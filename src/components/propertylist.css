@@ -1,0 +1,45 @@
+/**
+ * @license Copyright (c) 2003-2019, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md.
+ */
+
+:root {
+	--ck-inspector-color-property-list-property-name: #D0363F;
+	--ck-inspector-color-property-list-property-value-true: green;
+	--ck-inspector-color-property-list-property-value-false: red;
+	--ck-inspector-color-property-list-background: #F5F5F5;
+}
+
+.ck-inspector .ck-inspector-property-list {
+	display: grid;
+	grid-template-columns: auto 1fr;
+
+	& > *:nth-of-type(odd) {
+		background: var(--ck-inspector-color-property-list-background);
+	}
+
+	& dt {
+		padding: 0 .7em 0 1.2em;
+		min-width: 15em;
+	}
+
+	& dt label {
+		color: var(--ck-inspector-color-property-list-property-name);
+	}
+
+	& dd {
+		padding-right: .7em;
+	}
+
+	& dd input {
+		width: 100%;
+
+		&.ck-inspector-property-list__value_false {
+			color: var(--ck-inspector-color-property-list-property-value-false);
+		}
+
+		&.ck-inspector-property-list__value_true {
+			color: var(--ck-inspector-color-property-list-property-value-true);
+		}
+	}
+}

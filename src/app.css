@@ -1,0 +1,28 @@
+/**
+ * @license Copyright (c) 2003-2019, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md.
+ */
+
+:root {
+	--ck-inspector-height: 500px;
+	--ck-inspector-color-border: #D0D0D0;
+}
+
+html body.ck-inspector-body-expanded {
+	margin-bottom: var(--ck-inspector-height);
+}
+
+.ck-inspector-wrapper {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	background: var(--ck-inspector-color-background);
+	border-top: 1px solid var(--ck-inspector-color-border);
+	z-index: 9999;
+}
+
+.ck-inspector-wrapper * {
+	box-sizing: border-box;
+}

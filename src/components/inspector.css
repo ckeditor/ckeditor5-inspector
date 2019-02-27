@@ -1,0 +1,67 @@
+/**
+ * @license Copyright (c) 2003-2019, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md.
+ */
+
+:root {
+	--ck-inspector-explorer-width: 300px;
+}
+
+.ck-inspector .ck-inspector__explorer {
+	min-width: var(--ck-inspector-explorer-width);
+	width: var(--ck-inspector-explorer-width);
+}
+
+.ck-inspector .ck-inspector__object-inspector {
+	width: 100%;
+	background: var(--ck-inspector-color-white);
+	overflow: auto;
+
+	& h2,
+	& h3 {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+	}
+
+	& h2 {
+		padding: 1em;
+		overflow: hidden;
+		text-overflow: ellipsis;
+
+		& span {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			display: block;
+			margin-right: 1em;
+		}
+
+		& a {
+			color: var(--ck-inspector-color-tree-node-name);
+		}
+	}
+
+	& h3 {
+		font-size: 12px;
+		padding: .4em .7em;
+
+		& a {
+			color: inherit;
+		}
+
+		& .ck-inspector-button {
+			display: none;
+		}
+
+		&:hover .ck-inspector-button  {
+			display: block
+		}
+	}
+
+	& hr {
+		border-top: 1px solid var(--ck-inspector-color-border);
+	}
+}
+
+

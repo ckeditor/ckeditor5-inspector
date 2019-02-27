@@ -1,0 +1,31 @@
+/**
+ * @license Copyright (c) 2003-2019, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md.
+ */
+
+.ck-inspector .ck-inspector-button {
+	width: 16px;
+	height: 16px;
+	border: 0;
+	text-indent: 100px;
+	overflow: hidden;
+	opacity: .8;
+	margin-left: .7em;
+	flex: 0 0 auto;
+
+	&:first-of-type {
+		margin-left: auto;
+	}
+
+	&:hover {
+		opacity: 1;
+	}
+
+	&.ck-inspector-button_log {
+		background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZT0iIzZFNkU2RSIgc3Ryb2tlLXdpZHRoPSIxLjUiPjxwYXRoIGQ9Ik0xLjUgNC4xNjVsNS43IDQuMTItNS43IDMuMTUzTTkuNDQ5IDExLjVoNS42NTUiLz48L2c+PC9zdmc+);
+	}
+
+	&.ck-inspector-button_exec {
+		background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48Y2lyY2xlIHN0cm9rZT0iIzZFNkU2RSIgc3Ryb2tlLXdpZHRoPSIxLjUiIGN4PSI4IiBjeT0iOCIgcj0iNy4yNSIvPjxwYXRoIGZpbGw9IiM2RTZFNkUiIGQ9Ik02LjA5NCA1LjIzNUwxMS4wNzQgOGwtNC45OCAzLjAxOHoiLz48L2c+PC9zdmc+);
+	}
+}

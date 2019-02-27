@@ -1,0 +1,19 @@
+{
+	"env": {
+		"es6": true
+	},
+	"parser": "babel-eslint",
+	"extends": [
+		"eslint:recommended",
+		"plugin:react/recommended"
+	],
+	"rules": {
+		"react/prop-types": "ignore",
+		"no-console": "off",
+		"max-len": [
+			"error",
+			140
+		],
+		"no-trailing-spaces": "error"
+	}
+}
