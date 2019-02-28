@@ -1,6 +1,10 @@
 CKEditor 5 inspector
 =====================================
 
+The official [CKEditor 5](https://ckeditor.com) rich text editor instance inspector for developers.
+
+![The inspector panel attached to the editor instance.](/sample/screenshot.png)
+
 ## Usage
 
 Include the script to load the inspector:
