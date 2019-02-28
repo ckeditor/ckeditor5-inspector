@@ -11,7 +11,10 @@
   },
   "scripts": {
     "build": "webpack --mode production",
-    "dev": "webpack --mode development --watch"
+    "dev": "webpack --mode development --watch",
+    "changelog": "node ./scripts/changelog.js",
+    "prerelease": "npm run build; if [ -n \"$(git status dist/ --porcelain)\" ]; then git add -u dist/ && git commit -m 'Internal: Build.'; fi",
+    "release": "node ./scripts/release.js"
   },
   "repository": {
     "type": "git",
@@ -28,6 +31,7 @@
     "@babel/preset-react": "^7.0.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
+    "@ckeditor/ckeditor5-dev-env": "^13.0.2",
     "css-loader": "^2.1.0",
     "cssnano": "^4.1.10",
     "eslint": "^5.14.1",
