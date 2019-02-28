@@ -97,7 +97,6 @@ function getElementTree( element, rangeStart, rangeEnd ) {
 		node: element
 	} );
 
-
 	if ( element.childCount ) {
 		let isSelectionStartAdded = false;
 		let isSelectionEndAdded = false;
@@ -159,7 +158,10 @@ function getTextTree( textNode, rangeStart, rangeEnd ) {
 	Object.assign( textNodeTree, {
 		type: 'text',
 		children: [ textNode.data ],
-		node: textNode
+		node: textNode,
+		presentation: {
+			dontRenderAttributeValue: true
+		}
 	} );
 
 	// <$text>f[oobar</$text>

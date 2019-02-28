@@ -111,8 +111,17 @@ class TreeText extends TreeNode {
 	}
 
 	getAttributes() {
+		const attributes = [];
+		const item = this.props.item;
+		const presentation = item.presentation;
+		const dontRenderAttributeValue = presentation && presentation.dontRenderAttributeValue;
+
+		for ( const [ key, value ] of item.attributes ) {
+			attributes.push( <TreeNodeAttribute key={key} name={key} value={value} dontRenderValue={dontRenderAttributeValue} /> );
+		}
+
 		return <span className="ck-inspector-tree-text__attributes">
-			{super.getAttributes()}
+			{attributes}
 		</span>;
 	}
 }
@@ -121,7 +130,7 @@ class TreeNodeAttribute extends Component {
 	render() {
 		let attributeValue;
 
-		if ( this.props.value !== true ) {
+		if ( !this.props.dontRenderValue ) {
 			attributeValue = <span className="ck-inspector-tree-node__attribute__value">{this.props.value}</span>;
 		}
 
