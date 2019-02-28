@@ -34,6 +34,10 @@ ClassicEditor
 
 Call `CKEditorInspector.detach( name )` to detach an instance from the inspector.
 
+## Compatibility
+
+The inspector works with CKEditor 5 [v12.0.0](https://github.com/ckeditor/ckeditor5/releases/tag/v12.0.0)+.
+
 ## License
 
 Licensed under the terms of [GNU General Public License Version 2 or later](http://www.gnu.org/licenses/gpl.html). For full details about the license, please check the `LICENSE.md` file.
