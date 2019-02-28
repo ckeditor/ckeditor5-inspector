@@ -5,7 +5,7 @@ CKEditor 5 inspector
 [![npm version](https://badge.fury.io/js/%40ckeditor%2Fckeditor5-inspector.svg)](https://badge.fury.io/js/%40ckeditor%2Fckeditor5-inspector)
 [![devDependency Status](https://david-dm.org/ckeditor/ckeditor5-inspector/dev-status.svg)](https://david-dm.org/ckeditor/ckeditor5-inspector?type=dev)
 
-The official [CKEditor 5](https://ckeditor.com) rich text editor instance inspector for developers.
+The official [CKEditor 5](https://ckeditor.com/ckeditor-5) rich text editor instance inspector for developers.
 
 ![The inspector panel attached to the editor instance.](/sample/screenshot.png)
 
@@ -21,13 +21,13 @@ Call `CKEditorInspector.attach( name, editor )` when editor instance is ready:
 
 ```js
 ClassicEditor
-	.create( ... )
-	.then( editor => {
-		CKEditorInspector.attach( 'editor-name', editor );
-	} )
-	.catch( error => {
-		console.error( error );
-	} );
+    .create( ... )
+    .then( editor => {
+        CKEditorInspector.attach( 'editor-name', editor );
+    } )
+    .catch( error => {
+        console.error( error );
+    } );
 ```
 
 **Note**: You can attach multiple editors to the inspector. Select the editor instance in the drop–down inside the inspector panel to switch context.
