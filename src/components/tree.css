@@ -6,6 +6,7 @@
 :root {
 	--ck-inspector-color-tree-node-hover: #EAF2FB;
 	--ck-inspector-color-tree-node-name: #882680;
+	--ck-inspector-color-tree-node-attribute-name: #8a8a8a;
 	--ck-inspector-color-tree-node-tag: #aaa;
 	--ck-inspector-color-tree-node-attribute: #9A4819;
 	--ck-inspector-color-tree-node-attribute-value: #2A43AC;
@@ -150,7 +151,7 @@
 		}
 
 		& .ck-inspector-tree-node__attribute {
-			background: var(--ck-inspector-color-tree-node-name);
+			background: var(--ck-inspector-color-tree-node-attribute-name);
 			border-radius: 2px;
 			padding: 0 .5em;
 
