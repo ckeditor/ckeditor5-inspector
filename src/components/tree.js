@@ -135,7 +135,7 @@ class TreeNodeAttribute extends Component {
 		}
 
 		return <span className="ck-inspector-tree-node__attribute">
-			<span className="ck-inspector-tree-node__attribute__name">{this.props.name}</span>
+			<span className="ck-inspector-tree-node__attribute__name" title={String( this.props.value )}>{this.props.name}</span>
 			{attributeValue}
 		</span>;
 	}
