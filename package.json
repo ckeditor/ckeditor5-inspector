@@ -13,7 +13,7 @@
     "build": "webpack --mode production",
     "dev": "webpack --mode development --watch",
     "changelog": "node ./scripts/changelog.js",
-    "prerelease": "npm run build; if [ -n \"$(git status dist/ --porcelain)\" ]; then git add -u dist/ && git commit -m 'Internal: Build.'; fi",
+    "prerelease": "npm run build; if [ -n \"$(git status build/ --porcelain)\" ]; then git add -u build/ && git commit -m 'Internal: Build.'; fi",
     "release": "node ./scripts/release.js"
   },
   "repository": {
