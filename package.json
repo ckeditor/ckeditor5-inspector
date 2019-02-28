@@ -2,6 +2,9 @@
   "name": "@ckeditor/ckeditor5-inspector",
   "dependencies": {},
   "main": "build/inspector.js",
+  "files": [
+    "build"
+  ],
   "description": "The official CKEditor 5 instance inspector.",
   "license": "GPL-2.0-or-later",
   "version": "1.0.0",
