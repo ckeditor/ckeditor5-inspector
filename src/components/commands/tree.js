@@ -46,7 +46,7 @@ function getCommandStates( editor ) {
 	for ( const [ name, command ] of editor.commands ) {
 		const attributes = [];
 
-		if ( command.value ) {
+		if ( command.value !== undefined ) {
 			attributes.push( [ 'value', command.value ] )
 		}
 

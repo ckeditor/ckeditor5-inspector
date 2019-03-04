@@ -24,6 +24,8 @@ export class PropertyList extends Component {
 					valueClass = 'ck-inspector-property-list__value_true';
 				} else if ( value === 'false' ) {
 					valueClass = 'ck-inspector-property-list__value_false';
+				} else if ( value === 'undefined' ) {
+					valueClass = 'ck-inspector-property-list__value_undefined';
 				}
 
 				return [

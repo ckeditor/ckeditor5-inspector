@@ -4,6 +4,10 @@
  */
 
 export function stringifyAttributeValue( value ) {
+	if ( value === undefined ) {
+		return 'undefined';
+	}
+
 	// Note: Remove leading and trailing quotes (") from the output. By default it is:
 	//
 	//		JSON.stringify( 'foo' ) => '"foo"'

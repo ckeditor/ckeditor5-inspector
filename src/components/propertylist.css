@@ -7,6 +7,7 @@
 	--ck-inspector-color-property-list-property-name: #D0363F;
 	--ck-inspector-color-property-list-property-value-true: green;
 	--ck-inspector-color-property-list-property-value-false: red;
+	--ck-inspector-color-property-list-property-value-undefined: #888;
 	--ck-inspector-color-property-list-background: #F5F5F5;
 }
 
@@ -40,6 +41,10 @@
 
 		&.ck-inspector-property-list__value_true {
 			color: var(--ck-inspector-color-property-list-property-value-true);
+		}
+
+		&.ck-inspector-property-list__value_undefined {
+			color: var(--ck-inspector-color-property-list-property-value-undefined);
 		}
 	}
 }
