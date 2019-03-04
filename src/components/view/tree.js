@@ -8,7 +8,15 @@ import Tree from '../tree';
 import Select from '../select';
 import Checkbox from '../checkbox';
 import StorageManager from '../../storage';
-import { isViewElement, isViewAttributeElement, isViewContainerElement, isViewRoot, isViewText } from './utils';
+import {
+	isViewElement,
+	isViewAttributeElement,
+	isViewContainerElement,
+	isViewEmptyElement,
+	isViewUiElement,
+	isViewRoot,
+	isViewText
+} from './utils';
 
 const LOCAL_STORAGE_ELEMENT_TYPES = 'ck5-inspector-view-element-types';
 export default class ViewTree extends Component {
@@ -102,6 +110,10 @@ function getElementTree( element, rangeStart, rangeEnd, showTypes ) {
 			elementTree.name = 'attribute:' + element.name;
 		} else if ( isViewRoot( element ) ) {
 			elementTree.name = 'root:' + element.name;
+		} else if ( isViewEmptyElement( element ) ) {
+			elementTree.name = 'empty:' + element.name;
+		} else if ( isViewUiElement( element ) ) {
+			elementTree.name = 'ui:' + element.name;
 		} else if ( isViewContainerElement( element ) ) {
 			elementTree.name = 'container:' + element.name;
 		} else {
@@ -109,6 +121,14 @@ function getElementTree( element, rangeStart, rangeEnd, showTypes ) {
 		}
 	} else {
 		elementTree.name = element.name;
+	}
+
+	// Regardless of other rendering options, empty elements need no closing tags. They will never
+	// host any children or selection.
+	if ( isViewEmptyElement( element) ) {
+		elementTree.presentation = {
+			dontClose: true
+		};
 	}
 
 	if ( element.childCount ) {

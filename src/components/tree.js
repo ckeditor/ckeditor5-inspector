@@ -57,6 +57,7 @@ class TreeNode extends Component {
 			<span className="ck-inspector-tree-node__name">
 				{item.name}
 				{this.getAttributes()}
+				{dontClose ? ' /' : '' }
 			</span>
 			<div className="ck-inspector-tree-node__content">
 				{this.getChildren()}

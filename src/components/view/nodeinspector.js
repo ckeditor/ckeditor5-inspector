@@ -7,7 +7,15 @@
 
 import React, { Component } from 'react';
 import Button from './../button';
-import { isViewElement, isViewText, isViewRoot, isViewAttributeElement, isViewContainerElement } from './utils';
+import {
+	isViewElement,
+	isViewText,
+	isViewRoot,
+	isViewAttributeElement,
+	isViewContainerElement,
+	isViewUiElement,
+	isViewEmptyElement
+} from './utils';
 import { PropertyList } from './../propertylist';
 export default class NodeInspector extends Component {
 	constructor( props ) {
@@ -102,6 +110,12 @@ function getNodeInfo( node, currentRootName ) {
 			if ( isViewAttributeElement( node ) ) {
 				info.type = 'AttributeElement';
 				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_attributeelement-AttributeElement.html';
+			} else if ( isViewEmptyElement( node ) ) {
+				info.type = 'EmptyElement';
+				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_emptyelement-EmptyElement.html';
+			} else if ( isViewUiElement( node ) ) {
+				info.type = 'UIElement';
+				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_uielement-UIElement.html';
 			} else if ( isViewContainerElement ( node ) ) {
 				info.type = 'ContainerElement';
 				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_containerelement-ContainerElement.html';

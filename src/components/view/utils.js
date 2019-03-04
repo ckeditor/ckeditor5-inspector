@@ -15,6 +15,14 @@ export function isViewContainerElement( node ) {
 	return node && isViewElement( node ) && node.is( 'containerElement' );
 }
 
+export function isViewEmptyElement( node ) {
+	return node && isViewElement( node ) && node.is( 'emptyElement' );
+}
+
+export function isViewUiElement( node ) {
+	return node && isViewElement( node ) && node.is( 'uiElement' );
+}
+
 export function isViewText( node ) {
 	return node && node.data;
 }
