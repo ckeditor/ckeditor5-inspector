@@ -4,6 +4,7 @@
  */
 
 import React, { Component } from 'react';
+import { stringifyAttributeValue } from './utils';
 import './propertylist.css';
 
 export class PropertyList extends Component {
@@ -16,7 +17,7 @@ export class PropertyList extends Component {
 
 		return <dl className="ck-inspector-property-list ck-inspector-code">
 			{this.props.items.map( ( [ name, value ] ) => {
-				value = '' + value;
+				value = stringifyAttributeValue( value );
 
 				let valueClass = '';
 				if ( value === 'true' ) {

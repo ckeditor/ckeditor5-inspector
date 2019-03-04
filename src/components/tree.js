@@ -4,6 +4,7 @@
  */
 
 import React, { Component } from 'react';
+import { stringifyAttributeValue } from './utils';
 import './tree.css';
 
 export default class Tree extends Component {
@@ -122,15 +123,16 @@ class TreeText extends TreeNode {
 
 class TreeNodeAttribute extends Component {
 	render() {
-		let attributeValue;
+		const value = stringifyAttributeValue( this.props.value );
+		let valueElement;
 
 		if ( !this.props.dontRenderValue ) {
-			attributeValue = <span className="ck-inspector-tree-node__attribute__value">{this.props.value}</span>;
+			valueElement = <span className="ck-inspector-tree-node__attribute__value">{value}</span>;
 		}
 
 		return <span className="ck-inspector-tree-node__attribute">
-			<span className="ck-inspector-tree-node__attribute__name" title={String( this.props.value )}>{this.props.name}</span>
-			{attributeValue}
+			<span className="ck-inspector-tree-node__attribute__name" title={value}>{this.props.name}</span>
+			{valueElement}
 		</span>;
 	}
 }
