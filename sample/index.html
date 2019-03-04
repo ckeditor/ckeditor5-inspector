@@ -48,20 +48,22 @@
 		</div>
 
 		<script>
-			ClassicEditor
+			DecoupledEditor
 				.create( document.querySelector( '#first-editor-content' ) )
 				.then( editor => {
 					window.firstEditor = editor;
+					document.body.insertBefore( editor.ui.view.toolbar.element, editor.ui.getEditableElement() );
 					CKEditorInspector.attach( 'first-editor', editor );
 				} )
 				.catch( error => {
 					console.error( error );
 				} );
 
-			ClassicEditor
+			DecoupledEditor
 				.create( document.querySelector( '#second-editor-content' ) )
 				.then( editor => {
 					window.secondEditor = editor;
+					document.body.insertBefore( editor.ui.view.toolbar.element, editor.ui.getEditableElement() );
 					CKEditorInspector.attach( 'second-editor', editor );
 				} )
 				.catch( error => {
@@ -74,6 +76,10 @@
 			width: 960px;
 			margin: 0 auto;
 			padding: 2em;
+		}
+
+		.ck.ck-editor__editable {
+			border: 1px solid rgba(0, 0, 0, 0.15);
 		}
 	</style>
 </html>
