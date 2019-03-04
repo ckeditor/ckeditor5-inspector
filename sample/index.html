@@ -64,7 +64,7 @@
 				.then( editor => {
 					window.secondEditor = editor;
 					document.body.insertBefore( editor.ui.view.toolbar.element, editor.ui.getEditableElement() );
-					CKEditorInspector.attach( 'second-editor', editor );
+					CKEditorInspector.attach( editor );
 				} )
 				.catch( error => {
 					console.error( error );
