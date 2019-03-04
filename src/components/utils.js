@@ -3,10 +3,12 @@
  * For licensing, see LICENSE.md.
  */
 
-export function stringifyAttributeValue( value ) {
+export function stringify( value, quotesAroundText = true ) {
 	if ( value === undefined ) {
 		return 'undefined';
 	}
+
+	const stringified = JSON.stringify( value );
 
 	// Note: Remove leading and trailing quotes (") from the output. By default it is:
 	//
@@ -17,10 +19,14 @@ export function stringifyAttributeValue( value ) {
 	//
 	// What should be returned:
 	//
-	//		stringifyAttributeValue( 'foo' ) => 'foo'
-	//		stringifyAttributeValue( true ) => 'true'
-	//		stringifyAttributeValue( {} ) => '{}'
-	//		stringifyAttributeValue( [] ) => '[]'
+	//		stringify( 'foo' ) => 'foo'
+	//		stringify( true ) => 'true'
+	//		stringify( {} ) => '{}'
+	//		stringify( [] ) => '[]'
 	//
-	return JSON.stringify( value ).replace( /(^"|"$)/g, '' );
+	if ( !quotesAroundText ) {
+		return stringified.replace( /(^"|"$)/g, '' );
+	}
+
+	return stringified;
 }

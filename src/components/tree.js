@@ -4,7 +4,7 @@
  */
 
 import React, { Component } from 'react';
-import { stringifyAttributeValue } from './utils';
+import { stringify } from './utils';
 import './tree.css';
 
 export default class Tree extends Component {
@@ -123,7 +123,7 @@ class TreeText extends TreeNode {
 
 class TreeNodeAttribute extends Component {
 	render() {
-		const value = stringifyAttributeValue( this.props.value );
+		const value = stringify( this.props.value, false );
 		let valueElement;
 
 		if ( !this.props.dontRenderValue ) {

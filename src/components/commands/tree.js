@@ -4,7 +4,6 @@
  */
 
 import React, { Component } from 'react';
-import { stringifyAttributeValue } from '../utils';
 import Tree from '../tree';
 
 export default class CommandsTree extends Component {

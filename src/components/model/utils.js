@@ -16,5 +16,5 @@ export function isModelRoot( node ) {
 }
 
 export function getNodePathString( node ) {
-	return `[ ${ ( node.getPath ? node.getPath() : node.path ).join( ', ' ) } ]`;
+	return node.getPath ? node.getPath() : node.path;
 }

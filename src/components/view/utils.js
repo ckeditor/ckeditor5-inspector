@@ -35,6 +35,6 @@ export function nodeToString( node ) {
 			return node.name;
 		}
 	} else if ( isViewText( node ) ) {
-		return '"' + node.data + '"';
+		return node.data;
 	}
 }

@@ -91,7 +91,7 @@ function getSelectionInfo( editor ) {
 			[ 'isAtEnd', selection.anchor.isAtEnd ],
 			[ 'isAtStart', selection.anchor.isAtStart ],
 			[ 'offset', selection.anchor.offset ],
-			[ 'textNode', selection.anchor.textNode && `"${ selection.anchor.textNode.data }"` ],
+			[ 'textNode', selection.anchor.textNode && selection.anchor.textNode.data ],
 		],
 		focus: [
 			[ 'path', getNodePathString( selection.focus ) ],
@@ -100,7 +100,7 @@ function getSelectionInfo( editor ) {
 			[ 'isAtEnd', selection.focus.isAtEnd ],
 			[ 'isAtStart', selection.focus.isAtStart ],
 			[ 'offset', selection.focus.offset ],
-			[ 'textNode', selection.focus.textNode && `"${ selection.focus.textNode.data }"` ],
+			[ 'textNode', selection.focus.textNode && selection.focus.textNode.data ],
 		]
 	};
 }
