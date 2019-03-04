@@ -4,6 +4,7 @@
  */
 
 import React, { Component } from 'react';
+import { stringifyAttributeValue } from '../utils';
 import Tree from '../tree';
 
 export default class CommandsTree extends Component {
@@ -46,7 +47,7 @@ function getCommandStates( editor ) {
 		const attributes = [];
 
 		if ( command.value ) {
-			attributes.push( [ 'value', '' + command.value ] )
+			attributes.push( [ 'value', command.value ] )
 		}
 
 		list.push( {
