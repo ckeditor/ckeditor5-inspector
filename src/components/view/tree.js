@@ -161,7 +161,6 @@ function getElementTree( element, rangeStart, rangeEnd, showTypes ) {
 	}
 
 	elementTree.attributes = getNodeAttrs( element );
-	elementTree.classes = [ ...element.getClassNames() ];
 
 	return elementTree;
 }
@@ -204,11 +203,9 @@ function getTextTree( textNode, rangeStart, rangeEnd ) {
 			lastChild.slice( endSliceIndex, lastChild.length ) );
 	}
 
-	textNodeTree.attributes = getNodeAttrs( textNode );
-
 	return textNodeTree;
 }
 
 function getNodeAttrs( node ) {
-	return new Map( node._attrs );
+	return new Map( node.getAttributes() );
 }

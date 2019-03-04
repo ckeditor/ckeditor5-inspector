@@ -52,16 +52,10 @@ class TreeNode extends Component {
 			presentation && presentation.cssClass
 		];
 
-		let classAttribute;
-		if ( item.classes && item.classes.length ) {
-			classAttribute = <TreeNodeAttribute key="node-classes" name="class" value={item.classes.join( ' ' )} />
-		}
-
 		return <div className={nodeClasses.join( ' ' )} onClick={this.handleClick}>
 			<span className="ck-inspector-tree-node__name">
 				{item.name}
 				{this.getAttributes()}
-				{classAttribute}
 			</span>
 			<div className="ck-inspector-tree-node__content">
 				{this.getChildren()}

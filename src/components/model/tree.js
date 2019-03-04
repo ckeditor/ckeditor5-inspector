@@ -198,5 +198,5 @@ function getTextTree( textNode, rangeStart, rangeEnd ) {
 }
 
 function getNodeAttrs( node ) {
-	return new Map( node._attrs );
+	return new Map( node.getAttributes() );
 }
