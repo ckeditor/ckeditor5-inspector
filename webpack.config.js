@@ -5,6 +5,7 @@
 
 /* eslint-env node */
 
+const versionUtils = require( '@ckeditor/ckeditor5-dev-env/lib/release-tools/utils/versions' );
 const webpack = require( 'webpack' );
 const path = require( 'path' );
 
@@ -53,9 +54,7 @@ module.exports = ( env, argv ) => {
 		},
 		plugins: [
 			new webpack.DefinePlugin( {
-				CKEDITOR_INSPECTOR_VERSION: JSON.stringify(
-					require( path.resolve( __dirname, 'package.json' ) ).version
-				)
+				CKEDITOR_INSPECTOR_VERSION: JSON.stringify( versionUtils.getLastFromChangelog() )
 			} )
 		]
 	};
