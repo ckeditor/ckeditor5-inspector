@@ -66,6 +66,21 @@ To build the production version of the inspector, run:
 yarn build
 ```
 
+## Releasing
+
+The release process is as follows (order matters):
+
+```console
+yarn changelog
+yarn preversion
+```
+
+Run the sample and make sure global `CKEDITOR_INSPECTOR_VERSION` is right. Then:
+
+```console
+yarn release
+```
+
 ## License
 
 Licensed under the terms of [GNU General Public License Version 2 or later](http://www.gnu.org/licenses/gpl.html). For full details about the license, please check the `LICENSE.md` file.
