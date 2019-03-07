@@ -11,8 +11,7 @@ import ReactDOM from 'react-dom';
 import InspectorUI from './components/ui';
 import './app.css';
 
-
-// From package.json -> webpack.
+// From changelog -> webpack.
 window.CKEDITOR_INSPECTOR_VERSION = CKEDITOR_INSPECTOR_VERSION;
 
 const editors = new Map();

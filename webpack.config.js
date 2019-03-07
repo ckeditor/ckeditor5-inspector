@@ -13,12 +13,16 @@ module.exports = ( env, argv ) => {
 	const devMode = argv.mode === 'development'
 
 	return {
+		mode: argv.mode || 'production',
 		entry: path.resolve( __dirname, 'src', 'app.js' ),
 		module: {
 			rules: [ {
-				test: /\.(js|jsx)$/,
+				test: /\.js$/,
 					exclude: /node_modules/,
-					loader: 'babel-loader'
+					loader: 'babel-loader',
+					query: {
+						presets: [ '@babel/react' ]
+					}
 				}, {
 					test: /\.css$/,
 					loaders: [
