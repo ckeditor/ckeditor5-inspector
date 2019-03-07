@@ -5,8 +5,6 @@
 
 import Editor from '@ckeditor/ckeditor5-core/src/editor/editor';
 
-console.log( '----------- module loaded', window.CKEDITOR_VERSION );
-
 export default class TestEditor extends Editor {
 	static create( config ) {
 		return new Promise( resolve => {

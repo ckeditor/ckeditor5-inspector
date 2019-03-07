@@ -3,8 +3,8 @@
  * For licensing, see LICENSE.md.
  */
 
-import TestEditor from './utils/testeditor';
-import CKEditorInspector from '../src/app';
+import TestEditor from '../utils/testeditor';
+import CKEditorInspector from '../../src/app';
 
 describe( 'Application', () => {
 	let editor;

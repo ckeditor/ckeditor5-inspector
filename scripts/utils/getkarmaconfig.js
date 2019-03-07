@@ -26,8 +26,7 @@ module.exports = function getKarmaConfig() {
 		frameworks: [ 'mocha', 'chai', 'sinon' ],
 
 		files: [
-			// If the file below is imported in tests directly, it leads to an error related to CKEDITOR_VERSION collision.
-			'tests/**/*.js'
+			'tests/inspector/**/*.js'
 		],
 
 		preprocessors: {
