@@ -50,10 +50,6 @@
 	z-index: 9999;
 }
 
-.ck-inspector.ck-inspector_collapsed {
-	height: 30px;
-}
-
 .ck-inspector.ck-inspector_collapsed > .ck-inspector-panes > .ck-inspector-panes__navigation .ck-inspector-tabs {
 	display: none;
 }
