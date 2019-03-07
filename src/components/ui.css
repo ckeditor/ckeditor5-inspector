@@ -10,6 +10,7 @@
 	--ck-inspector-color-link: #005CC6;
 	--ck-inspector-code-font-size: 11px;
 	--ck-inspector-code-font-family: monaco,Consolas,Lucida Console,monospace;
+	--ck-inspector-color-border: #D0D0D0;
 }
 
 /* Reset first */
@@ -36,7 +37,6 @@
 }
 
 .ck-inspector {
-	height: var(--ck-inspector-height);
 	overflow: hidden;
 	border-collapse: collapse;
 	color: var(--ck-inspector-color-black);
@@ -44,6 +44,10 @@
 	white-space: normal;
 	cursor: auto;
 	float: none;
+
+	background: var(--ck-inspector-color-background);
+	border-top: 1px solid var(--ck-inspector-color-border);
+	z-index: 9999;
 }
 
 .ck-inspector.ck-inspector_collapsed {
