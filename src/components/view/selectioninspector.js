@@ -6,6 +6,7 @@
 /* global console */
 
 import React, { Component } from 'react';
+import Logger from '../../logger';
 import { PropertyList } from './../propertylist';
 import { nodeToString } from './utils';
 import Button from './../button';
@@ -31,7 +32,7 @@ export default class ViewSelectionInspector extends Component {
 					target="_blank" rel="noopener noreferrer">
 					<b>Selection</b>
 				</a>
-				<Button type="log" text="Log in console" onClick={() => console.log( this.props.editor.editing.view.document.selection )} />
+				<Button type="log" text="Log in console" onClick={() => Logger.log( this.props.editor.editing.view.document.selection )} />
 			</h2>
 			<hr/>
 
@@ -43,7 +44,7 @@ export default class ViewSelectionInspector extends Component {
 				<a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_selection-Selection.html#member-anchor"
 					target="_blank" rel="noopener noreferrer">Anchor</a>
 				<Button type="log" text="Log in console"
-					onClick={() => console.log( this.props.editor.editing.view.document.selection.focus )} />
+					onClick={() => Logger.log( this.props.editor.editing.view.document.selection.focus )} />
 			</h3>
 			<PropertyList items={this.state.selectionInfo.anchor} />
 			<hr/>
@@ -52,7 +53,7 @@ export default class ViewSelectionInspector extends Component {
 				<a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_selection-Selection.html#member-focus"
 					target="_blank" rel="noopener noreferrer">Focus</a>
 				<Button type="log" text="Log in console"
-					onClick={() => console.log( this.props.editor.editing.view.document.selection.anchor )} />
+					onClick={() => Logger.log( this.props.editor.editing.view.document.selection.anchor )} />
 			</h3>
 			<PropertyList items={this.state.selectionInfo.focus} />
 		</div>;

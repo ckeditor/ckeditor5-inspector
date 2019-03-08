@@ -7,12 +7,13 @@
 
 import TestEditor from '../utils/testeditor';
 import CKEditorInspector from '../../src/ckeditorinspector';
+import Logger from '../../src/logger';
 
 describe( 'CKEditorInspector', () => {
 	let editor, inspectorRef;
 
-	// Silence the inspector logs.
-	console.log = () => {};
+	// Silence inspector logs.
+	sinon.stub( Logger, 'log' ).callsFake( () => {} );
 
 	beforeEach( () => {
 		return TestEditor.create().then( newEditor => {

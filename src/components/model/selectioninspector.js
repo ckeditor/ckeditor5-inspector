@@ -6,9 +6,10 @@
 /* global console */
 
 import React, { Component } from 'react';
+import Logger from '../../logger';
+import Button from './../button';
 import { PropertyList } from './../propertylist';
 import { getNodePathString } from './utils';
-import Button from './../button';
 export default class ModelSelectionInspector extends Component {
 	constructor( props ) {
 		super( props );
@@ -44,7 +45,7 @@ export default class ModelSelectionInspector extends Component {
 			<h2 className="ck-inspector-code">
 				<a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_selection-Selection.html"
 					target="_blank" rel="noopener noreferrer"><b>Selection</b></a>
-				<Button type="log" text="Log in console" onClick={() => console.log( this.props.editor.model.document.selection )} />
+				<Button type="log" text="Log in console" onClick={() => Logger.log( this.props.editor.model.document.selection )} />
 			</h2>
 			<hr/>
 
@@ -57,7 +58,7 @@ export default class ModelSelectionInspector extends Component {
 			<h3>
 				<a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_selection-Selection.html#member-anchor"
 					target="_blank" rel="noopener noreferrer">Anchor</a>
-				<Button type="log" text="Log in console" onClick={() => console.log( this.props.editor.model.document.selection.anchor )} />
+				<Button type="log" text="Log in console" onClick={() => Logger.log( this.props.editor.model.document.selection.anchor )} />
 			</h3>
 			<PropertyList items={this.state.selectionInfo.anchor} />
 			<hr/>
@@ -65,7 +66,7 @@ export default class ModelSelectionInspector extends Component {
 			<h3>
 				<a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_selection-Selection.html#member-focus"
 					target="_blank" rel="noopener noreferrer">Focus</a>
-				<Button type="log" text="Log in console" onClick={() => console.log( this.props.editor.model.document.selection.focus )} />
+				<Button type="log" text="Log in console" onClick={() => Logger.log( this.props.editor.model.document.selection.focus )} />
 			</h3>
 			<PropertyList items={this.state.selectionInfo.focus} />
 

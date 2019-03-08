@@ -26,11 +26,11 @@ module.exports = function getKarmaConfig() {
 		frameworks: [ 'mocha', 'chai', 'sinon' ],
 
 		files: [
-			'tests/inspector/**/*.js'
+			'tests/index.js'
 		],
 
 		preprocessors: {
-			'tests/**/*.js': [ 'webpack' ],
+			'tests/index.js': [ 'webpack' ],
 		},
 
 		webpack: webpackConfig,

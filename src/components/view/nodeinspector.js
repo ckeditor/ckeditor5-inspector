@@ -7,6 +7,7 @@
 
 import React, { Component } from 'react';
 import Button from './../button';
+import Logger from '../../logger';
 import {
 	isViewElement,
 	isViewText,
@@ -61,7 +62,7 @@ export default class NodeInspector extends Component {
 		const content = [
 			<h2 key="node-name" className="ck-inspector-code">
 				{nodeNameContent}
-				<Button type="log" text="Log in console" onClick={() => console.log( info.editorNode )} />
+				<Button type="log" text="Log in console" onClick={() => Logger.log( info.editorNode )} />
 			</h2>,
 			<hr key="props-separator" />,
 			<h3 key="props-header">Properties</h3>,

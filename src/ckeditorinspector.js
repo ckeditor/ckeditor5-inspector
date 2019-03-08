@@ -9,6 +9,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import InspectorUI from './components/ui';
+import Logger from './logger';
 import './ckeditorinspector.css';
 
 // From changelog -> webpack.
@@ -52,10 +53,10 @@ export default class CKEditorInspector {
 			instance = editorOrName;
 		}
 
-		console.group('%cAttached the inspector to a CKEditor 5 instance. To learn more, visit https://ckeditor.com/docs/ckeditor5.',
+		Logger.group('%cAttached the inspector to a CKEditor 5 instance. To learn more, visit https://ckeditor.com/docs/ckeditor5.',
 		'font-weight: bold;' );
-		console.log( `Editor instance "${ name }"`, instance );
-		console.groupEnd();
+		Logger.log( `Editor instance "${ name }"`, instance );
+		Logger.groupEnd();
 
 		CKEditorInspector._editors.set( name, instance );
 

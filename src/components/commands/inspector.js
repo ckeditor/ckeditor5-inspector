@@ -8,6 +8,7 @@
 import React, { Component } from 'react';
 import Panes from '../panes';
 import Button from './../button';
+import Logger from '../../logger';
 import { PropertyList } from './../propertylist';
 import '../inspector.css';
 
@@ -76,7 +77,7 @@ class CommandInspector extends Component {
 					<a href={info.url} target="_blank" rel="noopener noreferrer"><b>{info.type}</b></a>:{info.name}
 				</span>
 				<Button type="exec" text="Execute command" onClick={() => this.props.editor.execute( info.name )} />
-				<Button type="log" text="Log in console" onClick={() => console.log( info.command )} />
+				<Button type="log" text="Log in console" onClick={() => Logger.log( info.command )} />
 			</h2>,
 			<hr key="props-separator" />,
 			<h3 key="props-header">Properties</h3>,
