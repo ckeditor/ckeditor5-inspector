@@ -8,6 +8,10 @@
 		"eslint:recommended",
 		"plugin:react/recommended"
 	],
+	"globals": {
+		"expect": true,
+		"sinon": true
+	},
 	"rules": {
 		"react/prop-types": "ignore",
 		"no-console": "off",

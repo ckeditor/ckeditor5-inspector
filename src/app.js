@@ -14,12 +14,10 @@ import './app.css';
 // From changelog -> webpack.
 window.CKEDITOR_INSPECTOR_VERSION = CKEDITOR_INSPECTOR_VERSION;
 
-const editors = new Map();
 const container = document.createElement( 'div' );
 container.className = 'ck-inspector-wrapper';
-const inspectorRef = React.createRef();
 
-let editorCount = 0;
+let unnamedEditorCount = 0;
 
 export default class CKEditorInspector {
 	/**
@@ -50,7 +48,7 @@ export default class CKEditorInspector {
 			name = editorOrName;
 			instance = editor;
 		} else {
-			name = `editor-${ ++editorCount }`;
+			name = `editor-${ ++unnamedEditorCount }`;
 			instance = editorOrName;
 		}
 
@@ -59,7 +57,7 @@ export default class CKEditorInspector {
 		console.log( `Editor instance "${ name }"`, instance );
 		console.groupEnd();
 
-		editors.set( name, instance );
+		CKEditorInspector._editors.set( name, instance );
 
 		instance.on( 'destroy', () => {
 			CKEditorInspector.detach( name );
@@ -67,23 +65,29 @@ export default class CKEditorInspector {
 
 		if ( !container.parentNode ) {
 			document.body.appendChild( container );
-			ReactDOM.render( <InspectorUI ref={inspectorRef} editors={editors} />, container );
+
+			ReactDOM.render( <InspectorUI
+				ref={CKEditorInspector._inspectorRef}
+				editors={CKEditorInspector._editors} />,
+				container );
 		}
 
-		CKEditorInspector._updateEditors( editors );
+		CKEditorInspector._updateState();
 
 		return name;
 	}
 
 	static detach( name ) {
-		editors.delete( name );
-
-		CKEditorInspector._updateEditors( editors );
+		CKEditorInspector._editors.delete( name );
+		CKEditorInspector._updateState();
 	}
 
-	static _updateEditors( editors ) {
-		inspectorRef.current.setState( {
-			editors: editors
+	static _updateState() {
+		CKEditorInspector._inspectorRef.current.setState( {
+			editors: CKEditorInspector._editors
 		} );
 	}
 }
+
+CKEditorInspector._editors = new Map();
+CKEditorInspector._inspectorRef = React.createRef();
