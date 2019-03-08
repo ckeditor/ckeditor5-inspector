@@ -10,7 +10,8 @@
 	],
 	"globals": {
 		"expect": true,
-		"sinon": true
+		"sinon": true,
+		"shallow": true
 	},
 	"rules": {
 		"react/prop-types": "ignore",

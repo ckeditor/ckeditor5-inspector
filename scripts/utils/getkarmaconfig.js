@@ -23,7 +23,7 @@ module.exports = function getKarmaConfig() {
 	const karmaConfig = {
 		basePath,
 
-		frameworks: [ 'mocha', 'chai', 'sinon' ],
+		frameworks: [ 'mocha', 'sinon' ],
 
 		files: [
 			'tests/index.js'

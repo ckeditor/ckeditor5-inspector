@@ -3,13 +3,7 @@
  * For licensing, see LICENSE.md.
  */
 
-/* global document, window, console */
-
 import React from 'react';
-import { expect } from 'chai';
-import { shallow } from 'enzyme';
-import sinon from 'sinon';
-
 import Button from '../../../src/components/button';
 
 describe( '<Button />', () => {
