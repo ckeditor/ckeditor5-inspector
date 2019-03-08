@@ -6,6 +6,9 @@
 import React, { Component } from 'react';
 import ModelTree from './tree';
 import ModelInspector from './inspector';
+import StorageManager from '../../storagemanager';
+
+const LOCAL_STORAGE_ACTIVE_PANE = 'ck5-inspector-active-model-pane-name';
 export default class ModelPane extends Component {
 	constructor( props ) {
 		super( props );
@@ -14,46 +17,30 @@ export default class ModelPane extends Component {
 			editor: null,
 			editorRoots: null,
 			currentRootName: null,
-			currentEditorNode: null
+			currentEditorNode: null,
+
+			activePane: StorageManager.get( LOCAL_STORAGE_ACTIVE_PANE ) || 'Inspect'
 		};
 
-		this.treeRef = React.createRef();
-		this.inspectorRef = React.createRef();
-
-		this.handleTreeClick = this.handleTreeClick.bind( this );
 		this.handleRootChange = this.handleRootChange.bind( this );
-		this.syncPaneWithEditor = this.syncPaneWithEditor.bind( this );
-	}
-
-	componentDidUpdate( prevProps ) {
-		if ( prevProps && prevProps.editor ) {
-			prevProps.editor.model.document.off( 'change', this.syncPaneWithEditor );
-		}
-
-		this.startListeningToEditor();
-	}
-
-	componentDidMount() {
-		this.startListeningToEditor();
-	}
-
-	startListeningToEditor() {
-		if ( this.props.editor ) {
-			this.props.editor.model.document.on( 'change', this.syncPaneWithEditor );
-			this.syncPaneWithEditor();
-		}
+		this.handlePaneChange = this.handlePaneChange.bind( this );
+		this.handleTreeClick = this.handleTreeClick.bind( this );
 	}
 
 	handleTreeClick( evt, currentEditorNode ) {
 		evt.persist();
 		evt.stopPropagation();
 
-		this.setState( { currentEditorNode }, () => {
-			this.syncPaneWithEditor();
-
+		this.setState( {
+			currentEditorNode
+		}, () => {
 			// Double click on a tree element should open the inspector.
 			if ( evt.detail == 2 ) {
-				this.inspectorRef.current.setActivePane( 'inspect' );
+				this.setState( {
+					activePane: 'Inspect'
+				}, () => {
+					StorageManager.set( LOCAL_STORAGE_ACTIVE_PANE, 'Inspect' );
+				} );
 			}
 		} );
 	}
@@ -64,15 +51,12 @@ export default class ModelPane extends Component {
 		} );
 	}
 
-	syncPaneWithEditor() {
-		this.treeRef.current.update();
-		this.inspectorRef.current.update();
-	}
-
-	componentWillUnmount() {
-		if ( this.props.editor ) {
-			this.props.editor.model.document.off( 'change', this.syncPaneWithEditor );
-		}
+	handlePaneChange( activePane ) {
+		this.setState( {
+			activePane
+		}, () => {
+			StorageManager.set( LOCAL_STORAGE_ACTIVE_PANE, activePane );
+		} );
 	}
 
 	render() {
@@ -91,14 +75,14 @@ export default class ModelPane extends Component {
 				key="tree"
 				onClick={this.handleTreeClick}
 				onRootChange={this.handleRootChange}
-				ref={this.treeRef}
 			/>,
 			<ModelInspector
 				currentRootName={this.state.currentRootName}
+				activePane={this.state.activePane}
+				onPaneChange={this.handlePaneChange}
 				editor={this.props.editor}
 				inspectedNode={this.state.currentEditorNode}
-				key="explorer"
-				ref={this.inspectorRef}
+				key="inspector"
 			/>
 		];
 	}

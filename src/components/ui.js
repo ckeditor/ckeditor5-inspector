@@ -25,7 +25,8 @@ export default class InspectorUI extends Component {
 		this.state = {
 			isCollapsed: StorageManager.get( LOCAL_STORAGE_IS_COLLAPSED ) === 'true',
 			editors: null,
-			currentEditorName: null
+			currentEditorName: null,
+			activePane: StorageManager.get( LOCAL_STORAGE_ACTIVE_PANE ) || 'Model'
 		};
 
 		this.panesRef = React.createRef();
@@ -34,16 +35,12 @@ export default class InspectorUI extends Component {
 		this.handleToggleCollapseClick = this.handleToggleCollapseClick.bind( this );
 	}
 
-	componentDidMount() {
-		const activePaneName = StorageManager.get( LOCAL_STORAGE_ACTIVE_PANE );
-
-		if ( activePaneName ) {
-			this.panesRef.current.setActivePane( activePaneName );
-		}
-	}
-
-	handlePaneChange( activePaneName ) {
-		StorageManager.set( LOCAL_STORAGE_ACTIVE_PANE, activePaneName );
+	handlePaneChange( activePane ) {
+		this.setState( {
+			activePane
+		}, () => {
+			StorageManager.set( LOCAL_STORAGE_ACTIVE_PANE, activePane );
+		} );
 	}
 
 	handleEditorChange( name ) {
@@ -68,21 +65,6 @@ export default class InspectorUI extends Component {
 		}
 
 		const currentEditorInstance = this.state.editors.get( this.state.currentEditorName );
-		const panesDefinitions = {
-			model: {
-				label: 'Model',
-				content: <ModelPane editor={currentEditorInstance} />
-			},
-			view: {
-				label: 'View',
-				content: <ViewPane editor={currentEditorInstance} />
-			},
-			commands: {
-				label: 'Commands',
-				content: <CommandsPane editor={currentEditorInstance} />
-			}
-		};
-
 		const editorInstanceSelector = <Select
 			id="inspector-editor-selector"
 			label="Editor instance"
@@ -95,16 +77,19 @@ export default class InspectorUI extends Component {
 			<Panes
 				ref={this.panesRef}
 				onPaneChange={this.handlePaneChange}
-				panesDefinitions={panesDefinitions}
-				initialActivePaneName="model"
 				contentBefore={<DocsButton />}
+				activePane={this.state.activePane}
 				contentAfter={[
 					<div className="ck-inspector-editor-selector" key="editor-selector">
 						{currentEditorInstance ? editorInstanceSelector	: '' }
 					</div>,
 					<ToggleButton key="inspector-toggle" onClick={this.handleToggleCollapseClick} isUp={this.state.isCollapsed} />
 				]}
-			/>
+			>
+				<ModelPane label="Model" editor={currentEditorInstance} />
+				<ViewPane label="View" editor={currentEditorInstance} />
+				<CommandsPane label="Commands" editor={currentEditorInstance} />
+			</Panes>
 		</div>;
 	}
 

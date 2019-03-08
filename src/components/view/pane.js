@@ -6,6 +6,9 @@
 import React, { Component } from 'react';
 import ViewTree from './tree';
 import ViewInspector from './inspector';
+import StorageManager from '../../storagemanager';
+
+const LOCAL_STORAGE_ACTIVE_PANE = 'ck5-inspector-active-view-pane-name';
 
 export default class ViewPane extends Component {
 	constructor( props ) {
@@ -15,13 +18,16 @@ export default class ViewPane extends Component {
 			editor: null,
 			currentEditorNode: null,
 			editorRoots: null,
-			currentRootName: null
+			currentRootName: null,
+
+			activePane: StorageManager.get( LOCAL_STORAGE_ACTIVE_PANE ) || 'Inspect'
 		};
 
 		this.treeRef = React.createRef();
 		this.inspectorRef = React.createRef();
 
 		this.handleTreeClick = this.handleTreeClick.bind( this );
+		this.handlePaneChange = this.handlePaneChange.bind( this );
 		this.handleRootChange = this.handleRootChange.bind( this );
 		this.syncPaneWithEditor = this.syncPaneWithEditor.bind( this );
 	}
@@ -54,7 +60,9 @@ export default class ViewPane extends Component {
 
 			// Double click on a tree element should open the inspector.
 			if ( evt.detail == 2 ) {
-				this.inspectorRef.current.setActivePane( 'inspect' );
+				this.setState( {
+					activePane: 'Inspect'
+				} );
 			}
 		} );
 	}
@@ -62,6 +70,14 @@ export default class ViewPane extends Component {
 	handleRootChange( currentRootName ) {
 		this.setState( { currentRootName }, () => {
 			this.syncPaneWithEditor();
+		} );
+	}
+
+	handlePaneChange( activePane ) {
+		this.setState( {
+			activePane
+		}, () => {
+			StorageManager.set( LOCAL_STORAGE_ACTIVE_PANE, activePane );
 		} );
 	}
 
@@ -96,9 +112,11 @@ export default class ViewPane extends Component {
 			/>,
 			<ViewInspector
 				currentRootName={this.state.currentRootName}
+				activePane={this.state.activePane}
+				onPaneChange={this.handlePaneChange}
 				editor={this.props.editor}
 				inspectedNode={this.state.currentEditorNode}
-				key="explorer"
+				key="inspector"
 				ref={this.inspectorRef}
 			/>
 		];

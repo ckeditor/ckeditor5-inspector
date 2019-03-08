@@ -8,21 +8,29 @@
 import React, { Component } from 'react';
 import Logger from '../../logger';
 import Button from './../button';
+import editorEventObserver from '../editorobserver';
 import { PropertyList } from './../propertylist';
 import { getNodePathString } from './utils';
-export default class ModelSelectionInspector extends Component {
+class ModelSelectionInspector extends Component {
 	constructor( props ) {
 		super( props );
 
 		this.state = {
 			selectionInfo: getSelectionInfo( this.props.editor )
 		};
+
+		this.update = this.update.bind( this );
+		this.observerEventName = 'change';
 	}
 
 	update() {
 		this.setState( {
 			selectionInfo: getSelectionInfo( this.props.editor )
 		} );
+	}
+
+	getObserverTarget( editor ) {
+		return editor.model.document;
 	}
 
 	render() {
@@ -105,3 +113,5 @@ function getSelectionInfo( editor ) {
 		]
 	};
 }
+
+export default editorEventObserver( ModelSelectionInspector );

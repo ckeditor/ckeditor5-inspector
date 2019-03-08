@@ -8,10 +8,11 @@ import Tree from '../tree';
 import Select from '../select';
 import Checkbox from '../checkbox';
 import StorageManager from '../../storagemanager';
+import editorEventObserver from '../editorobserver';
 import { isModelElement, isModelText } from './utils';
 
 const LOCAL_STORAGE_COMPACT_TEXT = 'ck5-inspector-model-compact-text';
-export default class ModelTree extends Component {
+class ModelTree extends Component {
 	constructor( props ) {
 		super( props );
 
@@ -21,6 +22,9 @@ export default class ModelTree extends Component {
 		};
 
 		this.handleCompactTextChange = this.handleCompactTextChange.bind( this );
+
+		this.update = this.update.bind( this );
+		this.observerEventName = 'change';
 	}
 
 	update() {
@@ -36,6 +40,10 @@ export default class ModelTree extends Component {
 		this.setState( {
 			modelTree: [ getNodeTree( root, selectionRange.start, selectionRange.end ) ]
 		} );
+	}
+
+	getObserverTarget( editor ) {
+		return editor.model.document;
 	}
 
 	handleCompactTextChange( evt ) {
@@ -200,3 +208,5 @@ function getTextTree( textNode, rangeStart, rangeEnd ) {
 function getNodeAttrs( node ) {
 	return new Map( node.getAttributes() );
 }
+
+export default editorEventObserver( ModelTree );

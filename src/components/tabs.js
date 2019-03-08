@@ -10,38 +10,41 @@ export default class Tabs extends Component {
 	constructor( props ) {
 		super( props );
 
-		this.state = {
-			activeTabName: this.props.activeTabName
-		};
-
 		this.handleTabClick = this.handleTabClick.bind( this );
 	}
 
-	handleTabClick( activeTabName ) {
-		this.setState( { activeTabName }, () => {
-			this.props.onClick( activeTabName );
+	handleTabClick( activeTab ) {
+		this.setState( { activeTab }, () => {
+			this.props.onClick( activeTab );
 		} );
 	}
 
-	setActiveTab( name ) {
-		this.setState( { activeTabName: name } );
-	}
-
 	render() {
-		const buttons = [];
+		return <div className="ck-inspector-tabs">
+			{this.props.definitions.map( label => {
+				return <Tab
+					key={label}
+					label={label}
+					isActive={this.props.activeTab === label}
+					onClick={() => this.handleTabClick( label )}
+				/>;
+			})}
+		</div>
+	}
+}
 
-		for ( const name in this.props.definitions ) {
-			const { label } = this.props.definitions[ name ];
-
-			buttons.push(
-				<button
-					className={'ck-inspector-tabs__tab' + ( this.state.activeTabName == name ? ' ck-inspector-tabs__tab_active' : '' ) }
-					key={name}
-					onClick={() => this.handleTabClick( name )}
-					type="button">{label}
-				</button>
-			);
-		}
-		return <div className="ck-inspector-tabs">{buttons}</div>
+export class Tab extends Component {
+	render() {
+		return <button
+			className={[
+				'ck-inspector-tabs__tab',
+				( this.props.isActive ? ' ck-inspector-tabs__tab_active' : '' )
+			].join( ' ' )}
+			key={this.props.label}
+			onClick={this.props.onClick}
+			type="button"
+		>
+			{this.props.label}
+		</button>;
 	}
 }

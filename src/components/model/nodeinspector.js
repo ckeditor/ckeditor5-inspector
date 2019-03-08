@@ -20,15 +20,22 @@ export default class ModelNodeInspector extends Component {
 		};
 	}
 
-	update() {
+	componentDidMount() {
+		if( this.props.inspectedNode ) {
+			this.setState( {
+				inspectedNodeInfo: getNodeInfo( this.props.inspectedNode, this.props.currentRootName )
+			} );
+		}
+	}
+
+	componentDidUpdate( prevProps ) {
+		if ( prevProps && prevProps.inspectedNode === this.props.inspectedNode ) {
+			return;
+		}
+
 		this.setState( {
 			inspectedNodeInfo: getNodeInfo( this.props.inspectedNode, this.props.currentRootName )
 		} );
-	}
-
-	componentDidMount() {
-		// When a node is selected in the tree and switching back from the selection tab.
-		this.update();
 	}
 
 	render() {
