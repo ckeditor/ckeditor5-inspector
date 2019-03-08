@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import Tree from '../tree';
 import Select from '../select';
 import Checkbox from '../checkbox';
-import StorageManager from '../../storage';
+import StorageManager from '../../storagemanager';
 import {
 	isViewElement,
 	isViewAttributeElement,

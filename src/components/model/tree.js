@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import Tree from '../tree';
 import Select from '../select';
 import Checkbox from '../checkbox';
-import StorageManager from '../../storage';
+import StorageManager from '../../storagemanager';
 import { isModelElement, isModelText } from './utils';
 
 const LOCAL_STORAGE_COMPACT_TEXT = 'ck5-inspector-model-compact-text';

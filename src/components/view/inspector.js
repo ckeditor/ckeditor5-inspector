@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import Panes from '../panes';
 import ViewNodeInspector from './nodeinspector';
 import ViewSelectionInspector from './selectioninspector';
-import StorageManager from '../../storage';
+import StorageManager from '../../storagemanager';
 import '../inspector.css';
 
 const LOCAL_STORAGE_ACTIVE_PANE = 'ck5-inspector-active-view-pane-name';

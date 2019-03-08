@@ -7,7 +7,7 @@
 
 import React, { Component } from 'react';
 
-import StorageManager from '../storage';
+import StorageManager from '../storagemanager';
 import ModelPane from './model/pane';
 import ViewPane from './view/pane';
 import CommandsPane from './commands/pane';
