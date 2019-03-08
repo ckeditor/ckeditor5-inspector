@@ -6,7 +6,7 @@
 /* global document, window, console */
 
 import TestEditor from '../utils/testeditor';
-import CKEditorInspector from '../../src/app';
+import CKEditorInspector from '../../src/ckeditorinspector';
 
 describe( 'CKEditorInspector', () => {
 	let editor, inspectorRef;

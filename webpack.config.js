@@ -14,7 +14,7 @@ module.exports = ( env, argv ) => {
 
 	return {
 		mode: argv.mode || 'production',
-		entry: path.resolve( __dirname, 'src', 'app.js' ),
+		entry: path.resolve( __dirname, 'src', 'ckeditorinspector.js' ),
 		module: {
 			rules: [
 				{
