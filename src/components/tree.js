@@ -4,7 +4,6 @@
  */
 
 import React, { Component } from 'react';
-import { stringify } from './utils';
 import './tree.css';
 
 export class Tree extends Component {

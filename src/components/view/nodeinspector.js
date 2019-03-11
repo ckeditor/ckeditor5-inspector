@@ -16,7 +16,8 @@ import {
 	isViewUiElement,
 	isViewEmptyElement
 } from './utils';
-import { PropertyList } from './../propertylist';
+import { stringifyPropertyList } from '../utils';
+import PropertyList from './../propertylist';
 
 class NodeInspector extends Component {
 	editorEventObserverConfig( props ) {
@@ -131,6 +132,9 @@ class NodeInspector extends Component {
 				[ 'index', node.index ]
 			);
 		}
+
+		info.properties = stringifyPropertyList( info.properties );
+		info.attributes = stringifyPropertyList( info.attributes );
 
 		return info;
 	}

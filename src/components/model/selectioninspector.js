@@ -7,8 +7,10 @@ import React, { Component } from 'react';
 import Logger from '../../logger';
 import Button from './../button';
 import editorEventObserver from '../editorobserver';
-import { PropertyList } from './../propertylist';
+import PropertyList from './../propertylist';
 import { getNodePathString } from './utils';
+import { stringifyPropertyList } from '../utils';
+
 class ModelSelectionInspector extends Component {
 	editorEventObserverConfig( props ) {
 		return {
@@ -68,8 +70,9 @@ class ModelSelectionInspector extends Component {
 
 	getEditorSelectionInfo() {
 		const selection = this.props.editor.model.document.selection;
-
-		return {
+		const anchor = selection.anchor;
+		const focus = selection.focus;
+		const info = {
 			properties: [
 				[ 'isCollapsed', selection.isCollapsed ],
 				[ 'isBackward', selection.isBackward ],
@@ -77,27 +80,28 @@ class ModelSelectionInspector extends Component {
 				[ 'rangeCount', selection.rangeCount ],
 			],
 			attributes: [ ...selection.getAttributes() ],
-			anchor: [
-				[ 'path', getNodePathString( selection.anchor ) ],
-				[ 'stickiness', selection.anchor.stickiness ],
-				[ 'index', selection.anchor.index ],
-				[ 'isAtEnd', selection.anchor.isAtEnd ],
-				[ 'isAtStart', selection.anchor.isAtStart ],
-				[ 'offset', selection.anchor.offset ],
-				[ 'textNode', selection.anchor.textNode && selection.anchor.textNode.data ],
-			],
-			focus: [
-				[ 'path', getNodePathString( selection.focus ) ],
-				[ 'stickiness', selection.focus.stickiness ],
-				[ 'index', selection.focus.index ],
-				[ 'isAtEnd', selection.focus.isAtEnd ],
-				[ 'isAtStart', selection.focus.isAtStart ],
-				[ 'offset', selection.focus.offset ],
-				[ 'textNode', selection.focus.textNode && selection.focus.textNode.data ],
-			]
+			anchor: getPositionInfo( anchor ),
+			focus: getPositionInfo( focus )
 		};
+
+		for ( const category in info ) {
+			info[ category ] = stringifyPropertyList( info[ category ] );
+		}
+
+		return info;
 	}
 }
 
+function getPositionInfo( position ) {
+	return [
+		[ 'path', getNodePathString( position ) ],
+		[ 'stickiness', position.stickiness ],
+		[ 'index', position.index ],
+		[ 'isAtEnd', position.isAtEnd ],
+		[ 'isAtStart', position.isAtStart ],
+		[ 'offset', position.offset ],
+		[ 'textNode', position.textNode && position.textNode.data ],
+	];
+}
 
 export default editorEventObserver( ModelSelectionInspector );

@@ -7,8 +7,9 @@ import React, { Component } from 'react';
 import Logger from '../../logger';
 import Button from './../button';
 import editorEventObserver from '../editorobserver';
-import { PropertyList } from './../propertylist';
+import PropertyList from './../propertylist';
 import { nodeToString } from './utils';
+import { stringifyPropertyList } from '../utils';
 class ViewSelectionInspector extends Component {
 	editorEventObserverConfig( props ) {
 		return {
@@ -55,28 +56,33 @@ class ViewSelectionInspector extends Component {
 
 	getEditorSelectionInfo() {
 		const selection = this.props.editor.editing.view.document.selection;
-
-		return {
+		const info = {
 			properties: [
 				[ 'isCollapsed', selection.isCollapsed ],
 				[ 'isBackward', selection.isBackward ],
 				[ 'isFake', selection.isFake ],
 				[ 'rangeCount', selection.rangeCount ],
 			],
-			anchor: [
-				[ 'offset', selection.anchor.offset ],
-				[ 'isAtEnd', selection.anchor.isAtEnd ],
-				[ 'isAtStart', selection.anchor.isAtStart ],
-				[ 'parent', nodeToString( selection.anchor.parent ) ]
-			],
-			focus: [
-				[ 'offset', selection.focus.offset ],
-				[ 'isAtEnd', selection.focus.isAtEnd ],
-				[ 'isAtStart', selection.focus.isAtStart ],
-				[ 'parent', nodeToString( selection.focus.parent ) ]
-			],
+			anchor: getPositionInfo( selection.anchor ),
+			focus: getPositionInfo( selection.focus ),
 		};
+
+		for ( const category in info ) {
+			info[ category ] = stringifyPropertyList( info[ category ] );
+		}
+
+		return info;
 	}
 }
+
+function getPositionInfo( position ) {
+	return [
+		[ 'offset', position.offset ],
+		[ 'isAtEnd', position.isAtEnd ],
+		[ 'isAtStart', position.isAtStart ],
+		[ 'parent', nodeToString( position.parent ) ]
+	];
+}
+
 
 export default editorEventObserver( ViewSelectionInspector );

@@ -7,8 +7,8 @@ import React, { Component } from 'react';
 import Button from './../button';
 import Logger from '../../logger';
 import editorEventObserver from '../editorobserver';
-import { PropertyList } from './../propertylist';
-
+import PropertyList from './../propertylist';
+import { stringifyPropertyList } from '../utils';
 class CommandInspector extends Component {
 	editorEventObserverConfig( props ) {
 		return {
@@ -52,7 +52,7 @@ class CommandInspector extends Component {
 
 		const command = editor.commands.get( name );
 
-		return {
+		const info = {
 			type: 'Command',
 			name: name,
 			url: 'https://ckeditor.com/docs/ckeditor5/latest/api/module_core_command-Command.html',
@@ -62,6 +62,10 @@ class CommandInspector extends Component {
 			],
 			command,
 		};
+
+		info.properties = stringifyPropertyList( info.properties );
+
+		return info;
 	}
 }
 

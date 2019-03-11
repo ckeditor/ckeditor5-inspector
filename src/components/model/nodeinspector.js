@@ -10,8 +10,9 @@ import Button from './../button';
 import Logger from '../../logger';
 import editorEventObserver from '../editorobserver';
 import { isModelElement, isModelText, isModelRoot } from './utils';
-import { PropertyList } from './../propertylist';
+import PropertyList from './../propertylist';
 import { getNodePathString } from './utils';
+import { stringifyPropertyList } from '../utils';
 class ModelNodeInspector extends Component {
 	editorEventObserverConfig( props ) {
 		return {
@@ -115,6 +116,9 @@ class ModelNodeInspector extends Component {
 
 		info.properties.push( [ 'path', getNodePathString( node ) ] );
 		info.attributes.push( ...node.getAttributes() );
+
+		info.properties = stringifyPropertyList( info.properties );
+		info.attributes = stringifyPropertyList( info.attributes );
 
 		return info;
 	}
