@@ -6,6 +6,7 @@
 /* global document */
 
 import React, { Component } from 'react';
+import { Rnd } from 'react-rnd';
 
 import StorageManager from '../storage';
 import ModelPane from './model/pane';
@@ -17,21 +18,39 @@ import './ui.css';
 
 const LOCAL_STORAGE_ACTIVE_PANE = 'ck5-inspector-active-pane-name';
 const LOCAL_STORAGE_IS_COLLAPSED = 'ck5-inspector-is-collapsed';
+const LOCAL_STORAGE_INSPECTOR_HEIGHT = 'ck5-inspector-height';
+const INSPECTOR_MIN_HEIGHT = '100';
+const INSPECTOR_DEFAULT_HEIGHT = '400px';
+const INSPECTOR_COLLAPSED_HEIGHT = 30;
+
+const INSPECTOR_STYLES = {
+	position: 'fixed',
+	bottom: '0',
+	left: '0',
+	right: '0',
+	top: 'auto'
+};
 
 export default class InspectorUI extends Component {
 	constructor( props ) {
 		super( props );
 
+		const height = StorageManager.get( LOCAL_STORAGE_INSPECTOR_HEIGHT ) || INSPECTOR_DEFAULT_HEIGHT;
+
 		this.state = {
 			isCollapsed: StorageManager.get( LOCAL_STORAGE_IS_COLLAPSED ) === 'true',
+			height,
 			editors: null,
 			currentEditorName: null
 		};
+
+		updateBodyHeight( height );
 
 		this.panesRef = React.createRef();
 		this.handlePaneChange = this.handlePaneChange.bind( this );
 		this.handleEditorChange = this.handleEditorChange.bind( this );
 		this.handleToggleCollapseClick = this.handleToggleCollapseClick.bind( this );
+		this.handleInspectorResize = this.handleInspectorResize.bind( this );
 	}
 
 	componentDidMount() {
@@ -57,6 +76,17 @@ export default class InspectorUI extends Component {
 			isCollapsed: !this.state.isCollapsed
 		}, () => {
 			StorageManager.set( LOCAL_STORAGE_IS_COLLAPSED, this.state.isCollapsed );
+		} );
+	}
+
+	handleInspectorResize( evt, direction, ref ) {
+		this.setState( {
+			height: ref.style.height,
+		}, () => {
+			const height = ref.style.height;
+
+			StorageManager.set( LOCAL_STORAGE_INSPECTOR_HEIGHT, height );
+			updateBodyHeight( height );
 		} );
 	}
 
@@ -91,21 +121,39 @@ export default class InspectorUI extends Component {
 			onChange={( evt ) => this.handleEditorChange( evt.target.value )}
 		/>;
 
-		return <div className={`ck-inspector ${this.state.isCollapsed ? 'ck-inspector_collapsed' : ''}`}>
-			<Panes
-				ref={this.panesRef}
-				onPaneChange={this.handlePaneChange}
-				panesDefinitions={panesDefinitions}
-				initialActivePaneName="model"
-				contentBefore={<DocsButton />}
-				contentAfter={[
-					<div className="ck-inspector-editor-selector" key="editor-selector">
-						{currentEditorInstance ? editorInstanceSelector	: '' }
-					</div>,
-					<ToggleButton key="inspector-toggle" onClick={this.handleToggleCollapseClick} isUp={this.state.isCollapsed} />
-				]}
-			/>
-		</div>;
+		return <Rnd
+			bounds='window'
+			enableResizing={{ top: !this.state.isCollapsed }}
+			disableDragging={true}
+			minHeight={INSPECTOR_MIN_HEIGHT}
+			style={INSPECTOR_STYLES}
+			className={[
+				'ck-inspector',
+				this.state.isCollapsed ? 'ck-inspector_collapsed' : '',
+			].join( ' ' )}
+			position={{ x: 0, y: '100%' }}
+			size={{
+				width: '100%',
+				height: this.state.isCollapsed ? INSPECTOR_COLLAPSED_HEIGHT : this.state.height
+			}}
+			onResizeStop={this.handleInspectorResize}>
+				<Panes
+					ref={this.panesRef}
+					onPaneChange={this.handlePaneChange}
+					panesDefinitions={panesDefinitions}
+					initialActivePaneName="model"
+					contentBefore={<DocsButton />}
+					contentAfter={[
+						<div className="ck-inspector-editor-selector" key="editor-selector">
+							{currentEditorInstance ? editorInstanceSelector	: '' }
+						</div>,
+						<ToggleButton
+							key="inspector-toggle"
+							onClick={this.handleToggleCollapseClick}
+							isUp={this.state.isCollapsed} />
+					]}
+				/>
+			</Rnd>;
 	}
 
 	static getDerivedStateFromProps( props, state ) {
@@ -140,4 +188,9 @@ class ToggleButton extends Component {
 				Toggle inspector
 		</button>;
 	}
+}
+
+
+function updateBodyHeight( height ) {
+	document.body.style.setProperty( '--ck-inspector-height', height );
 }
