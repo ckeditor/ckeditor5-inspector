@@ -45,11 +45,12 @@ class TreeNode extends Component {
 	render() {
 		const item = this.props.item;
 		const presentation = item.presentation;
-		const dontClose = presentation && presentation.dontClose;
+		const isEmpty = presentation && presentation.isEmpty;
 		const nodeClasses = [
 			'ck-inspector-code',
 			'ck-inspector-tree-node',
 			( this.isActive ? 'ck-inspector-tree-node_active' : '' ),
+			( isEmpty ? 'ck-inspector-tree-node_empty' : '' ),
 			presentation && presentation.cssClass
 		];
 
@@ -57,12 +58,11 @@ class TreeNode extends Component {
 			<span className="ck-inspector-tree-node__name">
 				{item.name}
 				{this.getAttributes()}
-				{dontClose ? ' /' : '' }
 			</span>
 			<div className="ck-inspector-tree-node__content">
 				{this.getChildren()}
 			</div>
-			{dontClose ? '' : <span className="ck-inspector-tree-node__name">/{item.name}</span>}
+			{isEmpty ? '' : <span className="ck-inspector-tree-node__name">/{item.name}</span>}
 		</div>;
 	}
 

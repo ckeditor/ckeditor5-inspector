@@ -136,7 +136,7 @@ function getElementTree( element, rangeStart, rangeEnd, showTypes ) {
 	// host any children or selection.
 	if ( isViewEmptyElement( element) ) {
 		elementTree.presentation = {
-			dontClose: true
+			isEmpty: true
 		};
 	}
 

@@ -78,14 +78,20 @@
 
 	/*-- Tagged vs. tagless ------------------------------------------------------------------------*/
 
-	&:not(.ck-inspector-tree-node_tagless) .ck-inspector-tree-node__name::before {
-		content: "<";
-		color: var(--ck-inspector-color-tree-node-tag);
-	}
+	&:not(.ck-inspector-tree-node_tagless) {
+		& .ck-inspector-tree-node__name::before {
+			content: "<";
+			color: var(--ck-inspector-color-tree-node-tag);
+		}
 
-	&:not(.ck-inspector-tree-node_tagless) .ck-inspector-tree-node__name::after {
-		content: ">";
-		color: var(--ck-inspector-color-tree-node-tag);
+		& .ck-inspector-tree-node__name::after {
+			content: ">";
+			color: var(--ck-inspector-color-tree-node-tag);
+		}
+
+		&.ck-inspector-tree-node_empty .ck-inspector-tree-node__name::after {
+			content: " />";
+		}
 	}
 
 	&.ck-inspector-tree-node_tagless .ck-inspector-tree-node__content {

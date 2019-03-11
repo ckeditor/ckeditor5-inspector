@@ -50,7 +50,7 @@ class CommandsTree extends Component {
 				attributes: attributes,
 
 				presentation: {
-					dontClose: true,
+					isEmpty: true,
 					cssClass: [
 						'ck-inspector-tree-node_tagless',
 						command.isEnabled ? '' : 'ck-inspector-tree-node_disabled'
