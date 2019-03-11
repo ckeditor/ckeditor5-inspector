@@ -4,7 +4,7 @@
  */
 
 import React, { Component } from 'react';
-import Tree from '../tree';
+import { Tree } from '../tree';
 import editorEventObserver from '../editorobserver';
 
 class CommandsTree extends Component {

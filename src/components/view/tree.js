@@ -4,7 +4,7 @@
  */
 
 import React, { Component } from 'react';
-import Tree from '../tree';
+import { Tree } from '../tree';
 import Select from '../select';
 import Checkbox from '../checkbox';
 import StorageManager from '../../storagemanager';
