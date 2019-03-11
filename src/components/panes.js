@@ -19,11 +19,13 @@ export default class Panes extends Component {
 	}
 
 	render() {
+		const children = Array.isArray( this.props.children ) ? this.props.children : [ this.props.children ];
+
 		return <div className="ck-inspector-panes">
 			<div className="ck-inspector-panes__navigation">
 				{this.props.contentBefore}
 				<Tabs
-					definitions={this.props.children.map( child => child.props.label )}
+					definitions={children.map( child => child.props.label )}
 					activeTab={this.props.activePane}
 					onClick={this.handleTabClick}
 				>
@@ -31,7 +33,7 @@ export default class Panes extends Component {
 				{this.props.contentAfter}
 			</div>
 			<div className="ck-inspector-panes__content">
-				{this.props.children.filter( child => {
+				{children.filter( child => {
 					return child.props.label === this.props.activePane;
 				})}
 			</div>
