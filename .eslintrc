@@ -11,7 +11,8 @@
 	"globals": {
 		"expect": true,
 		"sinon": true,
-		"shallow": true
+		"shallow": true,
+		"mount": true
 	},
 	"rules": {
 		"react/prop-types": "ignore",

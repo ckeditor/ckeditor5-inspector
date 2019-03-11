@@ -18,6 +18,7 @@ Chai.use( ChaiEnzyme() );
 
 window.expect = Chai.expect;
 window.shallow = Enzyme.shallow;
+window.mount = Enzyme.mount;
 
 const testsContext = require.context( '.', true, /\.js$/ );
 
