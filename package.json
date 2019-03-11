@@ -16,6 +16,8 @@
     "build": "webpack --mode production",
     "dev": "webpack --mode development --watch",
     "changelog": "node ./scripts/changelog.js",
+    "release:bump-version": "node ./scripts/bump-version.js",
+    "release:publish": "node ./scripts/publish.js",
     "preversion": "npm run build; if [ -n \"$(git status build/ --porcelain)\" ]; then git add -u build/ && git commit -m 'Internal: Build.'; fi",
     "release": "node ./scripts/release.js"
   },
@@ -32,7 +34,7 @@
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
     "@babel/preset-react": "^7.0.0",
-    "@ckeditor/ckeditor5-dev-env": "^13.0.2",
+    "@ckeditor/ckeditor5-dev-env": "^15.0.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
     "css-loader": "^2.1.0",
