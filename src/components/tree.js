@@ -135,15 +135,18 @@ export class TreeTextNode extends TreeNode {
 
 export class TreeNodeAttribute extends Component {
 	render() {
-		const value = stringify( this.props.value, false );
 		let valueElement;
 
 		if ( !this.props.dontRenderValue ) {
-			valueElement = <span className="ck-inspector-tree-node__attribute__value">{value}</span>;
+			valueElement = <span className="ck-inspector-tree-node__attribute__value">
+				{this.props.value}
+			</span>;
 		}
 
 		return <span className="ck-inspector-tree-node__attribute">
-			<span className="ck-inspector-tree-node__attribute__name" title={value}>{this.props.name}</span>
+			<span className="ck-inspector-tree-node__attribute__name" title={this.props.value}>
+				{this.props.name}
+			</span>
 			{valueElement}
 		</span>;
 	}

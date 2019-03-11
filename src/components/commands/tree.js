@@ -6,7 +6,7 @@
 import React, { Component } from 'react';
 import { Tree } from '../tree';
 import editorEventObserver from '../editorobserver';
-
+import { stringify } from '../utils';
 class CommandsTree extends Component {
 	editorEventObserverConfig( props ) {
 		return {
@@ -39,7 +39,7 @@ class CommandsTree extends Component {
 			const attributes = [];
 
 			if ( command.value !== undefined ) {
-				attributes.push( [ 'value', command.value ] )
+				attributes.push( [ 'value', stringify( command.value, false ) ] )
 			}
 
 			list.push( {

@@ -18,6 +18,7 @@ import {
 	isViewRoot,
 	isViewText
 } from './utils';
+import { stringify } from '../utils';
 
 const LOCAL_STORAGE_ELEMENT_TYPES = 'ck5-inspector-view-element-types';
 class ViewTree extends Component {
@@ -236,7 +237,11 @@ function getTextTree( textNode, rangeStart, rangeEnd ) {
 }
 
 function getNodeAttrs( node ) {
-	return new Map( node.getAttributes() );
+	const attrs = [ ...node.getAttributes() ].map( ( [ name, value ] ) => {
+		return [ name, stringify( value, false ) ];
+	} );
+
+	return new Map( attrs );
 }
 
 export default editorEventObserver( ViewTree );

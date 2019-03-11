@@ -10,6 +10,7 @@ import Checkbox from '../checkbox';
 import StorageManager from '../../storagemanager';
 import editorEventObserver from '../editorobserver';
 import { isModelElement, isModelText } from './utils';
+import { stringify } from '../utils';
 
 const LOCAL_STORAGE_COMPACT_TEXT = 'ck5-inspector-model-compact-text';
 class ModelTree extends Component {
@@ -207,7 +208,11 @@ function getTextTree( textNode, rangeStart, rangeEnd ) {
 }
 
 function getNodeAttrs( node ) {
-	return new Map( node.getAttributes() );
+	const attrs = [ ...node.getAttributes() ].map( ( [ name, value ] ) => {
+		return [ name, stringify( value, false ) ];
+	} );
+
+	return new Map( attrs );
 }
 
 export default editorEventObserver( ModelTree );

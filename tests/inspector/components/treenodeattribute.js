@@ -8,7 +8,7 @@ import {
 	TreeNodeAttribute
 } from '../../../src/components/tree';
 
-describe.only( '<TreeTextNode />', () => {
+describe( '<TreeTextNode />', () => {
 	let wrapper;
 
 	afterEach( () => {
@@ -47,21 +47,6 @@ describe.only( '<TreeTextNode />', () => {
 			wrapper = mount( <TreeNodeAttribute name="foo" value="bar" dontRenderValue="true" /> );
 
 			expect( wrapper.children() ).to.have.length( 1 );
-		} );
-
-		it( 'is stringified without quotes', () => {
-			wrapper = mount( <TreeNodeAttribute name="foo" value="bar" /> );
-
-			expect( wrapper.children().childAt( 1 ).text() ).to.equal( 'bar' );
-
-			wrapper.setProps( { value: [] } );
-			expect( wrapper.children().childAt( 1 ).text() ).to.equal( '[]' );
-
-			wrapper.setProps( { value: { x: 'y' } } );
-			expect( wrapper.children().childAt( 1 ).text() ).to.equal( '{"x":"y"}' );
-
-			wrapper.setProps( { value: true } );
-			expect( wrapper.children().childAt( 1 ).text() ).to.equal( 'true' );
 		} );
 	} );
 } );
