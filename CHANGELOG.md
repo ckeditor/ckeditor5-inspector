@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## [1.2.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v1.1.0...v1.2.0) (2019-03-11)
+
+### Features
+
+* Implemented vertical inspector resizing. Closes [#4](https://github.com/ckeditor/ckeditor5-inspector/issues/4). ([97d56aa](https://github.com/ckeditor/ckeditor5-inspector/commit/97d56aa))
+
+
 ## [1.1.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v1.0.0...v1.1.0) (2019-03-06)
 
 ### Features
