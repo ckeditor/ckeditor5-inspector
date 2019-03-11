@@ -3,43 +3,25 @@
  * For licensing, see LICENSE.md.
  */
 
-/* global console */
+/* global */
 
 import React, { Component } from 'react';
 import Button from './../button';
 import Logger from '../../logger';
+import editorEventObserver from '../editorobserver';
 import { isModelElement, isModelText, isModelRoot } from './utils';
 import { PropertyList } from './../propertylist';
 import { getNodePathString } from './utils';
-export default class ModelNodeInspector extends Component {
-	constructor( props ) {
-		super( props );
-
-		this.state = {
-			inspectedNodeInfo: null
+class ModelNodeInspector extends Component {
+	get editorEventObserverConfig() {
+		return {
+			target: this.props.editor.model.document,
+			event: 'change'
 		};
 	}
 
-	componentDidMount() {
-		if( this.props.inspectedNode ) {
-			this.setState( {
-				inspectedNodeInfo: getNodeInfo( this.props.inspectedNode, this.props.currentRootName )
-			} );
-		}
-	}
-
-	componentDidUpdate( prevProps ) {
-		if ( prevProps && prevProps.inspectedNode === this.props.inspectedNode ) {
-			return;
-		}
-
-		this.setState( {
-			inspectedNodeInfo: getNodeInfo( this.props.inspectedNode, this.props.currentRootName )
-		} );
-	}
-
 	render() {
-		const info = this.state.inspectedNodeInfo;
+		const info = this.getInspectedEditorNodeInfo();
 
 		if ( !info ) {
 			return <div className="ck-inspector-panes__content__empty-wrapper">
@@ -79,58 +61,63 @@ export default class ModelNodeInspector extends Component {
 
 		return <div className="ck-inspector__object-inspector">{content}</div>;
 	}
-}
 
-function getNodeInfo( node, currentRootName ) {
-	if ( !node ) {
-		return null;
-	}
+	getInspectedEditorNodeInfo() {
+		const node = this.props.inspectedNode;
+		const currentRootName = this.props.currentRootName;
 
-	if ( !isModelRoot( node ) && !node.parent ) {
-		return;
-	}
-
-	if ( node.root.rootName !== currentRootName ) {
-		return;
-	}
-
-	const info = {
-		editorNode: node,
-		properties: [],
-		attributes: []
-	};
-
-	if ( isModelElement( node ) ) {
-		if ( isModelRoot( node ) ) {
-			info.type = 'RootElement';
-			info.name = node.rootName;
-			info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_rootelement-RootElement.html';
-		} else {
-			info.type = 'Element';
-			info.name = node.name;
-			info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_element-Element.html';
+		if ( !node ) {
+			return null;
 		}
 
-		info.properties.push(
-			[ 'childCount', node.childCount ],
-			[ 'startOffset', node.startOffset ],
-			[ 'endOffset', node.endOffset ],
-			[ 'maxOffset', node.maxOffset ]
-		);
-	} else if ( isModelText( node ) ) {
-		info.name = node.data;
-		info.type = 'Text';
-		info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_text-Text.html';
+		if ( !isModelRoot( node ) && !node.parent ) {
+			return;
+		}
 
-		info.properties.push(
-			[ 'startOffset', node.startOffset ],
-			[ 'endOffset', node.endOffset ],
-			[ 'offsetSize', node.offsetSize ]
-		);
+		if ( node.root.rootName !== currentRootName ) {
+			return;
+		}
+
+		const info = {
+			editorNode: node,
+			properties: [],
+			attributes: []
+		};
+
+		if ( isModelElement( node ) ) {
+			if ( isModelRoot( node ) ) {
+				info.type = 'RootElement';
+				info.name = node.rootName;
+				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_rootelement-RootElement.html';
+			} else {
+				info.type = 'Element';
+				info.name = node.name;
+				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_element-Element.html';
+			}
+
+			info.properties.push(
+				[ 'childCount', node.childCount ],
+				[ 'startOffset', node.startOffset ],
+				[ 'endOffset', node.endOffset ],
+				[ 'maxOffset', node.maxOffset ]
+			);
+		} else if ( isModelText( node ) ) {
+			info.name = node.data;
+			info.type = 'Text';
+			info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_text-Text.html';
+
+			info.properties.push(
+				[ 'startOffset', node.startOffset ],
+				[ 'endOffset', node.endOffset ],
+				[ 'offsetSize', node.offsetSize ]
+			);
+		}
+
+		info.properties.push( [ 'path', getNodePathString( node ) ] );
+		info.attributes.push( ...node.getAttributes() );
+
+		return info;
 	}
-
-	info.properties.push( [ 'path', getNodePathString( node ) ] );
-	info.attributes.push( ...node.getAttributes() );
-
-	return info;
 }
+
+export default editorEventObserver( ModelNodeInspector );

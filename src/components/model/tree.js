@@ -17,33 +17,17 @@ class ModelTree extends Component {
 		super( props );
 
 		this.state = {
-			modelTree: null,
 			showCompactText: StorageManager.get( LOCAL_STORAGE_COMPACT_TEXT ) === 'true'
 		};
 
 		this.handleCompactTextChange = this.handleCompactTextChange.bind( this );
-
-		this.update = this.update.bind( this );
-		this.observerEventName = 'change';
 	}
 
-	update() {
-		if( !this.props.currentRootName ) {
-			return;
-		}
-
-		const editor = this.props.editor;
-		const model = editor.model;
-		const root = model.document.getRoot( this.props.currentRootName );
-		const selectionRange = editor.model.document.selection.getFirstRange();
-
-		this.setState( {
-			modelTree: [ getNodeTree( root, selectionRange.start, selectionRange.end ) ]
-		} );
-	}
-
-	getObserverTarget( editor ) {
-		return editor.model.document;
+	get editorEventObserverConfig() {
+		return {
+			target: this.props.editor.model.document,
+			event: 'change'
+		};
 	}
 
 	handleCompactTextChange( evt ) {
@@ -53,6 +37,8 @@ class ModelTree extends Component {
 	}
 
 	render() {
+		const tree = this.getEditorModelTree();
+
 		return <div className="ck-inspector__document-tree">
 			<div className="ck-inspector-panes">
 				<div className="ck-inspector-panes__navigation">
@@ -76,7 +62,7 @@ class ModelTree extends Component {
 				</div>
 				<div className="ck-inspector-panes__content">
 					<Tree
-						items={this.state.modelTree}
+						items={tree}
 						onClick={this.props.onClick}
 						showCompactText={this.state.showCompactText}
 						activeNode={this.props.currentEditorNode}
@@ -84,6 +70,21 @@ class ModelTree extends Component {
 				</div>
 			</div>
 		</div>
+	}
+
+	getEditorModelTree() {
+		if( !this.props.currentRootName ) {
+			return null;
+		}
+
+		const editor = this.props.editor;
+		const model = editor.model;
+		const root = model.document.getRoot( this.props.currentRootName );
+		const selectionRange = editor.model.document.selection.getFirstRange();
+
+		return [
+			getNodeTree( root, selectionRange.start, selectionRange.end )
+		];
 	}
 }
 

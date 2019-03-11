@@ -46,9 +46,7 @@ export default class ModelPane extends Component {
 	}
 
 	handleRootChange( currentRootName ) {
-		this.setState( { currentRootName }, () => {
-			this.syncPaneWithEditor();
-		} );
+		this.setState( { currentRootName } );
 	}
 
 	handlePaneChange( activePane ) {
