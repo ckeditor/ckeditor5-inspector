@@ -10,13 +10,6 @@ import ViewSelectionInspector from './selectioninspector';
 import '../inspector.css';
 
 export default class ViewInspector extends Component {
-	constructor( props ) {
-		super( props );
-
-		this.nodeInspectorRef = React.createRef();
-		this.selectionInspectorRef = React.createRef();
-	}
-
 	render() {
 		return <div className="ck-inspector__explorer">
 			<Panes
@@ -28,12 +21,10 @@ export default class ViewInspector extends Component {
 					editor={this.props.editor}
 					currentRootName={this.props.currentRootName}
 					inspectedNode={this.props.inspectedNode}
-					ref={this.nodeInspectorRef}
 				/>
 				<ViewSelectionInspector
 					label="Selection"
 					editor={this.props.editor}
-					ref={this.selectionInspectorRef}
 				/>
 			</Panes>
 		</div>;

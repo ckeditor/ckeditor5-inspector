@@ -3,11 +3,10 @@
  * For licensing, see LICENSE.md.
  */
 
-/* global console */
-
 import React, { Component } from 'react';
 import Button from './../button';
 import Logger from '../../logger';
+import editorEventObserver from '../editorobserver';
 import {
 	isViewElement,
 	isViewText,
@@ -18,28 +17,17 @@ import {
 	isViewEmptyElement
 } from './utils';
 import { PropertyList } from './../propertylist';
-export default class NodeInspector extends Component {
-	constructor( props ) {
-		super( props );
 
-		this.state = {
-			inspectedNodeInfo: null
+class NodeInspector extends Component {
+	editorEventObserverConfig( props ) {
+		return {
+			target: props.editor.editing.view,
+			event: 'render'
 		};
 	}
 
-	update() {
-		this.setState( {
-			inspectedNodeInfo: getNodeInfo( this.props.inspectedNode, this.props.currentRootName )
-		} );
-	}
-
-	componentDidMount() {
-		// When a node is selected in the tree and switching back from the selection tab.
-		this.update();
-	}
-
 	render() {
-		const info = this.state.inspectedNodeInfo;
+		const info = this.getInspectedEditorNodeInfo();
 
 		if ( !info ) {
 			return <div className="ck-inspector-panes__content__empty-wrapper">
@@ -79,68 +67,73 @@ export default class NodeInspector extends Component {
 
 		return <div className="ck-inspector__object-inspector">{content}</div>;
 	}
-}
 
-function getNodeInfo( node, currentRootName ) {
-	if ( !node ) {
-		return null;
-	}
+	getInspectedEditorNodeInfo() {
+		const node = this.props.inspectedNode;
+		const currentRootName = this.props.currentRootName;
 
-	if ( !isViewRoot( node ) && !node.parent ) {
-		return;
-	}
-
-	if ( node.root.rootName !== currentRootName ) {
-		return;
-	}
-
-	const info = {
-		editorNode: node,
-		properties: [],
-		attributes: []
-	};
-
-	if ( isViewElement( node ) ) {
-		if ( isViewRoot( node ) ) {
-			info.type = 'RootEditableElement';
-			info.name = node.rootName;
-			info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_rooteditableelement-RootEditableElement.html';
-		} else {
-			info.name = node.name;
-
-			if ( isViewAttributeElement( node ) ) {
-				info.type = 'AttributeElement';
-				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_attributeelement-AttributeElement.html';
-			} else if ( isViewEmptyElement( node ) ) {
-				info.type = 'EmptyElement';
-				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_emptyelement-EmptyElement.html';
-			} else if ( isViewUiElement( node ) ) {
-				info.type = 'UIElement';
-				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_uielement-UIElement.html';
-			} else if ( isViewContainerElement ( node ) ) {
-				info.type = 'ContainerElement';
-				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_containerelement-ContainerElement.html';
-			} else {
-				info.type = 'Element';
-				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_element-Element.html';
-			}
+		if ( !node ) {
+			return null;
 		}
 
-		info.attributes.push( ...node.getAttributes() );
-		info.properties.push(
-			[ 'index', node.index ],
-			[ 'isEmpty', node.isEmpty ],
-			[ 'childCount', node.childCount ],
-		);
-	} else if ( isViewText( node ) ) {
-		info.name = node.data;
-		info.type = 'Text';
-		info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_text-Text.html';
+		if ( !isViewRoot( node ) && !node.parent ) {
+			return;
+		}
 
-		info.properties.push(
-			[ 'index', node.index ]
-		);
+		if ( node.root.rootName !== currentRootName ) {
+			return;
+		}
+
+		const info = {
+			editorNode: node,
+			properties: [],
+			attributes: []
+		};
+
+		if ( isViewElement( node ) ) {
+			if ( isViewRoot( node ) ) {
+				info.type = 'RootEditableElement';
+				info.name = node.rootName;
+				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_rooteditableelement-RootEditableElement.html';
+			} else {
+				info.name = node.name;
+
+				if ( isViewAttributeElement( node ) ) {
+					info.type = 'AttributeElement';
+					info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_attributeelement-AttributeElement.html';
+				} else if ( isViewEmptyElement( node ) ) {
+					info.type = 'EmptyElement';
+					info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_emptyelement-EmptyElement.html';
+				} else if ( isViewUiElement( node ) ) {
+					info.type = 'UIElement';
+					info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_uielement-UIElement.html';
+				} else if ( isViewContainerElement ( node ) ) {
+					info.type = 'ContainerElement';
+					info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_containerelement-ContainerElement.html';
+				} else {
+					info.type = 'Element';
+					info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_element-Element.html';
+				}
+			}
+
+			info.attributes.push( ...node.getAttributes() );
+			info.properties.push(
+				[ 'index', node.index ],
+				[ 'isEmpty', node.isEmpty ],
+				[ 'childCount', node.childCount ],
+			);
+		} else if ( isViewText( node ) ) {
+			info.name = node.data;
+			info.type = 'Text';
+			info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_text-Text.html';
+
+			info.properties.push(
+				[ 'index', node.index ]
+			);
+		}
+
+		return info;
 	}
-
-	return info;
 }
+
+export default editorEventObserver( NodeInspector );

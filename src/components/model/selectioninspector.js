@@ -10,9 +10,9 @@ import editorEventObserver from '../editorobserver';
 import { PropertyList } from './../propertylist';
 import { getNodePathString } from './utils';
 class ModelSelectionInspector extends Component {
-	get editorEventObserverConfig() {
+	editorEventObserverConfig( props ) {
 		return {
-			target: this.props.editor.model.document,
+			target: props.editor.model.document,
 			event: 'change'
 		};
 	}

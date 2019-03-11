@@ -8,6 +8,7 @@ import Tree from '../tree';
 import Select from '../select';
 import Checkbox from '../checkbox';
 import StorageManager from '../../storagemanager';
+import editorEventObserver from '../editorobserver';
 import {
 	isViewElement,
 	isViewAttributeElement,
@@ -19,41 +20,33 @@ import {
 } from './utils';
 
 const LOCAL_STORAGE_ELEMENT_TYPES = 'ck5-inspector-view-element-types';
-export default class ViewTree extends Component {
+class ViewTree extends Component {
 	constructor( props ) {
 		super( props );
 
 		this.state = {
-			viewTree: null,
 			showTypes: StorageManager.get( LOCAL_STORAGE_ELEMENT_TYPES ) === 'true'
 		};
 
 		this.handleShowTypesChange = this.handleShowTypesChange.bind( this );
 	}
 
-	update() {
-		if( !this.props.currentRootName ) {
-			return;
-		}
-
-		const editor = this.props.editor;
-		const document = editor.editing.view.document;
-		const root = document.getRoot( this.props.currentRootName );
-		const selectionRange = document.selection.getFirstRange();
-
-		this.setState( {
-			viewTree: [ getNodeTree( root, selectionRange.start, selectionRange.end, this.state.showTypes ) ]
-		} );
+	editorEventObserverConfig( props ) {
+		return {
+			target: props.editor.editing.view,
+			event: 'render'
+		};
 	}
 
 	handleShowTypesChange( evt ) {
 		this.setState( { showTypes: evt.target.checked }, () => {
-			this.update();
 			StorageManager.set( LOCAL_STORAGE_ELEMENT_TYPES, this.state.showTypes );
 		} );
 	}
 
 	render() {
+		const tree = this.getEditorViewTree();
+
 		return <div className="ck-inspector__document-tree">
 			<div className="ck-inspector-panes">
 				<div className="ck-inspector-panes__navigation">
@@ -77,7 +70,7 @@ export default class ViewTree extends Component {
 				</div>
 				<div className="ck-inspector-panes__content">
 					<Tree
-						items={this.state.viewTree}
+						items={tree}
 						onClick={this.props.onClick}
 						showCompactText="true"
 						activeNode={this.props.currentEditorNode}
@@ -86,6 +79,22 @@ export default class ViewTree extends Component {
 			</div>
 		</div>
 	}
+
+	getEditorViewTree() {
+		if( !this.props.currentRootName ) {
+			return;
+		}
+
+		const editor = this.props.editor;
+		const document = editor.editing.view.document;
+		const root = document.getRoot( this.props.currentRootName );
+		const selectionRange = document.selection.getFirstRange();
+
+		return [
+			getNodeTree( root, selectionRange.start, selectionRange.end, this.state.showTypes )
+		];
+	}
+
 }
 
 function getNodeTree( node, rangeStart, rangeEnd, showTypes ) {
@@ -229,3 +238,5 @@ function getTextTree( textNode, rangeStart, rangeEnd ) {
 function getNodeAttrs( node ) {
 	return new Map( node.getAttributes() );
 }
+
+export default editorEventObserver( ViewTree );

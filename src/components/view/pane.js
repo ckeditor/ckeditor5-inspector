@@ -23,54 +23,31 @@ export default class ViewPane extends Component {
 			activePane: StorageManager.get( LOCAL_STORAGE_ACTIVE_PANE ) || 'Inspect'
 		};
 
-		this.treeRef = React.createRef();
-		this.inspectorRef = React.createRef();
-
 		this.handleTreeClick = this.handleTreeClick.bind( this );
 		this.handlePaneChange = this.handlePaneChange.bind( this );
 		this.handleRootChange = this.handleRootChange.bind( this );
-		this.syncPaneWithEditor = this.syncPaneWithEditor.bind( this );
-	}
-
-	componentDidUpdate( prevProps ) {
-		if ( prevProps && prevProps.editor ) {
-			prevProps.editor.editing.view.off( 'render', this.syncPaneWithEditor );
-		}
-
-		this.startListeningToEditor();
-	}
-
-	componentDidMount() {
-		this.startListeningToEditor();
-	}
-
-	startListeningToEditor() {
-		if ( this.props.editor ) {
-			this.props.editor.editing.view.on( 'render', this.syncPaneWithEditor );
-			this.syncPaneWithEditor();
-		}
 	}
 
 	handleTreeClick( evt, currentEditorNode ) {
 		evt.persist();
 		evt.stopPropagation();
 
-		this.setState( { currentEditorNode }, () => {
-			this.syncPaneWithEditor();
-
+		this.setState( {
+			currentEditorNode
+		}, () => {
 			// Double click on a tree element should open the inspector.
 			if ( evt.detail == 2 ) {
 				this.setState( {
 					activePane: 'Inspect'
+				}, () => {
+					StorageManager.set( LOCAL_STORAGE_ACTIVE_PANE, 'Inspect' );
 				} );
 			}
 		} );
 	}
 
 	handleRootChange( currentRootName ) {
-		this.setState( { currentRootName }, () => {
-			this.syncPaneWithEditor();
-		} );
+		this.setState( { currentRootName } );
 	}
 
 	handlePaneChange( activePane ) {
@@ -79,17 +56,6 @@ export default class ViewPane extends Component {
 		}, () => {
 			StorageManager.set( LOCAL_STORAGE_ACTIVE_PANE, activePane );
 		} );
-	}
-
-	syncPaneWithEditor() {
-		this.treeRef.current.update();
-		this.inspectorRef.current.update();
-	}
-
-	componentWillUnmount() {
-		if ( this.props.editor ) {
-			this.props.editor.editing.view.off( 'render', this.syncPaneWithEditor );
-		}
 	}
 
 	render() {
@@ -108,7 +74,6 @@ export default class ViewPane extends Component {
 				key="tree"
 				onClick={this.handleTreeClick}
 				onRootChange={this.handleRootChange}
-				ref={this.treeRef}
 			/>,
 			<ViewInspector
 				currentRootName={this.state.currentRootName}
@@ -117,7 +82,6 @@ export default class ViewPane extends Component {
 				editor={this.props.editor}
 				inspectedNode={this.state.currentEditorNode}
 				key="inspector"
-				ref={this.inspectorRef}
 			/>
 		];
 	}

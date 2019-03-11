@@ -23,9 +23,9 @@ class ModelTree extends Component {
 		this.handleCompactTextChange = this.handleCompactTextChange.bind( this );
 	}
 
-	get editorEventObserverConfig() {
+	editorEventObserverConfig( props ) {
 		return {
-			target: this.props.editor.model.document,
+			target: props.editor.model.document,
 			event: 'change'
 		};
 	}

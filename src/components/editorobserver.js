@@ -5,13 +5,21 @@
 
 export default function editorEventObserver( WrappedComponent ) {
 	return class extends WrappedComponent {
+		constructor( ...args ) {
+			super( ...args );
+
+			this._onEditorEventCallback = () => {
+				this.forceUpdate();
+			};
+		}
+
 		componentDidMount() {
 			this.startListeningToEditor();
 		}
 
 		componentDidUpdate( prevProps ) {
 			if ( prevProps && prevProps.editor && prevProps.editor !== this.props.editor ) {
-				this.stopListeningToEditor();
+				this.stopListeningToEditor( prevProps );
 			}
 
 			if ( this.props.editor ) {
@@ -22,27 +30,19 @@ export default function editorEventObserver( WrappedComponent ) {
 		}
 
 		componentWillUnmount() {
-			if ( this.props.editor ) {
-				this.stopListeningToEditor();
-			}
+			this.stopListeningToEditor( this.props );
 		}
 
 		startListeningToEditor() {
-			if ( this.props.editor ) {
-				this._onEditorEventCallback = () => {
-					this.forceUpdate();
-				};
+			const { target, event } = this.editorEventObserverConfig( this.props );
 
-				const { target, event } = this.editorEventObserverConfig;
+			target.on( event, this._onEditorEventCallback );
 
-				target.on( event, this._onEditorEventCallback );
-
-				this.forceUpdate();
-			}
+			this.forceUpdate();
 		}
 
-		stopListeningToEditor() {
-			const { target, event } = this.editorEventObserverConfig;
+		stopListeningToEditor( props ) {
+			const { target, event } = this.editorEventObserverConfig( props );
 
 			target.off( event, this._onEditorEventCallback );
 		}
