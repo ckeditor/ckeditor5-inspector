@@ -70,15 +70,17 @@ yarn build
 
 The release process is as follows (order matters):
 
+**Note:** We recommend using `npm` for that.
+
 ```console
-yarn changelog
-yarn preversion
+npm run changelog
+npm run preversion
 ```
 
 Run the sample and make sure global `CKEDITOR_INSPECTOR_VERSION` is right. Then:
 
 ```console
-yarn release
+npm run release
 ```
 
 ## License

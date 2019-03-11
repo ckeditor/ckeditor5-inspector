@@ -7,7 +7,7 @@
   ],
   "description": "The official CKEditor 5 instance inspector.",
   "license": "GPL-2.0-or-later",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "engines": {
     "node": ">=8.0.0",
     "npm": ">=5.7.1"
