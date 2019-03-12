@@ -1,4 +1,4 @@
-	/**
+/**
  * @license Copyright (c) 2003-2019, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md.
  */
@@ -51,10 +51,8 @@ describe( '<InspectorUI />', () => {
 		editor1Element.remove();
 		editor2Element.remove();
 
-		return Promise.all( [
-			editors.get( 'first' ).destroy(),
-			editors.get( 'second' ).destroy()
-		] );
+		return Promise.all( Array.from( editors )
+			.map( ( [ , editor ] ) => editor.destroy() ) );
 	} );
 
 	describe( 'state', () => {
@@ -331,6 +329,16 @@ describe( '<InspectorUI />', () => {
 					expect( mount( getPanes().props().children[ 2 ] ).type() ).to.equal( CommandsPane );
 				} );
 			} );
+		} );
+	} );
+
+	describe( 'getDerivedStateFromProps()', () => {
+		it ( 'falls back to the first editor in props#editors when editor is removed', () => {
+			wrapper.setState( { currentEditorName: 'second' } );
+			editors.delete( 'second' );
+			wrapper.setState( { editors } );
+
+			expect( wrapper.state().currentEditorName ).to.equal( 'first' );
 		} );
 	} );
 } );
