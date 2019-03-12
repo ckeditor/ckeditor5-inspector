@@ -6,11 +6,11 @@
 import React, { Component } from 'react';
 import Panes from '../panes';
 import CommandInspector from './inspector';
-import '../inspector.css';
+import '../sidebar.css';
 
 export default class CommandSidebar extends Component {
 	render() {
-		return <div className="ck-inspector__explorer">
+		return <div className="ck-inspector__sidebar">
 			<Panes
 				onPaneChange={this.props.onPaneChange}
 				activePane={this.props.activePane}

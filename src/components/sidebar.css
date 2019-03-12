@@ -7,7 +7,7 @@
 	--ck-inspector-explorer-width: 300px;
 }
 
-.ck-inspector .ck-inspector__explorer {
+.ck-inspector .ck-inspector__sidebar {
 	min-width: var(--ck-inspector-explorer-width);
 	width: var(--ck-inspector-explorer-width);
 }
