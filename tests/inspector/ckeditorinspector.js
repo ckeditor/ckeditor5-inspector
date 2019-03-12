@@ -12,7 +12,6 @@ import Logger from '../../src/logger';
 describe( 'CKEditorInspector', () => {
 	let editor, inspectorRef;
 
-
 	beforeEach( () => {
 		// Silence inspector logs.
 		sinon.stub( Logger, 'log' ).callsFake( () => {} );

@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md.
  */
 
-/* global document, console, window, CKEDITOR_INSPECTOR_VERSION */
+/* global document, window, CKEDITOR_INSPECTOR_VERSION */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
