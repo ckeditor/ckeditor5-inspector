@@ -4,20 +4,89 @@
  */
 
 import Editor from '@ckeditor/ckeditor5-core/src/editor/editor';
+import EditorUI from '@ckeditor/ckeditor5-core/src/editor/editorui';
+import HtmlDataProcessor from '@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor';
+import BoxedEditorUIView from '@ckeditor/ckeditor5-ui/src/editorui/boxed/boxededitoruiview';
+import ElementReplacer from '@ckeditor/ckeditor5-utils/src/elementreplacer';
+import InlineEditableUIView from '@ckeditor/ckeditor5-ui/src/editableui/inline/inlineeditableuiview';
+import getDataFromElement from '@ckeditor/ckeditor5-utils/src/dom/getdatafromelement';
 
 export default class TestEditor extends Editor {
-	static create( config ) {
+	/**
+	 * @inheritDoc
+	 */
+	constructor( element, config ) {
+		super( config );
+
+		this.element = element;
+		this.data.processor = new HtmlDataProcessor();
+		this.ui = new ClassicTestEditorUI( this, new BoxedEditorUIView( this.locale ) );
+		this.ui.view.editable = new InlineEditableUIView( this.ui.view.locale, this.editing.view );
+		this.model.document.createRoot();
+	}
+
+	destroy() {
+		this.ui.destroy();
+
+		return super.destroy();
+	}
+
+	static create( element, config ) {
 		return new Promise( resolve => {
-			const editor = new this( config );
+			const editor = new this( element, config );
 
 			resolve(
 				editor.initPlugins()
+					.then( () => editor.ui.init( element ) )
+					.then( () => editor.editing.view.attachDomRoot( editor.ui.getEditableElement() ) )
+					.then( () => editor.data.init( getDataFromElement( element ) ) )
 					.then( () => {
-						editor.model.document.createRoot();
+						editor.state = 'ready';
 						editor.fire( 'ready' );
 					} )
 					.then( () => editor )
 			);
 		} );
+	}
+}
+
+class ClassicTestEditorUI extends EditorUI {
+	constructor( editor, view ) {
+		super( editor );
+
+		this._elementReplacer = new ElementReplacer();
+
+		this._view = view;
+	}
+
+	get view() {
+		return this._view;
+	}
+
+	init( element ) {
+		const view = this.view;
+		const editable = view.editable;
+		const editingView = this.editor.editing.view;
+		const editingRoot = editingView.document.getRoot();
+
+		editable.name = editingRoot.rootName;
+
+		view.render();
+
+		view.main.add( view.editable );
+
+		this._editableElements.set( 'main', view.editable.element );
+
+		this._elementReplacer.replace( element, view.element );
+
+		this.fire( 'ready' );
+	}
+
+	destroy() {
+		this._elementReplacer.restore();
+
+		this._view.destroy();
+
+		super.destroy();
 	}
 }

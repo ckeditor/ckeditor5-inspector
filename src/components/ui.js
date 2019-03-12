@@ -22,7 +22,6 @@ const LOCAL_STORAGE_INSPECTOR_HEIGHT = 'ck5-inspector-height';
 const INSPECTOR_MIN_HEIGHT = '100';
 const INSPECTOR_DEFAULT_HEIGHT = '400px';
 const INSPECTOR_COLLAPSED_HEIGHT = 30;
-
 const INSPECTOR_STYLES = {
 	position: 'fixed',
 	bottom: '0',
@@ -47,7 +46,6 @@ export default class InspectorUI extends Component {
 
 		updateBodyHeight( height );
 
-		this.panesRef = React.createRef();
 		this.handlePaneChange = this.handlePaneChange.bind( this );
 		this.handleEditorChange = this.handleEditorChange.bind( this );
 		this.handleToggleCollapseClick = this.handleToggleCollapseClick.bind( this );
@@ -113,7 +111,6 @@ export default class InspectorUI extends Component {
 			}}
 			onResizeStop={this.handleInspectorResize}>
 				<Panes
-					ref={this.panesRef}
 					onPaneChange={this.handlePaneChange}
 					contentBefore={<DocsButton />}
 					activePane={this.state.activePane}
@@ -146,7 +143,7 @@ export default class InspectorUI extends Component {
 	}
 }
 
-class DocsButton extends Component {
+export class DocsButton extends Component {
 	render() {
 		return <a className="ck-inspector-panes__navigation__logo"
 			title="Go to the documentation"
@@ -156,7 +153,7 @@ class DocsButton extends Component {
 	}
 }
 
-class ToggleButton extends Component {
+export class ToggleButton extends Component {
 	render() {
 		return <button
 			type="button"
@@ -168,7 +165,7 @@ class ToggleButton extends Component {
 	}
 }
 
-class EditorInstanceSelector extends Component {
+export class EditorInstanceSelector extends Component {
 	render() {
 		return <div className="ck-inspector-editor-selector" key="editor-selector">
 			{this.props.currentEditorName ? <Select

@@ -10,7 +10,7 @@ import TestEditor from '../../utils/testeditor';
 import React, { Component } from 'react';
 
 describe( 'editorEventObserver()', () => {
-	let editor;
+	let editor, element ;
 
 	class Test extends Component {
 		editorEventObserverConfig( props ) {
@@ -28,13 +28,18 @@ describe( 'editorEventObserver()', () => {
 	const TestObserver = editorEventObserver( Test );
 
 	beforeEach( () => {
-		return TestEditor.create().then( newEditor => {
+		element = document.createElement( 'div' )
+		document.body.appendChild( element );
+
+		return TestEditor.create( element ).then( newEditor => {
 			editor = newEditor;
 		} );
 	} );
 
 	afterEach( () => {
 		return editor.destroy();
+
+		element.remove();
 	} );
 
 	describe( 'componentDidMount()', () => {
@@ -69,7 +74,7 @@ describe( 'editorEventObserver()', () => {
 		} );
 
 		it( 'starts listening to the event if props#editor changed and different', () => {
-			return TestEditor.create().then( newEditor => {
+			return TestEditor.create( element ).then( newEditor => {
 				const wrapper = mount( <TestObserver editor={editor} /> );
 				const stopSpy = sinon.spy( wrapper.instance(), 'stopListeningToEditor' );
 				const startSpy = sinon.spy( wrapper.instance(), 'startListeningToEditor' );

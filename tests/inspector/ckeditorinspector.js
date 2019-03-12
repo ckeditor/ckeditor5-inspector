@@ -10,19 +10,24 @@ import CKEditorInspector from '../../src/ckeditorinspector';
 import Logger from '../../src/logger';
 
 describe( 'CKEditorInspector', () => {
-	let editor, inspectorRef;
+	let editor, element, inspectorRef;
 
 	beforeEach( () => {
 		// Silence inspector logs.
 		sinon.stub( Logger, 'log' ).callsFake( () => {} );
 
-		return TestEditor.create().then( newEditor => {
+		element = document.createElement( 'div' )
+		document.body.appendChild( element );
+
+		return TestEditor.create( element ).then( newEditor => {
 			editor = newEditor;
 		} );
 	} );
 
 	afterEach( () => {
 		Logger.log.restore();
+
+		element.remove();
 
 		return editor.destroy();
 	} );
@@ -43,12 +48,12 @@ describe( 'CKEditorInspector', () => {
 
 			expect( wrapper.tagName.toLowerCase() ).to.equal( 'div' );
 			expect( wrapper.parentNode ).to.equal( document.body );
-			expect( wrapper.childNodes.length ).to.equal( 1 );
+			expect( wrapper.childNodes.length ).to.equal( 2 );
 			expect( wrapper.firstChild.classList.contains( 'ck-inspector' ) ).to.be.true;
 		} );
 
 		it( 'attaches editors under generated names', () => {
-			return TestEditor.create()
+			return TestEditor.create( element )
 				.then( anotherEditor => {
 					CKEditorInspector.attach( editor );
 					CKEditorInspector.attach( anotherEditor );
