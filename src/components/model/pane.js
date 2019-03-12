@@ -5,7 +5,7 @@
 
 import React, { Component } from 'react';
 import ModelTree from './tree';
-import ModelInspector from './inspector';
+import ModelSidebar from './sidebar';
 import StorageManager from '../../storagemanager';
 
 const LOCAL_STORAGE_ACTIVE_PANE = 'ck5-inspector-active-model-pane-name';
@@ -74,7 +74,7 @@ export default class ModelPane extends Component {
 				onClick={this.handleTreeClick}
 				onRootChange={this.handleRootChange}
 			/>,
-			<ModelInspector
+			<ModelSidebar
 				currentRootName={this.state.currentRootName}
 				activePane={this.state.activePane}
 				onPaneChange={this.handlePaneChange}

@@ -5,7 +5,7 @@
 
 import React, { Component } from 'react';
 import ViewTree from './tree';
-import ViewInspector from './inspector';
+import ViewSidebar from './sidebar';
 import StorageManager from '../../storagemanager';
 
 const LOCAL_STORAGE_ACTIVE_PANE = 'ck5-inspector-active-view-pane-name';
@@ -75,7 +75,7 @@ export default class ViewPane extends Component {
 				onClick={this.handleTreeClick}
 				onRootChange={this.handleRootChange}
 			/>,
-			<ViewInspector
+			<ViewSidebar
 				currentRootName={this.state.currentRootName}
 				activePane={this.state.activePane}
 				onPaneChange={this.handlePaneChange}

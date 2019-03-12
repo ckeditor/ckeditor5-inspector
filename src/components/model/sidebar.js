@@ -9,7 +9,7 @@ import ModelNodeInspector from './nodeinspector';
 import ModelSelectionInspector from './selectioninspector';
 import '../sidebar.css';
 
-export default class ModelInspector extends Component {
+export default class ModelSidebar extends Component {
 	render() {
 		return <div className="ck-inspector__sidebar">
 			<Panes

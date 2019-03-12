@@ -9,7 +9,7 @@ import ViewNodeInspector from './nodeinspector';
 import ViewSelectionInspector from './selectioninspector';
 import '../sidebar.css';
 
-export default class ViewInspector extends Component {
+export default class ViewSidebar extends Component {
 	render() {
 		return <div className="ck-inspector__sidebar">
 			<Panes
