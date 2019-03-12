@@ -9,7 +9,7 @@ import React from 'react';
 import TestEditor from '../../../utils/testeditor';
 import CommandsPane from '../../../../src/components/commands/pane';
 import CommandTree from '../../../../src/components/commands/tree';
-import CommandInspector from '../../../../src/components/commands/inspector';
+import CommandSidebar from '../../../../src/components/commands/sidebar';
 
 describe( '<CommandsPane />', () => {
 	let editor, wrapper, element;
@@ -79,12 +79,12 @@ describe( '<CommandsPane />', () => {
 			expect( wrapper.find( CommandTree ).props().onClick ).to.equal( wrapper.instance().handleTreeClick );
 		} );
 
-		it( 'renders a <CommandInspector/>', () => {
+		it( 'renders a <CommandSidebar/>', () => {
 			wrapper.setState( { currentCommandName: 'foo' } );
 
-			expect( wrapper.find( CommandInspector ).props().editor ).to.equal( editor );
-			expect( wrapper.find( CommandInspector ).props().inspectedCommandName ).to.equal( 'foo' );
-			expect( wrapper.find( CommandInspector ).props().activePane ).to.equal( 'Inspect' );
+			expect( wrapper.find( CommandSidebar ).props().editor ).to.equal( editor );
+			expect( wrapper.find( CommandSidebar ).props().inspectedCommandName ).to.equal( 'foo' );
+			expect( wrapper.find( CommandSidebar ).props().activePane ).to.equal( 'Inspect' );
 		} );
 	} );
 

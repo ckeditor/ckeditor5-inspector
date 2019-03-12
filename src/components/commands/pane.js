@@ -5,7 +5,7 @@
 
 import React, { Component } from 'react';
 import CommandTree from './tree';
-import CommandInspector from './inspector';
+import CommandSidebar from './sidebar';
 
 export default class CommandsPane extends Component {
 	constructor( props ) {
@@ -40,7 +40,7 @@ export default class CommandsPane extends Component {
 				key="tree"
 				onClick={this.handleTreeClick}
 			/>,
-			<CommandInspector
+			<CommandSidebar
 				editor={this.props.editor}
 				inspectedCommandName={this.state.currentCommandName}
 				activePane="Inspect"

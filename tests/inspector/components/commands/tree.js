@@ -8,9 +8,9 @@
 import React from 'react';
 import TestEditor from '../../../utils/testeditor';
 import Tree from '../../../../src/components/tree';
-import CommandsTree from '../../../../src/components/commands/tree';
+import CommandTree from '../../../../src/components/commands/tree';
 
-describe( '<CommandsTree />', () => {
+describe( '<CommandTree />', () => {
 	let editor, wrapper, element, clickSpy;
 
 	const container = document.createElement( 'div' );
@@ -24,7 +24,7 @@ describe( '<CommandsTree />', () => {
 		return TestEditor.create( element ).then( newEditor => {
 			editor = newEditor;
 
-			wrapper = shallow( <CommandsTree editor={editor} onClick={clickSpy} /> );
+			wrapper = shallow( <CommandTree editor={editor} onClick={clickSpy} /> );
 		} );
 	} );
 

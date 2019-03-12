@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import Tree from '../tree';
 import editorEventObserver from '../editorobserver';
 import { stringify } from '../utils';
-class CommandsTree extends Component {
+class CommandTree extends Component {
 	editorEventObserverConfig( props ) {
 		return {
 			target: props.editor.model.document,
@@ -63,4 +63,4 @@ class CommandsTree extends Component {
 	}
 }
 
-export default editorEventObserver( CommandsTree );
+export default editorEventObserver( CommandTree );
