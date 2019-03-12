@@ -1,4 +1,4 @@
-/**
+	/**
  * @license Copyright (c) 2003-2019, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md.
  */
@@ -238,6 +238,11 @@ describe( '<InspectorUI />', () => {
 					const rnd = wrapper.find( Rnd );
 
 					expect( rnd.props().onResizeStop ).to.equal( wrapper.instance().handleInspectorResize );
+
+					wrapper.instance().handleInspectorResize( {}, {}, { style: { height: '321px' } } );
+
+					expect( document.body.style.getPropertyValue( '--ck-inspector-height' ) ).to.equal( '321px' );
+					expect( window.localStorage.getItem( 'ck5-inspector-height' ) ).to.equal( '321px' );
 				} );
 			} );
 		} );
