@@ -25,10 +25,7 @@ describe( '<CommandInspector />', () => {
 		return TestEditor.create( element ).then( newEditor => {
 			editor = newEditor;
 
-			wrapper = shallow(
-				<CommandInspector editor={editor} />,
-				{ attachTo: container }
-			);
+			wrapper = shallow( <CommandInspector editor={editor} /> );
 		} );
 	} );
 

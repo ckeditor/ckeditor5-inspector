@@ -4,8 +4,7 @@
  */
 
 import React from 'react';
-import {
-	Tree,
+import Tree, {
 	TreeTextNode,
 	TreePlainText,
 	TreeSelection,
