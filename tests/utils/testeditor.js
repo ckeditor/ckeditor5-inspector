@@ -13,6 +13,7 @@ export default class TestEditor extends Editor {
 			resolve(
 				editor.initPlugins()
 					.then( () => {
+						editor.model.document.createRoot();
 						editor.fire( 'ready' );
 					} )
 					.then( () => editor )
