@@ -12,16 +12,19 @@ import Logger from '../../src/logger';
 describe( 'CKEditorInspector', () => {
 	let editor, inspectorRef;
 
-	// Silence inspector logs.
-	sinon.stub( Logger, 'log' ).callsFake( () => {} );
 
 	beforeEach( () => {
+		// Silence inspector logs.
+		sinon.stub( Logger, 'log' ).callsFake( () => {} );
+
 		return TestEditor.create().then( newEditor => {
 			editor = newEditor;
 		} );
 	} );
 
 	afterEach( () => {
+		Logger.log.restore();
+
 		return editor.destroy();
 	} );
 

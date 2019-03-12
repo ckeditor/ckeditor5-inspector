@@ -65,13 +65,6 @@ export default class InspectorUI extends Component {
 		}
 
 		const currentEditorInstance = this.state.editors.get( this.state.currentEditorName );
-		const editorInstanceSelector = <Select
-			id="inspector-editor-selector"
-			label="Editor instance"
-			value={this.state.currentEditorName}
-			options={[ ...this.state.editors ].map( ( [ editorName ] ) => editorName ) }
-			onChange={( evt ) => this.handleEditorChange( evt.target.value )}
-		/>;
 
 		return <div className={`ck-inspector ${this.state.isCollapsed ? 'ck-inspector_collapsed' : ''}`}>
 			<Panes
@@ -80,9 +73,12 @@ export default class InspectorUI extends Component {
 				contentBefore={<DocsButton />}
 				activePane={this.state.activePane}
 				contentAfter={[
-					<div className="ck-inspector-editor-selector" key="editor-selector">
-						{currentEditorInstance ? editorInstanceSelector	: '' }
-					</div>,
+					<EditorInstanceSelector
+						key="selector"
+						currentEditorName={this.state.currentEditorName}
+						editors={this.state.editors}
+						onChange={( evt ) => this.handleEditorChange( evt.target.value )}
+					/>,
 					<ToggleButton key="inspector-toggle" onClick={this.handleToggleCollapseClick} isUp={this.state.isCollapsed} />
 				]}
 			>
@@ -124,5 +120,19 @@ class ToggleButton extends Component {
 			className={`ck-inspector-panes__navigation__toggle ${ this.props.isUp ? ' ck-inspector-panes__navigation__toggle_up' : '' }`}>
 				Toggle inspector
 		</button>;
+	}
+}
+
+class EditorInstanceSelector extends Component {
+	render() {
+		return <div className="ck-inspector-editor-selector" key="editor-selector">
+			{this.props.currentEditorName ? <Select
+				id="inspector-editor-selector"
+				label="Editor instance"
+				value={this.props.currentEditorName}
+				options={[ ...this.props.editors ].map( ( [ editorName ] ) => editorName ) }
+				onChange={this.props.onChange}
+			/> : ''}
+		</div>;
 	}
 }
