@@ -159,7 +159,10 @@ export class ToggleButton extends Component {
 			type="button"
 			onClick={this.props.onClick}
 			title="Toggle inspector"
-			className={`ck-inspector-tabbed-panes__navigation__toggle ${ this.props.isUp ? ' ck-inspector-tabbed-panes__navigation__toggle_up' : '' }`}>
+			className={[
+				'ck-inspector-tabbed-panes__navigation__toggle',
+				this.props.isUp ? ' ck-inspector-tabbed-panes__navigation__toggle_up' : ''
+			].join( ' ' )}>
 				Toggle inspector
 		</button>;
 	}
