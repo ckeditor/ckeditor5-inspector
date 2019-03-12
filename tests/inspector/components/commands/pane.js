@@ -11,7 +11,7 @@ import CommandsPane from '../../../../src/components/commands/pane';
 import CommandTree from '../../../../src/components/commands/tree';
 import CommandInspector from '../../../../src/components/commands/inspector';
 
-describe.only( '<CommandsPane />', () => {
+describe( '<CommandsPane />', () => {
 	let editor, wrapper, element;
 
 	const container = document.createElement( 'div' );
