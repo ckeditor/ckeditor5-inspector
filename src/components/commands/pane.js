@@ -5,8 +5,9 @@
 
 import React, { Component } from 'react';
 import CommandTree from './tree';
-import CommandSidebar from './sidebar';
-
+import Panes from '../panes';
+import CommandInspector from './inspector';
+import '../sidebar.css';
 export default class CommandsPane extends Component {
 	constructor( props ) {
 		super( props );
@@ -33,20 +34,20 @@ export default class CommandsPane extends Component {
 			</div>;
 		}
 
-		return [
+		return <div className="ck-inspector-pane">
 			<CommandTree
 				editor={this.props.editor}
 				currentCommandName={this.state.currentCommandName}
-				key="tree"
 				onClick={this.handleTreeClick}
-			/>,
-			<CommandSidebar
-				editor={this.props.editor}
-				inspectedCommandName={this.state.currentCommandName}
-				activePane="Inspect"
-				key="explorer"
 			/>
-		];
+			<Panes activePane="Inspect">
+				<CommandInspector
+					label="Inspect"
+					editor={this.props.editor}
+					inspectedCommandName={this.state.currentCommandName}
+				/>
+			</Panes>
+		</div>;
 	}
 
 	static getDerivedStateFromProps( props, state ) {

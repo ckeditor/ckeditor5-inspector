@@ -5,8 +5,11 @@
 
 import React, { Component } from 'react';
 import ModelTree from './tree';
-import ModelSidebar from './sidebar';
+import Panes from '../panes';
+import ModelNodeInspector from './nodeinspector';
+import ModelSelectionInspector from './selectioninspector';
 import StorageManager from '../../storagemanager';
+import '../sidebar.css';
 
 const LOCAL_STORAGE_ACTIVE_PANE = 'ck5-inspector-active-model-pane-name';
 export default class ModelPane extends Component {
@@ -64,7 +67,7 @@ export default class ModelPane extends Component {
 			</div>;
 		}
 
-		return [
+		return <div className="ck-inspector-pane">
 			<ModelTree
 				currentEditorNode={this.state.currentEditorNode}
 				currentRootName={this.state.currentRootName}
@@ -73,16 +76,23 @@ export default class ModelPane extends Component {
 				key="tree"
 				onClick={this.handleTreeClick}
 				onRootChange={this.handleRootChange}
-			/>,
-			<ModelSidebar
-				currentRootName={this.state.currentRootName}
-				activePane={this.state.activePane}
-				onPaneChange={this.handlePaneChange}
-				editor={this.props.editor}
-				inspectedNode={this.state.currentEditorNode}
-				key="inspector"
 			/>
-		];
+			<Panes
+				onPaneChange={this.handlePaneChange}
+				activePane={this.state.activePane}
+			>
+				<ModelNodeInspector
+					label="Inspect"
+					editor={this.state.editor}
+					currentRootName={this.state.currentRootName}
+					inspectedNode={this.state.currentEditorNode}
+				/>
+				<ModelSelectionInspector
+					label="Selection"
+					editor={this.state.editor}
+				/>
+			</Panes>
+		</div>
 	}
 
 	static getDerivedStateFromProps( props, state ) {

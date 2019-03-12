@@ -5,8 +5,11 @@
 
 import React, { Component } from 'react';
 import ViewTree from './tree';
-import ViewSidebar from './sidebar';
+import Panes from '../panes';
+import ViewNodeInspector from './nodeinspector';
+import ViewSelectionInspector from './selectioninspector';
 import StorageManager from '../../storagemanager';
+import '../sidebar.css';
 
 const LOCAL_STORAGE_ACTIVE_PANE = 'ck5-inspector-active-view-pane-name';
 
@@ -65,7 +68,7 @@ export default class ViewPane extends Component {
 			</div>;
 		}
 
-		return [
+		return <div className="ck-inspector-pane">
 			<ViewTree
 				currentEditorNode={this.state.currentEditorNode}
 				currentRootName={this.state.currentRootName}
@@ -74,16 +77,23 @@ export default class ViewPane extends Component {
 				key="tree"
 				onClick={this.handleTreeClick}
 				onRootChange={this.handleRootChange}
-			/>,
-			<ViewSidebar
-				currentRootName={this.state.currentRootName}
-				activePane={this.state.activePane}
-				onPaneChange={this.handlePaneChange}
-				editor={this.props.editor}
-				inspectedNode={this.state.currentEditorNode}
-				key="inspector"
 			/>
-		];
+			<Panes
+				onPaneChange={this.handlePaneChange}
+				activePane={this.state.activePane}
+			>
+				<ViewNodeInspector
+					label="Inspect"
+					editor={this.state.editor}
+					currentRootName={this.state.currentRootName}
+					inspectedNode={this.state.currentEditorNode}
+				/>
+				<ViewSelectionInspector
+					label="Selection"
+					editor={this.state.editor}
+				/>
+			</Panes>
+		</div>;
 	}
 
 	static getDerivedStateFromProps( props, state ) {
