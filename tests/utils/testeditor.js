@@ -10,6 +10,7 @@ import BoxedEditorUIView from '@ckeditor/ckeditor5-ui/src/editorui/boxed/boxeded
 import ElementReplacer from '@ckeditor/ckeditor5-utils/src/elementreplacer';
 import InlineEditableUIView from '@ckeditor/ckeditor5-ui/src/editableui/inline/inlineeditableuiview';
 import getDataFromElement from '@ckeditor/ckeditor5-utils/src/dom/getdatafromelement';
+import Command from '@ckeditor/ckeditor5-core/src/command';
 
 export default class TestEditor extends Editor {
 	/**
@@ -53,9 +54,7 @@ export default class TestEditor extends Editor {
 class ClassicTestEditorUI extends EditorUI {
 	constructor( editor, view ) {
 		super( editor );
-
 		this._elementReplacer = new ElementReplacer();
-
 		this._view = view;
 	}
 
@@ -70,23 +69,27 @@ class ClassicTestEditorUI extends EditorUI {
 		const editingRoot = editingView.document.getRoot();
 
 		editable.name = editingRoot.rootName;
-
 		view.render();
-
 		view.main.add( view.editable );
 
 		this._editableElements.set( 'main', view.editable.element );
-
 		this._elementReplacer.replace( element, view.element );
+
+		this.editor.commands.add( 'foo', new FooCommand( this.editor ) );
+		this.editor.commands.add( 'bar', new FooCommand( this.editor ) );
 
 		this.fire( 'ready' );
 	}
 
 	destroy() {
 		this._elementReplacer.restore();
-
 		this._view.destroy();
-
 		super.destroy();
+	}
+}
+
+export class FooCommand extends Command {
+	refresh() {
+		this.isEnabled = true;
 	}
 }

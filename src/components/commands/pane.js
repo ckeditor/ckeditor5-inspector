@@ -19,7 +19,6 @@ export default class CommandsPane extends Component {
 		this.handleTreeClick = this.handleTreeClick.bind( this );
 	}
 
-
 	handleTreeClick( evt, currentCommandName ) {
 		evt.persist();
 		evt.stopPropagation();
