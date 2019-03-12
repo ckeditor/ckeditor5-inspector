@@ -22,7 +22,7 @@ class CommandInspector extends Component {
 		const info = this.getEditorCommandInfo();
 
 		if ( !info ) {
-			return <div className="ck-inspector-panes__content__empty-wrapper">
+			return <div className="ck-inspector-tabbed-panes__content__empty-wrapper">
 				<p>Select a command to inspect</p>
 			</div>;
 		}

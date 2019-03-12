@@ -242,7 +242,7 @@
 	flex: 1 1 auto;
 	overflow: hidden;
 
-	& .ck-inspector-panes__navigation {
+	& .ck-inspector-tabbed-panes__navigation {
 		align-items: center;
 	}
 

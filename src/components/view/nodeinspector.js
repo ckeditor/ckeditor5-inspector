@@ -31,7 +31,7 @@ class NodeInspector extends Component {
 		const info = this.getInspectedEditorNodeInfo();
 
 		if ( !info ) {
-			return <div className="ck-inspector-panes__content__empty-wrapper">
+			return <div className="ck-inspector-tabbed-panes__content__empty-wrapper">
 				<p>Select a node in the tree to inspect</p>
 			</div>;
 		}

@@ -19,8 +19,8 @@ class CommandTree extends Component {
 		const states = this.getCommandStates();
 
 		return <div className="ck-inspector__document-tree">
-			<div className="ck-inspector-panes">
-				<div className="ck-inspector-panes__content">
+			<div className="ck-inspector-tabbed-panes">
+				<div className="ck-inspector-tabbed-panes__content">
 					<Tree
 						items={states}
 						onClick={this.props.onClick}

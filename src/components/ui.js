@@ -12,7 +12,7 @@ import StorageManager from '../storagemanager';
 import ModelPane from './model/pane';
 import ViewPane from './view/pane';
 import CommandsPane from './commands/pane';
-import Panes from './panes';
+import Panes from './tabbedpanes';
 import Select from './select';
 import './ui.css';
 
@@ -145,7 +145,7 @@ export default class InspectorUI extends Component {
 
 export class DocsButton extends Component {
 	render() {
-		return <a className="ck-inspector-panes__navigation__logo"
+		return <a className="ck-inspector-tabbed-panes__navigation__logo"
 			title="Go to the documentation"
 			href="https://ckeditor.com/docs/ckeditor5/latest/"
 			target="_blank"
@@ -159,7 +159,7 @@ export class ToggleButton extends Component {
 			type="button"
 			onClick={this.props.onClick}
 			title="Toggle inspector"
-			className={`ck-inspector-panes__navigation__toggle ${ this.props.isUp ? ' ck-inspector-panes__navigation__toggle_up' : '' }`}>
+			className={`ck-inspector-tabbed-panes__navigation__toggle ${ this.props.isUp ? ' ck-inspector-tabbed-panes__navigation__toggle_up' : '' }`}>
 				Toggle inspector
 		</button>;
 	}

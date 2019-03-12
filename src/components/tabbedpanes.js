@@ -5,9 +5,9 @@
 
 import React, { Component } from 'react';
 import Tabs from './tabs';
-import './panes.css';
+import './tabbedpanes.css';
 
-export default class Panes extends Component {
+export default class TabbedPanes extends Component {
 	constructor( props ) {
 		super( props );
 
@@ -21,8 +21,8 @@ export default class Panes extends Component {
 	render() {
 		const children = Array.isArray( this.props.children ) ? this.props.children : [ this.props.children ];
 
-		return <div className="ck-inspector-panes">
-			<div className="ck-inspector-panes__navigation">
+		return <div className="ck-inspector-tabbed-panes">
+			<div className="ck-inspector-tabbed-panes__navigation">
 				{this.props.contentBefore}
 				<Tabs
 					definitions={children.map( child => child.props.label )}
@@ -32,7 +32,7 @@ export default class Panes extends Component {
 				</Tabs>
 				{this.props.contentAfter}
 			</div>
-			<div className="ck-inspector-panes__content">
+			<div className="ck-inspector-tabbed-panes__content">
 				{children.filter( child => {
 					return child.props.label === this.props.activePane;
 				})}

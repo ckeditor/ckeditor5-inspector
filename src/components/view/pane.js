@@ -5,7 +5,7 @@
 
 import React, { Component } from 'react';
 import ViewTree from './tree';
-import Panes from '../panes';
+import Panes from '../tabbedpanes';
 import ViewNodeInspector from './nodeinspector';
 import ViewSelectionInspector from './selectioninspector';
 import StorageManager from '../../storagemanager';
@@ -63,7 +63,7 @@ export default class ViewPane extends Component {
 
 	render() {
 		if ( !this.props.editor ) {
-			return <div className="ck-inspector-panes__content__empty-wrapper">
+			return <div className="ck-inspector-tabbed-panes__content__empty-wrapper">
 				<p>Nothing to show. Attach another editor instance to start inspecting.</p>
 			</div>;
 		}

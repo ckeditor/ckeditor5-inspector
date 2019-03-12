@@ -4,16 +4,16 @@
  */
 
 :root {
-	--ck-inspector-panes-empty-background: #fafafa;
+	--ck-inspector-tabbed-panes-empty-background: #fafafa;
 }
 
-.ck-inspector .ck-inspector-panes {
+.ck-inspector .ck-inspector-tabbed-panes {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
 	align-items: stretch;
 
-	& .ck-inspector-panes__navigation {
+	& .ck-inspector-tabbed-panes__navigation {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: nowrap;
@@ -26,19 +26,19 @@
 		align-items: center;
 	}
 
-	& .ck-inspector-panes__content {
+	& .ck-inspector-tabbed-panes__content {
 		display: flex;
 		flex-direction: row;
 		height: 100%;
 		overflow: hidden;
 
-		& .ck-inspector-panes__content__empty-wrapper {
+		& .ck-inspector-tabbed-panes__content__empty-wrapper {
 			width: 100%;
 			align-items: center;
 			display: flex;
 			justify-content: center;
 			padding: 1em;
-			background: var(--ck-inspector-panes-empty-background);
+			background: var(--ck-inspector-tabbed-panes-empty-background);
 
 			& p {
 				align-self: center;

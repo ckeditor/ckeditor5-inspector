@@ -41,8 +41,8 @@ class ModelTree extends Component {
 		const tree = this.getEditorModelTree();
 
 		return <div className="ck-inspector__document-tree">
-			<div className="ck-inspector-panes">
-				<div className="ck-inspector-panes__navigation">
+			<div className="ck-inspector-tabbed-panes">
+				<div className="ck-inspector-tabbed-panes__navigation">
 					<div className="ck-inspector__document-tree__config">
 						<Select
 							id="view-root-select"
@@ -61,7 +61,7 @@ class ModelTree extends Component {
 						/>
 					</div>
 				</div>
-				<div className="ck-inspector-panes__content">
+				<div className="ck-inspector-tabbed-panes__content">
 					<Tree
 						items={tree}
 						onClick={this.props.onClick}

@@ -4,34 +4,34 @@
  */
 
 import React from 'react';
-import Panes from '../../../src/components/panes';
+import TabbedPanes from '../../../src/components/tabbedpanes';
 import Tabs from '../../../src/components/tabs';
 
-describe( '<Panes />', () => {
+describe( '<TabbedPanes />', () => {
 	let wrapper, clickSpy;
 
 	beforeEach( () => {
 		clickSpy = sinon.spy();
 
 		wrapper = mount(
-			<Panes activePane="Bar" onPaneChange={clickSpy}>
+			<TabbedPanes activePane="Bar" onPaneChange={clickSpy}>
 				<div label="Foo"></div>
 				<div label="Bar"></div>
-			</Panes>
+			</TabbedPanes>
 		);
 	} );
 
 	it( 'renders panes', () => {
-		expect( wrapper ).to.have.className( 'ck-inspector-panes' );
-		expect( wrapper.children().childAt( 0 ) ).to.have.className( 'ck-inspector-panes__navigation' );
-		expect( wrapper.children().childAt( 1 ) ).to.have.className( 'ck-inspector-panes__content' );
+		expect( wrapper ).to.have.className( 'ck-inspector-tabbed-panes' );
+		expect( wrapper.children().childAt( 0 ) ).to.have.className( 'ck-inspector-tabbed-panes__navigation' );
+		expect( wrapper.children().childAt( 1 ) ).to.have.className( 'ck-inspector-tabbed-panes__content' );
 	} );
 
 	it( 'renders props#contentBefore and props#contentAfter', () => {
 		wrapper = mount(
-			<Panes contentBefore={<div></div>} contentAfter={<b></b>}>
+			<TabbedPanes contentBefore={<div></div>} contentAfter={<b></b>}>
 				<div label="Foo"></div>
-			</Panes>
+			</TabbedPanes>
 		);
 
 		const nav = wrapper.children().childAt( 0 );

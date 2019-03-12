@@ -5,7 +5,7 @@
 
 import React, { Component } from 'react';
 import CommandTree from './tree';
-import Panes from '../panes';
+import Panes from '../tabbedpanes';
 import CommandInspector from './inspector';
 import '../sidebar.css';
 export default class CommandsPane extends Component {
@@ -29,7 +29,7 @@ export default class CommandsPane extends Component {
 
 	render() {
 		if ( !this.props.editor ) {
-			return <div className="ck-inspector-panes__content__empty-wrapper">
+			return <div className="ck-inspector-tabbed-panes__content__empty-wrapper">
 				<p>Nothing to show. Attach another editor instance to start inspecting.</p>
 			</div>;
 		}

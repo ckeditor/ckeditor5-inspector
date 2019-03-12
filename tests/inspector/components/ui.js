@@ -12,7 +12,7 @@ import InspectorUI, {
 	ToggleButton,
 	EditorInstanceSelector
 } from '../../../src/components/ui';
-import Panes from '../../../src/components/panes';
+import Panes from '../../../src/components/tabbedpanes';
 import ModelPane from '../../../src/components/model/pane';
 import ViewPane from '../../../src/components/view/pane';
 import CommandsPane from '../../../src/components/commands/pane';
