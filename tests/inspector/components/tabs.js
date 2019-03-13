@@ -45,7 +45,7 @@ describe( '<Tabs />', () => {
 			const tabs = wrapper.find( HorizontalNav );
 
 			expect( tabs ).to.have.length( 1 );
-			expect( tabs.props().definitions ).to.have.members( [ 'Foo', 'Bar' ]);
+			expect( tabs.props().definitions ).to.have.members( [ 'Foo', 'Bar' ] );
 			expect( tabs.props().activeTab ).to.equal( 'Bar' );
 		} );
 

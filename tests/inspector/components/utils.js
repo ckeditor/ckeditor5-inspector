@@ -3,8 +3,6 @@
  * For licensing, see LICENSE.md.
  */
 
-/* global window */
-
 import {
 	stringify,
 	uid,

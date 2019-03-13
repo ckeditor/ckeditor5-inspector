@@ -333,7 +333,7 @@ describe( '<InspectorUI />', () => {
 	} );
 
 	describe( 'getDerivedStateFromProps()', () => {
-		it ( 'falls back to the first editor in props#editors when editor is removed', () => {
+		it( 'falls back to the first editor in props#editors when editor is removed', () => {
 			wrapper.setState( { currentEditorName: 'second' } );
 			editors.delete( 'second' );
 			wrapper.setState( { editors } );

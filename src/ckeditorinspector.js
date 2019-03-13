@@ -53,8 +53,8 @@ export default class CKEditorInspector {
 			instance = editorOrName;
 		}
 
-		Logger.group('%cAttached the inspector to a CKEditor 5 instance. To learn more, visit https://ckeditor.com/docs/ckeditor5.',
-		'font-weight: bold;' );
+		Logger.group( '%cAttached the inspector to a CKEditor 5 instance. To learn more, visit https://ckeditor.com/docs/ckeditor5.',
+			'font-weight: bold;' );
 		Logger.log( `Editor instance "${ name }"`, instance );
 		Logger.groupEnd();
 
@@ -67,9 +67,11 @@ export default class CKEditorInspector {
 		if ( !container.parentNode ) {
 			document.body.appendChild( container );
 
-			ReactDOM.render( <InspectorUI
-				ref={CKEditorInspector._inspectorRef}
-				editors={CKEditorInspector._editors} />,
+			ReactDOM.render(
+				<InspectorUI
+					ref={CKEditorInspector._inspectorRef}
+					editors={CKEditorInspector._editors}
+				/>,
 				container );
 		}
 

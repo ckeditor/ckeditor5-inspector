@@ -66,7 +66,7 @@ describe( '<CommandInspector />', () => {
 
 			logSpy.restore();
 
-			wrapper.unmount()
+			wrapper.unmount();
 		} );
 
 		it( 'renders command info', () => {

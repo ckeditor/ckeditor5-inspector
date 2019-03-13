@@ -92,7 +92,7 @@ export default class ModelPane extends Component {
 					editor={this.state.editor}
 				/>
 			</Tabs>
-		</Pane>
+		</Pane>;
 	}
 
 	static getDerivedStateFromProps( props, state ) {

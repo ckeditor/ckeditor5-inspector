@@ -14,6 +14,6 @@ export default class Pane extends Component {
 			this.props.isEmpty ? 'ck-inspector-pane_empty' : ''
 		].join( ' ' )}>
 			{this.props.children}
-		</div>
+		</div>;
 	}
 }

@@ -34,7 +34,7 @@ export default class Tabs extends Component {
 			]}
 			{children.filter( child => {
 				return child.props.label === this.props.activeTab;
-			})}
+			} )}
 		</NavBox>;
 	}
 }

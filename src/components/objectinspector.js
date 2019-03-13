@@ -20,7 +20,7 @@ export default class ObjectInspector extends Component {
 						<a href={list.url} target="_blank" rel="noopener noreferrer">{list.name}</a>
 						{list.buttons && list.buttons.map( ( button, index ) => {
 							return <Button key={'button' + index} {...button} />;
-						})}
+						} )}
 					</h3>,
 					<PropertyList key={`${ list.name }-list`} items={list.items} />
 				);

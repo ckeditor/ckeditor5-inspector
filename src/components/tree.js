@@ -7,10 +7,6 @@ import React, { Component } from 'react';
 import './tree.css';
 
 export default class Tree extends Component {
-	constructor( props ) {
-		super( props );
-	}
-
 	render() {
 		let treeContent;
 
@@ -25,11 +21,11 @@ export default class Tree extends Component {
 		}
 
 		return <div className={[
-				'ck-inspector-tree',
-				this.props.showCompactText ? 'ck-inspector-tree_compact-text' : ''
-			].join( ' ' )}>
-				{treeContent}
-			</div>;
+			'ck-inspector-tree',
+			this.props.showCompactText ? 'ck-inspector-tree_compact-text' : ''
+		].join( ' ' )}>
+			{treeContent}
+		</div>;
 	}
 }
 
@@ -110,7 +106,7 @@ export class TreeTextNode extends TreeNode {
 			<span className="ck-inspector-tree-node__content">
 				{this.props.showCompactText ? '' : this.getAttributes()}
 				{this.props.showCompactText ? '' : '"' }
-					{this.getChildren()}
+				{this.getChildren()}
 				{this.props.showCompactText ? '' : '"' }
 			</span>
 		</span>;

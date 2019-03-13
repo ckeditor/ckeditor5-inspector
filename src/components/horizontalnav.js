@@ -28,8 +28,8 @@ export default class HorizontalNav extends Component {
 					isActive={this.props.activeTab === label}
 					onClick={() => this.handleTabClick( label )}
 				/>;
-			})}
-		</div>
+			} )}
+		</div>;
 	}
 }
 

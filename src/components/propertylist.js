@@ -28,7 +28,7 @@ export default class PropertyList extends Component {
 						/>
 					</dd>
 				];
-			})}
+			} )}
 		</dl>;
 	}
 }

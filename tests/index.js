@@ -7,14 +7,14 @@
 
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import Chai from 'chai'
-import ChaiEnzyme from 'chai-enzyme'
+import Chai from 'chai';
+import chaiEnzyme from 'chai-enzyme';
 
 Enzyme.configure( {
 	adapter: new Adapter()
 } );
 
-Chai.use( ChaiEnzyme() );
+Chai.use( chaiEnzyme() );
 
 window.expect = Chai.expect;
 window.shallow = Enzyme.shallow;

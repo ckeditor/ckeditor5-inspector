@@ -110,25 +110,25 @@ export default class InspectorUI extends Component {
 				height: this.state.isCollapsed ? INSPECTOR_COLLAPSED_HEIGHT : this.state.height
 			}}
 			onResizeStop={this.handleInspectorResize}>
-				<Tabs
-					onTabChange={this.handlePaneChange}
-					contentBefore={<DocsButton key="docs" />}
-					activeTab={this.state.activeTab}
-					contentAfter={[
-						<EditorInstanceSelector
-							key="selector"
-							currentEditorName={this.state.currentEditorName}
-							editors={this.state.editors}
-							onChange={( evt ) => this.handleEditorChange( evt.target.value )}
-						/>,
-						<ToggleButton key="inspector-toggle" onClick={this.handleToggleCollapseClick} isUp={this.state.isCollapsed} />
-					]}
-				>
-					<ModelPane label="Model" editor={currentEditorInstance} />
-					<ViewPane label="View" editor={currentEditorInstance} />
-					<CommandsPane label="Commands" editor={currentEditorInstance} />
-				</Tabs>
-			</Rnd>;
+			<Tabs
+				onTabChange={this.handlePaneChange}
+				contentBefore={<DocsButton key="docs" />}
+				activeTab={this.state.activeTab}
+				contentAfter={[
+					<EditorInstanceSelector
+						key="selector"
+						currentEditorName={this.state.currentEditorName}
+						editors={this.state.editors}
+						onChange={evt => this.handleEditorChange( evt.target.value )}
+					/>,
+					<ToggleButton key="inspector-toggle" onClick={this.handleToggleCollapseClick} isUp={this.state.isCollapsed} />
+				]}
+			>
+				<ModelPane label="Model" editor={currentEditorInstance} />
+				<ViewPane label="View" editor={currentEditorInstance} />
+				<CommandsPane label="Commands" editor={currentEditorInstance} />
+			</Tabs>
+		</Rnd>;
 	}
 
 	static getDerivedStateFromProps( props, state ) {

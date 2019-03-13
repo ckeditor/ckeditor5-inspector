@@ -49,7 +49,7 @@ class ModelTree extends Component {
 						label="Root"
 						value={this.props.currentRootName}
 						options={this.props.editorRoots.map( root => root.rootName )}
-						onChange={( evt ) => this.props.onRootChange( evt.target.value )}
+						onChange={evt => this.props.onRootChange( evt.target.value )}
 					/>
 				</div>,
 				<div className="ck-inspector-tree__config" key="text-cfg">
@@ -71,7 +71,7 @@ class ModelTree extends Component {
 	}
 
 	getEditorModelTree() {
-		if( !this.props.currentRootName ) {
+		if ( !this.props.currentRootName ) {
 			return null;
 		}
 
@@ -179,7 +179,7 @@ function getTextTree( textNode, rangeStart, rangeEnd ) {
 			textNode.data.slice( 0, startSliceIndex ),
 			{ type: 'selection' },
 			textNode.data.slice( startSliceIndex, textNode.data.length )
-		]
+		];
 	}
 
 	// <$text>fooba]r</$text>

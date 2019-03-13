@@ -12,9 +12,9 @@ describe( 'Logger', () => {
 		it( 'calls console.group', () => {
 			const spy = sinon.spy( console, 'group' );
 
-			Logger.group( 'foo' );
+			Logger.group( 'foo', 'bar' );
 
-			sinon.assert.calledWithExactly( spy.firstCall, 'foo' );
+			sinon.assert.calledWithExactly( spy.firstCall, 'foo', 'bar' );
 		} );
 	} );
 
@@ -22,9 +22,9 @@ describe( 'Logger', () => {
 		it( 'calls console.groupEnd', () => {
 			const spy = sinon.spy( console, 'groupEnd' );
 
-			Logger.groupEnd( 'foo' );
+			Logger.groupEnd( 'foo', 'bar' );
 
-			sinon.assert.calledWithExactly( spy.firstCall, 'foo' );
+			sinon.assert.calledWithExactly( spy.firstCall, 'foo', 'bar' );
 		} );
 	} );
 
@@ -32,9 +32,9 @@ describe( 'Logger', () => {
 		it( 'calls console.log', () => {
 			const spy = sinon.spy( console, 'log' );
 
-			Logger.log( 'foo' );
+			Logger.log( 'foo', 'bar' );
 
-			sinon.assert.calledWithExactly( spy.firstCall, 'foo' );
+			sinon.assert.calledWithExactly( spy.firstCall, 'foo', 'bar' );
 		} );
 	} );
 } );

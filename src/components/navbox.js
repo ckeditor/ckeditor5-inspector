@@ -20,6 +20,6 @@ export default class NavBox extends Component {
 			<div className="ck-inspector-navbox__content">
 				{children[ children.length - 1 ]}
 			</div>
-		</div>
+		</div>;
 	}
 }

@@ -57,7 +57,7 @@ class ViewTree extends Component {
 						label="Root"
 						value={this.props.currentRootName}
 						options={this.props.editorRoots.map( root => root.rootName )}
-						onChange={( evt ) => this.props.onRootChange( evt.target.value )}
+						onChange={evt => this.props.onRootChange( evt.target.value )}
 					/>
 				</div>,
 				<div className="ck-inspector-tree__config" key="types-cfg">
@@ -79,7 +79,7 @@ class ViewTree extends Component {
 	}
 
 	getEditorViewTree() {
-		if( !this.props.currentRootName ) {
+		if ( !this.props.currentRootName ) {
 			return;
 		}
 
@@ -92,7 +92,6 @@ class ViewTree extends Component {
 			getNodeTree( root, selectionRange.start, selectionRange.end, this.state.showTypes )
 		];
 	}
-
 }
 
 function getNodeTree( node, rangeStart, rangeEnd, showTypes ) {
@@ -132,7 +131,7 @@ function getElementTree( element, rangeStart, rangeEnd, showTypes ) {
 
 	// Regardless of other rendering options, empty elements need no closing tags. They will never
 	// host any children or selection.
-	if ( isViewEmptyElement( element) ) {
+	if ( isViewEmptyElement( element ) ) {
 		elementTree.presentation = {
 			isEmpty: true
 		};
@@ -210,7 +209,7 @@ function getTextTree( textNode, rangeStart, rangeEnd ) {
 			textNode.data.slice( 0, startSliceIndex ),
 			{ type: 'selection' },
 			textNode.data.slice( startSliceIndex, textNode.data.length )
-		]
+		];
 	}
 
 	// "fooba]r"

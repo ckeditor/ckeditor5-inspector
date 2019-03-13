@@ -17,7 +17,7 @@ export default class Select extends Component {
 			>
 				{this.props.options.map( option => {
 					return <option value={option} key={option}>{option}</option>;
-				})}
+				} )}
 			</select>
 		];
 	}

@@ -70,7 +70,7 @@ class ViewSelectionInspector extends Component {
 					items: info.focus
 				}
 			]}
-		/>
+		/>;
 	}
 
 	getEditorSelectionInfo() {
@@ -102,6 +102,5 @@ function getPositionInfo( position ) {
 		[ 'parent', nodeToString( position.parent ) ]
 	];
 }
-
 
 export default editorEventObserver( ViewSelectionInspector );

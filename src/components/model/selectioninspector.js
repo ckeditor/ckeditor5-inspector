@@ -75,7 +75,7 @@ class ModelSelectionInspector extends Component {
 					items: info.focus
 				}
 			]}
-		/>
+		/>;
 	}
 
 	getEditorSelectionInfo() {

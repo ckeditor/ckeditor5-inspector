@@ -6,15 +6,15 @@
 /* global console */
 
 export default class Logger {
-	static group( name ) {
-		console.group( name );
+	static group( ...args ) {
+		console.group( ...args );
 	}
 
-	static groupEnd( name ) {
-		console.groupEnd( name );
+	static groupEnd( ...args ) {
+		console.groupEnd( ...args );
 	}
 
-	static log( message ) {
-		console.log( message );
+	static log( ...args ) {
+		console.log( ...args );
 	}
 }

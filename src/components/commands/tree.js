@@ -34,7 +34,7 @@ class CommandTree extends Component {
 			const attributes = [];
 
 			if ( command.value !== undefined ) {
-				attributes.push( [ 'value', stringify( command.value, false ) ] )
+				attributes.push( [ 'value', stringify( command.value, false ) ] );
 			}
 
 			list.push( {
@@ -42,7 +42,7 @@ class CommandTree extends Component {
 				type: 'element',
 				children: [],
 				node: name,
-				attributes: attributes,
+				attributes,
 
 				presentation: {
 					isEmpty: true,

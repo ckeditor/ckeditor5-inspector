@@ -11,8 +11,12 @@ import Pane from '../pane';
 import ObjectInspector from '../objectinspector';
 import Logger from '../../logger';
 import editorEventObserver from '../editorobserver';
-import { isModelElement, isModelText, isModelRoot } from './utils';
-import { getNodePathString } from './utils';
+import {
+	isModelElement,
+	isModelText,
+	isModelRoot,
+	getNodePathString
+} from './utils';
 import { stringifyPropertyList } from '../utils';
 
 class ModelNodeInspector extends Component {

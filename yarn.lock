@@ -2750,6 +2750,18 @@ escodegen@^1.9.0:
   optionalDependencies:
     source-map "~0.6.1"
 
+eslint-config-ckeditor5@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/eslint-config-ckeditor5/-/eslint-config-ckeditor5-1.0.11.tgz#268fcfa9388919c996e0931033383f3722f8a4ea"
+  integrity sha512-lSOK1JROltq/BxAqSMZn13mY++HyyUhN/C+WEPV2JTLEpEC8FaaW2OmhPCtt6xGMudvJwVfdWFf3VQ68j80Ijw==
+  dependencies:
+    eslint-plugin-ckeditor5-rules "^0.0.2"
+
+eslint-plugin-ckeditor5-rules@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-ckeditor5-rules/-/eslint-plugin-ckeditor5-rules-0.0.2.tgz#f6325c6d046b41f05423c3a18bb9794b37c80baf"
+  integrity sha512-bV8w34pQcn1IyfdW1IEgfKuc1/hkTYpLo1DglRp1v4a2ph03PkMjN7vZ6FDrmu5ImVDJsd9022j5waA//MeyKg==
+
 eslint-plugin-react@^7.12.4:
   version "7.12.4"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.12.4.tgz#b1ecf26479d61aee650da612e425c53a99f48c8c"

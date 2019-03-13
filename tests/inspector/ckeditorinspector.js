@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md.
  */
 
-/* global document, window, console */
+/* global document, window */
 
 import TestEditor from '../utils/testeditor';
 import CKEditorInspector from '../../src/ckeditorinspector';
@@ -16,7 +16,7 @@ describe( 'CKEditorInspector', () => {
 		// Silence inspector logs.
 		sinon.stub( Logger, 'log' ).callsFake( () => {} );
 
-		element = document.createElement( 'div' )
+		element = document.createElement( 'div' );
 		document.body.appendChild( element );
 
 		return TestEditor.create( element ).then( newEditor => {
@@ -65,7 +65,7 @@ describe( 'CKEditorInspector', () => {
 
 					return anotherEditor.destroy();
 				} )
-				.catch( err =>  {
+				.catch( err => {
 					throw err;
 				} );
 		} );

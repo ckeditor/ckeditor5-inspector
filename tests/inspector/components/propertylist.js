@@ -22,7 +22,7 @@ describe( '<PropertyList />', () => {
 	} );
 
 	it( 'renders names and values', () => {
-		const items= [
+		const items = [
 			[ 'foo', 'bar' ],
 			[ 'qux', 'baz' ]
 		];

@@ -106,7 +106,7 @@ class NodeInspector extends Component {
 				} else if ( isViewUiElement( node ) ) {
 					info.type = 'UIElement';
 					info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_uielement-UIElement.html';
-				} else if ( isViewContainerElement ( node ) ) {
+				} else if ( isViewContainerElement( node ) ) {
 					info.type = 'ContainerElement';
 					info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_containerelement-ContainerElement.html';
 				} else {

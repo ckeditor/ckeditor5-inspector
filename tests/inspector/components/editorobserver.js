@@ -3,14 +3,14 @@
  * For licensing, see LICENSE.md.
  */
 
-/* global console */
+/* global document */
 
 import editorEventObserver from '../../../src/components/editorobserver';
 import TestEditor from '../../utils/testeditor';
 import React, { Component } from 'react';
 
 describe( 'editorEventObserver()', () => {
-	let editor, element ;
+	let editor, element;
 
 	class Test extends Component {
 		editorEventObserverConfig( props ) {
@@ -28,7 +28,7 @@ describe( 'editorEventObserver()', () => {
 	const TestObserver = editorEventObserver( Test );
 
 	beforeEach( () => {
-		element = document.createElement( 'div' )
+		element = document.createElement( 'div' );
 		document.body.appendChild( element );
 
 		return TestEditor.create( element ).then( newEditor => {
@@ -37,9 +37,9 @@ describe( 'editorEventObserver()', () => {
 	} );
 
 	afterEach( () => {
-		return editor.destroy();
-
 		element.remove();
+
+		return editor.destroy();
 	} );
 
 	describe( 'componentDidMount()', () => {
@@ -58,7 +58,7 @@ describe( 'editorEventObserver()', () => {
 			const wrapper = mount( <TestObserver editor={editor} /> );
 			const spy = sinon.spy( wrapper.instance(), 'stopListeningToEditor' );
 
-			wrapper.setProps( { editor: editor } );
+			wrapper.setProps( { editor } );
 
 			sinon.assert.notCalled( spy );
 		} );
@@ -70,7 +70,7 @@ describe( 'editorEventObserver()', () => {
 			wrapper.setProps( { editor: null } );
 
 			sinon.assert.calledOnce( spy );
-			sinon.assert.calledWithExactly( spy, { editor: editor } );
+			sinon.assert.calledWithExactly( spy, { editor } );
 		} );
 
 		it( 'starts listening to the event if props#editor changed and different', () => {
@@ -87,7 +87,7 @@ describe( 'editorEventObserver()', () => {
 				wrapper.setProps( { editor: newEditor } );
 
 				sinon.assert.calledOnce( stopSpy );
-				sinon.assert.calledWithExactly( stopSpy, { editor: editor } );
+				sinon.assert.calledWithExactly( stopSpy, { editor } );
 				sinon.assert.calledOnce( startSpy );
 
 				return newEditor.destroy();
@@ -103,7 +103,7 @@ describe( 'editorEventObserver()', () => {
 			wrapper.unmount();
 
 			sinon.assert.calledOnce( spy );
-			sinon.assert.calledWithExactly( spy, { editor: editor } );
+			sinon.assert.calledWithExactly( spy, { editor } );
 		} );
 	} );
 
