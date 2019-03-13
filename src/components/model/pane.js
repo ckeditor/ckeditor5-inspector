@@ -69,11 +69,10 @@ export default class ModelPane extends Component {
 
 		return <Pane splitVertically="true">
 			<ModelTree
-				currentEditorNode={this.state.currentEditorNode}
-				currentRootName={this.state.currentRootName}
 				editor={this.props.editor}
 				editorRoots={this.state.editorRoots}
-				key="tree"
+				currentEditorNode={this.state.currentEditorNode}
+				currentRootName={this.state.currentRootName}
 				onClick={this.handleTreeClick}
 				onRootChange={this.handleRootChange}
 			/>
