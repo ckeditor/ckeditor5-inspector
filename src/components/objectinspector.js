@@ -28,8 +28,8 @@ export default class ObjectInspector extends Component {
 		}
 
 		return <div className="ck-inspector__object-inspector">
-			<h2 key="object-name" className="ck-inspector-code">
-				{this.props.headerContent}
+			<h2 className="ck-inspector-code">
+				{this.props.header}
 			</h2>
 			{content}
 		</div>;

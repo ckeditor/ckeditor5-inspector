@@ -25,7 +25,7 @@ class ViewSelectionInspector extends Component {
 		const info = this.getEditorSelectionInfo();
 
 		return <ObjectInspector
-			headerContent={[
+			header={[
 				<span key="link">
 					<a href={API_DOCS_PREFIX}
 						target="_blank" rel="noopener noreferrer">

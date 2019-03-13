@@ -29,7 +29,7 @@ class CommandInspector extends Component {
 		}
 
 		return <ObjectInspector
-			headerContent={[
+			header={[
 				<span key="link">
 					<a href={info.url} target="_blank" rel="noopener noreferrer">
 						<b>{info.type}</b>
