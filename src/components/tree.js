@@ -172,7 +172,7 @@ function renderTreeItem( item, index, treeProps ) {
 		return <TreeElement key={index} item={item} {...treeProps} />;
 	} else if ( item.type === 'text' ) {
 		return <TreeTextNode key={index} item={item} {...treeProps} />;
-	} else if ( item.type === 'selection' ) {
+	} else {
 		return <TreeSelection key={index} isEnd={item.isEnd} />;
 	}
 }

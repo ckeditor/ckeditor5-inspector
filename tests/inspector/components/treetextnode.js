@@ -100,6 +100,26 @@ describe( '<TreeTextNode />', () => {
 				expect( attrs.childAt( 0 ).props().value ).to.equal( 'b' );
 				expect( content.text() ).to.equal( 'ab"abc"' );
 			} );
+
+			it( 'can render attributes without values when presentation#dontRenderAttributeValue', () => {
+				wrapper = mount( <TreeTextNode showCompactText={false} item={{
+					name: 'foo',
+					attributes: [
+						[ 'a', 'b' ]
+					],
+					children: [ 'abc' ],
+					presentation: {
+						dontRenderAttributeValue: true
+					}
+				}} /> );
+
+				const content = wrapper.children().childAt( 0 );
+				const attrs = content.childAt( 0 );
+
+				expect( attrs ).to.have.className( 'ck-inspector-tree-text__attributes' );
+				expect( attrs.find( TreeNodeAttribute ) ).to.have.length( 1 );
+				expect( attrs.find( TreeNodeAttribute ).props().dontRenderValue ).to.be.true;
+			} );
 		} );
 	} );
 } );

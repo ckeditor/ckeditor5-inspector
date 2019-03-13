@@ -61,6 +61,17 @@ describe( '<CommandTree />', () => {
 						'isEmpty': true,
 					},
 					'type': 'element'
+				},
+				{
+					'attributes': [],
+					'children': [],
+					'name': 'qux',
+					'node': 'qux',
+					'presentation': {
+						'cssClass': 'ck-inspector-tree-node_tagless ',
+						'isEmpty': true,
+					},
+					'type': 'element'
 				}
 			] );
 		} );
@@ -89,6 +100,17 @@ describe( '<CommandTree />', () => {
 					'children': [],
 					'name': 'foo',
 					'node': 'foo',
+					'presentation': {
+						'cssClass': 'ck-inspector-tree-node_tagless ',
+						'isEmpty': true,
+					},
+					'type': 'element'
+				},
+				{
+					'attributes': [],
+					'children': [],
+					'name': 'qux',
+					'node': 'qux',
 					'presentation': {
 						'cssClass': 'ck-inspector-tree-node_tagless ',
 						'isEmpty': true,

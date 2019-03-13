@@ -7,7 +7,7 @@ import React from 'react';
 import ObjectInspector from '../../../src/components/objectinspector';
 import PropertyList from '../../../src/components/propertylist';
 
-describe.only( '<ObjectInspector />', () => {
+describe( '<ObjectInspector />', () => {
 	let wrapper;
 
 	afterEach( () => {

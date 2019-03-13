@@ -77,6 +77,7 @@ class ClassicTestEditorUI extends EditorUI {
 
 		this.editor.commands.add( 'foo', new FooCommand( this.editor ) );
 		this.editor.commands.add( 'bar', new FooCommand( this.editor ) );
+		this.editor.commands.add( 'qux', new FooCommand( this.editor ) );
 
 		this.fire( 'ready' );
 	}
