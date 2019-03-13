@@ -3,20 +3,6 @@
  * For licensing, see LICENSE.md.
  */
 
-:root {
-	--ck-inspector-explorer-width: 300px;
-}
-
-.ck-inspector .ck-inspector-pane {
-	display: flex;
-	width: 100%;
-
-	& > .ck-inspector-tabbed-panes {
-		min-width: var(--ck-inspector-explorer-width);
-		width: var(--ck-inspector-explorer-width);
-	}
-}
-
 .ck-inspector .ck-inspector__object-inspector {
 	width: 100%;
 	background: var(--ck-inspector-color-white);
@@ -44,6 +30,11 @@
 
 		& a {
 			color: var(--ck-inspector-color-tree-node-name);
+		}
+
+		& em::before,
+		& em::after {
+			content: '"';
 		}
 	}
 

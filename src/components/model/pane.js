@@ -5,13 +5,13 @@
 
 import React, { Component } from 'react';
 import ModelTree from './tree';
-import Panes from '../tabbedpanes';
+import Pane from '../pane';
+import Tabs from '../tabs';
 import ModelNodeInspector from './nodeinspector';
 import ModelSelectionInspector from './selectioninspector';
 import StorageManager from '../../storagemanager';
-import '../sidebar.css';
 
-const LOCAL_STORAGE_ACTIVE_PANE = 'ck5-inspector-active-model-pane-name';
+const LOCAL_STORAGE_ACTIVE_TAB = 'ck5-inspector-active-model-tab-name';
 export default class ModelPane extends Component {
 	constructor( props ) {
 		super( props );
@@ -22,7 +22,7 @@ export default class ModelPane extends Component {
 			currentRootName: null,
 			currentEditorNode: null,
 
-			activePane: StorageManager.get( LOCAL_STORAGE_ACTIVE_PANE ) || 'Inspect'
+			activeTab: StorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Inspect'
 		};
 
 		this.handleRootChange = this.handleRootChange.bind( this );
@@ -40,9 +40,9 @@ export default class ModelPane extends Component {
 			// Double click on a tree element should open the inspector.
 			if ( evt.detail == 2 ) {
 				this.setState( {
-					activePane: 'Inspect'
+					activeTab: 'Inspect'
 				}, () => {
-					StorageManager.set( LOCAL_STORAGE_ACTIVE_PANE, 'Inspect' );
+					StorageManager.set( LOCAL_STORAGE_ACTIVE_TAB, 'Inspect' );
 				} );
 			}
 		} );
@@ -52,22 +52,22 @@ export default class ModelPane extends Component {
 		this.setState( { currentRootName } );
 	}
 
-	handlePaneChange( activePane ) {
+	handlePaneChange( activeTab ) {
 		this.setState( {
-			activePane
+			activeTab
 		}, () => {
-			StorageManager.set( LOCAL_STORAGE_ACTIVE_PANE, activePane );
+			StorageManager.set( LOCAL_STORAGE_ACTIVE_TAB, activeTab );
 		} );
 	}
 
 	render() {
 		if ( !this.props.editor ) {
-			return <div className="ck-inspector-tabbed-panes__content__empty-wrapper">
+			return <Pane isEmpty="true">
 				<p>Nothing to show. Attach another editor instance to start inspecting.</p>
-			</div>;
+			</Pane>;
 		}
 
-		return <div className="ck-inspector-pane">
+		return <Pane splitVertically="true">
 			<ModelTree
 				currentEditorNode={this.state.currentEditorNode}
 				currentRootName={this.state.currentRootName}
@@ -77,9 +77,9 @@ export default class ModelPane extends Component {
 				onClick={this.handleTreeClick}
 				onRootChange={this.handleRootChange}
 			/>
-			<Panes
-				onPaneChange={this.handlePaneChange}
-				activePane={this.state.activePane}
+			<Tabs
+				onTabChange={this.handlePaneChange}
+				activeTab={this.state.activeTab}
 			>
 				<ModelNodeInspector
 					label="Inspect"
@@ -91,8 +91,8 @@ export default class ModelPane extends Component {
 					label="Selection"
 					editor={this.state.editor}
 				/>
-			</Panes>
-		</div>
+			</Tabs>
+		</Pane>
 	}
 
 	static getDerivedStateFromProps( props, state ) {

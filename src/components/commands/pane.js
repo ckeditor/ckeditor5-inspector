@@ -5,9 +5,10 @@
 
 import React, { Component } from 'react';
 import CommandTree from './tree';
-import Panes from '../tabbedpanes';
+import Pane from '../pane';
+import Tabs from '../tabs';
 import CommandInspector from './inspector';
-import '../sidebar.css';
+import '../pane.css';
 export default class CommandsPane extends Component {
 	constructor( props ) {
 		super( props );
@@ -29,25 +30,25 @@ export default class CommandsPane extends Component {
 
 	render() {
 		if ( !this.props.editor ) {
-			return <div className="ck-inspector-tabbed-panes__content__empty-wrapper">
+			return <Pane isEmpty="true">
 				<p>Nothing to show. Attach another editor instance to start inspecting.</p>
-			</div>;
+			</Pane>;
 		}
 
-		return <div className="ck-inspector-pane">
+		return <Pane splitVertically="true">
 			<CommandTree
 				editor={this.props.editor}
 				currentCommandName={this.state.currentCommandName}
 				onClick={this.handleTreeClick}
 			/>
-			<Panes activePane="Inspect">
+			<Tabs activeTab="Inspect">
 				<CommandInspector
 					label="Inspect"
 					editor={this.props.editor}
 					inspectedCommandName={this.state.currentCommandName}
 				/>
-			</Panes>
-		</div>;
+			</Tabs>
+		</Pane>;
 	}
 
 	static getDerivedStateFromProps( props, state ) {

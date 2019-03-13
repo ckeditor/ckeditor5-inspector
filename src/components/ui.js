@@ -12,11 +12,11 @@ import StorageManager from '../storagemanager';
 import ModelPane from './model/pane';
 import ViewPane from './view/pane';
 import CommandsPane from './commands/pane';
-import Panes from './tabbedpanes';
+import Tabs from './tabs';
 import Select from './select';
 import './ui.css';
 
-const LOCAL_STORAGE_ACTIVE_PANE = 'ck5-inspector-active-pane-name';
+const LOCAL_STORAGE_ACTIVE_TAB = 'ck5-inspector-active-tab-name';
 const LOCAL_STORAGE_IS_COLLAPSED = 'ck5-inspector-is-collapsed';
 const LOCAL_STORAGE_INSPECTOR_HEIGHT = 'ck5-inspector-height';
 const INSPECTOR_MIN_HEIGHT = '100';
@@ -41,7 +41,7 @@ export default class InspectorUI extends Component {
 			height,
 			editors: null,
 			currentEditorName: null,
-			activePane: StorageManager.get( LOCAL_STORAGE_ACTIVE_PANE ) || 'Model'
+			activeTab: StorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Model'
 		};
 
 		updateBodyHeight( height );
@@ -52,11 +52,11 @@ export default class InspectorUI extends Component {
 		this.handleInspectorResize = this.handleInspectorResize.bind( this );
 	}
 
-	handlePaneChange( activePane ) {
+	handlePaneChange( activeTab ) {
 		this.setState( {
-			activePane
+			activeTab
 		}, () => {
-			StorageManager.set( LOCAL_STORAGE_ACTIVE_PANE, activePane );
+			StorageManager.set( LOCAL_STORAGE_ACTIVE_TAB, activeTab );
 		} );
 	}
 
@@ -110,10 +110,10 @@ export default class InspectorUI extends Component {
 				height: this.state.isCollapsed ? INSPECTOR_COLLAPSED_HEIGHT : this.state.height
 			}}
 			onResizeStop={this.handleInspectorResize}>
-				<Panes
-					onPaneChange={this.handlePaneChange}
-					contentBefore={<DocsButton />}
-					activePane={this.state.activePane}
+				<Tabs
+					onTabChange={this.handlePaneChange}
+					contentBefore={<DocsButton key="docs" />}
+					activeTab={this.state.activeTab}
 					contentAfter={[
 						<EditorInstanceSelector
 							key="selector"
@@ -127,7 +127,7 @@ export default class InspectorUI extends Component {
 					<ModelPane label="Model" editor={currentEditorInstance} />
 					<ViewPane label="View" editor={currentEditorInstance} />
 					<CommandsPane label="Commands" editor={currentEditorInstance} />
-				</Panes>
+				</Tabs>
 			</Rnd>;
 	}
 
@@ -145,7 +145,7 @@ export default class InspectorUI extends Component {
 
 export class DocsButton extends Component {
 	render() {
-		return <a className="ck-inspector-tabbed-panes__navigation__logo"
+		return <a className="ck-inspector-navbox__navigation__logo"
 			title="Go to the documentation"
 			href="https://ckeditor.com/docs/ckeditor5/latest/"
 			target="_blank"
@@ -160,8 +160,8 @@ export class ToggleButton extends Component {
 			onClick={this.props.onClick}
 			title="Toggle inspector"
 			className={[
-				'ck-inspector-tabbed-panes__navigation__toggle',
-				this.props.isUp ? ' ck-inspector-tabbed-panes__navigation__toggle_up' : ''
+				'ck-inspector-navbox__navigation__toggle',
+				this.props.isUp ? ' ck-inspector-navbox__navigation__toggle_up' : ''
 			].join( ' ' )}>
 				Toggle inspector
 		</button>;

@@ -5,6 +5,7 @@
 
 import React, { Component } from 'react';
 import Button from './../button';
+import Pane from '../pane';
 import Logger from '../../logger';
 import editorEventObserver from '../editorobserver';
 import {
@@ -17,7 +18,7 @@ import {
 	isViewEmptyElement
 } from './utils';
 import { stringifyPropertyList } from '../utils';
-import PropertyList from './../propertylist';
+import ObjectInspector from '../objectinspector';
 
 class NodeInspector extends Component {
 	editorEventObserverConfig( props ) {
@@ -31,42 +32,39 @@ class NodeInspector extends Component {
 		const info = this.getInspectedEditorNodeInfo();
 
 		if ( !info ) {
-			return <div className="ck-inspector-tabbed-panes__content__empty-wrapper">
+			return <Pane isEmpty="true">
 				<p>Select a node in the tree to inspect</p>
-			</div>;
+			</Pane>;
 		}
 
-		let nodeNameContent;
-
-		if ( info.type === 'Text' ) {
-			nodeNameContent = <span>
-				<a href={info.url} target="_blank" rel="noopener noreferrer"><b>{info.type}</b></a>:&quot;<em>{info.name}</em>&quot;
-			</span>;
-		} else {
-			nodeNameContent = <span>
-				<a href={info.url} target="_blank" rel="noopener noreferrer"><b>{info.type}</b></a>:{info.name}
-			</span>;
-		}
-
-		const content = [
-			<h2 key="node-name" className="ck-inspector-code">
-				{nodeNameContent}
-				<Button type="log" text="Log in console" onClick={() => Logger.log( info.editorNode )} />
-			</h2>,
-			<hr key="props-separator" />,
-			<h3 key="props-header">Properties</h3>,
-			<PropertyList key="props-list" items={info.properties} />
-		];
-
-		if ( info.attributes.length ) {
-			content.push(
-				<hr key="attrs-separator" />,
-				<h3 key="attrs-header">Attributes</h3>,
-				<PropertyList key="attrs" items={info.attributes} />
-			);
-		}
-
-		return <div className="ck-inspector__object-inspector">{content}</div>;
+		return <ObjectInspector
+			headerContent={[
+				<span key="link">
+					<a href={info.url} target="_blank" rel="noopener noreferrer">
+						<b>{info.type}</b>:
+					</a>
+					{ info.type === 'Text' ? <em>{info.name}</em> : info.name }
+				</span>,
+				<Button
+					key="log"
+					type="log"
+					text="Log in console"
+					onClick={() => Logger.log( info.editorNode )}
+				/>
+			]}
+			lists={[
+				{
+					name: 'Attributes',
+					url: info.url,
+					items: info.attributes
+				},
+				{
+					name: 'Properties',
+					url: info.url,
+					items: info.properties
+				},
+			]}
+		/>;
 	}
 
 	getInspectedEditorNodeInfo() {

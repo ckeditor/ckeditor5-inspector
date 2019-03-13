@@ -4,7 +4,8 @@
  */
 
 import React, { Component } from 'react';
-import './tabs.css';
+import HorizontalNav from './horizontalnav';
+import NavBox from './navbox';
 
 export default class Tabs extends Component {
 	constructor( props ) {
@@ -14,37 +15,26 @@ export default class Tabs extends Component {
 	}
 
 	handleTabClick( activeTab ) {
-		this.setState( { activeTab }, () => {
-			this.props.onClick( activeTab );
-		} );
+		this.props.onTabChange( activeTab );
 	}
 
 	render() {
-		return <div className="ck-inspector-tabs">
-			{this.props.definitions.map( label => {
-				return <Tab
-					key={label}
-					label={label}
-					isActive={this.props.activeTab === label}
-					onClick={() => this.handleTabClick( label )}
-				/>;
+		const children = Array.isArray( this.props.children ) ? this.props.children : [ this.props.children ];
+
+		return <NavBox>
+			{[
+				this.props.contentBefore,
+				<HorizontalNav
+					key="tabs"
+					definitions={children.map( child => child.props.label )}
+					activeTab={this.props.activeTab}
+					onClick={this.handleTabClick}
+				/>,
+				this.props.contentAfter
+			]}
+			{children.filter( child => {
+				return child.props.label === this.props.activeTab;
 			})}
-		</div>
-	}
-}
-
-export class Tab extends Component {
-	render() {
-		return <button
-			className={[
-				'ck-inspector-tabs__tab',
-				( this.props.isActive ? ' ck-inspector-tabs__tab_active' : '' )
-			].join( ' ' )}
-			key={this.props.label}
-			onClick={this.props.onClick}
-			type="button"
-		>
-			{this.props.label}
-		</button>;
+		</NavBox>;
 	}
 }

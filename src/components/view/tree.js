@@ -6,6 +6,7 @@
 import React, { Component } from 'react';
 import Tree from '../tree';
 import Select from '../select';
+import NavBox from '../navbox';
 import Checkbox from '../checkbox';
 import StorageManager from '../../storagemanager';
 import editorEventObserver from '../editorobserver';
@@ -48,37 +49,33 @@ class ViewTree extends Component {
 	render() {
 		const tree = this.getEditorViewTree();
 
-		return <div className="ck-inspector__document-tree">
-			<div className="ck-inspector-tabbed-panes">
-				<div className="ck-inspector-tabbed-panes__navigation">
-					<div className="ck-inspector__document-tree__config">
-						<Select
-							id="view-root-select"
-							label="Root"
-							value={this.props.currentRootName}
-							options={this.props.editorRoots.map( root => root.rootName )}
-							onChange={( evt ) => this.props.onRootChange( evt.target.value )}
-						/>
-					</div>
-					<div className="ck-inspector__document-tree__config">
-						<Checkbox
-							label="Show element types"
-							id="view-show-types"
-							isChecked={this.state.showTypes}
-							onChange={this.handleShowTypesChange}
-						/>
-					</div>
-				</div>
-				<div className="ck-inspector-tabbed-panes__content">
-					<Tree
-						items={tree}
-						onClick={this.props.onClick}
-						showCompactText="true"
-						activeNode={this.props.currentEditorNode}
+		return <NavBox>
+			{[
+				<div className="ck-inspector-tree__config" key="root-cfg">
+					<Select
+						id="view-root-select"
+						label="Root"
+						value={this.props.currentRootName}
+						options={this.props.editorRoots.map( root => root.rootName )}
+						onChange={( evt ) => this.props.onRootChange( evt.target.value )}
+					/>
+				</div>,
+				<div className="ck-inspector-tree__config" key="types-cfg">
+					<Checkbox
+						label="Show element types"
+						id="view-show-types"
+						isChecked={this.state.showTypes}
+						onChange={this.handleShowTypesChange}
 					/>
 				</div>
-			</div>
-		</div>
+			]}
+			<Tree
+				items={tree}
+				onClick={this.props.onClick}
+				showCompactText="true"
+				activeNode={this.props.currentEditorNode}
+			/>
+		</NavBox>;
 	}
 
 	getEditorViewTree() {

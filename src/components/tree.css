@@ -234,21 +234,3 @@
 	background: var(--ck-inspector-color-tree-selection);
 	padding: 0 .2em;
 }
-
-/*-- Document tree ---------------------------------------------------------------------------------------- */
-
-.ck-inspector .ck-inspector__document-tree {
-	border-right: 1px solid var(--ck-inspector-color-border);
-	flex: 1 1 auto;
-	overflow: hidden;
-
-	& .ck-inspector-tabbed-panes__navigation {
-		align-items: center;
-	}
-
-	& .ck-inspector__document-tree__config label {
-		margin-left: 1em;
-		margin-right: 1em;
-	}
-}
-

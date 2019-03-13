@@ -5,9 +5,10 @@
 
 import React, { Component } from 'react';
 import Button from './../button';
+import Pane from '../pane';
 import Logger from '../../logger';
 import editorEventObserver from '../editorobserver';
-import PropertyList from './../propertylist';
+import ObjectInspector from './../objectinspector';
 import { stringifyPropertyList } from '../utils';
 
 class CommandInspector extends Component {
@@ -22,36 +23,40 @@ class CommandInspector extends Component {
 		const info = this.getEditorCommandInfo();
 
 		if ( !info ) {
-			return <div className="ck-inspector-tabbed-panes__content__empty-wrapper">
+			return <Pane isEmpty="true">
 				<p>Select a command to inspect</p>
-			</div>;
+			</Pane>;
 		}
 
-		return <div className="ck-inspector__object-inspector">
-			<h2 className="ck-inspector-code">
-				<span>
+		return <ObjectInspector
+			headerContent={[
+				<span key="link">
 					<a href={info.url} target="_blank" rel="noopener noreferrer">
 						<b>{info.type}</b>
 					</a>
 					:{info.name}
-				</span>
+				</span>,
 				<Button
+					key="exec"
 					type="exec"
 					text="Execute command"
 					onClick={() => this.props.editor.execute( info.name )}
-				/>
+				/>,
 				<Button
+					key="log"
 					type="log"
 					text="Log in console"
 					onClick={() => Logger.log( info.command )}
 				/>
-			</h2>
-
-			<hr />
-
-			<h3>Properties</h3>
-			<PropertyList items={info.properties} />
-		</div>;
+			]}
+			lists={[
+				{
+					name: 'Properties',
+					url: info.url,
+					items: info.properties
+				},
+			]}
+		/>;
 	}
 
 	getEditorCommandInfo() {

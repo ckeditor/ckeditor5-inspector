@@ -4,54 +4,54 @@
  */
 
 import React from 'react';
-import TabbedPanes from '../../../src/components/tabbedpanes';
 import Tabs from '../../../src/components/tabs';
+import HorizontalNav from '../../../src/components/horizontalnav';
 
-describe( '<TabbedPanes />', () => {
+describe( '<Tabs />', () => {
 	let wrapper, clickSpy;
 
 	beforeEach( () => {
 		clickSpy = sinon.spy();
 
 		wrapper = mount(
-			<TabbedPanes activePane="Bar" onPaneChange={clickSpy}>
+			<Tabs activeTab="Bar" onTabChange={clickSpy}>
 				<div label="Foo"></div>
 				<div label="Bar"></div>
-			</TabbedPanes>
+			</Tabs>
 		);
 	} );
 
 	it( 'renders panes', () => {
-		expect( wrapper ).to.have.className( 'ck-inspector-tabbed-panes' );
-		expect( wrapper.children().childAt( 0 ) ).to.have.className( 'ck-inspector-tabbed-panes__navigation' );
-		expect( wrapper.children().childAt( 1 ) ).to.have.className( 'ck-inspector-tabbed-panes__content' );
+		expect( wrapper ).to.have.className( 'ck-inspector-navbox' );
+		expect( wrapper.children().childAt( 0 ) ).to.have.className( 'ck-inspector-navbox__navigation' );
+		expect( wrapper.children().childAt( 1 ) ).to.have.className( 'ck-inspector-navbox__content' );
 	} );
 
 	it( 'renders props#contentBefore and props#contentAfter', () => {
 		wrapper = mount(
-			<TabbedPanes contentBefore={<div></div>} contentAfter={<b></b>}>
+			<Tabs contentBefore={<div></div>} contentAfter={<b></b>}>
 				<div label="Foo"></div>
-			</TabbedPanes>
+			</Tabs>
 		);
 
 		const nav = wrapper.children().childAt( 0 );
 
 		expect( nav.childAt( 0 ).type() ).to.equal( 'div' );
-		expect( nav.childAt( 1 ).type() ).to.equal( Tabs );
+		expect( nav.childAt( 1 ).type() ).to.equal( HorizontalNav );
 		expect( nav.childAt( 2 ).type() ).to.equal( 'b' );
 	} );
 
-	describe( '<Tabs />', () => {
+	describe( '<HorizontalNav />', () => {
 		it( 'are rendered', () => {
-			const tabs = wrapper.find( Tabs );
+			const tabs = wrapper.find( HorizontalNav );
 
 			expect( tabs ).to.have.length( 1 );
 			expect( tabs.props().definitions ).to.have.members( [ 'Foo', 'Bar' ]);
 			expect( tabs.props().activeTab ).to.equal( 'Bar' );
 		} );
 
-		it( 'trigger props#onPaneChange when clicked', () => {
-			const tabs = wrapper.find( Tabs );
+		it( 'trigger props#onTabChange when clicked', () => {
+			const tabs = wrapper.find( HorizontalNav );
 
 			tabs.children().childAt( 0 ).simulate( 'click' );
 			sinon.assert.calledOnce( clickSpy );

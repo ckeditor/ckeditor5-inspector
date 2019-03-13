@@ -7,9 +7,12 @@ import React, { Component } from 'react';
 import Logger from '../../logger';
 import Button from './../button';
 import editorEventObserver from '../editorobserver';
-import PropertyList from './../propertylist';
+import ObjectInspector from './../objectinspector';
 import { nodeToString } from './utils';
 import { stringifyPropertyList } from '../utils';
+
+const API_DOCS_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_selection-Selection.html';
+
 class ViewSelectionInspector extends Component {
 	editorEventObserverConfig( props ) {
 		return {
@@ -21,37 +24,53 @@ class ViewSelectionInspector extends Component {
 	render() {
 		const info = this.getEditorSelectionInfo();
 
-		return <div className="ck-inspector__object-inspector">
-			<h2 className="ck-inspector-code">
-				<a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_selection-Selection.html"
-					target="_blank" rel="noopener noreferrer">
-					<b>Selection</b>
-				</a>
-				<Button type="log" text="Log in console" onClick={() => Logger.log( this.props.editor.editing.view.document.selection )} />
-			</h2>
-			<hr/>
-
-			<h3>Properties</h3>
-			<PropertyList items={info.properties} />
-			<hr/>
-
-			<h3>
-				<a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_selection-Selection.html#member-anchor"
-					target="_blank" rel="noopener noreferrer">Anchor</a>
-				<Button type="log" text="Log in console"
-					onClick={() => Logger.log( this.props.editor.editing.view.document.selection.focus )} />
-			</h3>
-			<PropertyList items={info.anchor} />
-			<hr/>
-
-			<h3>
-				<a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_selection-Selection.html#member-focus"
-					target="_blank" rel="noopener noreferrer">Focus</a>
-				<Button type="log" text="Log in console"
-					onClick={() => Logger.log( this.props.editor.editing.view.document.selection.anchor )} />
-			</h3>
-			<PropertyList items={info.focus} />
-		</div>;
+		return <ObjectInspector
+			headerContent={[
+				<span key="link">
+					<a href={API_DOCS_PREFIX}
+						target="_blank" rel="noopener noreferrer">
+						<b>Selection</b>
+					</a>
+				</span>,
+				<Button
+					key="log"
+					type="log"
+					text="Log in console"
+					onClick={() => Logger.log( this.props.editor.editing.view.document.selection )}
+				/>
+			]}
+			lists={[
+				{
+					name: 'Properties',
+					url: `${ API_DOCS_PREFIX }`,
+					items: info.properties
+				},
+				{
+					name: 'Anchor',
+					url: `${ API_DOCS_PREFIX }#member-anchor`,
+					buttons: [
+						{
+							type: 'log',
+							text: 'Log in console',
+							onClick: () => Logger.log( this.props.editor.editing.view.document.selection.anchor )
+						}
+					],
+					items: info.anchor
+				},
+				{
+					name: 'Focus',
+					url: `${ API_DOCS_PREFIX }#member-focus`,
+					buttons: [
+						{
+							type: 'log',
+							text: 'Log in console',
+							onClick: () => Logger.log( this.props.editor.editing.view.document.selection.focus )
+						}
+					],
+					items: info.focus
+				}
+			]}
+		/>
 	}
 
 	getEditorSelectionInfo() {

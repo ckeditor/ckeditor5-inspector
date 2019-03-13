@@ -8,13 +8,13 @@
 	--ck-inspector-color-tab-active-border: #0DACEF
 }
 
-.ck-inspector .ck-inspector-tabs {
+.ck-inspector .ck-inspector-horizontal-nav {
 	display: flex;
 	flex-direction: row;
 	user-select: none;
 	align-self: stretch;
 
-	& .ck-inspector-tabs__tab {
+	& .ck-inspector-horizontal-nav__item {
 		-webkit-appearance: none;
 		background: none;
 		border: 0;
@@ -26,7 +26,7 @@
 			background: var(--ck-inspector-color-tab-background-hover);
 		}
 
-		&.ck-inspector-tabs__tab_active {
+		&.ck-inspector-horizontal-nav__item_active {
 			border-bottom-color: var(--ck-inspector-color-tab-active-border);
 		}
 	}

@@ -5,6 +5,7 @@
 
 import React, { Component } from 'react';
 import Tree from '../tree';
+import NavBox from '../navbox';
 import editorEventObserver from '../editorobserver';
 import { stringify } from '../utils';
 class CommandTree extends Component {
@@ -16,19 +17,13 @@ class CommandTree extends Component {
 	}
 
 	render() {
-		const states = this.getCommandStates();
-
-		return <div className="ck-inspector__document-tree">
-			<div className="ck-inspector-tabbed-panes">
-				<div className="ck-inspector-tabbed-panes__content">
-					<Tree
-						items={states}
-						onClick={this.props.onClick}
-						activeNode={this.props.currentCommandName}
-					/>
-				</div>
-			</div>
-		</div>
+		return <NavBox>
+			<Tree
+				items={this.getCommandStates()}
+				onClick={this.props.onClick}
+				activeNode={this.props.currentCommandName}
+			/>
+		</NavBox>;
 	}
 
 	getCommandStates() {
@@ -59,7 +54,7 @@ class CommandTree extends Component {
 			} );
 		}
 
-		return list.sort( ( a, b ) => 	a.name > b.name ? 1 : -1 );
+		return list.sort( ( a, b ) => a.name > b.name ? 1 : -1 );
 	}
 }
 

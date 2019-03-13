@@ -5,6 +5,7 @@
 
 import React, { Component } from 'react';
 import Tree from '../tree';
+import NavBox from '../navbox';
 import Select from '../select';
 import Checkbox from '../checkbox';
 import StorageManager from '../../storagemanager';
@@ -40,37 +41,33 @@ class ModelTree extends Component {
 	render() {
 		const tree = this.getEditorModelTree();
 
-		return <div className="ck-inspector__document-tree">
-			<div className="ck-inspector-tabbed-panes">
-				<div className="ck-inspector-tabbed-panes__navigation">
-					<div className="ck-inspector__document-tree__config">
-						<Select
-							id="view-root-select"
-							label="Root"
-							value={this.props.currentRootName}
-							options={this.props.editorRoots.map( root => root.rootName )}
-							onChange={( evt ) => this.props.onRootChange( evt.target.value )}
-						/>
-					</div>
-					<div className="ck-inspector__document-tree__config">
-						<Checkbox
-							label="Compact text"
-							id="model-compact-text"
-							isChecked={this.state.showCompactText}
-							onChange={this.handleCompactTextChange}
-						/>
-					</div>
-				</div>
-				<div className="ck-inspector-tabbed-panes__content">
-					<Tree
-						items={tree}
-						onClick={this.props.onClick}
-						showCompactText={this.state.showCompactText}
-						activeNode={this.props.currentEditorNode}
+		return <NavBox>
+			{[
+				<div className="ck-inspector-tree__config" key="root-cfg">
+					<Select
+						id="view-root-select"
+						label="Root"
+						value={this.props.currentRootName}
+						options={this.props.editorRoots.map( root => root.rootName )}
+						onChange={( evt ) => this.props.onRootChange( evt.target.value )}
+					/>
+				</div>,
+				<div className="ck-inspector-tree__config" key="text-cfg">
+					<Checkbox
+						label="Compact text"
+						id="model-compact-text"
+						isChecked={this.state.showCompactText}
+						onChange={this.handleCompactTextChange}
 					/>
 				</div>
-			</div>
-		</div>
+			]}
+			<Tree
+				items={tree}
+				onClick={this.props.onClick}
+				showCompactText={this.state.showCompactText}
+				activeNode={this.props.currentEditorNode}
+			/>
+		</NavBox>;
 	}
 
 	getEditorModelTree() {

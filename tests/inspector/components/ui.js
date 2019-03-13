@@ -12,7 +12,7 @@ import InspectorUI, {
 	ToggleButton,
 	EditorInstanceSelector
 } from '../../../src/components/ui';
-import Panes from '../../../src/components/tabbedpanes';
+import Tabs from '../../../src/components/tabs';
 import ModelPane from '../../../src/components/model/pane';
 import ViewPane from '../../../src/components/view/pane';
 import CommandsPane from '../../../src/components/commands/pane';
@@ -64,7 +64,7 @@ describe( '<InspectorUI />', () => {
 			expect( document.body.style.getPropertyValue( '--ck-inspector-height' ) ).to.equal( '400px' );
 			expect( state.isCollapsed ).to.be.false;
 			expect( state.currentEditorName ).to.equal( 'first' );
-			expect( state.activePane ).to.equal( 'Model' );
+			expect( state.activeTab ).to.equal( 'Model' );
 		} );
 
 		it( 'restores state#height from the storage and sets it to body', () => {
@@ -94,28 +94,28 @@ describe( '<InspectorUI />', () => {
 			wrapper.unmount();
 		} );
 
-		it( 'restores state#activePane from the storage', () => {
-			window.localStorage.setItem( 'ck5-inspector-active-pane-name', 'Commands' );
+		it( 'restores state#activeTab from the storage', () => {
+			window.localStorage.setItem( 'ck5-inspector-active-tab-name', 'Commands' );
 
 			const wrapper = mount(
 				<InspectorUI editors={editors} />,
 				{ attachTo: container }
 			);
 
-			expect( wrapper.state().activePane ).to.equal( 'Commands' );
+			expect( wrapper.state().activeTab ).to.equal( 'Commands' );
 
 			wrapper.unmount();
 		} );
 	} );
 
 	describe( 'handlePaneChange()', () => {
-		it( 'changes state#activePane and saves to the storage', () => {
+		it( 'changes state#activeTab and saves to the storage', () => {
 			const instance = wrapper.instance();
 
 			instance.handlePaneChange( 'Commands' );
 
-			expect( wrapper.state().activePane ).to.equal( 'Commands' );
-			expect( window.localStorage.getItem( 'ck5-inspector-active-pane-name' ) ).to.equal( 'Commands' );
+			expect( wrapper.state().activeTab ).to.equal( 'Commands' );
+			expect( window.localStorage.getItem( 'ck5-inspector-active-tab-name' ) ).to.equal( 'Commands' );
 		} );
 	} );
 
@@ -247,14 +247,14 @@ describe( '<InspectorUI />', () => {
 
 		describe( 'panes', () => {
 			function getPanes() {
-				return wrapper.find( Panes ).first();
+				return wrapper.find( Tabs ).first();
 			}
 
 			describe( 'props', () => {
-				it( 'has #onPaneChange', () => {
+				it( 'has #onTabChange', () => {
 					const panes = getPanes();
 
-					expect( panes.props().onPaneChange ).to.equal( wrapper.instance().handlePaneChange );
+					expect( panes.props().onTabChange ).to.equal( wrapper.instance().handlePaneChange );
 				} );
 
 				it( 'has #contentBefore', () => {
@@ -263,14 +263,14 @@ describe( '<InspectorUI />', () => {
 					expect( mount( panes.props().contentBefore ).type() ).to.equal( DocsButton );
 				} );
 
-				it( 'has #activePane', () => {
+				it( 'has #activeTab', () => {
 					const panes = getPanes();
 
-					expect( panes.props().activePane ).to.equal( 'Model' );
+					expect( panes.props().activeTab ).to.equal( 'Model' );
 
-					wrapper.setState( { activePane: 'Commands' } );
+					wrapper.setState( { activeTab: 'Commands' } );
 
-					expect( getPanes().props().activePane ).to.equal( 'Commands' );
+					expect( getPanes().props().activeTab ).to.equal( 'Commands' );
 				} );
 
 				describe( '#contentAfter', () => {
