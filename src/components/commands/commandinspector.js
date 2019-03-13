@@ -54,7 +54,7 @@ class CommandInspector extends Component {
 					name: 'Properties',
 					url: info.url,
 					items: info.properties
-				},
+				}
 			]}
 		/>;
 	}
@@ -69,7 +69,7 @@ class CommandInspector extends Component {
 
 		const command = editor.commands.get( name );
 
-		const info = {
+		return {
 			type: 'Command',
 			name: name,
 			url: 'https://ckeditor.com/docs/ckeditor5/latest/api/module_core_command-Command.html',
@@ -79,8 +79,6 @@ class CommandInspector extends Component {
 			] ),
 			command,
 		};
-
-		return info;
 	}
 }
 

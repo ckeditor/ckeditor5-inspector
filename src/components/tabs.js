@@ -25,7 +25,7 @@ export default class Tabs extends Component {
 			{[
 				this.props.contentBefore,
 				<HorizontalNav
-					key="tabs"
+					key="navigation"
 					definitions={children.map( child => child.props.label )}
 					activeTab={this.props.activeTab}
 					onClick={this.handleTabClick}

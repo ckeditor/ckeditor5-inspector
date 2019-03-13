@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import CommandTree from './tree';
 import Pane from '../pane';
 import Tabs from '../tabs';
-import CommandInspector from './inspector';
+import CommandInspector from './commandinspector';
 import '../pane.css';
 export default class CommandsPane extends Component {
 	constructor( props ) {

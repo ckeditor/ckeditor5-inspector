@@ -46,9 +46,5 @@ export default function editorEventObserver( WrappedComponent ) {
 
 			target.off( event, this._onEditorEventCallback );
 		}
-
-		render() {
-			return super.render();
-		}
 	};
 }

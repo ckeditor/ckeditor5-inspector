@@ -5,6 +5,7 @@
 
 import React from 'react';
 import Tabs from '../../../src/components/tabs';
+import NavBox from '../../../src/components/navbox';
 import HorizontalNav from '../../../src/components/horizontalnav';
 
 describe( '<Tabs />', () => {
@@ -15,30 +16,28 @@ describe( '<Tabs />', () => {
 
 		wrapper = mount(
 			<Tabs activeTab="Bar" onTabChange={clickSpy}>
-				<div label="Foo"></div>
-				<div label="Bar"></div>
+				<div label="Foo" key="Foo"></div>
+				<div label="Bar" key="Bar"></div>
 			</Tabs>
 		);
 	} );
 
-	it( 'renders panes', () => {
-		expect( wrapper ).to.have.className( 'ck-inspector-navbox' );
-		expect( wrapper.children().childAt( 0 ) ).to.have.className( 'ck-inspector-navbox__navigation' );
-		expect( wrapper.children().childAt( 1 ) ).to.have.className( 'ck-inspector-navbox__content' );
+	it( 'renders <NavBox>', () => {
+		expect( wrapper.childAt( 0 ).type() ).to.equal( NavBox );
 	} );
 
-	it( 'renders props#contentBefore and props#contentAfter', () => {
+	it( 'renders props#contentBefore and props#contentAfter in <NavBox> navigation', () => {
 		wrapper = mount(
-			<Tabs contentBefore={<div></div>} contentAfter={<b></b>}>
-				<div label="Foo"></div>
+			<Tabs contentBefore={<div key="before"></div>} contentAfter={<b key="after"></b>}>
+				<div label="Foo" key="foo"></div>
 			</Tabs>
 		);
 
-		const nav = wrapper.children().childAt( 0 );
+		const nav = wrapper.childAt( 0 ).props().children[ 0 ];
 
-		expect( nav.childAt( 0 ).type() ).to.equal( 'div' );
-		expect( nav.childAt( 1 ).type() ).to.equal( HorizontalNav );
-		expect( nav.childAt( 2 ).type() ).to.equal( 'b' );
+		expect( mount( nav[ 0 ] ).type() ).to.equal( 'div' );
+		expect( mount( nav[ 1 ] ).type() ).to.equal( HorizontalNav );
+		expect( mount( nav[ 2 ] ).type() ).to.equal( 'b' );
 	} );
 
 	describe( '<HorizontalNav />', () => {

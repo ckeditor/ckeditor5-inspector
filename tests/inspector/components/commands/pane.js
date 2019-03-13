@@ -9,7 +9,7 @@ import React from 'react';
 import TestEditor from '../../../utils/testeditor';
 import CommandsPane from '../../../../src/components/commands/pane';
 import CommandTree from '../../../../src/components/commands/tree';
-import CommandInspector from '../../../../src/components/commands/inspector';
+import CommandInspector from '../../../../src/components/commands/commandinspector';
 
 describe( '<CommandsPane />', () => {
 	let editor, wrapper, element;

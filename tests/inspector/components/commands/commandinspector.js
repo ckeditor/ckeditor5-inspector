@@ -8,9 +8,10 @@
 import React from 'react';
 import TestEditor from '../../../utils/testeditor';
 import Button from '../../../../src/components/button';
-import PropertyList from '../../../../src/components/propertylist';
+import ObjectInspector from '../../../../src/components/objectinspector';
+import Pane from '../../../../src/components/pane';
 import Logger from '../../../../src/logger';
-import CommandInspector from '../../../../src/components/commands/inspector';
+import CommandInspector from '../../../../src/components/commands/commandinspector';
 
 describe( '<CommandInspector />', () => {
 	let editor, wrapper, element;
@@ -40,19 +41,22 @@ describe( '<CommandInspector />', () => {
 		it( 'renders a placeholder when no props#inspectedCommandName', () => {
 			wrapper.setProps( { inspectedCommandName: null } );
 
-			expect( wrapper.text() ).to.match( /^Select a command to/ );
+			expect( wrapper.type() ).to.equal( Pane );
+			expect( wrapper.childAt( 0 ).text() ).to.match( /^Select a command to/ );
 		} );
 
-		it( 'renders command header', () => {
+		it( 'renders the inspector', () => {
+			const wrapper = mount( <CommandInspector editor={editor} /> );
+
 			wrapper.setProps( { inspectedCommandName: 'foo' } );
 
-			const header = wrapper.find( 'h2.ck-inspector-code' );
 			const execButton = wrapper.find( Button ).first();
 			const logButton = wrapper.find( Button ).last();
 			const execSpy = sinon.spy( editor.commands.get( 'foo' ), 'execute' );
 			const logSpy = sinon.stub( Logger, 'log' ).callsFake( () => {} );
 
-			expect( header.text() ).to.equal( 'Command:foo<Button /><Button />' );
+			expect( wrapper.childAt( 0 ).type() ).to.equal( ObjectInspector );
+			expect( wrapper.childAt( 0 ).find( 'h2 span' ).text() ).to.equal( 'Command:foo' );
 
 			execButton.simulate( 'click' );
 			sinon.assert.calledOnce( execSpy );
@@ -61,14 +65,17 @@ describe( '<CommandInspector />', () => {
 			sinon.assert.calledOnce( logSpy );
 
 			logSpy.restore();
+
+			wrapper.unmount()
 		} );
 
 		it( 'renders command info', () => {
 			wrapper.setProps( { inspectedCommandName: 'foo' } );
 
-			const list = wrapper.find( PropertyList );
+			const inspector = wrapper.find( ObjectInspector );
+			const lists = inspector.props().lists;
 
-			expect( list.props().items ).to.deep.equal( [
+			expect( lists[ 0 ].items ).to.deep.equal( [
 				[ 'isEnabled', 'true' ],
 				[ 'value', 'undefined' ]
 			] );
@@ -80,7 +87,7 @@ describe( '<CommandInspector />', () => {
 			editor.commands.get( 'foo' ).value = 'bar';
 			editor.model.document.fire( 'change' );
 
-			expect( wrapper.find( PropertyList ).props().items ).to.deep.equal( [
+			expect( wrapper.find( ObjectInspector ).props().lists[ 0 ].items ).to.deep.equal( [
 				[ 'isEnabled', 'true' ],
 				[ 'value', '"bar"' ]
 			] );
