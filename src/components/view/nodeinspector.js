@@ -10,10 +10,8 @@ import Logger from '../../logger';
 import editorEventObserver from '../editorobserver';
 import {
 	isViewElement,
-	isViewText,
 	isViewRoot,
 	isViewAttributeElement,
-	isViewContainerElement,
 	isViewUiElement,
 	isViewEmptyElement
 } from './utils';
@@ -106,12 +104,9 @@ class NodeInspector extends Component {
 				} else if ( isViewUiElement( node ) ) {
 					info.type = 'UIElement';
 					info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_uielement-UIElement.html';
-				} else if ( isViewContainerElement( node ) ) {
+				} else {
 					info.type = 'ContainerElement';
 					info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_containerelement-ContainerElement.html';
-				} else {
-					info.type = 'Element';
-					info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_element-Element.html';
 				}
 			}
 
@@ -121,7 +116,7 @@ class NodeInspector extends Component {
 				[ 'isEmpty', node.isEmpty ],
 				[ 'childCount', node.childCount ],
 			);
-		} else if ( isViewText( node ) ) {
+		} else {
 			info.name = node.data;
 			info.type = 'Text';
 			info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_text-Text.html';
