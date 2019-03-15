@@ -32,7 +32,7 @@
 	/*-- Pane with split ---------------------------------------------------------------------------------------- */
 
 	&.ck-inspector-pane_vsplit {
-		& .ck-inspector-navbox:first-child {
+		& > .ck-inspector-navbox:first-child {
 			border-right: 1px solid var(--ck-inspector-color-border);
 			flex: 1 1 auto;
 			overflow: hidden;
