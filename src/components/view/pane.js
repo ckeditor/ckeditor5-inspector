@@ -12,7 +12,7 @@ import ViewSelectionInspector from './selectioninspector';
 import StorageManager from '../../storagemanager';
 import '../pane.css';
 
-const LOCAL_STORAGE_ACTIVE_TAB = 'ck5-inspector-active-view-tab-name';
+const LOCAL_STORAGE_ACTIVE_TAB = 'active-view-tab-name';
 
 export default class ViewPane extends Component {
 	constructor( props ) {

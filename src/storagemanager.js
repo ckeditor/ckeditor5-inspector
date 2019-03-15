@@ -7,10 +7,10 @@
 
 export default class StorageManager {
 	static set( name, value ) {
-		window.localStorage.setItem( name, value );
+		window.localStorage.setItem( 'ck5-inspector-' + name, value );
 	}
 
 	static get( name ) {
-		return window.localStorage.getItem( name );
+		return window.localStorage.getItem( 'ck5-inspector-' + name );
 	}
 }

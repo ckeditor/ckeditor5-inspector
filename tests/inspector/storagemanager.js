@@ -15,8 +15,8 @@ describe( 'StorageManager', () => {
 			StorageManager.set( 'foo', 'bar' );
 			StorageManager.set( 'baz', 'qux' );
 
-			sinon.assert.calledWithExactly( spy.firstCall, 'foo', 'bar' );
-			sinon.assert.calledWithExactly( spy.secondCall, 'baz', 'qux' );
+			sinon.assert.calledWithExactly( spy.firstCall, 'ck5-inspector-foo', 'bar' );
+			sinon.assert.calledWithExactly( spy.secondCall, 'ck5-inspector-baz', 'qux' );
 		} );
 	} );
 
@@ -27,7 +27,7 @@ describe( 'StorageManager', () => {
 			StorageManager.set( 'foo', 'bar' );
 			expect( StorageManager.get( 'foo' ) ).to.equal( 'bar' );
 
-			sinon.assert.calledWithExactly( spy, 'foo' );
+			sinon.assert.calledWithExactly( spy, 'ck5-inspector-foo' );
 		} );
 	} );
 } );

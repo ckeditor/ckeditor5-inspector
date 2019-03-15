@@ -11,7 +11,7 @@ import ModelNodeInspector from './nodeinspector';
 import ModelSelectionInspector from './selectioninspector';
 import StorageManager from '../../storagemanager';
 
-const LOCAL_STORAGE_ACTIVE_TAB = 'ck5-inspector-active-model-tab-name';
+const LOCAL_STORAGE_ACTIVE_TAB = 'active-model-tab-name';
 export default class ModelPane extends Component {
 	constructor( props ) {
 		super( props );

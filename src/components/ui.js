@@ -16,9 +16,9 @@ import Tabs from './tabs';
 import Select from './select';
 import './ui.css';
 
-const LOCAL_STORAGE_ACTIVE_TAB = 'ck5-inspector-active-tab-name';
-const LOCAL_STORAGE_IS_COLLAPSED = 'ck5-inspector-is-collapsed';
-const LOCAL_STORAGE_INSPECTOR_HEIGHT = 'ck5-inspector-height';
+const LOCAL_STORAGE_ACTIVE_TAB = 'active-tab-name';
+const LOCAL_STORAGE_IS_COLLAPSED = 'is-collapsed';
+const LOCAL_STORAGE_INSPECTOR_HEIGHT = 'height';
 const INSPECTOR_MIN_HEIGHT = '100';
 const INSPECTOR_DEFAULT_HEIGHT = '400px';
 const INSPECTOR_COLLAPSED_HEIGHT = 30;

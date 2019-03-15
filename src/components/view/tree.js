@@ -19,7 +19,7 @@ import {
 } from './utils';
 import { stringify } from '../utils';
 
-const LOCAL_STORAGE_ELEMENT_TYPES = 'ck5-inspector-view-element-types';
+const LOCAL_STORAGE_ELEMENT_TYPES = 'view-element-types';
 class ViewTree extends Component {
 	constructor( props ) {
 		super( props );

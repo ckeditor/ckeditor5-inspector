@@ -13,7 +13,7 @@ import editorEventObserver from '../editorobserver';
 import { isModelElement } from './utils';
 import { stringify } from '../utils';
 
-const LOCAL_STORAGE_COMPACT_TEXT = 'ck5-inspector-model-compact-text';
+const LOCAL_STORAGE_COMPACT_TEXT = 'model-compact-text';
 class ModelTree extends Component {
 	constructor( props ) {
 		super( props );
