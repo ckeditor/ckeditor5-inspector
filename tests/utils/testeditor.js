@@ -11,6 +11,8 @@ import ElementReplacer from '@ckeditor/ckeditor5-utils/src/elementreplacer';
 import InlineEditableUIView from '@ckeditor/ckeditor5-ui/src/editableui/inline/inlineeditableuiview';
 import getDataFromElement from '@ckeditor/ckeditor5-utils/src/dom/getdatafromelement';
 import Command from '@ckeditor/ckeditor5-core/src/command';
+import DataApiMixin from '@ckeditor/ckeditor5-core/src/editor/utils/dataapimixin';
+import mix from '@ckeditor/ckeditor5-utils/src/mix';
 
 export default class TestEditor extends Editor {
 	/**
@@ -94,3 +96,5 @@ export class FooCommand extends Command {
 		this.isEnabled = true;
 	}
 }
+
+mix( TestEditor, DataApiMixin );

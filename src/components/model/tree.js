@@ -10,7 +10,7 @@ import Select from '../select';
 import Checkbox from '../checkbox';
 import StorageManager from '../../storagemanager';
 import editorEventObserver from '../editorobserver';
-import { isModelElement, isModelText } from './utils';
+import { isModelElement } from './utils';
 import { stringify } from '../utils';
 
 const LOCAL_STORAGE_COMPACT_TEXT = 'ck5-inspector-model-compact-text';
@@ -89,7 +89,7 @@ class ModelTree extends Component {
 function getNodeTree( node, rangeStart, rangeEnd ) {
 	if ( isModelElement( node ) ) {
 		return getElementTree( node, rangeStart, rangeEnd );
-	} else if ( isModelText( node ) ) {
+	} else {
 		return getTextTree( node, rangeStart, rangeEnd );
 	}
 }

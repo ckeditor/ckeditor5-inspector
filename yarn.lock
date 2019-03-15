@@ -206,6 +206,14 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
+"@ckeditor/ckeditor5-basic-styles@^11.0.0":
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-basic-styles/-/ckeditor5-basic-styles-11.0.0.tgz#16f66878761352ff33e7611ba995067d667750a0"
+  integrity sha512-z4itBpNjEeHqeyxLMi2slKQekhqrbra/lU/3RpaSI3mp46WgV7P3IoVOPqBiB6jZxk+JJzEXl8jfVV3hXH8wGg==
+  dependencies:
+    "@ckeditor/ckeditor5-core" "^12.0.0"
+    "@ckeditor/ckeditor5-ui" "^12.0.0"
+
 "@ckeditor/ckeditor5-core@^12.0.0":
   version "12.0.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-core/-/ckeditor5-core-12.0.0.tgz#5bff19fdca713c9f2ca551782f8cde42ed5cedf3"
@@ -266,6 +274,15 @@
   dependencies:
     "@ckeditor/ckeditor5-utils" "^12.0.0"
     lodash-es "^4.17.10"
+
+"@ckeditor/ckeditor5-paragraph@^11.0.0":
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-paragraph/-/ckeditor5-paragraph-11.0.0.tgz#3a12981f1ef145498e4fe695c94fd2a9adfc66d9"
+  integrity sha512-1k2OfQ5q80h8JVP5uzKewTnvnbD51K/mkWCoSgxGTW33bxYjMyYjKGEo9VPLiBiPqyl07b7NFEbSJSh3TNeCiQ==
+  dependencies:
+    "@ckeditor/ckeditor5-core" "^12.0.0"
+    "@ckeditor/ckeditor5-ui" "^12.0.0"
+    "@ckeditor/ckeditor5-utils" "^12.0.0"
 
 "@ckeditor/ckeditor5-theme-lark@^13.0.0":
   version "13.0.0"

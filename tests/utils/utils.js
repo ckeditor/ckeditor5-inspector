@@ -1,0 +1,38 @@
+/**
+ * @license Copyright (c) 2003-2019, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md.
+ */
+
+export function assertTreeItems( items, expected ) {
+	if ( expected.length != items.length ) {
+		expect.fail( items, expected, 'number of items should match' );
+	}
+
+	for ( let expectedItemIndex = 0; expectedItemIndex < expected.length; expectedItemIndex++ ) {
+		const expectedItem = expected[ expectedItemIndex ];
+		const assertedItem = items[ expectedItemIndex ];
+
+		if ( !assertedItem ) {
+			expect.fail( assertedItem, expectedItem, 'should be' );
+		}
+
+		if ( typeof expectedItem === 'string' ) {
+			// Child is ia text.
+			return expect( assertedItem ).to.equal( expectedItem );
+		}
+
+		for ( const property in expectedItem ) {
+			if ( property !== 'attributes' && property !== 'children' ) {
+				expect( assertedItem[ property ] ).to.deep.equal( expectedItem[ property ], property + ' must match' );
+			}
+		}
+
+		if ( expectedItem.attributes ) {
+			expect( Array.from( assertedItem.attributes ) ).to.have.deep.members( expectedItem.attributes, 'attributes must match' );
+		}
+
+		if ( expectedItem.children ) {
+			assertTreeItems( assertedItem.children, expectedItem.children );
+		}
+	}
+}
