@@ -229,12 +229,9 @@ describe( '<ViewTree />', () => {
 												type: 'text',
 												node: root.getChild( 0 ).getChild( 2 ).getChild( 0 ),
 												children: [
-													'',
 													{
-														type: 'selection',
-														isEnd: false
+														type: 'selection'
 													},
-													'',
 													{
 														type: 'selection',
 														isEnd: true
@@ -358,11 +355,9 @@ describe( '<ViewTree />', () => {
 										type: 'text',
 										node: root.getChild( 0 ).getChild( 0 ),
 										children: [
-											'',
 											{
 												type: 'selection'
 											},
-											'',
 											{
 												type: 'selection',
 												isEnd: true
@@ -481,7 +476,6 @@ describe( '<ViewTree />', () => {
 													{
 														type: 'selection'
 													},
-													'',
 													{
 														type: 'selection',
 														isEnd: true

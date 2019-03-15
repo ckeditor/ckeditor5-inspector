@@ -199,6 +199,8 @@ function getTextTree( textNode, rangeStart, rangeEnd ) {
 			lastChild.slice( endSliceIndex, lastChild.length ) );
 	}
 
+	// Filter out empty strings, a leftover after slice().
+	textNodeTree.children = textNodeTree.children.filter( child => child );
 	textNodeTree.attributes = getNodeAttrs( textNode );
 
 	return textNodeTree;

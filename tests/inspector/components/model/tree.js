@@ -360,7 +360,6 @@ describe( '<ModelTree />', () => {
 												type: 'selection',
 												isEnd: false
 											},
-											'',
 											{
 												type: 'selection',
 												isEnd: true
