@@ -66,6 +66,19 @@ describe( '<ModelPane />', () => {
 			sinon.assert.calledOnce( evt.persist );
 			sinon.assert.calledOnce( evt.stopPropagation );
 		} );
+
+		it( 'opens the inspector when double clicked', () => {
+			wrapper.setState( { activeTab: 'Selection' } );
+
+			const evt = {
+				persist: sinon.spy(),
+				stopPropagation: sinon.spy(),
+				detail: 2
+			};
+
+			wrapper.instance().handleTreeClick( evt, editor.model.document.getRoot().getChild( 0 ) );
+			expect( wrapper.state().activeTab ).to.equal( 'Inspect' );
+		} );
 	} );
 
 	describe( 'handlePaneChange()', () => {

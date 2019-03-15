@@ -250,7 +250,7 @@ describe( '<ModelTree />', () => {
 
 				editor.setData( '<p>f<b>o</b>o</p>' );
 
-				// <paragraph>f<b>[]o</b>o</paragraph>
+				// <paragraph>f<$text bold>[]o</$text>o</paragraph>
 				editor.model.change( writer => {
 					writer.setSelection( root.getChild( 0 ), 1 );
 				} );
@@ -317,7 +317,7 @@ describe( '<ModelTree />', () => {
 
 				editor.setData( '<p>f<b>oo</b>o</p>' );
 
-				// <paragraph>f<b>o[]o</b>o</paragraph>
+				// <paragraph>f<$text bold>o[]o</$text>o</paragraph>
 				editor.model.change( writer => {
 					writer.setSelection( root.getChild( 0 ), 2 );
 				} );
@@ -388,7 +388,7 @@ describe( '<ModelTree />', () => {
 
 				editor.setData( '<p>a<b>bc</b>de</p>' );
 
-				// <paragraph>a<b>b[c</b>d]e</paragraph>
+				// <paragraph>a<$text bold>b[c</$text>d]e</paragraph>
 				editor.model.change( writer => {
 					writer.setSelection( root.getChild( 0 ), 4 );
 					writer.setSelectionFocus( root.getChild( 0 ), 2 );

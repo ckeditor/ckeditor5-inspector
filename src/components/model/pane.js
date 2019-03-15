@@ -96,10 +96,12 @@ export default class ModelPane extends Component {
 
 	static getDerivedStateFromProps( props, state ) {
 		if ( props.editor !== state.editor ) {
+			const editorRoots = getEditorRoots( props.editor );
+
 			return {
 				editor: props.editor,
-				editorRoots: getEditorRoots( props.editor ),
-				currentRootName: getCurrentRootName( props.editor ),
+				editorRoots,
+				currentRootName: editorRoots ? editorRoots[ 0 ].rootName : null,
 				currentEditorNode: null
 			};
 		} else {
@@ -113,17 +115,10 @@ function getEditorRoots( editor ) {
 		return null;
 	}
 
-	return [ ...editor.model.document.roots ];
-}
+	const roots = [ ...editor.model.document.roots ];
 
-function getCurrentRootName( editor ) {
-	if ( !editor ) {
-		return null;
-	}
-
-	if ( editor.model.document.roots.has( 'main' ) ) {
-		return 'main';
-	} else {
-		return getEditorRoots( editor )[ 0 ].rootName;
-	}
+	// Put $graveyard at the end.
+	return roots
+		.filter( ( { rootName } ) => rootName !== '$graveyard' )
+		.concat( roots.filter( ( { rootName } ) => rootName === '$graveyard' ) );
 }
