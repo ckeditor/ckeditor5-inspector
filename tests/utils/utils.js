@@ -12,8 +12,8 @@ export function assertTreeItems( items, expected ) {
 		const expectedItem = expected[ expectedItemIndex ];
 		const assertedItem = items[ expectedItemIndex ];
 
-		if ( !assertedItem ) {
-			expect.fail( assertedItem, expectedItem, 'should be' );
+		if ( assertedItem === undefined ) {
+			expect.fail( JSON.stringify( assertedItem ), JSON.stringify( expectedItem ), 'should be' );
 		}
 
 		if ( typeof expectedItem === 'string' ) {

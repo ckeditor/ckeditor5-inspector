@@ -13,11 +13,9 @@ import editorEventObserver from '../editorobserver';
 import {
 	isViewElement,
 	isViewAttributeElement,
-	isViewContainerElement,
 	isViewEmptyElement,
 	isViewUiElement,
-	isViewRoot,
-	isViewText
+	isViewRoot
 } from './utils';
 import { stringify } from '../utils';
 
@@ -97,7 +95,7 @@ class ViewTree extends Component {
 function getNodeTree( node, rangeStart, rangeEnd, showTypes ) {
 	if ( isViewElement( node ) ) {
 		return getElementTree( node, rangeStart, rangeEnd, showTypes );
-	} else if ( isViewText( node ) ) {
+	} else {
 		return getTextTree( node, rangeStart, rangeEnd, showTypes );
 	}
 }
@@ -120,10 +118,8 @@ function getElementTree( element, rangeStart, rangeEnd, showTypes ) {
 			elementTree.name = 'empty:' + element.name;
 		} else if ( isViewUiElement( element ) ) {
 			elementTree.name = 'ui:' + element.name;
-		} else if ( isViewContainerElement( element ) ) {
-			elementTree.name = 'container:' + element.name;
 		} else {
-			elementTree.name = element.name;
+			elementTree.name = 'container:' + element.name;
 		}
 	} else {
 		elementTree.name = element.name;
