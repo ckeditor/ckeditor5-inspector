@@ -75,7 +75,6 @@ export default class ViewPane extends Component {
 				currentRootName={this.state.currentRootName}
 				editor={this.props.editor}
 				editorRoots={this.state.editorRoots}
-				key="tree"
 				onClick={this.handleTreeClick}
 				onRootChange={this.handleRootChange}
 			/>
@@ -98,11 +97,13 @@ export default class ViewPane extends Component {
 	}
 
 	static getDerivedStateFromProps( props, state ) {
+		const editorRoots = getEditorRoots( props.editor );
+
 		if ( props.editor !== state.editor ) {
 			return {
 				editor: props.editor,
-				editorRoots: getEditorRoots( props.editor ),
-				currentRootName: getCurrentRootName( props.editor ),
+				editorRoots,
+				currentRootName: editorRoots ? editorRoots[ 0 ].rootName : null,
 				currentEditorNode: null
 			};
 		} else {
@@ -117,16 +118,4 @@ function getEditorRoots( editor ) {
 	}
 
 	return [ ...editor.editing.view.document.roots ];
-}
-
-function getCurrentRootName( editor ) {
-	if ( !editor ) {
-		return null;
-	}
-
-	if ( editor.editing.view.document.roots.has( 'main' ) ) {
-		return 'main';
-	} else {
-		return getEditorRoots( editor )[ 0 ].rootName;
-	}
 }
