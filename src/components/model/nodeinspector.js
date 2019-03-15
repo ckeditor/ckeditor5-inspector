@@ -13,7 +13,6 @@ import Logger from '../../logger';
 import editorEventObserver from '../editorobserver';
 import {
 	isModelElement,
-	isModelText,
 	isModelRoot,
 	getNodePathString
 } from './utils';
@@ -105,7 +104,7 @@ class ModelNodeInspector extends Component {
 				[ 'endOffset', node.endOffset ],
 				[ 'maxOffset', node.maxOffset ]
 			);
-		} else if ( isModelText( node ) ) {
+		} else {
 			info.name = node.data;
 			info.type = 'Text';
 			info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_text-Text.html';

@@ -10,12 +10,12 @@ import TestEditor from '../../../utils/testeditor';
 import Button from '../../../../src/components/button';
 import ObjectInspector from '../../../../src/components/objectinspector';
 import Logger from '../../../../src/logger';
-import SelectionInspector from '../../../../src/components/model/selectioninspector';
+import ModelSelectionInspector from '../../../../src/components/model/selectioninspector';
 
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import BoldEditing from '@ckeditor/ckeditor5-basic-styles/src/bold/boldediting';
 
-describe( '<SelectionInspector />', () => {
+describe( '<ModelSelectionInspector />', () => {
 	let editor, wrapper, element;
 
 	const container = document.createElement( 'div' );
@@ -30,7 +30,7 @@ describe( '<SelectionInspector />', () => {
 		} ).then( newEditor => {
 			editor = newEditor;
 
-			wrapper = shallow( <SelectionInspector editor={editor} /> );
+			wrapper = shallow( <ModelSelectionInspector editor={editor} /> );
 		} );
 	} );
 
@@ -43,7 +43,7 @@ describe( '<SelectionInspector />', () => {
 
 	describe( 'render()', () => {
 		it( 'renders the inspector', () => {
-			const wrapper = mount( <SelectionInspector editor={editor} /> );
+			const wrapper = mount( <ModelSelectionInspector editor={editor} /> );
 			const logSelButton = wrapper.find( Button ).first();
 			const logAnchorButton = wrapper.find( Button ).at( 1 );
 			const logFocusButton = wrapper.find( Button ).last();
