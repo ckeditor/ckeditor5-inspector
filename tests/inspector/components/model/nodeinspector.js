@@ -184,5 +184,40 @@ describe( '<ModelNodeInspector />', () => {
 				[ 'path', '[0,0]' ]
 			] );
 		} );
+
+		it( 'refreshes the info on editor.model.document#change', () => {
+			const wrapper = shallow( <ModelNodeInspector editor={editor} currentRootName="main" /> );
+
+			editor.setData( '<p>foo</p>' );
+
+			wrapper.setProps( {
+				inspectedNode: root.getChild( 0 )
+			} );
+
+			const inspector = wrapper.find( ObjectInspector );
+			const lists = inspector.props().lists;
+
+			expect( lists[ 1 ].items ).to.deep.equal( [
+				[ 'childCount', '1' ],
+				[ 'startOffset', '0' ],
+				[ 'endOffset', '1' ],
+				[ 'maxOffset', '3' ],
+				[ 'path', '[0]' ]
+			] );
+
+			editor.model.change( writer => {
+				writer.insertText( 'bar', root.getChild( 0 ), 0 );
+			} );
+
+			expect( wrapper.find( ObjectInspector ).props().lists[ 1 ].items ).to.deep.equal( [
+				[ 'childCount', '1' ],
+				[ 'startOffset', '0' ],
+				[ 'endOffset', '1' ],
+				[ 'maxOffset', '6' ],
+				[ 'path', '[0]' ]
+			] );
+
+			wrapper.unmount();
+		} );
 	} );
 } );
