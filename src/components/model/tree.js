@@ -5,37 +5,31 @@
 
 import React, { Component } from 'react';
 import Tree from '../tree';
+import NavBox from '../navbox';
 import Select from '../select';
 import Checkbox from '../checkbox';
-import StorageManager from '../../storage';
-import { isModelElement, isModelText } from './utils';
+import StorageManager from '../../storagemanager';
+import editorEventObserver from '../editorobserver';
+import { isModelElement } from './utils';
+import { stringify } from '../utils';
 
-const LOCAL_STORAGE_COMPACT_TEXT = 'ck5-inspector-model-compact-text';
-export default class ModelTree extends Component {
+const LOCAL_STORAGE_COMPACT_TEXT = 'model-compact-text';
+class ModelTree extends Component {
 	constructor( props ) {
 		super( props );
 
 		this.state = {
-			modelTree: null,
 			showCompactText: StorageManager.get( LOCAL_STORAGE_COMPACT_TEXT ) === 'true'
 		};
 
 		this.handleCompactTextChange = this.handleCompactTextChange.bind( this );
 	}
 
-	update() {
-		if( !this.props.currentRootName ) {
-			return;
-		}
-
-		const editor = this.props.editor;
-		const model = editor.model;
-		const root = model.document.getRoot( this.props.currentRootName );
-		const selectionRange = editor.model.document.selection.getFirstRange();
-
-		this.setState( {
-			modelTree: [ getNodeTree( root, selectionRange.start, selectionRange.end ) ]
-		} );
+	editorEventObserverConfig( props ) {
+		return {
+			target: props.editor.model.document,
+			event: 'change'
+		};
 	}
 
 	handleCompactTextChange( evt ) {
@@ -45,44 +39,57 @@ export default class ModelTree extends Component {
 	}
 
 	render() {
-		return <div className="ck-inspector__document-tree">
-			<div className="ck-inspector-panes">
-				<div className="ck-inspector-panes__navigation">
-					<div className="ck-inspector__document-tree__config">
-						<Select
-							id="view-root-select"
-							label="Root"
-							value={this.props.currentRootName}
-							options={this.props.editorRoots.map( root => root.rootName )}
-							onChange={( evt ) => this.props.onRootChange( evt.target.value )}
-						/>
-					</div>
-					<div className="ck-inspector__document-tree__config">
-						<Checkbox
-							label="Compact text"
-							id="model-compact-text"
-							isChecked={this.state.showCompactText}
-							onChange={this.handleCompactTextChange}
-						/>
-					</div>
-				</div>
-				<div className="ck-inspector-panes__content">
-					<Tree
-						items={this.state.modelTree}
-						onClick={this.props.onClick}
-						showCompactText={this.state.showCompactText}
-						activeNode={this.props.currentEditorNode}
+		const tree = this.getEditorModelTree();
+
+		return <NavBox>
+			{[
+				<div className="ck-inspector-tree__config" key="root-cfg">
+					<Select
+						id="view-root-select"
+						label="Root"
+						value={this.props.currentRootName}
+						options={this.props.editorRoots.map( root => root.rootName )}
+						onChange={evt => this.props.onRootChange( evt.target.value )}
+					/>
+				</div>,
+				<div className="ck-inspector-tree__config" key="text-cfg">
+					<Checkbox
+						label="Compact text"
+						id="model-compact-text"
+						isChecked={this.state.showCompactText}
+						onChange={this.handleCompactTextChange}
 					/>
 				</div>
-			</div>
-		</div>
+			]}
+			<Tree
+				items={tree}
+				onClick={this.props.onClick}
+				showCompactText={this.state.showCompactText}
+				activeNode={this.props.currentEditorNode}
+			/>
+		</NavBox>;
+	}
+
+	getEditorModelTree() {
+		if ( !this.props.currentRootName ) {
+			return null;
+		}
+
+		const editor = this.props.editor;
+		const model = editor.model;
+		const root = model.document.getRoot( this.props.currentRootName );
+		const selectionRange = editor.model.document.selection.getFirstRange();
+
+		return [
+			getNodeTree( root, selectionRange.start, selectionRange.end )
+		];
 	}
 }
 
 function getNodeTree( node, rangeStart, rangeEnd ) {
 	if ( isModelElement( node ) ) {
 		return getElementTree( node, rangeStart, rangeEnd );
-	} else if ( isModelText( node ) ) {
+	} else {
 		return getTextTree( node, rangeStart, rangeEnd );
 	}
 }
@@ -172,7 +179,7 @@ function getTextTree( textNode, rangeStart, rangeEnd ) {
 			textNode.data.slice( 0, startSliceIndex ),
 			{ type: 'selection' },
 			textNode.data.slice( startSliceIndex, textNode.data.length )
-		]
+		];
 	}
 
 	// <$text>fooba]r</$text>
@@ -192,11 +199,19 @@ function getTextTree( textNode, rangeStart, rangeEnd ) {
 			lastChild.slice( endSliceIndex, lastChild.length ) );
 	}
 
+	// Filter out empty strings, a leftover after slice().
+	textNodeTree.children = textNodeTree.children.filter( child => child );
 	textNodeTree.attributes = getNodeAttrs( textNode );
 
 	return textNodeTree;
 }
 
 function getNodeAttrs( node ) {
-	return new Map( node.getAttributes() );
+	const attrs = [ ...node.getAttributes() ].map( ( [ name, value ] ) => {
+		return [ name, stringify( value, false ) ];
+	} );
+
+	return new Map( attrs );
 }
+
+export default editorEventObserver( ModelTree );

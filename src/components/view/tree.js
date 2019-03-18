@@ -6,33 +6,78 @@
 import React, { Component } from 'react';
 import Tree from '../tree';
 import Select from '../select';
+import NavBox from '../navbox';
 import Checkbox from '../checkbox';
-import StorageManager from '../../storage';
+import StorageManager from '../../storagemanager';
+import editorEventObserver from '../editorobserver';
 import {
 	isViewElement,
 	isViewAttributeElement,
-	isViewContainerElement,
 	isViewEmptyElement,
 	isViewUiElement,
-	isViewRoot,
-	isViewText
+	isViewRoot
 } from './utils';
+import { stringify } from '../utils';
 
-const LOCAL_STORAGE_ELEMENT_TYPES = 'ck5-inspector-view-element-types';
-export default class ViewTree extends Component {
+const LOCAL_STORAGE_ELEMENT_TYPES = 'view-element-types';
+class ViewTree extends Component {
 	constructor( props ) {
 		super( props );
 
 		this.state = {
-			viewTree: null,
 			showTypes: StorageManager.get( LOCAL_STORAGE_ELEMENT_TYPES ) === 'true'
 		};
 
 		this.handleShowTypesChange = this.handleShowTypesChange.bind( this );
 	}
 
-	update() {
-		if( !this.props.currentRootName ) {
+	editorEventObserverConfig( props ) {
+		return {
+			target: props.editor.editing.view,
+			event: 'render'
+		};
+	}
+
+	handleShowTypesChange( evt ) {
+		this.setState( { showTypes: evt.target.checked }, () => {
+			StorageManager.set( LOCAL_STORAGE_ELEMENT_TYPES, this.state.showTypes );
+		} );
+	}
+
+	render() {
+		const tree = this.getEditorViewTree();
+
+		return <NavBox>
+			{[
+				<div className="ck-inspector-tree__config" key="root-cfg">
+					<Select
+						id="view-root-select"
+						label="Root"
+						value={this.props.currentRootName}
+						options={this.props.editorRoots.map( root => root.rootName )}
+						onChange={evt => this.props.onRootChange( evt.target.value )}
+					/>
+				</div>,
+				<div className="ck-inspector-tree__config" key="types-cfg">
+					<Checkbox
+						label="Show element types"
+						id="view-show-types"
+						isChecked={this.state.showTypes}
+						onChange={this.handleShowTypesChange}
+					/>
+				</div>
+			]}
+			<Tree
+				items={tree}
+				onClick={this.props.onClick}
+				showCompactText="true"
+				activeNode={this.props.currentEditorNode}
+			/>
+		</NavBox>;
+	}
+
+	getEditorViewTree() {
+		if ( !this.props.currentRootName ) {
 			return;
 		}
 
@@ -41,57 +86,16 @@ export default class ViewTree extends Component {
 		const root = document.getRoot( this.props.currentRootName );
 		const selectionRange = document.selection.getFirstRange();
 
-		this.setState( {
-			viewTree: [ getNodeTree( root, selectionRange.start, selectionRange.end, this.state.showTypes ) ]
-		} );
-	}
-
-	handleShowTypesChange( evt ) {
-		this.setState( { showTypes: evt.target.checked }, () => {
-			this.update();
-			StorageManager.set( LOCAL_STORAGE_ELEMENT_TYPES, this.state.showTypes );
-		} );
-	}
-
-	render() {
-		return <div className="ck-inspector__document-tree">
-			<div className="ck-inspector-panes">
-				<div className="ck-inspector-panes__navigation">
-					<div className="ck-inspector__document-tree__config">
-						<Select
-							id="view-root-select"
-							label="Root"
-							value={this.props.currentRootName}
-							options={this.props.editorRoots.map( root => root.rootName )}
-							onChange={( evt ) => this.props.onRootChange( evt.target.value )}
-						/>
-					</div>
-					<div className="ck-inspector__document-tree__config">
-						<Checkbox
-							label="Show element types"
-							id="view-show-types"
-							isChecked={this.state.showTypes}
-							onChange={this.handleShowTypesChange}
-						/>
-					</div>
-				</div>
-				<div className="ck-inspector-panes__content">
-					<Tree
-						items={this.state.viewTree}
-						onClick={this.props.onClick}
-						showCompactText="true"
-						activeNode={this.props.currentEditorNode}
-					/>
-				</div>
-			</div>
-		</div>
+		return [
+			getNodeTree( root, selectionRange.start, selectionRange.end, this.state.showTypes )
+		];
 	}
 }
 
 function getNodeTree( node, rangeStart, rangeEnd, showTypes ) {
 	if ( isViewElement( node ) ) {
 		return getElementTree( node, rangeStart, rangeEnd, showTypes );
-	} else if ( isViewText( node ) ) {
+	} else {
 		return getTextTree( node, rangeStart, rangeEnd, showTypes );
 	}
 }
@@ -114,10 +118,8 @@ function getElementTree( element, rangeStart, rangeEnd, showTypes ) {
 			elementTree.name = 'empty:' + element.name;
 		} else if ( isViewUiElement( element ) ) {
 			elementTree.name = 'ui:' + element.name;
-		} else if ( isViewContainerElement( element ) ) {
-			elementTree.name = 'container:' + element.name;
 		} else {
-			elementTree.name = element.name;
+			elementTree.name = 'container:' + element.name;
 		}
 	} else {
 		elementTree.name = element.name;
@@ -125,9 +127,9 @@ function getElementTree( element, rangeStart, rangeEnd, showTypes ) {
 
 	// Regardless of other rendering options, empty elements need no closing tags. They will never
 	// host any children or selection.
-	if ( isViewEmptyElement( element) ) {
+	if ( isViewEmptyElement( element ) ) {
 		elementTree.presentation = {
-			dontClose: true
+			isEmpty: true
 		};
 	}
 
@@ -203,7 +205,7 @@ function getTextTree( textNode, rangeStart, rangeEnd ) {
 			textNode.data.slice( 0, startSliceIndex ),
 			{ type: 'selection' },
 			textNode.data.slice( startSliceIndex, textNode.data.length )
-		]
+		];
 	}
 
 	// "fooba]r"
@@ -223,9 +225,18 @@ function getTextTree( textNode, rangeStart, rangeEnd ) {
 			lastChild.slice( endSliceIndex, lastChild.length ) );
 	}
 
+	// Filter out empty strings, a leftover after slice().
+	textNodeTree.children = textNodeTree.children.filter( child => child );
+
 	return textNodeTree;
 }
 
 function getNodeAttrs( node ) {
-	return new Map( node.getAttributes() );
+	const attrs = [ ...node.getAttributes() ].map( ( [ name, value ] ) => {
+		return [ name, stringify( value, false ) ];
+	} );
+
+	return new Map( attrs );
 }
+
+export default editorEventObserver( ViewTree );

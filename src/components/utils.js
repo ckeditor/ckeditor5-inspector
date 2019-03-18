@@ -30,3 +30,13 @@ export function stringify( value, quotesAroundText = true ) {
 
 	return stringified;
 }
+
+export function uid() {
+	return Math.random().toString( 36 ).substring( 7 );
+}
+
+export function stringifyPropertyList( list ) {
+	return list.map( ( [ name, value ] ) => {
+		return [ name, stringify( value ) ];
+	} );
+}

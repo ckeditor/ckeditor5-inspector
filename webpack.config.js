@@ -13,13 +13,19 @@ module.exports = ( env, argv ) => {
 	const devMode = argv.mode === 'development'
 
 	return {
-		entry: path.resolve( __dirname, 'src', 'app.js' ),
+		mode: argv.mode || 'production',
+		entry: path.resolve( __dirname, 'src', 'ckeditorinspector.js' ),
 		module: {
-			rules: [ {
-				test: /\.(js|jsx)$/,
+			rules: [
+				{
+					test: /\.js$/,
 					exclude: /node_modules/,
-					loader: 'babel-loader'
-				}, {
+					loader: 'babel-loader',
+					query: {
+						presets: [ '@babel/react' ]
+					}
+				},
+				{
 					test: /\.css$/,
 					loaders: [
 						'style-loader',

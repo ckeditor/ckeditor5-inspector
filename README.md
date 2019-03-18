@@ -66,6 +66,14 @@ To build the production version of the inspector, run:
 yarn build
 ```
 
+### Testing
+
+To run tests, execute:
+
+```console
+yarn test
+```
+
 ## Releasing
 
 The release process is as follows (order matters):
