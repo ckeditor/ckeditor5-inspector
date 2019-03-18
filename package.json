@@ -16,7 +16,6 @@
 		"build": "webpack --mode production",
 		"dev": "webpack --mode development --watch",
 		"changelog": "node ./scripts/changelog.js",
-		"preversion": "npm run build; if [ -n \"$(git status build/ --porcelain)\" ]; then git add -u build/ && git commit -m 'Internal: Build.'; fi",
 		"release": "node ./scripts/release.js",
 		"test": "node ./scripts/test.js"
 	},
