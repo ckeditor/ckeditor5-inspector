@@ -82,7 +82,7 @@ The release process is as follows (order matters):
 
 ```console
 npm run changelog
-npm run preversion
+npm run build
 ```
 
 Run the sample and make sure global `CKEDITOR_INSPECTOR_VERSION` is right. Then:
