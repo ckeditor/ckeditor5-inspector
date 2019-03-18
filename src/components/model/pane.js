@@ -30,8 +30,6 @@ export default class ModelPane extends Component {
 		this.handleRootChange = this.handleRootChange.bind( this );
 		this.handlePaneChange = this.handlePaneChange.bind( this );
 		this.handleTreeClick = this.handleTreeClick.bind( this );
-
-		this.paneRef = React.createRef();
 	}
 
 	handleTreeClick( evt, currentEditorNode ) {
@@ -71,7 +69,7 @@ export default class ModelPane extends Component {
 			</Pane>;
 		}
 
-		return <Pane splitVertically="true" ref={this.paneRef}>
+		return <Pane splitVertically="true">
 			<ModelTree
 				editor={this.props.editor}
 				editorRoots={this.state.editorRoots}
