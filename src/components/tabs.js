@@ -4,44 +4,37 @@
  */
 
 import React, { Component } from 'react';
-import './tabs.css';
+import HorizontalNav from './horizontalnav';
+import NavBox from './navbox';
 
 export default class Tabs extends Component {
 	constructor( props ) {
 		super( props );
 
-		this.state = {
-			activeTabName: this.props.activeTabName
-		};
-
 		this.handleTabClick = this.handleTabClick.bind( this );
 	}
 
-	handleTabClick( activeTabName ) {
-		this.setState( { activeTabName }, () => {
-			this.props.onClick( activeTabName );
-		} );
-	}
-
-	setActiveTab( name ) {
-		this.setState( { activeTabName: name } );
+	handleTabClick( activeTab ) {
+		this.props.onTabChange( activeTab );
 	}
 
 	render() {
-		const buttons = [];
+		const children = Array.isArray( this.props.children ) ? this.props.children : [ this.props.children ];
 
-		for ( const name in this.props.definitions ) {
-			const { label } = this.props.definitions[ name ];
-
-			buttons.push(
-				<button
-					className={'ck-inspector-tabs__tab' + ( this.state.activeTabName == name ? ' ck-inspector-tabs__tab_active' : '' ) }
-					key={name}
-					onClick={() => this.handleTabClick( name )}
-					type="button">{label}
-				</button>
-			);
-		}
-		return <div className="ck-inspector-tabs">{buttons}</div>
+		return <NavBox>
+			{[
+				this.props.contentBefore,
+				<HorizontalNav
+					key="navigation"
+					definitions={children.map( child => child.props.label )}
+					activeTab={this.props.activeTab}
+					onClick={this.handleTabClick}
+				/>,
+				this.props.contentAfter
+			]}
+			{children.filter( child => {
+				return child.props.label === this.props.activeTab;
+			} )}
+		</NavBox>;
 	}
 }

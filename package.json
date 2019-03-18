@@ -7,7 +7,7 @@
   ],
   "description": "The official CKEditor 5 instance inspector.",
   "license": "GPL-2.0-or-later",
-  "version": "1.2.0",
+  "version": "1.1.0",
   "engines": {
     "node": ">=8.0.0",
     "npm": ">=5.7.1"
@@ -15,12 +15,21 @@
   "scripts": {
     "build": "webpack --mode production",
     "dev": "webpack --mode development --watch",
+    "preversion": "npm run build; if [ -n \"$(git status build/ --porcelain)\" ]; then git add -u build/ && git commit -m 'Internal: Build.'; fi",
     "changelog": "node ./scripts/changelog.js",
     "release:bump-version": "node ./scripts/bump-version.js",
     "release:publish": "node ./scripts/publish.js",
-    "preversion": "npm run build; if [ -n \"$(git status build/ --porcelain)\" ]; then git add -u build/ && git commit -m 'Internal: Build.'; fi",
-    "release": "node ./scripts/release.js"
+    "test": "node ./scripts/test.js"
   },
+  "lint-staged": {
+    "**/*.js": [
+      "eslint --quiet"
+    ]
+  },
+  "eslintIgnore": [
+    "build/**",
+    "coverage/**"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/ckeditor/ckeditor5-inspector.git"
@@ -34,20 +43,52 @@
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
     "@babel/preset-react": "^7.0.0",
-    "@ckeditor/ckeditor5-dev-env": "^15.0.0",
+    "@ckeditor/ckeditor5-basic-styles": "^11.0.0",
+    "@ckeditor/ckeditor5-core": "^12.0.0",
+    "@ckeditor/ckeditor5-dev-env": "^13.0.2",
+    "@ckeditor/ckeditor5-paragraph": "^11.0.0",
+    "@ckeditor/ckeditor5-ui": "^12.0.0",
+    "@ckeditor/ckeditor5-utils": "^12.0.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
+    "chai": "^4.1.2",
+    "chai-enzyme": "^1.0.0-beta.1",
     "css-loader": "^2.1.0",
     "cssnano": "^4.1.10",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.10.0",
     "eslint": "^5.14.1",
+    "eslint-config-ckeditor5": "^1.0.11",
     "eslint-plugin-react": "^7.12.4",
+    "husky": "^1.3.1",
+    "istanbul-instrumenter-loader": "^3.0.1",
+    "karma": "^4.0.0",
+    "karma-browserstack-launcher": "^1.3.0",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage": "^1.1.2",
+    "karma-coveralls": "^2.1.0",
+    "karma-firefox-launcher": "^1.0.1",
+    "karma-mocha": "^1.3.0",
+    "karma-mocha-reporter": "^2.2.4",
+    "karma-sinon": "^1.0.5",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^3.0.0",
+    "lint-staged": "^8.1.5",
+    "mocha": "^5.2.0",
     "postcss-loader": "^3.0.0",
     "postcss-nesting": "^7.0.0",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
     "react-rnd": "^9.1.2",
+    "sinon": "^7.2.3",
     "style-loader": "^0.23.1",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.2.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }

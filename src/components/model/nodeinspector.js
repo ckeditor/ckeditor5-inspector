@@ -3,126 +3,127 @@
  * For licensing, see LICENSE.md.
  */
 
-/* global console */
+/* global */
 
 import React, { Component } from 'react';
 import Button from './../button';
-import { isModelElement, isModelText, isModelRoot } from './utils';
-import { PropertyList } from './../propertylist';
-import { getNodePathString } from './utils';
-export default class ModelNodeInspector extends Component {
-	constructor( props ) {
-		super( props );
+import Pane from '../pane';
+import ObjectInspector from '../objectinspector';
+import Logger from '../../logger';
+import editorEventObserver from '../editorobserver';
+import {
+	isModelElement,
+	isModelRoot,
+	getNodePathString
+} from './utils';
+import { stringifyPropertyList } from '../utils';
 
-		this.state = {
-			inspectedNodeInfo: null
+class ModelNodeInspector extends Component {
+	editorEventObserverConfig( props ) {
+		return {
+			target: props.editor.model.document,
+			event: 'change'
 		};
 	}
 
-	update() {
-		this.setState( {
-			inspectedNodeInfo: getNodeInfo( this.props.inspectedNode, this.props.currentRootName )
-		} );
-	}
-
-	componentDidMount() {
-		// When a node is selected in the tree and switching back from the selection tab.
-		this.update();
-	}
-
 	render() {
-		const info = this.state.inspectedNodeInfo;
+		const info = this.getInspectedEditorNodeInfo();
 
 		if ( !info ) {
-			return <div className="ck-inspector-panes__content__empty-wrapper">
+			return <Pane isEmpty="true">
 				<p>Select a node in the tree to inspect</p>
-			</div>;
+			</Pane>;
 		}
 
-		let nodeNameContent;
+		return <ObjectInspector
+			header={[
+				<span key="link">
+					<a href={info.url} target="_blank" rel="noopener noreferrer">
+						<b>{info.type}</b>:
+					</a>
+					{ info.type === 'Text' ? <em>{info.name}</em> : info.name }
+				</span>,
+				<Button
+					key="log"
+					type="log"
+					text="Log in console"
+					onClick={() => Logger.log( info.editorNode )}
+				/>
+			]}
+			lists={[
+				{
+					name: 'Attributes',
+					url: info.url,
+					items: info.attributes
+				},
+				{
+					name: 'Properties',
+					url: info.url,
+					items: info.properties
+				},
+			]}
+		/>;
+	}
 
-		if ( info.type === 'Text' ) {
-			nodeNameContent = <span>
-				<a href={info.url} target="_blank" rel="noopener noreferrer"><b>Text</b></a>:&quot;<em>{info.name}</em>&quot;
-			</span>;
+	getInspectedEditorNodeInfo() {
+		const node = this.props.inspectedNode;
+		const currentRootName = this.props.currentRootName;
+
+		if ( !node ) {
+			return null;
+		}
+
+		if ( !isModelRoot( node ) && !node.parent ) {
+			return;
+		}
+
+		if ( node.root.rootName !== currentRootName ) {
+			return;
+		}
+
+		const info = {
+			editorNode: node,
+			properties: [],
+			attributes: []
+		};
+
+		if ( isModelElement( node ) ) {
+			if ( isModelRoot( node ) ) {
+				info.type = 'RootElement';
+				info.name = node.rootName;
+				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_rootelement-RootElement.html';
+			} else {
+				info.type = 'Element';
+				info.name = node.name;
+				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_element-Element.html';
+			}
+
+			info.properties.push(
+				[ 'childCount', node.childCount ],
+				[ 'startOffset', node.startOffset ],
+				[ 'endOffset', node.endOffset ],
+				[ 'maxOffset', node.maxOffset ]
+			);
 		} else {
-			nodeNameContent = <span>
-				<a href={info.url} target="_blank" rel="noopener noreferrer"><b>{info.type}</b></a>:{info.name}
-			</span>;
-		}
+			info.name = node.data;
+			info.type = 'Text';
+			info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_text-Text.html';
 
-		const content = [
-			<h2 key="node-name" className="ck-inspector-code">
-				{nodeNameContent}
-				<Button type="log" text="Log in console" onClick={() => console.log( info.editorNode )} />
-			</h2>,
-			<hr key="props-separator" />,
-			<h3 key="props-header">Properties</h3>,
-			<PropertyList key="props-list" items={info.properties} />
-		];
-
-		if ( info.attributes.length ) {
-			content.push(
-				<hr key="attrs-separator" />,
-				<h3 key="attrs-header">Attributes</h3>,
-				<PropertyList key="attrs" items={info.attributes} />
+			info.properties.push(
+				[ 'startOffset', node.startOffset ],
+				[ 'endOffset', node.endOffset ],
+				[ 'offsetSize', node.offsetSize ]
 			);
 		}
 
-		return <div className="ck-inspector__object-inspector">{content}</div>;
+		info.properties.push( [ 'path', getNodePathString( node ) ] );
+		info.attributes.push( ...node.getAttributes() );
+
+		info.properties = stringifyPropertyList( info.properties );
+		info.attributes = stringifyPropertyList( info.attributes );
+
+		return info;
 	}
 }
 
-function getNodeInfo( node, currentRootName ) {
-	if ( !node ) {
-		return null;
-	}
-
-	if ( !isModelRoot( node ) && !node.parent ) {
-		return;
-	}
-
-	if ( node.root.rootName !== currentRootName ) {
-		return;
-	}
-
-	const info = {
-		editorNode: node,
-		properties: [],
-		attributes: []
-	};
-
-	if ( isModelElement( node ) ) {
-		if ( isModelRoot( node ) ) {
-			info.type = 'RootElement';
-			info.name = node.rootName;
-			info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_rootelement-RootElement.html';
-		} else {
-			info.type = 'Element';
-			info.name = node.name;
-			info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_element-Element.html';
-		}
-
-		info.properties.push(
-			[ 'childCount', node.childCount ],
-			[ 'startOffset', node.startOffset ],
-			[ 'endOffset', node.endOffset ],
-			[ 'maxOffset', node.maxOffset ]
-		);
-	} else if ( isModelText( node ) ) {
-		info.name = node.data;
-		info.type = 'Text';
-		info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_text-Text.html';
-
-		info.properties.push(
-			[ 'startOffset', node.startOffset ],
-			[ 'endOffset', node.endOffset ],
-			[ 'offsetSize', node.offsetSize ]
-		);
-	}
-
-	info.properties.push( [ 'path', getNodePathString( node ) ] );
-	info.attributes.push( ...node.getAttributes() );
-
-	return info;
-}
+export default editorEventObserver( ModelNodeInspector );

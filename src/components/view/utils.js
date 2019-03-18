@@ -11,20 +11,12 @@ export function isViewAttributeElement( node ) {
 	return node && isViewElement( node ) && node.is( 'attributeElement' );
 }
 
-export function isViewContainerElement( node ) {
-	return node && isViewElement( node ) && node.is( 'containerElement' );
-}
-
 export function isViewEmptyElement( node ) {
 	return node && isViewElement( node ) && node.is( 'emptyElement' );
 }
 
 export function isViewUiElement( node ) {
 	return node && isViewElement( node ) && node.is( 'uiElement' );
-}
-
-export function isViewText( node ) {
-	return node && node.data;
 }
 
 export function isViewRoot( node ) {
@@ -37,12 +29,10 @@ export function nodeToString( node ) {
 			return 'attribute:' + node.name;
 		} else if ( isViewRoot( node ) ) {
 			return 'root:' + node.name;
-		} else if ( isViewContainerElement( node ) ) {
-			return 'container:' + node.name;
 		} else {
-			return node.name;
+			return 'container:' + node.name;
 		}
-	} else if ( isViewText( node ) ) {
+	} else {
 		return node.data;
 	}
 }

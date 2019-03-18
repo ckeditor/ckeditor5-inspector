@@ -7,10 +7,6 @@ export function isModelElement( node ) {
 	return node && node.is( 'element' );
 }
 
-export function isModelText( node ) {
-	return node && node.is( 'text' );
-}
-
 export function isModelRoot( node ) {
 	return node && node.is( 'rootElement' );
 }

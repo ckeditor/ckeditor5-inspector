@@ -3,83 +3,104 @@
  * For licensing, see LICENSE.md.
  */
 
-/* global console */
-
 import React, { Component } from 'react';
-import { PropertyList } from './../propertylist';
-import { nodeToString } from './utils';
+import Logger from '../../logger';
 import Button from './../button';
-export default class ViewSelectionInspector extends Component {
-	constructor( props ) {
-		super( props );
+import editorEventObserver from '../editorobserver';
+import ObjectInspector from './../objectinspector';
+import { nodeToString } from './utils';
+import { stringifyPropertyList } from '../utils';
 
-		this.state = {
-			selectionInfo: getSelectionInfo( this.props.editor )
+const API_DOCS_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_selection-Selection.html';
+
+class ViewSelectionInspector extends Component {
+	editorEventObserverConfig( props ) {
+		return {
+			target: props.editor.editing.view,
+			event: 'render'
 		};
 	}
 
-	update() {
-		this.setState( {
-			selectionInfo: getSelectionInfo( this.props.editor )
-		} );
-	}
-
 	render() {
-		return <div className="ck-inspector__object-inspector">
-			<h2 className="ck-inspector-code">
-				<a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_selection-Selection.html"
-					target="_blank" rel="noopener noreferrer">
-					<b>Selection</b>
-				</a>
-				<Button type="log" text="Log in console" onClick={() => console.log( this.props.editor.editing.view.document.selection )} />
-			</h2>
-			<hr/>
+		const info = this.getEditorSelectionInfo();
 
-			<h3>Properties</h3>
-			<PropertyList items={this.state.selectionInfo.properties} />
-			<hr/>
+		return <ObjectInspector
+			header={[
+				<span key="link">
+					<a href={API_DOCS_PREFIX}
+						target="_blank" rel="noopener noreferrer">
+						<b>Selection</b>
+					</a>
+				</span>,
+				<Button
+					key="log"
+					type="log"
+					text="Log in console"
+					onClick={() => Logger.log( this.props.editor.editing.view.document.selection )}
+				/>
+			]}
+			lists={[
+				{
+					name: 'Properties',
+					url: `${ API_DOCS_PREFIX }`,
+					items: info.properties
+				},
+				{
+					name: 'Anchor',
+					url: `${ API_DOCS_PREFIX }#member-anchor`,
+					buttons: [
+						{
+							type: 'log',
+							text: 'Log in console',
+							onClick: () => Logger.log( this.props.editor.editing.view.document.selection.anchor )
+						}
+					],
+					items: info.anchor
+				},
+				{
+					name: 'Focus',
+					url: `${ API_DOCS_PREFIX }#member-focus`,
+					buttons: [
+						{
+							type: 'log',
+							text: 'Log in console',
+							onClick: () => Logger.log( this.props.editor.editing.view.document.selection.focus )
+						}
+					],
+					items: info.focus
+				}
+			]}
+		/>;
+	}
 
-			<h3>
-				<a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_selection-Selection.html#member-anchor"
-					target="_blank" rel="noopener noreferrer">Anchor</a>
-				<Button type="log" text="Log in console"
-					onClick={() => console.log( this.props.editor.editing.view.document.selection.focus )} />
-			</h3>
-			<PropertyList items={this.state.selectionInfo.anchor} />
-			<hr/>
+	getEditorSelectionInfo() {
+		const selection = this.props.editor.editing.view.document.selection;
+		const info = {
+			properties: [
+				[ 'isCollapsed', selection.isCollapsed ],
+				[ 'isBackward', selection.isBackward ],
+				[ 'isFake', selection.isFake ],
+				[ 'rangeCount', selection.rangeCount ],
+			],
+			anchor: getPositionInfo( selection.anchor ),
+			focus: getPositionInfo( selection.focus ),
+		};
 
-			<h3>
-				<a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_selection-Selection.html#member-focus"
-					target="_blank" rel="noopener noreferrer">Focus</a>
-				<Button type="log" text="Log in console"
-					onClick={() => console.log( this.props.editor.editing.view.document.selection.anchor )} />
-			</h3>
-			<PropertyList items={this.state.selectionInfo.focus} />
-		</div>;
+		for ( const category in info ) {
+			info[ category ] = stringifyPropertyList( info[ category ] );
+		}
+
+		return info;
 	}
 }
 
-function getSelectionInfo( editor ) {
-	const selection = editor.editing.view.document.selection;
-
-	return {
-		properties: [
-			[ 'isCollapsed', selection.isCollapsed ],
-			[ 'isBackward', selection.isBackward ],
-			[ 'isFake', selection.isFake ],
-			[ 'rangeCount', selection.rangeCount ],
-		],
-		anchor: [
-			[ 'offset', selection.anchor.offset ],
-			[ 'isAtEnd', selection.anchor.isAtEnd ],
-			[ 'isAtStart', selection.anchor.isAtStart ],
-			[ 'parent', nodeToString( selection.anchor.parent ) ]
-		],
-		focus: [
-			[ 'offset', selection.focus.offset ],
-			[ 'isAtEnd', selection.focus.isAtEnd ],
-			[ 'isAtStart', selection.focus.isAtStart ],
-			[ 'parent', nodeToString( selection.focus.parent ) ]
-		],
-	};
+function getPositionInfo( position ) {
+	return [
+		[ 'offset', position.offset ],
+		[ 'isAtEnd', position.isAtEnd ],
+		[ 'isAtStart', position.isAtStart ],
+		[ 'parent', nodeToString( position.parent ) ]
+	];
 }
+
+export default editorEventObserver( ViewSelectionInspector );

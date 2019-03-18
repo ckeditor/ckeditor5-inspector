@@ -4,14 +4,9 @@
  */
 
 import React, { Component } from 'react';
-import { stringify } from './utils';
 import './tree.css';
 
 export default class Tree extends Component {
-	constructor( props ) {
-		super( props );
-	}
-
 	render() {
 		let treeContent;
 
@@ -25,13 +20,16 @@ export default class Tree extends Component {
 			treeContent = 'Nothing to show.';
 		}
 
-		return <div className={`ck-inspector-tree${ this.props.showCompactText ? ' ck-inspector-tree_compact-text' : ''}`}>
+		return <div className={[
+			'ck-inspector-tree',
+			this.props.showCompactText ? 'ck-inspector-tree_compact-text' : ''
+		].join( ' ' )}>
 			{treeContent}
 		</div>;
 	}
 }
 
-class TreeNode extends Component {
+export class TreeNode extends Component {
 	constructor( props ) {
 		super( props );
 
@@ -39,30 +37,49 @@ class TreeNode extends Component {
 	}
 
 	handleClick( evt ) {
-		this.props.config.onClick( evt, this.props.item.node );
+		this.props.onClick( evt, this.props.item.node );
 	}
 
+	getChildren() {
+		return this.props.item.children.map( ( child, index ) => renderTreeItem( child, index, this.treeProps ) );
+	}
+
+	get isActive() {
+		return this.props.item.node === this.props.activeNode;
+	}
+
+	get treeProps() {
+		return {
+			onClick: this.props.onClick,
+			showCompactText: this.props.showCompactText,
+			activeNode: this.props.activeNode
+		};
+	}
+}
+
+export class TreeElement extends TreeNode {
 	render() {
 		const item = this.props.item;
 		const presentation = item.presentation;
-		const dontClose = presentation && presentation.dontClose;
+		const isEmpty = presentation && presentation.isEmpty;
+		const cssClass = presentation && presentation.cssClass;
 		const nodeClasses = [
 			'ck-inspector-code',
 			'ck-inspector-tree-node',
 			( this.isActive ? 'ck-inspector-tree-node_active' : '' ),
-			presentation && presentation.cssClass
+			( isEmpty ? 'ck-inspector-tree-node_empty' : '' ),
+			cssClass
 		];
 
 		return <div className={nodeClasses.join( ' ' )} onClick={this.handleClick}>
 			<span className="ck-inspector-tree-node__name">
 				{item.name}
 				{this.getAttributes()}
-				{dontClose ? ' /' : '' }
 			</span>
 			<div className="ck-inspector-tree-node__content">
 				{this.getChildren()}
 			</div>
-			{dontClose ? '' : <span className="ck-inspector-tree-node__name">/{item.name}</span>}
+			{isEmpty ? '' : <span className="ck-inspector-tree-node__name">/{item.name}</span>}
 		</div>;
 	}
 
@@ -76,34 +93,23 @@ class TreeNode extends Component {
 
 		return attributes;
 	}
-
-	getChildren() {
-		return this.props.item.children.map( ( child, index ) => renderTreeItem( child, index, this.props.config ) );
-	}
-
-	get isActive() {
-		return this.props.item.node === this.props.config.activeNode;
-	}
 }
 
-class TreeText extends TreeNode {
+export class TreeTextNode extends TreeNode {
 	render() {
-		const activeNodeClass = ( this.isActive ? 'ck-inspector-tree-node_active' : '' );
+		const classes = [
+			'ck-inspector-tree-text',
+			this.isActive ? 'ck-inspector-tree-node_active' : ''
+		].join( ' ' );
 
-		if ( this.props.config.showCompactText ) {
-			return <span className={'ck-inspector-tree-text ' + activeNodeClass} onClick={this.handleClick}>
-				<span className="ck-inspector-tree-node__content">
-					{this.getChildren()}
-				</span>
-			</span>;
-		} else {
-			return <span className={'ck-inspector-tree-text ' + activeNodeClass} onClick={this.handleClick}>
-				<span className="ck-inspector-tree-node__content">
-					{this.getAttributes()}
-					&quot;{this.getChildren()}&quot;
-				</span>
-			</span>;
-		}
+		return <span className={classes} onClick={this.handleClick}>
+			<span className="ck-inspector-tree-node__content">
+				{this.props.showCompactText ? '' : this.getAttributes()}
+				{this.props.showCompactText ? '' : '"' }
+				{this.getChildren()}
+				{this.props.showCompactText ? '' : '"' }
+			</span>
+		</span>;
 	}
 
 	getAttributes() {
@@ -122,33 +128,47 @@ class TreeText extends TreeNode {
 	}
 }
 
-class TreeNodeAttribute extends Component {
+export class TreeNodeAttribute extends Component {
 	render() {
-		const value = stringify( this.props.value, false );
 		let valueElement;
 
 		if ( !this.props.dontRenderValue ) {
-			valueElement = <span className="ck-inspector-tree-node__attribute__value">{value}</span>;
+			valueElement = <span className="ck-inspector-tree-node__attribute__value">
+				{this.props.value}
+			</span>;
 		}
 
 		return <span className="ck-inspector-tree-node__attribute">
-			<span className="ck-inspector-tree-node__attribute__name" title={value}>{this.props.name}</span>
+			<span className="ck-inspector-tree-node__attribute__name" title={this.props.value}>
+				{this.props.name}
+			</span>
 			{valueElement}
 		</span>;
 	}
 }
 
-function renderTreeItem( item, index, config ) {
-	if ( typeof item === 'string' ) {
-		return <span key={index}>{item}</span>
-	} else if ( item.type === 'element' ) {
-		return <TreeNode key={index} item={item} config={config} />;
-	} else if ( item.type === 'text' ) {
-		return <TreeText key={index} item={item} config={config} />;
-	} else if ( item.type === 'selection' ) {
-		return <span
-			className="ck-inspector-tree__selection" key={index}>
-				{item.isEnd ? ']' : '['}
+export class TreeSelection extends Component {
+	render() {
+		return <span className="ck-inspector-tree__selection">
+			{this.props.isEnd ? ']' : '['}
 		</span>;
+	}
+}
+
+export class TreePlainText extends Component {
+	render() {
+		return <span>{this.props.text}</span>;
+	}
+}
+
+function renderTreeItem( item, index, treeProps ) {
+	if ( typeof item === 'string' ) {
+		return <TreePlainText key={index} text={item} />;
+	} else if ( item.type === 'element' ) {
+		return <TreeElement key={index} item={item} {...treeProps} />;
+	} else if ( item.type === 'text' ) {
+		return <TreeTextNode key={index} item={item} {...treeProps} />;
+	} else {
+		return <TreeSelection key={index} isEnd={item.isEnd} />;
 	}
 }

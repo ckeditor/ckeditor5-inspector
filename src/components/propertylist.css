@@ -35,15 +35,15 @@
 	& dd input {
 		width: 100%;
 
-		&.ck-inspector-property-list__value_false {
+		&[value="false"] {
 			color: var(--ck-inspector-color-property-list-property-value-false);
 		}
 
-		&.ck-inspector-property-list__value_true {
+		&[value="true"] {
 			color: var(--ck-inspector-color-property-list-property-value-true);
 		}
 
-		&.ck-inspector-property-list__value_undefined {
+		&[value="undefined"] {
 			color: var(--ck-inspector-color-property-list-property-value-undefined);
 		}
 	}

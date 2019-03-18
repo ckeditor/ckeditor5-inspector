@@ -66,13 +66,21 @@ To build the production version of the inspector, run:
 yarn build
 ```
 
+### Testing
+
+To run tests, execute:
+
+```console
+yarn test
+```
+
 ## Releasing package
 
 ### Changelog
 
 Before starting the release process, you need to generate the changelog:
 
-```bash
+```console
 npm run changelog
 ```
 
@@ -82,7 +90,7 @@ After generating the changelog, you are able to release the package.
 
 First, you need to bump the version:
 
-```bash
+```console
 npm run release:bump-version
 ```
 
@@ -91,7 +99,7 @@ You can also use the `--dry-run` option in order to see what this task does.
 After bumping the version, run the sample and make sure global `CKEDITOR_INSPECTOR_VERSION` is right. 
 Then you can publish the changes:
 
-```bash
+```console
 npm run release:publish
 ```
 

@@ -1,0 +1,50 @@
+/**
+ * @license Copyright (c) 2003-2019, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md.
+ */
+
+:root {
+	--ck-inspector-explorer-width: 300px;
+}
+
+.ck-inspector .ck-inspector-pane {
+	display: flex;
+	width: 100%;
+
+	&.ck-inspector-pane_empty {
+		align-items: center;
+		justify-content: center;
+		padding: 1em;
+		background: var(--ck-inspector-navbox-empty-background);
+
+		& p {
+			align-self: center;
+			width: 100%;
+			text-align: center;
+		}
+	}
+
+	& > .ck-inspector-navbox:last-child {
+		min-width: var(--ck-inspector-explorer-width);
+		width: var(--ck-inspector-explorer-width);
+	}
+
+	/*-- Pane with split ---------------------------------------------------------------------------------------- */
+
+	&.ck-inspector-pane_vsplit {
+		& .ck-inspector-navbox:first-child {
+			border-right: 1px solid var(--ck-inspector-color-border);
+			flex: 1 1 auto;
+			overflow: hidden;
+
+			& .ck-inspector-navbox__navigation {
+				align-items: center;
+			}
+
+			& .ck-inspector-tree__config label {
+				margin-left: 1em;
+				margin-right: 1em;
+			}
+		}
+	}
+}

@@ -5,7 +5,14 @@
 
 import React, { Component } from 'react';
 import ViewTree from './tree';
-import ViewInspector from './inspector';
+import Pane from '../pane';
+import Tabs from '../tabs';
+import ViewNodeInspector from './nodeinspector';
+import ViewSelectionInspector from './selectioninspector';
+import StorageManager from '../../storagemanager';
+import '../pane.css';
+
+const LOCAL_STORAGE_ACTIVE_TAB = 'active-view-tab-name';
 
 export default class ViewPane extends Component {
 	constructor( props ) {
@@ -15,101 +22,88 @@ export default class ViewPane extends Component {
 			editor: null,
 			currentEditorNode: null,
 			editorRoots: null,
-			currentRootName: null
+			currentRootName: null,
+
+			activeTab: StorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Inspect'
 		};
 
-		this.treeRef = React.createRef();
-		this.inspectorRef = React.createRef();
-
 		this.handleTreeClick = this.handleTreeClick.bind( this );
+		this.handlePaneChange = this.handlePaneChange.bind( this );
 		this.handleRootChange = this.handleRootChange.bind( this );
-		this.syncPaneWithEditor = this.syncPaneWithEditor.bind( this );
-	}
-
-	componentDidUpdate( prevProps ) {
-		if ( prevProps && prevProps.editor ) {
-			prevProps.editor.editing.view.off( 'render', this.syncPaneWithEditor );
-		}
-
-		this.startListeningToEditor();
-	}
-
-	componentDidMount() {
-		this.startListeningToEditor();
-	}
-
-	startListeningToEditor() {
-		if ( this.props.editor ) {
-			this.props.editor.editing.view.on( 'render', this.syncPaneWithEditor );
-			this.syncPaneWithEditor();
-		}
 	}
 
 	handleTreeClick( evt, currentEditorNode ) {
 		evt.persist();
 		evt.stopPropagation();
 
-		this.setState( { currentEditorNode }, () => {
-			this.syncPaneWithEditor();
-
+		this.setState( {
+			currentEditorNode
+		}, () => {
 			// Double click on a tree element should open the inspector.
 			if ( evt.detail == 2 ) {
-				this.inspectorRef.current.setActivePane( 'inspect' );
+				this.setState( {
+					activeTab: 'Inspect'
+				}, () => {
+					StorageManager.set( LOCAL_STORAGE_ACTIVE_TAB, 'Inspect' );
+				} );
 			}
 		} );
 	}
 
 	handleRootChange( currentRootName ) {
-		this.setState( { currentRootName }, () => {
-			this.syncPaneWithEditor();
+		this.setState( { currentRootName } );
+	}
+
+	handlePaneChange( activeTab ) {
+		this.setState( {
+			activeTab
+		}, () => {
+			StorageManager.set( LOCAL_STORAGE_ACTIVE_TAB, activeTab );
 		} );
-	}
-
-	syncPaneWithEditor() {
-		this.treeRef.current.update();
-		this.inspectorRef.current.update();
-	}
-
-	componentWillUnmount() {
-		if ( this.props.editor ) {
-			this.props.editor.editing.view.off( 'render', this.syncPaneWithEditor );
-		}
 	}
 
 	render() {
 		if ( !this.props.editor ) {
-			return <div className="ck-inspector-panes__content__empty-wrapper">
+			return <Pane isEmpty="true">
 				<p>Nothing to show. Attach another editor instance to start inspecting.</p>
-			</div>;
+			</Pane>;
 		}
 
-		return [
+		return <Pane splitVertically="true">
 			<ViewTree
 				currentEditorNode={this.state.currentEditorNode}
 				currentRootName={this.state.currentRootName}
 				editor={this.props.editor}
 				editorRoots={this.state.editorRoots}
-				key="tree"
 				onClick={this.handleTreeClick}
 				onRootChange={this.handleRootChange}
-				ref={this.treeRef}
-			/>,
-			<ViewInspector
-				currentRootName={this.state.currentRootName}
-				editor={this.props.editor}
-				inspectedNode={this.state.currentEditorNode}
-				key="explorer"
-				ref={this.inspectorRef}
 			/>
-		];
+			<Tabs
+				onTabChange={this.handlePaneChange}
+				activeTab={this.state.activeTab}
+			>
+				<ViewNodeInspector
+					label="Inspect"
+					editor={this.state.editor}
+					currentRootName={this.state.currentRootName}
+					inspectedNode={this.state.currentEditorNode}
+				/>
+				<ViewSelectionInspector
+					label="Selection"
+					editor={this.state.editor}
+				/>
+			</Tabs>
+		</Pane>;
 	}
 
 	static getDerivedStateFromProps( props, state ) {
+		const editorRoots = getEditorRoots( props.editor );
+
 		if ( props.editor !== state.editor ) {
 			return {
 				editor: props.editor,
-				editorRoots: getEditorRoots( props.editor ),
-				currentRootName: getCurrentRootName( props.editor ),
+				editorRoots,
+				currentRootName: editorRoots ? editorRoots[ 0 ].rootName : null,
 				currentEditorNode: null
 			};
 		} else {
@@ -124,16 +118,4 @@ function getEditorRoots( editor ) {
 	}
 
 	return [ ...editor.editing.view.document.roots ];
-}
-
-function getCurrentRootName( editor ) {
-	if ( !editor ) {
-		return null;
-	}
-
-	if ( editor.editing.view.document.roots.has( 'main' ) ) {
-		return 'main';
-	} else {
-		return getEditorRoots( editor )[ 0 ].rootName;
-	}
 }

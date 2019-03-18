@@ -3,143 +3,134 @@
  * For licensing, see LICENSE.md.
  */
 
-/* global console */
-
 import React, { Component } from 'react';
 import Button from './../button';
+import Pane from '../pane';
+import Logger from '../../logger';
+import editorEventObserver from '../editorobserver';
 import {
 	isViewElement,
-	isViewText,
 	isViewRoot,
 	isViewAttributeElement,
-	isViewContainerElement,
 	isViewUiElement,
 	isViewEmptyElement
 } from './utils';
-import { PropertyList } from './../propertylist';
-export default class NodeInspector extends Component {
-	constructor( props ) {
-		super( props );
+import { stringifyPropertyList } from '../utils';
+import ObjectInspector from '../objectinspector';
 
-		this.state = {
-			inspectedNodeInfo: null
+class NodeInspector extends Component {
+	editorEventObserverConfig( props ) {
+		return {
+			target: props.editor.editing.view,
+			event: 'render'
 		};
 	}
 
-	update() {
-		this.setState( {
-			inspectedNodeInfo: getNodeInfo( this.props.inspectedNode, this.props.currentRootName )
-		} );
-	}
-
-	componentDidMount() {
-		// When a node is selected in the tree and switching back from the selection tab.
-		this.update();
-	}
-
 	render() {
-		const info = this.state.inspectedNodeInfo;
+		const info = this.getInspectedEditorNodeInfo();
 
 		if ( !info ) {
-			return <div className="ck-inspector-panes__content__empty-wrapper">
+			return <Pane isEmpty="true">
 				<p>Select a node in the tree to inspect</p>
-			</div>;
+			</Pane>;
 		}
 
-		let nodeNameContent;
+		return <ObjectInspector
+			header={[
+				<span key="link">
+					<a href={info.url} target="_blank" rel="noopener noreferrer">
+						<b>{info.type}</b>:
+					</a>
+					{ info.type === 'Text' ? <em>{info.name}</em> : info.name }
+				</span>,
+				<Button
+					key="log"
+					type="log"
+					text="Log in console"
+					onClick={() => Logger.log( info.editorNode )}
+				/>
+			]}
+			lists={[
+				{
+					name: 'Attributes',
+					url: info.url,
+					items: info.attributes
+				},
+				{
+					name: 'Properties',
+					url: info.url,
+					items: info.properties
+				},
+			]}
+		/>;
+	}
 
-		if ( info.type === 'Text' ) {
-			nodeNameContent = <span>
-				<a href={info.url} target="_blank" rel="noopener noreferrer"><b>{info.type}</b></a>:&quot;<em>{info.name}</em>&quot;
-			</span>;
+	getInspectedEditorNodeInfo() {
+		const node = this.props.inspectedNode;
+		const currentRootName = this.props.currentRootName;
+
+		if ( !node ) {
+			return null;
+		}
+
+		if ( !isViewRoot( node ) && !node.parent ) {
+			return;
+		}
+
+		if ( node.root.rootName !== currentRootName ) {
+			return;
+		}
+
+		const info = {
+			editorNode: node,
+			properties: [],
+			attributes: []
+		};
+
+		if ( isViewElement( node ) ) {
+			if ( isViewRoot( node ) ) {
+				info.type = 'RootEditableElement';
+				info.name = node.rootName;
+				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_rooteditableelement-RootEditableElement.html';
+			} else {
+				info.name = node.name;
+
+				if ( isViewAttributeElement( node ) ) {
+					info.type = 'AttributeElement';
+					info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_attributeelement-AttributeElement.html';
+				} else if ( isViewEmptyElement( node ) ) {
+					info.type = 'EmptyElement';
+					info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_emptyelement-EmptyElement.html';
+				} else if ( isViewUiElement( node ) ) {
+					info.type = 'UIElement';
+					info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_uielement-UIElement.html';
+				} else {
+					info.type = 'ContainerElement';
+					info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_containerelement-ContainerElement.html';
+				}
+			}
+
+			info.attributes.push( ...node.getAttributes() );
+			info.properties.push(
+				[ 'index', node.index ],
+				[ 'isEmpty', node.isEmpty ],
+				[ 'childCount', node.childCount ],
+			);
 		} else {
-			nodeNameContent = <span>
-				<a href={info.url} target="_blank" rel="noopener noreferrer"><b>{info.type}</b></a>:{info.name}
-			</span>;
-		}
+			info.name = node.data;
+			info.type = 'Text';
+			info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_text-Text.html';
 
-		const content = [
-			<h2 key="node-name" className="ck-inspector-code">
-				{nodeNameContent}
-				<Button type="log" text="Log in console" onClick={() => console.log( info.editorNode )} />
-			</h2>,
-			<hr key="props-separator" />,
-			<h3 key="props-header">Properties</h3>,
-			<PropertyList key="props-list" items={info.properties} />
-		];
-
-		if ( info.attributes.length ) {
-			content.push(
-				<hr key="attrs-separator" />,
-				<h3 key="attrs-header">Attributes</h3>,
-				<PropertyList key="attrs" items={info.attributes} />
+			info.properties.push(
+				[ 'index', node.index ]
 			);
 		}
 
-		return <div className="ck-inspector__object-inspector">{content}</div>;
+		info.properties = stringifyPropertyList( info.properties );
+		info.attributes = stringifyPropertyList( info.attributes );
+
+		return info;
 	}
 }
 
-function getNodeInfo( node, currentRootName ) {
-	if ( !node ) {
-		return null;
-	}
-
-	if ( !isViewRoot( node ) && !node.parent ) {
-		return;
-	}
-
-	if ( node.root.rootName !== currentRootName ) {
-		return;
-	}
-
-	const info = {
-		editorNode: node,
-		properties: [],
-		attributes: []
-	};
-
-	if ( isViewElement( node ) ) {
-		if ( isViewRoot( node ) ) {
-			info.type = 'RootEditableElement';
-			info.name = node.rootName;
-			info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_rooteditableelement-RootEditableElement.html';
-		} else {
-			info.name = node.name;
-
-			if ( isViewAttributeElement( node ) ) {
-				info.type = 'AttributeElement';
-				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_attributeelement-AttributeElement.html';
-			} else if ( isViewEmptyElement( node ) ) {
-				info.type = 'EmptyElement';
-				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_emptyelement-EmptyElement.html';
-			} else if ( isViewUiElement( node ) ) {
-				info.type = 'UIElement';
-				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_uielement-UIElement.html';
-			} else if ( isViewContainerElement ( node ) ) {
-				info.type = 'ContainerElement';
-				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_containerelement-ContainerElement.html';
-			} else {
-				info.type = 'Element';
-				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_element-Element.html';
-			}
-		}
-
-		info.attributes.push( ...node.getAttributes() );
-		info.properties.push(
-			[ 'index', node.index ],
-			[ 'isEmpty', node.isEmpty ],
-			[ 'childCount', node.childCount ],
-		);
-	} else if ( isViewText( node ) ) {
-		info.name = node.data;
-		info.type = 'Text';
-		info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_text-Text.html';
-
-		info.properties.push(
-			[ 'index', node.index ]
-		);
-	}
-
-	return info;
-}
+export default editorEventObserver( NodeInspector );

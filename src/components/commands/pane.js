@@ -5,7 +5,10 @@
 
 import React, { Component } from 'react';
 import CommandTree from './tree';
-import CommandInspector from './inspector';
+import Pane from '../pane';
+import Tabs from '../tabs';
+import CommandInspector from './commandinspector';
+import '../pane.css';
 export default class CommandsPane extends Component {
 	constructor( props ) {
 		super( props );
@@ -15,74 +18,37 @@ export default class CommandsPane extends Component {
 			currentCommandName: null,
 		};
 
-		this.treeRef = React.createRef();
-		this.inspectorRef = React.createRef();
-
 		this.handleTreeClick = this.handleTreeClick.bind( this );
-		this.syncPaneWithEditor = this.syncPaneWithEditor.bind( this );
-	}
-
-	componentDidUpdate( prevProps ) {
-		if ( prevProps && prevProps.editor ) {
-			prevProps.editor.model.document.off( 'change', this.syncPaneWithEditor );
-		}
-
-		this.startListeningToEditor();
-	}
-
-	componentDidMount() {
-		this.startListeningToEditor();
-	}
-
-	startListeningToEditor() {
-		if ( this.props.editor ) {
-			this.props.editor.model.document.on( 'change', this.syncPaneWithEditor );
-			this.syncPaneWithEditor();
-		}
 	}
 
 	handleTreeClick( evt, currentCommandName ) {
 		evt.persist();
 		evt.stopPropagation();
 
-		this.setState( { currentCommandName }, () => {
-			this.syncPaneWithEditor();
-		} );
-	}
-
-	syncPaneWithEditor() {
-		this.treeRef.current.update();
-		this.inspectorRef.current.update();
-	}
-
-	componentWillUnmount() {
-		if ( this.props.editor ) {
-			this.props.editor.model.document.off( 'change', this.syncPaneWithEditor );
-		}
+		this.setState( { currentCommandName } );
 	}
 
 	render() {
 		if ( !this.props.editor ) {
-			return <div className="ck-inspector-panes__content__empty-wrapper">
+			return <Pane isEmpty="true">
 				<p>Nothing to show. Attach another editor instance to start inspecting.</p>
-			</div>;
+			</Pane>;
 		}
 
-		return [
+		return <Pane splitVertically="true">
 			<CommandTree
 				editor={this.props.editor}
 				currentCommandName={this.state.currentCommandName}
-				key="tree"
 				onClick={this.handleTreeClick}
-				ref={this.treeRef}
-			/>,
-			<CommandInspector
-				editor={this.props.editor}
-				inspectedCommandName={this.state.currentCommandName}
-				key="explorer"
-				ref={this.inspectorRef}
 			/>
-		];
+			<Tabs activeTab="Inspect">
+				<CommandInspector
+					label="Inspect"
+					editor={this.props.editor}
+					inspectedCommandName={this.state.currentCommandName}
+				/>
+			</Tabs>
+		</Pane>;
 	}
 
 	static getDerivedStateFromProps( props, state ) {
