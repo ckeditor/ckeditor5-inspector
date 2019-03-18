@@ -18,6 +18,8 @@ import {
 import { stringifyPropertyList } from '../utils';
 import ObjectInspector from '../objectinspector';
 
+const DOCS_URL_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view';
+
 class NodeInspector extends Component {
 	editorEventObserverConfig( props ) {
 		return {
@@ -61,6 +63,11 @@ class NodeInspector extends Component {
 					url: info.url,
 					items: info.properties
 				},
+				{
+					name: 'Custom Properties',
+					url: `${ DOCS_URL_PREFIX }_element-Element.html#function-getCustomProperty`,
+					items: info.customProperties
+				}
 			]}
 		/>;
 	}
@@ -84,29 +91,30 @@ class NodeInspector extends Component {
 		const info = {
 			editorNode: node,
 			properties: [],
-			attributes: []
+			attributes: [],
+			customProperties: []
 		};
 
 		if ( isViewElement( node ) ) {
 			if ( isViewRoot( node ) ) {
 				info.type = 'RootEditableElement';
 				info.name = node.rootName;
-				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_rooteditableelement-RootEditableElement.html';
+				info.url = `${ DOCS_URL_PREFIX }_rooteditableelement-RootEditableElement.html`;
 			} else {
 				info.name = node.name;
 
 				if ( isViewAttributeElement( node ) ) {
 					info.type = 'AttributeElement';
-					info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_attributeelement-AttributeElement.html';
+					info.url = `${ DOCS_URL_PREFIX }_attributeelement-AttributeElement.html`;
 				} else if ( isViewEmptyElement( node ) ) {
 					info.type = 'EmptyElement';
-					info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_emptyelement-EmptyElement.html';
+					info.url = `${ DOCS_URL_PREFIX }_emptyelement-EmptyElement.html`;
 				} else if ( isViewUiElement( node ) ) {
 					info.type = 'UIElement';
-					info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_uielement-UIElement.html';
+					info.url = `${ DOCS_URL_PREFIX }_uielement-UIElement.html`;
 				} else {
 					info.type = 'ContainerElement';
-					info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_containerelement-ContainerElement.html';
+					info.url = `${ DOCS_URL_PREFIX }_containerelement-ContainerElement.html`;
 				}
 			}
 
@@ -116,10 +124,11 @@ class NodeInspector extends Component {
 				[ 'isEmpty', node.isEmpty ],
 				[ 'childCount', node.childCount ],
 			);
+			info.customProperties.push( ...node.getCustomProperties() );
 		} else {
 			info.name = node.data;
 			info.type = 'Text';
-			info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_text-Text.html';
+			info.url = `${ DOCS_URL_PREFIX }_text-Text.html`;
 
 			info.properties.push(
 				[ 'index', node.index ]
@@ -127,6 +136,7 @@ class NodeInspector extends Component {
 		}
 
 		info.properties = stringifyPropertyList( info.properties );
+		info.customProperties = stringifyPropertyList( info.customProperties );
 		info.attributes = stringifyPropertyList( info.attributes );
 
 		return info;

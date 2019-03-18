@@ -7,7 +7,7 @@
 	--ck-inspector-color-property-list-property-name: #D0363F;
 	--ck-inspector-color-property-list-property-value-true: green;
 	--ck-inspector-color-property-list-property-value-false: red;
-	--ck-inspector-color-property-list-property-value-undefined: #888;
+	--ck-inspector-color-property-list-property-value-unknown: #888;
 	--ck-inspector-color-property-list-background: #F5F5F5;
 }
 
@@ -43,8 +43,13 @@
 			color: var(--ck-inspector-color-property-list-property-value-true);
 		}
 
-		&[value="undefined"] {
-			color: var(--ck-inspector-color-property-list-property-value-undefined);
+		&[value="undefined"],
+		&[value="function() {…}"] {
+			color: var(--ck-inspector-color-property-list-property-value-unknown);
+		}
+
+		&[value="function() {…}"] {
+			font-style: italic;
 		}
 	}
 }
