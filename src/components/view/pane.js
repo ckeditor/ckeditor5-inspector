@@ -7,6 +7,7 @@ import React, { Component } from 'react';
 import ViewTree from './tree';
 import Pane from '../pane';
 import Tabs from '../tabs';
+import SidePane from '../sidepane';
 import ViewNodeInspector from './nodeinspector';
 import ViewSelectionInspector from './selectioninspector';
 import StorageManager from '../../storagemanager';
@@ -78,21 +79,23 @@ export default class ViewPane extends Component {
 				onClick={this.handleTreeClick}
 				onRootChange={this.handleRootChange}
 			/>
-			<Tabs
-				onTabChange={this.handlePaneChange}
-				activeTab={this.state.activeTab}
-			>
-				<ViewNodeInspector
-					label="Inspect"
-					editor={this.state.editor}
-					currentRootName={this.state.currentRootName}
-					inspectedNode={this.state.currentEditorNode}
-				/>
-				<ViewSelectionInspector
-					label="Selection"
-					editor={this.state.editor}
-				/>
-			</Tabs>
+			<SidePane>
+				<Tabs
+					onTabChange={this.handlePaneChange}
+					activeTab={this.state.activeTab}
+				>
+					<ViewNodeInspector
+						label="Inspect"
+						editor={this.state.editor}
+						currentRootName={this.state.currentRootName}
+						inspectedNode={this.state.currentEditorNode}
+					/>
+					<ViewSelectionInspector
+						label="Selection"
+						editor={this.state.editor}
+					/>
+				</Tabs>
+			</SidePane>
 		</Pane>;
 	}
 
