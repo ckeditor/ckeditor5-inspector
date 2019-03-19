@@ -156,40 +156,40 @@ describe( '<InspectorUI />', () => {
 
 		describe( 'resizable container', () => {
 			it( 'is rendered', () => {
-				expect( wrapper.find( Rnd ) ).to.have.lengthOf( 1 );
+				expect( wrapper.find( Rnd ).first() ).to.have.lengthOf( 1 );
 			} );
 
 			describe( 'props', () => {
 				it( 'has #bounds', () => {
-					const rnd = wrapper.find( Rnd );
+					const rnd = wrapper.find( Rnd ).first();
 
 					expect( rnd.props().bounds ).to.equal( 'window' );
 				} );
 
 				it( 'has #enableResizing', () => {
-					const rnd = wrapper.find( Rnd );
+					const rnd = wrapper.find( Rnd ).first();
 
 					expect( rnd.props().enableResizing ).to.deep.equal( { top: true } );
 
 					wrapper.setState( { isCollapsed: true } );
 
-					expect( wrapper.find( Rnd ).props().enableResizing ).to.deep.equal( { top: false } );
+					expect( wrapper.find( Rnd ).first().props().enableResizing ).to.deep.equal( { top: false } );
 				} );
 
 				it( 'has #disableDragging', () => {
-					const rnd = wrapper.find( Rnd );
+					const rnd = wrapper.find( Rnd ).first();
 
 					expect( rnd.props().disableDragging ).to.be.true;
 				} );
 
-				it( 'has #disableDragging', () => {
-					const rnd = wrapper.find( Rnd );
+				it( 'has #minHeight', () => {
+					const rnd = wrapper.find( Rnd ).first();
 
 					expect( rnd.props().minHeight ).to.equal( '100' );
 				} );
 
 				it( 'has #style', () => {
-					const rnd = wrapper.find( Rnd );
+					const rnd = wrapper.find( Rnd ).first();
 
 					expect( rnd.props().style ).to.deep.equal( {
 						position: 'fixed',
@@ -201,23 +201,23 @@ describe( '<InspectorUI />', () => {
 				} );
 
 				it( 'has #className', () => {
-					const rnd = wrapper.find( Rnd );
+					const rnd = wrapper.find( Rnd ).first();
 
 					expect( rnd.props().className ).to.equal( 'ck-inspector ' );
 
 					wrapper.setState( { isCollapsed: true } );
 
-					expect( wrapper.find( Rnd ).props().className ).to.equal( 'ck-inspector ck-inspector_collapsed' );
+					expect( wrapper.find( Rnd ).first().props().className ).to.equal( 'ck-inspector ck-inspector_collapsed' );
 				} );
 
 				it( 'has #position', () => {
-					const rnd = wrapper.find( Rnd );
+					const rnd = wrapper.find( Rnd ).first();
 
 					expect( rnd.props().position ).to.deep.equal( { x: 0, y: '100%' } );
 				} );
 
 				it( 'has #size', () => {
-					const rnd = wrapper.find( Rnd );
+					const rnd = wrapper.find( Rnd ).first();
 
 					expect( rnd.props().size ).to.deep.equal( {
 						width: '100%',
@@ -226,14 +226,14 @@ describe( '<InspectorUI />', () => {
 
 					wrapper.setState( { isCollapsed: true } );
 
-					expect( wrapper.find( Rnd ).props().size ).to.deep.equal( {
+					expect( wrapper.find( Rnd ).first().props().size ).to.deep.equal( {
 						width: '100%',
 						height: 30
 					} );
 				} );
 
 				it( 'has #onResizeStop', () => {
-					const rnd = wrapper.find( Rnd );
+					const rnd = wrapper.find( Rnd ).first();
 
 					expect( rnd.props().onResizeStop ).to.equal( wrapper.instance().handleInspectorResize );
 

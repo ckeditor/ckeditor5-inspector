@@ -10,7 +10,7 @@ const webpack = require( 'webpack' );
 const path = require( 'path' );
 
 module.exports = ( env, argv ) => {
-	const devMode = argv.mode === 'development'
+	const devMode = argv.mode === 'development';
 
 	return {
 		mode: argv.mode || 'production',

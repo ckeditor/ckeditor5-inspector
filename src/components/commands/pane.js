@@ -7,6 +7,7 @@ import React, { Component } from 'react';
 import CommandTree from './tree';
 import Pane from '../pane';
 import Tabs from '../tabs';
+import SidePane from '../sidepane';
 import CommandInspector from './commandinspector';
 import '../pane.css';
 export default class CommandsPane extends Component {
@@ -41,13 +42,15 @@ export default class CommandsPane extends Component {
 				currentCommandName={this.state.currentCommandName}
 				onClick={this.handleTreeClick}
 			/>
-			<Tabs activeTab="Inspect">
-				<CommandInspector
-					label="Inspect"
-					editor={this.props.editor}
-					inspectedCommandName={this.state.currentCommandName}
-				/>
-			</Tabs>
+			<SidePane>
+				<Tabs activeTab="Inspect">
+					<CommandInspector
+						label="Inspect"
+						editor={this.props.editor}
+						inspectedCommandName={this.state.currentCommandName}
+					/>
+				</Tabs>
+			</SidePane>
 		</Pane>;
 	}
 

@@ -7,11 +7,13 @@ import React, { Component } from 'react';
 import ModelTree from './tree';
 import Pane from '../pane';
 import Tabs from '../tabs';
+import SidePane from '../sidepane';
 import ModelNodeInspector from './nodeinspector';
 import ModelSelectionInspector from './selectioninspector';
 import StorageManager from '../../storagemanager';
 
 const LOCAL_STORAGE_ACTIVE_TAB = 'active-model-tab-name';
+
 export default class ModelPane extends Component {
 	constructor( props ) {
 		super( props );
@@ -22,7 +24,7 @@ export default class ModelPane extends Component {
 			currentRootName: null,
 			currentEditorNode: null,
 
-			activeTab: StorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Inspect'
+			activeTab: StorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Inspect',
 		};
 
 		this.handleRootChange = this.handleRootChange.bind( this );
@@ -76,21 +78,23 @@ export default class ModelPane extends Component {
 				onClick={this.handleTreeClick}
 				onRootChange={this.handleRootChange}
 			/>
-			<Tabs
-				onTabChange={this.handlePaneChange}
-				activeTab={this.state.activeTab}
-			>
-				<ModelNodeInspector
-					label="Inspect"
-					editor={this.state.editor}
-					currentRootName={this.state.currentRootName}
-					inspectedNode={this.state.currentEditorNode}
-				/>
-				<ModelSelectionInspector
-					label="Selection"
-					editor={this.state.editor}
-				/>
-			</Tabs>
+			<SidePane>
+				<Tabs
+					onTabChange={this.handlePaneChange}
+					activeTab={this.state.activeTab}
+				>
+					<ModelNodeInspector
+						label="Inspect"
+						editor={this.state.editor}
+						currentRootName={this.state.currentRootName}
+						inspectedNode={this.state.currentEditorNode}
+					/>
+					<ModelSelectionInspector
+						label="Selection"
+						editor={this.state.editor}
+					/>
+				</Tabs>
+			</SidePane>
 		</Pane>;
 	}
 
