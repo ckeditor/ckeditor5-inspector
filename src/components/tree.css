@@ -17,6 +17,7 @@
 	--ck-inspector-color-tree-node-name-active-bg: #2B98F0;
 	--ck-inspector-color-tree-node-inactive: #8a8a8a;
 	--ck-inspector-color-tree-selection: red;
+	--ck-inspector-color-comment: green;
 }
 
 .ck-inspector .ck-inspector-tree {
@@ -201,6 +202,18 @@
 		background: var(--ck-inspector-color-tree-node-hover);
 		border-style: solid;
 		border-color: var(--ck-inspector-color-tree-node-border-hover);
+	}
+}
+
+/*-- Comment -----------------------------------------------------------------------------*/
+
+.ck-inspector-tree .ck-inspector-tree-comment {
+	color: var(--ck-inspector-color-comment);
+	font-style: italic;
+
+	& a {
+		color: inherit;
+		text-decoration: underline;
 	}
 }
 

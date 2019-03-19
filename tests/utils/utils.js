@@ -22,7 +22,9 @@ export function assertTreeItems( items, expected ) {
 		}
 
 		for ( const property in expectedItem ) {
-			if ( property !== 'attributes' && property !== 'children' ) {
+			if ( property === 'text' && expectedItem[ property ] instanceof RegExp ) {
+				expect( assertedItem[ property ] ).to.match( expectedItem[ property ], property + ' must match' );
+			} else if ( property !== 'attributes' && property !== 'children' ) {
 				expect( assertedItem[ property ] ).to.deep.equal( expectedItem[ property ], property + ' must match' );
 			}
 		}

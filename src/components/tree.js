@@ -161,6 +161,14 @@ export class TreePlainText extends Component {
 	}
 }
 
+export class TreeComment extends Component {
+	render() {
+		return <span
+			className="ck-inspector-tree-comment"
+			dangerouslySetInnerHTML={{ __html: this.props.item.text }}></span>;
+	}
+}
+
 function renderTreeItem( item, index, treeProps ) {
 	if ( typeof item === 'string' ) {
 		return <TreePlainText key={index} text={item} />;
@@ -168,6 +176,8 @@ function renderTreeItem( item, index, treeProps ) {
 		return <TreeElement key={index} item={item} {...treeProps} />;
 	} else if ( item.type === 'text' ) {
 		return <TreeTextNode key={index} item={item} {...treeProps} />;
+	} else if ( item.type === 'comment' ) {
+		return <TreeComment key={index} item={item} />;
 	} else {
 		return <TreeSelection key={index} isEnd={item.isEnd} />;
 	}

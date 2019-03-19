@@ -133,6 +133,20 @@ function getElementTree( element, rangeStart, rangeEnd, showTypes ) {
 		};
 	}
 
+	if ( isViewUiElement( element ) ) {
+		elementTree.children.push( {
+			type: 'comment',
+			text: [
+				'&lt;!--',
+				'The View UI element content has been skipped. ',
+				'<a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_uielement-UIElement.html" target="_blank">',
+				'Find out why',
+				'</a>.',
+				' --&gt;'
+			].join( '' ),
+		} );
+	}
+
 	if ( element.childCount ) {
 		let isSelectionStartAdded = false;
 		let isSelectionEndAdded = false;
