@@ -188,6 +188,12 @@ describe( '<InspectorUI />', () => {
 					expect( rnd.props().minHeight ).to.equal( '100' );
 				} );
 
+				it( 'has #maxHeight', () => {
+					const rnd = wrapper.find( Rnd ).first();
+
+					expect( rnd.props().maxHeight ).to.equal( '100%' );
+				} );
+
 				it( 'has #style', () => {
 					const rnd = wrapper.find( Rnd ).first();
 
