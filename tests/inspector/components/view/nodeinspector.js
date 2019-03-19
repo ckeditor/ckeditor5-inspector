@@ -109,6 +109,10 @@ describe( '<ViewNodeInspector />', () => {
 		it( 'renders for a RootElement', () => {
 			editor.setData( '<p>foo</p>' );
 
+			editor.editing.view.change( writer => {
+				writer.setCustomProperty( 'foo', 'bar', editor.editing.view.document.getRoot() );
+			} );
+
 			wrapper.setProps( {
 				inspectedNode: root
 			} );
@@ -133,10 +137,22 @@ describe( '<ViewNodeInspector />', () => {
 				[ 'isEmpty', 'false' ],
 				[ 'childCount', '1' ],
 			] );
+
+			expect( lists[ 2 ].name ).to.equal( 'Custom Properties' );
+
+			const items = lists[ 2 ].items;
+			expect( items[ 0 ] ).to.have.members( [ 'Symbol(rootName)', '"main"' ] );
+			expect( items[ 1 ][ 0 ] ).to.equal( 'Symbol(document)' );
+			expect( items[ 1 ][ 1 ] ).to.match( /^{/ );
+			expect( items[ 2 ] ).to.have.members( [ 'foo', '"bar"' ] );
 		} );
 
 		it( 'renders for a ContainerElement', () => {
 			editor.setData( '<p>foo</p>' );
+
+			editor.editing.view.change( writer => {
+				writer.setCustomProperty( 'foo', 'bar', editor.editing.view.document.getRoot().getChild( 0 ) );
+			} );
 
 			wrapper.setProps( {
 				inspectedNode: root.getChild( 0 )
@@ -157,10 +173,19 @@ describe( '<ViewNodeInspector />', () => {
 				[ 'isEmpty', 'false' ],
 				[ 'childCount', '1' ],
 			] );
+
+			expect( lists[ 2 ].name ).to.equal( 'Custom Properties' );
+			expect( lists[ 2 ].items ).to.deep.equal( [
+				[ 'foo', '"bar"' ]
+			] );
 		} );
 
 		it( 'renders for an AttributeElement', () => {
 			editor.setData( '<p><b>foo</b></p>' );
+
+			editor.editing.view.change( writer => {
+				writer.setCustomProperty( 'foo', 'bar', editor.editing.view.document.getRoot().getChild( 0 ).getChild( 0 ) );
+			} );
 
 			wrapper.setProps( {
 				inspectedNode: root.getChild( 0 ).getChild( 0 )
@@ -181,6 +206,11 @@ describe( '<ViewNodeInspector />', () => {
 				[ 'isEmpty', 'false' ],
 				[ 'childCount', '1' ],
 			] );
+
+			expect( lists[ 2 ].name ).to.equal( 'Custom Properties' );
+			expect( lists[ 2 ].items ).to.deep.equal( [
+				[ 'foo', '"bar"' ]
+			] );
 		} );
 
 		it( 'renders for an EmptyElement', () => {
@@ -189,6 +219,7 @@ describe( '<ViewNodeInspector />', () => {
 			editor.editing.view.change( writer => {
 				const foo = writer.createEmptyElement( 'foo' );
 				writer.insert( editor.editing.view.document.selection.getFirstPosition(), foo );
+				writer.setCustomProperty( 'foo', 'bar', foo );
 			} );
 
 			wrapper.setProps( {
@@ -210,6 +241,11 @@ describe( '<ViewNodeInspector />', () => {
 				[ 'isEmpty', 'true' ],
 				[ 'childCount', '0' ],
 			] );
+
+			expect( lists[ 2 ].name ).to.equal( 'Custom Properties' );
+			expect( lists[ 2 ].items ).to.deep.equal( [
+				[ 'foo', '"bar"' ]
+			] );
 		} );
 
 		it( 'renders for an UIElement', () => {
@@ -218,6 +254,7 @@ describe( '<ViewNodeInspector />', () => {
 			editor.editing.view.change( writer => {
 				const foo = writer.createUIElement( 'foo' );
 				writer.insert( editor.editing.view.document.selection.getFirstPosition(), foo );
+				writer.setCustomProperty( 'foo', 'bar', foo );
 			} );
 
 			wrapper.setProps( {
@@ -238,6 +275,11 @@ describe( '<ViewNodeInspector />', () => {
 				[ 'index', '0' ],
 				[ 'isEmpty', 'true' ],
 				[ 'childCount', '0' ],
+			] );
+
+			expect( lists[ 2 ].name ).to.equal( 'Custom Properties' );
+			expect( lists[ 2 ].items ).to.deep.equal( [
+				[ 'foo', '"bar"' ]
 			] );
 		} );
 

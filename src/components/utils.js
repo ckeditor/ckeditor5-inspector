@@ -8,6 +8,10 @@ export function stringify( value, quotesAroundText = true ) {
 		return 'undefined';
 	}
 
+	if ( typeof value === 'function' ) {
+		return 'function() {…}';
+	}
+
 	const stringified = JSON.stringify( value );
 
 	// Note: Remove leading and trailing quotes (") from the output. By default it is:
@@ -37,6 +41,10 @@ export function uid() {
 
 export function stringifyPropertyList( list ) {
 	return list.map( ( [ name, value ] ) => {
+		if ( typeof name === 'symbol' ) {
+			name = name.toString();
+		}
+
 		return [ name, stringify( value ) ];
 	} );
 }
