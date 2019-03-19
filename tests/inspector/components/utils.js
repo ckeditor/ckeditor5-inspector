@@ -17,6 +17,7 @@ describe( 'Utils', () => {
 			expect( stringify( 'foo' ) ).to.equal( '"foo"' );
 			expect( stringify( [ 'a' ] ) ).to.equal( '["a"]' );
 			expect( stringify( { a: false } ) ).to.equal( '{"a":false}' );
+			expect( stringify( () => 'foo' ) ).to.equal( 'function() {…}' );
 		} );
 
 		it( 'stringifies values (no quotes around text)', () => {
@@ -25,6 +26,7 @@ describe( 'Utils', () => {
 			expect( stringify( 'foo', false ) ).to.equal( 'foo' );
 			expect( stringify( [ 'a' ], false ) ).to.equal( '["a"]' );
 			expect( stringify( { a: false }, false ) ).to.equal( '{"a":false}' );
+			expect( stringify( () => 'foo' ), false ).to.equal( 'function() {…}' );
 		} );
 	} );
 
@@ -39,9 +41,11 @@ describe( 'Utils', () => {
 			expect( stringifyPropertyList( [
 				[ 'foo', 'bar' ],
 				[ 'baz', 'qux' ],
+				[ Symbol( '42' ), 'abc' ]
 			] ) ).to.have.deep.members( [
 				[ 'foo', '"bar"' ],
 				[ 'baz', '"qux"' ],
+				[ 'Symbol(42)', '"abc"' ]
 			] );
 		} );
 	} );

@@ -74,14 +74,17 @@ To run tests, execute:
 yarn test
 ```
 
-## Releasing package
+## Releasing
 
 ### Changelog
 
-Before starting the release process, you need to generate the changelog:
+Before starting the release process, you need to generate the changelog and build the package:
+
+**Note:** We recommend using `npm` for that.
 
 ```console
 npm run changelog
+npm run build
 ```
 
 ### Publishing
