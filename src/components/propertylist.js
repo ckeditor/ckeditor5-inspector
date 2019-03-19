@@ -4,8 +4,10 @@
  */
 
 import React, { Component } from 'react';
-import { uid } from './utils';
+import { uid, truncateString } from './utils';
 import './propertylist.css';
+
+const MAX_PROPERTY_VALUE_LENGTH = 2000;
 
 export default class PropertyList extends Component {
 	render() {
@@ -13,6 +15,8 @@ export default class PropertyList extends Component {
 
 		return <dl className="ck-inspector-property-list ck-inspector-code">
 			{this.props.items.map( ( [ name, value ] ) => {
+				value = truncateString( String( value ), MAX_PROPERTY_VALUE_LENGTH );
+
 				return [
 					<dt key={`${ name }-name`}>
 						<label htmlFor={`${ listUid }-${ name }-input`}>
@@ -23,7 +27,7 @@ export default class PropertyList extends Component {
 						<input
 							id={`${ listUid }-${ name }-input`}
 							type="text"
-							value={String( value )}
+							value={value}
 							readOnly={true}
 						/>
 					</dd>

@@ -48,3 +48,11 @@ export function stringifyPropertyList( list ) {
 		return [ name, stringify( value ) ];
 	} );
 }
+
+export function truncateString( string, length ) {
+	if ( string.length > length ) {
+		return string.substr( 0, length ) + `… [${ string.length - length } characters left]`;
+	}
+
+	return string;
+}

@@ -9,7 +9,8 @@ import Tree, {
 	TreePlainText,
 	TreeSelection,
 	TreeElement,
-	TreeComment
+	TreeComment,
+	TreeNodeAttribute
 } from '../../../src/components/tree';
 
 describe( '<Tree />', () => {
@@ -376,6 +377,36 @@ describe( '<Tree />', () => {
 			const childAB = wrapper.children().childAt( 0 ).children().find( TreeComment ).last();
 
 			expect( childAB.html() ).to.equal( '<span class="ck-inspector-tree-comment"><b>bar</b></span>' );
+		} );
+	} );
+
+	describe( 'attribute', () => {
+		it( 'truncates values above 500 characters', () => {
+			const wrapper = mount( <Tree
+				items={[
+					{
+						type: 'text',
+						node: 'node',
+						attributes: [
+							[ 'foo', new Array( 499 ).fill( 0 ).join( '' ) ],
+							[ 'bar', new Array( 500 ).fill( 0 ).join( '' ) ],
+							[ 'baz', new Array( 550 ).fill( 0 ).join( '' ) ]
+						],
+						children: []
+					}
+				]}
+			/> );
+
+			const firstAttribute = wrapper.children().find( TreeNodeAttribute ).first();
+			const secondAttribute = wrapper.children().find( TreeNodeAttribute ).at( 1 );
+			const thirdAttribute = wrapper.children().find( TreeNodeAttribute ).last();
+
+			expect( firstAttribute.childAt( 0 ).childAt( 1 ).text() ).to.have.length( 499 );
+			expect( secondAttribute.childAt( 0 ).childAt( 1 ).text() ).to.have.length( 500 );
+			expect( thirdAttribute.childAt( 0 ).childAt( 1 ).text() ).to.have.lengthOf.below( 550 );
+			expect( thirdAttribute.childAt( 0 ).childAt( 1 ).text() ).to.match( /characters left]$/ );
+
+			wrapper.unmount();
 		} );
 	} );
 } );
