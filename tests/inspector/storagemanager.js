@@ -10,7 +10,7 @@ import StorageManager from '../../src/storagemanager';
 describe( 'StorageManager', () => {
 	describe( '#set()', () => {
 		it( 'sets items in the local storage', () => {
-			const spy = sinon.spy( window.localStorage, 'setItem' );
+			const spy = sinon.spy( window.Storage.prototype, 'setItem' );
 
 			StorageManager.set( 'foo', 'bar' );
 			StorageManager.set( 'baz', 'qux' );
@@ -22,7 +22,7 @@ describe( 'StorageManager', () => {
 
 	describe( '#get()', () => {
 		it( 'retrieves items from the local storage', () => {
-			const spy = sinon.spy( window.localStorage, 'getItem' );
+			const spy = sinon.spy( window.Storage.prototype, 'getItem' );
 
 			StorageManager.set( 'foo', 'bar' );
 			expect( StorageManager.get( 'foo' ) ).to.equal( 'bar' );
