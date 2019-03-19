@@ -8,7 +8,8 @@ import Tree, {
 	TreeTextNode,
 	TreePlainText,
 	TreeSelection,
-	TreeElement
+	TreeElement,
+	TreeComment
 } from '../../../src/components/tree';
 
 describe( '<Tree />', () => {
@@ -325,6 +326,56 @@ describe( '<Tree />', () => {
 			expect( selEnd.props().isEnd ).to.be.true;
 
 			expect( wrapper.children().childAt( 0 ).text() ).to.equal( '"some[text]"' );
+		} );
+	} );
+
+	describe( 'comment', () => {
+		let wrapper, itemA, itemAA, itemAB;
+
+		beforeEach( () => {
+			itemAA = {
+				type: 'comment',
+				text: 'foo'
+			};
+			itemAB = {
+				type: 'comment',
+				text: '<b>bar</b>'
+			};
+			itemA = {
+				type: 'element',
+				name: 'span',
+				node: 'a-node',
+				attributes: [],
+				children: [
+					itemAA,
+					itemAB
+				]
+			};
+
+			wrapper = mount( <Tree items={[ itemA ]} /> );
+		} );
+
+		afterEach( () => {
+			wrapper.unmount();
+		} );
+
+		it( 'is rendered', () => {
+			expect( wrapper.find( TreeComment ).length ).to.equal( 2 );
+
+			const childAA = wrapper.children().childAt( 0 ).children().find( TreeComment ).first();
+			const childAB = wrapper.children().childAt( 0 ).children().find( TreeComment ).last();
+
+			expect( childAA.type() ).to.equal( TreeComment );
+			expect( childAB.type() ).to.equal( TreeComment );
+
+			expect( childAA.props().item ).to.equal( itemAA );
+			expect( childAB.props().item ).to.equal( itemAB );
+		} );
+
+		it( 'is rendered with unsafe html', () => {
+			const childAB = wrapper.children().childAt( 0 ).children().find( TreeComment ).last();
+
+			expect( childAB.html() ).to.equal( '<span class="ck-inspector-tree-comment"><b>bar</b></span>' );
 		} );
 	} );
 } );
