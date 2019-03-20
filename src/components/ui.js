@@ -99,6 +99,7 @@ export default class InspectorUI extends Component {
 			enableResizing={{ top: !this.state.isCollapsed }}
 			disableDragging={true}
 			minHeight={INSPECTOR_MIN_HEIGHT}
+			maxHeight="100%"
 			style={INSPECTOR_STYLES}
 			className={[
 				'ck-inspector',
