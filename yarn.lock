@@ -214,6 +214,11 @@
     "@ckeditor/ckeditor5-core" "^12.0.0"
     "@ckeditor/ckeditor5-ui" "^12.0.0"
 
+"@ckeditor/ckeditor5-build-decoupled-document@^12.0.0":
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-build-decoupled-document/-/ckeditor5-build-decoupled-document-12.0.0.tgz#ce05c2687e6d3a05e8febdcb1deeb939d97c515f"
+  integrity sha512-4BNWOI8lgpP5XZ7yC3GcbPrCB0H+eVbCuFJWEb5sAknX6sDb31U+4ME33HJg399jYa4dZz99LieIR1q/3IGwiw==
+
 "@ckeditor/ckeditor5-core@^12.0.0":
   version "12.0.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-core/-/ckeditor5-core-12.0.0.tgz#5bff19fdca713c9f2ca551782f8cde42ed5cedf3"

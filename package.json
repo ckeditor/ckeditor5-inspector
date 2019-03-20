@@ -42,6 +42,7 @@
     "@babel/core": "^7.2.2",
     "@babel/preset-react": "^7.0.0",
     "@ckeditor/ckeditor5-basic-styles": "^11.0.0",
+    "@ckeditor/ckeditor5-build-decoupled-document": "^12.0.0",
     "@ckeditor/ckeditor5-core": "^12.0.0",
     "@ckeditor/ckeditor5-dev-env": "^13.0.2",
     "@ckeditor/ckeditor5-paragraph": "^11.0.0",
