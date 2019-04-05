@@ -36,61 +36,147 @@ export default class CKEditorInspector {
 	 *				console.error( error );
 	 *			} );
 	 *
+	 * **Note:** You can pass configuration options when attaching:
+	 *
+	 *		CKEditorInspector.attach( editor, { ... } );
+	 *		CKEditorInspector.attach( 'my-editor', editor, { ... } );
+	 *
 	 * @param {Editor|String} editorOrName When an unique string is provided, the editor will be listed in the inspector
 	 * under a name (the instance passed as a second argument). If an editor instance is passed, the editor with be
 	 * attached and assigned a generated name.
-	 * @param {Editor} [editor] An instance of the editor, if the first argument was specified as a string.
+	 * @param {Editor|CKEditorInspectorConfig} [editorOrOptions] An instance of the editor, if the first argument was specified as a string.
+	 * Otherwise, an object of configuration options controlling the behavior of the inspector.
+	 * @param {CKEditorInspectorConfig} [options] An object of configuration options controlling the behavior of the inspector.
 	 * @returns {String} The unique name of the editor in the inspector. Useful when using `CKEditorInspector.detach()`.
 	 */
-	static attach( editorOrName, editor ) {
-		let name, instance;
-
-		if ( typeof editorOrName === 'string' ) {
-			name = editorOrName;
-			instance = editor;
-		} else {
-			name = `editor-${ ++unnamedEditorCount }`;
-			instance = editorOrName;
-		}
+	static attach( ...args ) {
+		const { editorName, editorInstance, options } = normalizeArguments( args );
 
 		Logger.group( '%cAttached the inspector to a CKEditor 5 instance. To learn more, visit https://ckeditor.com/docs/ckeditor5.',
 			'font-weight: bold;' );
-		Logger.log( `Editor instance "${ name }"`, instance );
+		Logger.log( `Editor instance "${ editorName }"`, editorInstance );
 		Logger.groupEnd();
 
-		CKEditorInspector._editors.set( name, instance );
+		CKEditorInspector._editors.set( editorName, editorInstance );
 
-		instance.on( 'destroy', () => {
-			CKEditorInspector.detach( name );
+		editorInstance.on( 'destroy', () => {
+			CKEditorInspector.detach( editorName );
 		} );
 
-		if ( !container.parentNode ) {
-			document.body.appendChild( container );
-
-			ReactDOM.render(
-				<InspectorUI
-					ref={CKEditorInspector._inspectorRef}
-					editors={CKEditorInspector._editors}
-				/>,
-				container );
+		if ( !CKEditorInspector._isMounted ) {
+			CKEditorInspector._mount( options );
 		}
 
 		CKEditorInspector._updateState();
 
-		return name;
+		return editorName;
 	}
 
+	/**
+	 * Detaches the inspector from an editor instance.
+	 *
+	 *		CKEditorInspector.attach( 'my-editor', editor );
+	 *
+	 *		// The inspector will no longer inspect the "editor".
+	 *		CKEditorInspector.detach( 'my-editor' );
+	 *
+	 * @param {String} string Name of the editor to detach.
+	 */
 	static detach( name ) {
 		CKEditorInspector._editors.delete( name );
 		CKEditorInspector._updateState();
 	}
 
+	/**
+	 * Destroys the entire inspector application and removes it from DOM.
+	 */
+	static destroy() {
+		ReactDOM.unmountComponentAtNode( container );
+		CKEditorInspector._editors.clear();
+		container.remove();
+	}
+
 	static _updateState() {
+		// Don't update state if the application was destroy()ed.
+		if ( !CKEditorInspector._isMounted ) {
+			return;
+		}
+
 		CKEditorInspector._inspectorRef.current.setState( {
 			editors: CKEditorInspector._editors
 		} );
 	}
+
+	static _mount( options ) {
+		document.body.appendChild( container );
+
+		ReactDOM.render(
+			<InspectorUI
+				ref={CKEditorInspector._inspectorRef}
+				editors={CKEditorInspector._editors}
+				isCollapsed={options.isCollapsed}
+			/>,
+			container );
+	}
+
+	get _isMounted() {
+		return !!CKEditorInspector._inspectorRef.current;
+	}
+}
+
+function normalizeArguments( args ) {
+	const normalized = {};
+
+	// attach( editor );
+	if ( args.length === 1 ) {
+		normalized.editorName = getNextEditorName();
+		normalized.editorInstance = args[ 0 ];
+	}
+	// attach( 'foo', editor );
+	// attach( editor, { options } );
+	else if ( args.length === 2 ) {
+		// attach( 'foo', editor );
+		if ( typeof args[ 0 ] === 'string' ) {
+			normalized.editorName = args[ 0 ];
+			normalized.editorInstance = args[ 1 ];
+		}
+		// attach( editor, { options } );
+		else {
+			normalized.editorName = getNextEditorName();
+			normalized.editorInstance = args[ 0 ];
+			normalized.options = args[ 1 ];
+		}
+	}
+	// attach( 'foo', editor, { options } );
+	else {
+		normalized.editorName = args[ 0 ];
+		normalized.editorInstance = args[ 1 ];
+		normalized.options = args[ 2 ];
+	}
+
+	normalized.options = normalized.options || {};
+
+	return normalized;
+}
+
+function getNextEditorName() {
+	return `editor-${ ++unnamedEditorCount }`;
 }
 
 CKEditorInspector._editors = new Map();
 CKEditorInspector._inspectorRef = React.createRef();
+
+/**
+ * The configuration options of the inspector.
+ *
+ * @interface CKEditorInspectorConfig
+ */
+
+/**
+ * Controls the initial collapsed state of the inspector. Allows attaching to an editor instance without
+ * expanding the UI.
+ *
+ * **Note**: Works when `attach()` is called for the first time only.
+ *
+ * @member {Boolean} CKEditorInspectorConfig#isCollapsed
+ */

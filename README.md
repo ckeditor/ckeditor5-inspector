@@ -39,6 +39,33 @@ ClassicEditor
 
 Call `CKEditorInspector.detach( name )` to detach an instance from the inspector.
 
+### Configuration
+
+You can pass configuration options to the `CKEditorInspector.attach()` method as the last argument:
+
+```js
+CKEditorInspector.attach( 'editor-name', editor, {
+	// configuration options
+} );
+
+CKEditorInspector.attach( 'editor-name', {
+	// configuration options
+} );
+```
+
+#### `isCollapsed`
+
+To attach the inspector with a collapsed UI, use the `options.isCollapsed` option.
+
+**Note**: This option works when `CKEditorInspector.attach()` is called for the first time only.
+
+```js
+CKEditorInspector.attach( 'editor-name', editor, {
+	// Attach the inspector to the "editor" but the UI will be collapsed.
+	isCollapsed: true
+} );
+```
+
 ## Compatibility
 
 The inspector works with CKEditor 5 [v12.0.0](https://github.com/ckeditor/ckeditor5/releases/tag/v12.0.0)+.

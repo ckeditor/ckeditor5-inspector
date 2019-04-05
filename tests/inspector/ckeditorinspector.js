@@ -90,6 +90,38 @@ describe( 'CKEditorInspector', () => {
 				expect( inspectorRef.state.editors.size ).to.equal( 0 );
 			} );
 		} );
+
+		describe( 'options', () => {
+			describe( '#isCollapsed', () => {
+				beforeEach( () => {
+					CKEditorInspector.destroy();
+				} );
+
+				it( 'does nothing if unspecified', () => {
+					CKEditorInspector.attach( 'foo', editor );
+
+					inspectorRef = CKEditorInspector._inspectorRef.current;
+
+					expect( inspectorRef.props.isCollapsed ).to.be.undefined;
+				} );
+
+				it( 'controlls the initial collapsed state of the editor #1', () => {
+					CKEditorInspector.attach( 'foo', editor, { isCollapsed: true } );
+
+					inspectorRef = CKEditorInspector._inspectorRef.current;
+
+					expect( inspectorRef.props.isCollapsed ).to.be.true;
+				} );
+
+				it( 'controlls the initial collapsed state of the editor #2', () => {
+					CKEditorInspector.attach( editor, { isCollapsed: true } );
+
+					inspectorRef = CKEditorInspector._inspectorRef.current;
+
+					expect( inspectorRef.props.isCollapsed ).to.be.true;
+				} );
+			} );
+		} );
 	} );
 
 	describe( '#detach()', () => {
@@ -103,6 +135,18 @@ describe( 'CKEditorInspector', () => {
 			CKEditorInspector.detach( 'foo' );
 
 			expect( inspectorRef.state.editors.size ).to.equal( 0 );
+		} );
+	} );
+
+	describe( '#destroy()', () => {
+		it( 'destroys the entire inspector application', () => {
+			CKEditorInspector.attach( 'foo', editor );
+
+			CKEditorInspector.destroy();
+
+			expect( CKEditorInspector._inspectorRef.current ).to.be.null;
+			expect( document.querySelector( '.ck-inspector-wrapper' ) ).to.be.null;
+			expect( CKEditorInspector._editors.size ).to.equal( 0 );
 		} );
 	} );
 } );
