@@ -38,7 +38,7 @@ describe( '<InspectorUI />', () => {
 			TestEditor.create( editor2Element )
 		] ).then( ( [ editor1, editor2 ] ) => {
 			editors = new Map( [ [ 'first', editor1 ], [ 'second', editor2 ] ] );
-			wrapper = mount(
+			wrapper = shallow(
 				<InspectorUI editors={editors} />,
 				{ attachTo: container }
 			);
@@ -70,7 +70,7 @@ describe( '<InspectorUI />', () => {
 		it( 'restores state#height from the storage and sets it to body', () => {
 			window.localStorage.setItem( 'ck5-inspector-height', '123px' );
 
-			const wrapper = mount(
+			const wrapper = shallow(
 				<InspectorUI editors={editors} />,
 				{ attachTo: container }
 			);
@@ -112,7 +112,7 @@ describe( '<InspectorUI />', () => {
 		it( 'restores state#activeTab from the storage', () => {
 			window.localStorage.setItem( 'ck5-inspector-active-tab-name', 'Commands' );
 
-			const wrapper = mount(
+			const wrapper = shallow(
 				<InspectorUI editors={editors} />,
 				{ attachTo: container }
 			);

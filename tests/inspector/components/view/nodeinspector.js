@@ -283,6 +283,41 @@ describe( '<ViewNodeInspector />', () => {
 			] );
 		} );
 
+		it( 'renders for an EditableElement', () => {
+			editor.setData( '' );
+
+			editor.editing.view.change( writer => {
+				const foo = writer.createEditableElement( 'p' );
+				writer.insert( editor.editing.view.document.selection.getFirstPosition(), foo );
+				writer.setCustomProperty( 'foo', 'bar', foo );
+			} );
+
+			wrapper.setProps( {
+				inspectedNode: root.getChild( 0 ).getChild( 0 )
+			} );
+
+			expect( wrapper.childAt( 0 ).find( 'h2 span' ).text() ).to.equal( 'EditableElement:p' );
+			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
+
+			const inspector = wrapper.find( ObjectInspector );
+			const lists = inspector.props().lists;
+
+			expect( lists[ 0 ].name ).to.equal( 'Attributes' );
+			expect( lists[ 0 ].items ).to.deep.equal( [] );
+
+			expect( lists[ 1 ].name ).to.equal( 'Properties' );
+			expect( lists[ 1 ].items ).to.deep.equal( [
+				[ 'index', '0' ],
+				[ 'isEmpty', 'true' ],
+				[ 'childCount', '0' ],
+			] );
+
+			const items = lists[ 2 ].items;
+			expect( items[ 0 ][ 0 ] ).to.equal( 'Symbol(document)' );
+			expect( items[ 0 ][ 1 ] ).to.match( /^{/ );
+			expect( items[ 1 ] ).to.have.members( [ 'foo', '"bar"' ] );
+		} );
+
 		it( 'renders for a Text', () => {
 			editor.setData( '<p>foo</p>' );
 
