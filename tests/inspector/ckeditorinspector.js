@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md.
  */
 
-/* global document, window */
+/* global document, window, HTMLElement */
 
 import TestEditor from '../utils/testeditor';
 import CKEditorInspector from '../../src/ckeditorinspector';
@@ -29,6 +29,8 @@ describe( 'CKEditorInspector', () => {
 
 		element.remove();
 
+		CKEditorInspector.destroy();
+
 		return editor.destroy();
 	} );
 
@@ -41,15 +43,34 @@ describe( 'CKEditorInspector', () => {
 	describe( '#attach()', () => {
 		it( 'adds inspector to DOM', () => {
 			expect( document.querySelector( '.ck-inspector-wrapper' ) ).to.be.null;
+			expect( CKEditorInspector._wrapper ).to.be.null;
 
 			CKEditorInspector.attach( 'foo', editor );
 
-			const wrapper = document.querySelector( '.ck-inspector-wrapper' );
+			expect( CKEditorInspector._wrapper ).to.be.instanceOf( HTMLElement );
+
+			const wrapper = CKEditorInspector._wrapper;
 
 			expect( wrapper.tagName.toLowerCase() ).to.equal( 'div' );
 			expect( wrapper.parentNode ).to.equal( document.body );
 			expect( wrapper.childNodes.length ).to.equal( 2 );
 			expect( wrapper.firstChild.classList.contains( 'ck-inspector' ) ).to.be.true;
+		} );
+
+		it( 'adds inspector to DOM only once when attaching to the first editor', () => {
+			return TestEditor.create( element )
+				.then( anotherEditor => {
+					CKEditorInspector.attach( 'foo', editor );
+					CKEditorInspector.attach( 'bar', anotherEditor );
+
+					expect( document.querySelectorAll( '.ck-inspector-wrapper' ) ).to.be.lengthOf( 1 );
+					expect( document.querySelectorAll( '.ck-inspector' ) ).to.be.lengthOf( 1 );
+
+					return anotherEditor.destroy();
+				} )
+				.catch( err => {
+					throw err;
+				} );
 		} );
 
 		it( 'attaches editors under generated names', () => {
@@ -136,6 +157,15 @@ describe( 'CKEditorInspector', () => {
 
 			expect( inspectorRef.state.editors.size ).to.equal( 0 );
 		} );
+
+		it( 'does not throw if executed multiple times', () => {
+			CKEditorInspector.attach( 'foo', editor );
+
+			expect( () => {
+				CKEditorInspector.detach( 'foo' );
+				CKEditorInspector.detach( 'foo' );
+			} ).to.not.throw();
+		} );
 	} );
 
 	describe( '#destroy()', () => {
@@ -147,6 +177,7 @@ describe( 'CKEditorInspector', () => {
 			expect( CKEditorInspector._inspectorRef.current ).to.be.null;
 			expect( document.querySelector( '.ck-inspector-wrapper' ) ).to.be.null;
 			expect( CKEditorInspector._editors.size ).to.equal( 0 );
+			expect( CKEditorInspector._wrapper ).to.be.null;
 		} );
 	} );
 } );

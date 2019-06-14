@@ -10,15 +10,11 @@ import ReactDOM from 'react-dom';
 
 import InspectorUI from './components/ui';
 import Logger from './logger';
+import { normalizeArguments } from './utils';
 import './ckeditorinspector.css';
 
 // From changelog -> webpack.
 window.CKEDITOR_INSPECTOR_VERSION = CKEDITOR_INSPECTOR_VERSION;
-
-const container = document.createElement( 'div' );
-container.className = 'ck-inspector-wrapper';
-
-let unnamedEditorCount = 0;
 
 export default class CKEditorInspector {
 	/**
@@ -63,11 +59,8 @@ export default class CKEditorInspector {
 			CKEditorInspector.detach( editorName );
 		} );
 
-		if ( !CKEditorInspector._isMounted ) {
-			CKEditorInspector._mount( options );
-		}
-
-		CKEditorInspector._updateState();
+		CKEditorInspector._mount( options );
+		CKEditorInspector._updateEditorsState();
 
 		return editorName;
 	}
@@ -84,19 +77,24 @@ export default class CKEditorInspector {
 	 */
 	static detach( name ) {
 		CKEditorInspector._editors.delete( name );
-		CKEditorInspector._updateState();
+		CKEditorInspector._updateEditorsState();
 	}
 
 	/**
 	 * Destroys the entire inspector application and removes it from DOM.
 	 */
 	static destroy() {
-		ReactDOM.unmountComponentAtNode( container );
+		if ( !CKEditorInspector._wrapper ) {
+			return;
+		}
+
+		ReactDOM.unmountComponentAtNode( CKEditorInspector._wrapper );
 		CKEditorInspector._editors.clear();
-		container.remove();
+		CKEditorInspector._wrapper.remove();
+		CKEditorInspector._wrapper = null;
 	}
 
-	static _updateState() {
+	static _updateEditorsState() {
 		// Don't update state if the application was destroy()ed.
 		if ( !CKEditorInspector._isMounted ) {
 			return;
@@ -108,6 +106,12 @@ export default class CKEditorInspector {
 	}
 
 	static _mount( options ) {
+		if ( CKEditorInspector._wrapper ) {
+			return;
+		}
+
+		const container = CKEditorInspector._wrapper = document.createElement( 'div' );
+		container.className = 'ck-inspector-wrapper';
 		document.body.appendChild( container );
 
 		ReactDOM.render(
@@ -119,52 +123,14 @@ export default class CKEditorInspector {
 			container );
 	}
 
-	get _isMounted() {
+	static get _isMounted() {
 		return !!CKEditorInspector._inspectorRef.current;
 	}
 }
 
-function normalizeArguments( args ) {
-	const normalized = {};
-
-	// attach( editor );
-	if ( args.length === 1 ) {
-		normalized.editorName = getNextEditorName();
-		normalized.editorInstance = args[ 0 ];
-	}
-	// attach( 'foo', editor );
-	// attach( editor, { options } );
-	else if ( args.length === 2 ) {
-		// attach( 'foo', editor );
-		if ( typeof args[ 0 ] === 'string' ) {
-			normalized.editorName = args[ 0 ];
-			normalized.editorInstance = args[ 1 ];
-		}
-		// attach( editor, { options } );
-		else {
-			normalized.editorName = getNextEditorName();
-			normalized.editorInstance = args[ 0 ];
-			normalized.options = args[ 1 ];
-		}
-	}
-	// attach( 'foo', editor, { options } );
-	else {
-		normalized.editorName = args[ 0 ];
-		normalized.editorInstance = args[ 1 ];
-		normalized.options = args[ 2 ];
-	}
-
-	normalized.options = normalized.options || {};
-
-	return normalized;
-}
-
-function getNextEditorName() {
-	return `editor-${ ++unnamedEditorCount }`;
-}
-
 CKEditorInspector._editors = new Map();
 CKEditorInspector._inspectorRef = React.createRef();
+CKEditorInspector._wrapper = null;
 
 /**
  * The configuration options of the inspector.
