@@ -45,7 +45,7 @@ describe( 'CKEditorInspector', () => {
 			expect( document.querySelector( '.ck-inspector-wrapper' ) ).to.be.null;
 			expect( CKEditorInspector._wrapper ).to.be.null;
 
-			CKEditorInspector.attach( 'foo', editor );
+			CKEditorInspector.attach( { foo: editor } );
 
 			expect( CKEditorInspector._wrapper ).to.be.instanceOf( HTMLElement );
 
@@ -60,8 +60,8 @@ describe( 'CKEditorInspector', () => {
 		it( 'adds inspector to DOM only once when attaching to the first editor', () => {
 			return TestEditor.create( element )
 				.then( anotherEditor => {
-					CKEditorInspector.attach( 'foo', editor );
-					CKEditorInspector.attach( 'bar', anotherEditor );
+					CKEditorInspector.attach( { foo: editor } );
+					CKEditorInspector.attach( { bar: anotherEditor } );
 
 					expect( document.querySelectorAll( '.ck-inspector-wrapper' ) ).to.be.lengthOf( 1 );
 					expect( document.querySelectorAll( '.ck-inspector' ) ).to.be.lengthOf( 1 );
@@ -73,16 +73,18 @@ describe( 'CKEditorInspector', () => {
 				} );
 		} );
 
-		it( 'attaches editors under generated names', () => {
+		it( 'attaches to editors under generated names', () => {
 			return TestEditor.create( element )
 				.then( anotherEditor => {
-					CKEditorInspector.attach( editor );
-					CKEditorInspector.attach( anotherEditor );
+					const firstNames = CKEditorInspector.attach( editor );
+					const secondNames = CKEditorInspector.attach( anotherEditor );
 
 					inspectorRef = CKEditorInspector._inspectorRef.current;
 
 					expect( inspectorRef.state.editors.get( 'editor-1' ) ).to.equal( editor );
 					expect( inspectorRef.state.editors.get( 'editor-2' ) ).to.equal( anotherEditor );
+					expect( firstNames ).to.have.members( [ 'editor-1' ] );
+					expect( secondNames ).to.have.members( [ 'editor-2' ] );
 
 					return anotherEditor.destroy();
 				} )
@@ -91,22 +93,42 @@ describe( 'CKEditorInspector', () => {
 				} );
 		} );
 
-		it( 'attaches a new editor (named)', () => {
-			CKEditorInspector.attach( 'foo', editor );
+		it( 'attaches to a named editor', () => {
+			CKEditorInspector.attach( { foo: editor } );
 
 			inspectorRef = CKEditorInspector._inspectorRef.current;
 
 			expect( inspectorRef.state.editors.get( 'foo' ) ).to.equal( editor );
 		} );
 
+		it( 'attaches to multiple editors at a time', () => {
+			return TestEditor.create( element )
+				.then( anotherEditor => {
+					const names = CKEditorInspector.attach( { foo: editor, bar: anotherEditor } );
+
+					inspectorRef = CKEditorInspector._inspectorRef.current;
+
+					expect( inspectorRef.state.editors.get( 'foo' ) ).to.equal( editor );
+					expect( inspectorRef.state.editors.get( 'bar' ) ).to.equal( anotherEditor );
+					expect( names ).to.have.members( [ 'foo', 'bar' ] );
+
+					return anotherEditor.destroy();
+				} )
+				.catch( err => {
+					throw err;
+				} );
+		} );
+
 		it( 'detaches when the editor is destroyed', () => {
 			const spy = sinon.spy( CKEditorInspector, 'detach' );
 
-			CKEditorInspector.attach( 'bar', editor );
+			CKEditorInspector.attach( { bar: editor } );
 
 			return editor.destroy().then( () => {
 				sinon.assert.calledOnce( spy );
 				sinon.assert.calledWith( spy, 'bar' );
+
+				inspectorRef = CKEditorInspector._inspectorRef.current;
 
 				expect( inspectorRef.state.editors.size ).to.equal( 0 );
 			} );
@@ -119,23 +141,23 @@ describe( 'CKEditorInspector', () => {
 				} );
 
 				it( 'does nothing if unspecified', () => {
-					CKEditorInspector.attach( 'foo', editor );
+					CKEditorInspector.attach( editor );
 
 					inspectorRef = CKEditorInspector._inspectorRef.current;
 
 					expect( inspectorRef.props.isCollapsed ).to.be.undefined;
 				} );
 
-				it( 'controlls the initial collapsed state of the editor #1', () => {
-					CKEditorInspector.attach( 'foo', editor, { isCollapsed: true } );
+				it( 'controlls the initial collapsed state of the editor (single editor)', () => {
+					CKEditorInspector.attach( editor, { isCollapsed: true } );
 
 					inspectorRef = CKEditorInspector._inspectorRef.current;
 
 					expect( inspectorRef.props.isCollapsed ).to.be.true;
 				} );
 
-				it( 'controlls the initial collapsed state of the editor #2', () => {
-					CKEditorInspector.attach( editor, { isCollapsed: true } );
+				it( 'controlls the initial collapsed state of the editor (multiple editors)', () => {
+					CKEditorInspector.attach( { foo: editor }, { isCollapsed: true } );
 
 					inspectorRef = CKEditorInspector._inspectorRef.current;
 
@@ -147,7 +169,7 @@ describe( 'CKEditorInspector', () => {
 
 	describe( '#detach()', () => {
 		it( 'detaches an editor', () => {
-			CKEditorInspector.attach( 'foo', editor );
+			CKEditorInspector.attach( { foo: editor } );
 
 			inspectorRef = CKEditorInspector._inspectorRef.current;
 
@@ -159,7 +181,7 @@ describe( 'CKEditorInspector', () => {
 		} );
 
 		it( 'does not throw if executed multiple times', () => {
-			CKEditorInspector.attach( 'foo', editor );
+			CKEditorInspector.attach( { foo: editor } );
 
 			expect( () => {
 				CKEditorInspector.detach( 'foo' );
@@ -170,7 +192,7 @@ describe( 'CKEditorInspector', () => {
 
 	describe( '#destroy()', () => {
 		it( 'destroys the entire inspector application', () => {
-			CKEditorInspector.attach( 'foo', editor );
+			CKEditorInspector.attach( { foo: editor } );
 
 			CKEditorInspector.destroy();
 

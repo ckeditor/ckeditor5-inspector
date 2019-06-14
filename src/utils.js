@@ -6,33 +6,43 @@
 let unnamedEditorCount = 0;
 
 export function normalizeArguments( args ) {
-	const normalized = {};
+	const normalized = {
+		editors: {}
+	};
 
 	// attach( editor );
+	// attach( { foo: editor1, bar: editor2 } );
 	if ( args.length === 1 ) {
-		normalized.editorName = getNextEditorName();
-		normalized.editorInstance = args[ 0 ];
-	}
-	// attach( 'foo', editor );
-	// attach( editor, { options } );
-	else if ( args.length === 2 ) {
-		// attach( 'foo', editor );
-		if ( typeof args[ 0 ] === 'string' ) {
-			normalized.editorName = args[ 0 ];
-			normalized.editorInstance = args[ 1 ];
+		const editorOrEditorPairs = args[ 0 ];
+
+		// attach( editor );
+		if ( isEditorInstance( editorOrEditorPairs ) ) {
+			normalized.editors[ getNextEditorName() ] = args[ 0 ];
 		}
-		// attach( editor, { options } );
+		// attach( { foo: editor1, bar: editor2, ... } );
 		else {
-			normalized.editorName = getNextEditorName();
-			normalized.editorInstance = args[ 0 ];
-			normalized.options = args[ 1 ];
+			for ( const name in editorOrEditorPairs ) {
+				normalized.editors[ name ] = editorOrEditorPairs[ name ];
+			}
 		}
 	}
-	// attach( 'foo', editor, { options } );
+	// attach( editor, { options } );
+	// attach( { foo: editor1, bar: editor2 }, { options } );
 	else {
-		normalized.editorName = args[ 0 ];
-		normalized.editorInstance = args[ 1 ];
-		normalized.options = args[ 2 ];
+		// attach( editor, { options } );
+		if ( isEditorInstance( args[ 0 ] ) ) {
+			normalized.editors[ getNextEditorName() ] = args[ 0 ];
+		}
+		// attach( { foo: editor1, bar: editor2 }, { options } );
+		else {
+			const editorOrEditorPairs = args[ 0 ];
+
+			for ( const name in editorOrEditorPairs ) {
+				normalized.editors[ name ] = editorOrEditorPairs[ name ];
+			}
+		}
+
+		normalized.options = args[ 1 ];
 	}
 
 	normalized.options = normalized.options || {};
@@ -42,4 +52,9 @@ export function normalizeArguments( args ) {
 
 function getNextEditorName() {
 	return `editor-${ ++unnamedEditorCount }`;
+}
+
+function isEditorInstance( arg ) {
+	// Quack! 🦆
+	return !!arg.model;
 }

@@ -24,51 +24,63 @@ export default class CKEditorInspector {
 	 *			.create( ... )
 	 *			.then( editor => {
 	 *				CKEditorInspector.attach( editor );
-	 *
-	 *				// Alternatively:
-	 *				// CKEditorInspector.attach( 'my-editor', editor );
 	 *			} )
 	 *			.catch( error => {
 	 *				console.error( error );
 	 *			} );
 	 *
-	 * **Note:** You can pass configuration options when attaching:
+	 * **Note:** You can attach to multiple editors at a time under unique names:
 	 *
-	 *		CKEditorInspector.attach( editor, { ... } );
-	 *		CKEditorInspector.attach( 'my-editor', editor, { ... } );
+	 *		CKEditorInspector.attach( {
+	 *			'header-editor': editor1,
+	 *			'footer-editor': editor2,
+	 *			// ...
+	 *		} );
 	 *
-	 * @param {Editor|String} editorOrName When an unique string is provided, the editor will be listed in the inspector
-	 * under a name (the instance passed as a second argument). If an editor instance is passed, the editor with be
-	 * attached and assigned a generated name.
-	 * @param {Editor|CKEditorInspectorConfig} [editorOrOptions] An instance of the editor, if the first argument was specified as a string.
-	 * Otherwise, an object of configuration options controlling the behavior of the inspector.
-	 * @param {CKEditorInspectorConfig} [options] An object of configuration options controlling the behavior of the inspector.
-	 * @returns {String} The unique name of the editor in the inspector. Useful when using `CKEditorInspector.detach()`.
+	 * **Note:** You can pass global configuration options when attaching:
+	 *
+	 *		CKEditorInspector.attach( editor, { option: 'value', ... } );
+	 *		CKEditorInspector.attach( {
+	 *			'header-editor': editor1,
+	 *			'footer-editor': editor2
+	 *		}, { option: 'value', ... } );
+	 *
+	 * @param {Editor|Object} editorOrEditors If an editor instance is passed, the inspect will attach to the editor
+	 * with an auto–generated name. It is possible to pass an object with `name: instance` pairs to attach to
+	 * multiple editors at a time with unique names.
+	 * @param {CKEditorInspectorConfig} [options] An object of global configuration options controlling the
+	 * behavior of the inspector.
+	 * @returns {Array.<String>} Names of the editors the inspector attached to. Useful when using `CKEditorInspector.detach()`
+	 * with generated editor names.
 	 */
 	static attach( ...args ) {
-		const { editorName, editorInstance, options } = normalizeArguments( args );
+		const { editors, options } = normalizeArguments( args );
 
-		Logger.group( '%cAttached the inspector to a CKEditor 5 instance. To learn more, visit https://ckeditor.com/docs/ckeditor5.',
-			'font-weight: bold;' );
-		Logger.log( `Editor instance "${ editorName }"`, editorInstance );
-		Logger.groupEnd();
+		for ( const editorName in editors ) {
+			const editorInstance = editors[ editorName ];
 
-		CKEditorInspector._editors.set( editorName, editorInstance );
+			Logger.group( '%cAttached the inspector to a CKEditor 5 instance. To learn more, visit https://ckeditor.com/docs/ckeditor5.',
+				'font-weight: bold;' );
+			Logger.log( `Editor instance "${ editorName }"`, editorInstance );
+			Logger.groupEnd();
 
-		editorInstance.on( 'destroy', () => {
-			CKEditorInspector.detach( editorName );
-		} );
+			CKEditorInspector._editors.set( editorName, editorInstance );
 
-		CKEditorInspector._mount( options );
-		CKEditorInspector._updateEditorsState();
+			editorInstance.on( 'destroy', () => {
+				CKEditorInspector.detach( editorName );
+			} );
 
-		return editorName;
+			CKEditorInspector._mount( options );
+			CKEditorInspector._updateEditorsState();
+		}
+
+		return Object.keys( editors );
 	}
 
 	/**
 	 * Detaches the inspector from an editor instance.
 	 *
-	 *		CKEditorInspector.attach( 'my-editor', editor );
+	 *		CKEditorInspector.attach( { 'my-editor': editor } );
 	 *
 	 *		// The inspector will no longer inspect the "editor".
 	 *		CKEditorInspector.detach( 'my-editor' );

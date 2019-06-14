@@ -21,33 +21,55 @@ Include the script to load the inspector:
 <script src="path/to/inspector.js"></script>
 ```
 
-Call `CKEditorInspector.attach( name, editor )` when editor instance is ready:
+Call `CKEditorInspector.attach( editor )` when editor instance is ready:
 
 ```js
 ClassicEditor
-    .create( ... )
-    .then( editor => {
-        CKEditorInspector.attach( 'editor-name', editor );
-    } )
-    .catch( error => {
-        console.error( error );
-    } );
+	.create( ... )
+	.then( editor => {
+		CKEditorInspector.attach( editor );
+	} )
+	.catch( error => {
+		console.error( error );
+	} );
 ```
 
-**Note**: You can attach multiple editors to the inspector. Select the editor instance in the drop–down inside the inspector panel to switch context.
+**Note**: You can attach to multiple editors under unique names at a time. Then you can select the editor instance in the drop–down inside the inspector panel to switch context.
 
-Call `CKEditorInspector.detach( name )` to detach an instance from the inspector.
+```js
+CKEditorInspector.attach( {
+	'header-editor': editor1,
+	'footer-editor': editor2,
+	// ...
+} );
+```
+
+Call `CKEditorInspector.detach( name )` to detach the inspector from an editor instance.
+
+***Tip**: `CKEditorInspector.attach()` returns the generated name of the editor if it was not provided.
+
+```js
+// Attach the inspector to two editor instances:
+const generatedName = CKEditorInspector.attach( editor1 );
+CKEditorInspector.attach( { myEditor: editor2 } );
+
+// ...
+
+// Detach from the instances:
+CKEditorInspector.detach( generatedName );
+CKEditorInspector.detach( 'myEditor' );
+```
 
 ### Configuration
 
 You can pass configuration options to the `CKEditorInspector.attach()` method as the last argument:
 
 ```js
-CKEditorInspector.attach( 'editor-name', editor, {
+CKEditorInspector.attach( editor, {
 	// configuration options
 } );
 
-CKEditorInspector.attach( 'editor-name', {
+CKEditorInspector.attach( { 'editor-name': editor }, {
 	// configuration options
 } );
 ```
@@ -59,7 +81,7 @@ To attach the inspector with a collapsed UI, use the `options.isCollapsed` optio
 **Note**: This option works when `CKEditorInspector.attach()` is called for the first time only.
 
 ```js
-CKEditorInspector.attach( 'editor-name', editor, {
+CKEditorInspector.attach( { 'editor-name': editor }, {
 	// Attach the inspector to the "editor" but the UI will be collapsed.
 	isCollapsed: true
 } );
