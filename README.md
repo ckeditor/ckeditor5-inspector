@@ -46,7 +46,7 @@ CKEditorInspector.attach( {
 
 Call `CKEditorInspector.detach( name )` to detach the inspector from an editor instance.
 
-***Tip**: `CKEditorInspector.attach()` returns the generated name of the editor if it was not provided.
+**Tip**: `CKEditorInspector.attach()` returns the generated name of the editor if it was not provided.
 
 ```js
 // Attach the inspector to two editor instances:
