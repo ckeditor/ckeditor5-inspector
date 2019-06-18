@@ -37,4 +37,14 @@ describe( 'Logger', () => {
 			sinon.assert.calledWithExactly( spy.firstCall, 'foo', 'bar' );
 		} );
 	} );
+
+	describe( '#warn()', () => {
+		it( 'calls console.warn', () => {
+			const spy = sinon.spy( console, 'warn' );
+
+			Logger.warn( 'foo', 'bar' );
+
+			sinon.assert.calledWithExactly( spy.firstCall, 'foo', 'bar' );
+		} );
+	} );
 } );

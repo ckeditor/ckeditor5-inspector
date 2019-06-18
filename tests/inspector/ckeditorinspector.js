@@ -10,11 +10,12 @@ import CKEditorInspector from '../../src/ckeditorinspector';
 import Logger from '../../src/logger';
 
 describe( 'CKEditorInspector', () => {
-	let editor, element, inspectorRef;
+	let editor, element, inspectorRef, warnStub;
 
 	beforeEach( () => {
 		// Silence inspector logs.
 		sinon.stub( Logger, 'log' ).callsFake( () => {} );
+		warnStub = sinon.stub( Logger, 'warn' ).callsFake( () => {} );
 
 		element = document.createElement( 'div' );
 		document.body.appendChild( element );
@@ -26,6 +27,7 @@ describe( 'CKEditorInspector', () => {
 
 	afterEach( () => {
 		Logger.log.restore();
+		Logger.warn.restore();
 
 		element.remove();
 
@@ -117,6 +119,15 @@ describe( 'CKEditorInspector', () => {
 				.catch( err => {
 					throw err;
 				} );
+		} );
+
+		it( 'supports the deprecated syntax but warns', () => {
+			CKEditorInspector.attach( 'foo', editor );
+
+			inspectorRef = CKEditorInspector._inspectorRef.current;
+			expect( inspectorRef.state.editors.get( 'foo' ) ).to.equal( editor );
+			sinon.assert.calledOnce( warnStub );
+			sinon.assert.calledWithMatch( warnStub, /^\[CKEditorInspector\]/ );
 		} );
 
 		it( 'detaches when the editor is destroyed', () => {
