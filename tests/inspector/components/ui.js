@@ -148,10 +148,12 @@ describe( '<InspectorUI />', () => {
 			const instance = wrapper.instance();
 
 			expect( document.body.classList.contains( 'ck-inspector-body-expanded' ) ).to.be.true;
+			expect( document.body.classList.contains( 'ck-inspector-body-collapsed' ) ).to.be.false;
 
 			instance.setState( { isCollapsed: true } );
 
 			expect( document.body.classList.contains( 'ck-inspector-body-expanded' ) ).to.be.false;
+			expect( document.body.classList.contains( 'ck-inspector-body-collapsed' ) ).to.be.true;
 		} );
 
 		describe( 'resizable container', () => {

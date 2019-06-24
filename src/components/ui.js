@@ -88,7 +88,9 @@ export default class InspectorUI extends Component {
 	render() {
 		if ( this.state.isCollapsed ) {
 			document.body.classList.remove( 'ck-inspector-body-expanded' );
+			document.body.classList.add( 'ck-inspector-body-collapsed' );
 		} else {
+			document.body.classList.remove( 'ck-inspector-body-collapsed' );
 			document.body.classList.add( 'ck-inspector-body-expanded' );
 		}
 
@@ -130,6 +132,11 @@ export default class InspectorUI extends Component {
 				<CommandsPane label="Commands" editor={currentEditorInstance} />
 			</Tabs>
 		</Rnd>;
+	}
+	
+	componentWillUnmount() {
+			document.body.classList.remove( 'ck-inspector-body-expanded' );
+			document.body.classList.remove( 'ck-inspector-body-collapsed' );
 	}
 
 	static getDerivedStateFromProps( props, state ) {
