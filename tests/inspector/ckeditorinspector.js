@@ -178,6 +178,79 @@ describe( 'CKEditorInspector', () => {
 		} );
 	} );
 
+	describe( '#attachToAll()', () => {
+		it( 'attaches to all editors', () => {
+			return TestEditor.create( element )
+				.then( anotherEditor => {
+					document.body.appendChild( editor.ui.view.element );
+					document.body.appendChild( anotherEditor.ui.view.element );
+
+					const editorNames = CKEditorInspector.attachToAll();
+
+					inspectorRef = CKEditorInspector._inspectorRef.current;
+
+					expect( inspectorRef.state.editors.size ).to.equal( 2 );
+					expect( inspectorRef.state.editors.get( 'editor-5' ) ).to.equal( editor );
+					expect( inspectorRef.state.editors.get( 'editor-6' ) ).to.equal( anotherEditor );
+					expect( editorNames ).to.have.members( [ 'editor-5', 'editor-6' ] );
+
+					return anotherEditor.destroy();
+				} )
+				.catch( err => {
+					throw err;
+				} );
+		} );
+
+		it( 'detects and prevents duplicates', () => {
+			return TestEditor.create( element )
+				.then( anotherEditor => {
+					document.body.appendChild( editor.ui.view.element );
+					document.body.appendChild( anotherEditor.ui.view.element );
+
+					CKEditorInspector.attachToAll();
+
+					inspectorRef = CKEditorInspector._inspectorRef.current;
+
+					expect( inspectorRef.state.editors.size ).to.equal( 2 );
+					expect( inspectorRef.state.editors.get( 'editor-7' ) ).to.equal( editor );
+					expect( inspectorRef.state.editors.get( 'editor-8' ) ).to.equal( anotherEditor );
+
+					CKEditorInspector.attachToAll();
+
+					inspectorRef = CKEditorInspector._inspectorRef.current;
+
+					expect( inspectorRef.state.editors.size ).to.equal( 2 );
+
+					return anotherEditor.destroy();
+				} )
+				.catch( err => {
+					throw err;
+				} );
+		} );
+
+		it( 'passes options to #attach()', () => {
+			return TestEditor.create( element )
+				.then( anotherEditor => {
+					document.body.appendChild( editor.ui.view.element );
+					document.body.appendChild( anotherEditor.ui.view.element );
+
+					const spy = sinon.spy( CKEditorInspector, 'attach' );
+					const options = { foo: true };
+					CKEditorInspector.attachToAll( options );
+
+					sinon.assert.calledWithExactly( spy.firstCall, editor, options );
+					sinon.assert.calledWithExactly( spy.secondCall, anotherEditor, options );
+
+					spy.restore();
+
+					return anotherEditor.destroy();
+				} )
+				.catch( err => {
+					throw err;
+				} );
+		} );
+	} );
+
 	describe( '#detach()', () => {
 		it( 'detaches an editor', () => {
 			CKEditorInspector.attach( { foo: editor } );
