@@ -12,7 +12,11 @@ The official [CKEditor 5](https://ckeditor.com/ckeditor-5) rich text editor inst
 
 ![The inspector panel attached to the editor instance.](/sample/screenshot.png)
 
-## Usage
+## Documentation 📖
+
+Learn how to use the inspector and see it live in the [Development tools](https://ckeditor.com/docs/ckeditor5/latest/framework/guides/development-tools.html) guide.
+
+## Quick start
 
 Include the script to load the inspector:
 
@@ -36,10 +40,6 @@ ClassicEditor
 **Note**: You can attach multiple editors to the inspector. Select the editor instance in the drop–down inside the inspector panel to switch context.
 
 Call `CKEditorInspector.detach( name )` to detach an instance from the inspector.
-
-## Compatibility
-
-The inspector works with CKEditor 5 [v12.0.0](https://github.com/ckeditor/ckeditor5/releases/tag/v12.0.0)+.
 
 ## Development
 
