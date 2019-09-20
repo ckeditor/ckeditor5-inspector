@@ -103,6 +103,16 @@ describe( 'CKEditorInspector', () => {
 			expect( inspectorRef.state.editors.get( 'foo' ) ).to.equal( editor );
 		} );
 
+		it( 'attaches to a editor named like one of core editor properties (used in a duck typing)', () => {
+			CKEditorInspector.attach( { model: editor } );
+			CKEditorInspector.attach( { editing: editor } );
+
+			inspectorRef = CKEditorInspector._inspectorRef.current;
+
+			expect( inspectorRef.state.editors.get( 'model' ) ).to.equal( editor );
+			expect( inspectorRef.state.editors.get( 'editing' ) ).to.equal( editor );
+		} );
+
 		it( 'attaches to multiple editors at a time', () => {
 			return TestEditor.create( element )
 				.then( anotherEditor => {

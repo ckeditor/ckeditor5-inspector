@@ -47,5 +47,5 @@ function getNextEditorName() {
 
 function isEditorInstance( arg ) {
 	// Quack! 🦆
-	return !!arg.model;
+	return !!arg.model && !!arg.editing;
 }
