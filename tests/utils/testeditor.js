@@ -74,7 +74,7 @@ class ClassicTestEditorUI extends EditorUI {
 		view.render();
 		view.main.add( view.editable );
 
-		this._editableElements.set( 'main', view.editable.element );
+		this.setEditableElement( 'main', view.editable.element );
 		this._elementReplacer.replace( element, view.element );
 
 		this.editor.commands.add( 'foo', new FooCommand( this.editor ) );

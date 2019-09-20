@@ -17,6 +17,8 @@ import BoldEditing from '@ckeditor/ckeditor5-basic-styles/src/bold/boldediting';
 import { assertTreeItems } from '../../../../tests/utils/utils';
 
 const ROOT_ATTRIBUTES = [
+	[ 'lang', 'en' ],
+	[ 'dir', 'ltr' ],
 	[ 'aria-label', 'Rich Text Editor, main' ],
 	[ 'role', 'textbox' ],
 	[ 'contenteditable', 'true' ],
