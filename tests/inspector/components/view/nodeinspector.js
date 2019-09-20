@@ -40,6 +40,7 @@ describe( '<ViewNodeInspector />', () => {
 	afterEach( () => {
 		wrapper.unmount();
 		element.remove();
+		sinon.restore();
 
 		return editor.destroy();
 	} );
@@ -102,8 +103,6 @@ describe( '<ViewNodeInspector />', () => {
 
 			logNodeButton.simulate( 'click' );
 			sinon.assert.calledOnce( logSpy );
-
-			logSpy.restore();
 		} );
 
 		it( 'renders for a RootElement', () => {

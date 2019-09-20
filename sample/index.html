@@ -47,6 +47,11 @@
 			<p>foo</p>
 		</div>
 
+		<h2>Actions</h2>
+		<button id="attach-inspector">Attach inspector to all editors</button>
+		<button id="detach-inspector-from-editors">Detach inspector from editors</button>
+		<button id="destroy-inspector">Destroy inspector</button>
+
 		<script>
 			class DummyUploadAdapter {
 				constructor( loader ) {
@@ -74,6 +79,24 @@
 				};
 			}
 
+			let editorNames = [];
+
+			document.querySelector( '#destroy-inspector' ).addEventListener( 'click', () => {
+				CKEditorInspector.destroy();
+				editorNames = [];
+			} );
+
+			document.querySelector( '#attach-inspector' ).addEventListener( 'click', () => {
+				const names = CKEditorInspector.attachToAll();
+
+				editorNames.push( ...names );
+			} );
+
+			document.querySelector( '#detach-inspector-from-editors' ).addEventListener( 'click', () => {
+				editorNames.forEach( name => CKEditorInspector.detach( name ) );
+				editorNames = [];
+			} );
+
 			DecoupledEditor
 				.create( document.querySelector( '#first-editor-content' ), {
 					extraPlugins: [ UploadAdapter ]
@@ -82,6 +105,7 @@
 					window.firstEditor = editor;
 					document.body.insertBefore( editor.ui.view.toolbar.element, editor.ui.getEditableElement() );
 					CKEditorInspector.attach( { 'first-editor': editor } );
+					editorNames.push( 'first-editor' );
 				} )
 				.catch( error => {
 					console.error( error );
@@ -94,7 +118,8 @@
 				.then( editor => {
 					window.secondEditor = editor;
 					document.body.insertBefore( editor.ui.view.toolbar.element, editor.ui.getEditableElement() );
-					CKEditorInspector.attach( editor );
+					const [ name ] = CKEditorInspector.attach( editor );
+					editorNames.push( name );
 				} )
 				.catch( error => {
 					console.error( error );

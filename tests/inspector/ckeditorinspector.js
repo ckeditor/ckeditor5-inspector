@@ -26,9 +26,7 @@ describe( 'CKEditorInspector', () => {
 	} );
 
 	afterEach( () => {
-		Logger.log.restore();
-		Logger.warn.restore();
-
+		sinon.restore();
 		element.remove();
 
 		CKEditorInspector.destroy();
@@ -40,6 +38,14 @@ describe( 'CKEditorInspector', () => {
 		it( 'is set', () => {
 			expect( window.CKEDITOR_INSPECTOR_VERSION ).to.be.a( 'string' );
 		} );
+	} );
+
+	it( 'warns if called the constructor()', () => {
+		// eslint-disable-next-line no-unused-vars
+		const inspector = new CKEditorInspector();
+
+		sinon.assert.calledOnce( warnStub );
+		sinon.assert.calledWithMatch( warnStub, /^\[CKEditorInspector\]/ );
 	} );
 
 	describe( '#attach()', () => {
@@ -60,7 +66,10 @@ describe( 'CKEditorInspector', () => {
 		} );
 
 		it( 'adds inspector to DOM only once when attaching to the first editor', () => {
-			return TestEditor.create( element )
+			const anotherEditorElement = document.createElement( 'div' );
+			document.body.appendChild( anotherEditorElement );
+
+			return TestEditor.create( anotherEditorElement )
 				.then( anotherEditor => {
 					CKEditorInspector.attach( { foo: editor } );
 					CKEditorInspector.attach( { bar: anotherEditor } );
@@ -68,10 +77,9 @@ describe( 'CKEditorInspector', () => {
 					expect( document.querySelectorAll( '.ck-inspector-wrapper' ) ).to.be.lengthOf( 1 );
 					expect( document.querySelectorAll( '.ck-inspector' ) ).to.be.lengthOf( 1 );
 
+					anotherEditorElement.remove();
+
 					return anotherEditor.destroy();
-				} )
-				.catch( err => {
-					throw err;
 				} );
 		} );
 
@@ -89,9 +97,6 @@ describe( 'CKEditorInspector', () => {
 					expect( secondNames ).to.have.members( [ 'editor-2' ] );
 
 					return anotherEditor.destroy();
-				} )
-				.catch( err => {
-					throw err;
 				} );
 		} );
 
@@ -101,6 +106,16 @@ describe( 'CKEditorInspector', () => {
 			inspectorRef = CKEditorInspector._inspectorRef.current;
 
 			expect( inspectorRef.state.editors.get( 'foo' ) ).to.equal( editor );
+		} );
+
+		it( 'attaches to a editor named like one of core editor properties (used in a duck typing)', () => {
+			CKEditorInspector.attach( { model: editor } );
+			CKEditorInspector.attach( { editing: editor } );
+
+			inspectorRef = CKEditorInspector._inspectorRef.current;
+
+			expect( inspectorRef.state.editors.get( 'model' ) ).to.equal( editor );
+			expect( inspectorRef.state.editors.get( 'editing' ) ).to.equal( editor );
 		} );
 
 		it( 'attaches to multiple editors at a time', () => {
@@ -115,9 +130,6 @@ describe( 'CKEditorInspector', () => {
 					expect( names ).to.have.members( [ 'foo', 'bar' ] );
 
 					return anotherEditor.destroy();
-				} )
-				.catch( err => {
-					throw err;
 				} );
 		} );
 
@@ -147,10 +159,6 @@ describe( 'CKEditorInspector', () => {
 
 		describe( 'options', () => {
 			describe( '#isCollapsed', () => {
-				beforeEach( () => {
-					CKEditorInspector.destroy();
-				} );
-
 				it( 'does nothing if unspecified', () => {
 					CKEditorInspector.attach( editor );
 
@@ -175,6 +183,68 @@ describe( 'CKEditorInspector', () => {
 					expect( inspectorRef.props.isCollapsed ).to.be.true;
 				} );
 			} );
+		} );
+	} );
+
+	describe( '#attachToAll()', () => {
+		it( 'attaches to all editors', () => {
+			return TestEditor.create( element )
+				.then( anotherEditor => {
+					document.body.appendChild( editor.ui.view.element );
+					document.body.appendChild( anotherEditor.ui.view.element );
+
+					const editorNames = CKEditorInspector.attachToAll();
+
+					inspectorRef = CKEditorInspector._inspectorRef.current;
+
+					expect( inspectorRef.state.editors.size ).to.equal( 2 );
+					expect( inspectorRef.state.editors.get( 'editor-5' ) ).to.equal( editor );
+					expect( inspectorRef.state.editors.get( 'editor-6' ) ).to.equal( anotherEditor );
+					expect( editorNames ).to.have.members( [ 'editor-5', 'editor-6' ] );
+
+					return anotherEditor.destroy();
+				} );
+		} );
+
+		it( 'detects and prevents duplicates', () => {
+			return TestEditor.create( element )
+				.then( anotherEditor => {
+					document.body.appendChild( editor.ui.view.element );
+					document.body.appendChild( anotherEditor.ui.view.element );
+
+					CKEditorInspector.attachToAll();
+
+					inspectorRef = CKEditorInspector._inspectorRef.current;
+
+					expect( inspectorRef.state.editors.size ).to.equal( 2 );
+					expect( inspectorRef.state.editors.get( 'editor-7' ) ).to.equal( editor );
+					expect( inspectorRef.state.editors.get( 'editor-8' ) ).to.equal( anotherEditor );
+
+					CKEditorInspector.attachToAll();
+
+					inspectorRef = CKEditorInspector._inspectorRef.current;
+
+					expect( inspectorRef.state.editors.size ).to.equal( 2 );
+
+					return anotherEditor.destroy();
+				} );
+		} );
+
+		it( 'passes options to #attach()', () => {
+			return TestEditor.create( element )
+				.then( anotherEditor => {
+					document.body.appendChild( editor.ui.view.element );
+					document.body.appendChild( anotherEditor.ui.view.element );
+
+					const spy = sinon.spy( CKEditorInspector, 'attach' );
+					const options = { foo: true };
+					CKEditorInspector.attachToAll( options );
+
+					sinon.assert.calledWithExactly( spy.firstCall, editor, options );
+					sinon.assert.calledWithExactly( spy.secondCall, anotherEditor, options );
+
+					return anotherEditor.destroy();
+				} );
 		} );
 	} );
 

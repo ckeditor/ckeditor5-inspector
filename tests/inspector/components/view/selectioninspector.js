@@ -37,6 +37,7 @@ describe( '<ViewSelectionInspector />', () => {
 	afterEach( () => {
 		wrapper.unmount();
 		element.remove();
+		sinon.restore();
 
 		return editor.destroy();
 	} );
@@ -61,8 +62,6 @@ describe( '<ViewSelectionInspector />', () => {
 
 			logFocusButton.simulate( 'click' );
 			sinon.assert.calledThrice( logSpy );
-
-			logSpy.restore();
 
 			wrapper.unmount();
 		} );

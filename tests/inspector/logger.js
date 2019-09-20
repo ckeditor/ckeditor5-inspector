@@ -8,49 +8,47 @@
 import Logger from '../../src/logger';
 
 describe( 'Logger', () => {
-	let spy;
-
 	afterEach( () => {
-		spy.restore();
+		sinon.restore();
 	} );
 
 	describe( '#group()', () => {
 		it( 'calls console.group', () => {
-			spy = sinon.spy( console, 'group' );
+			const stub = sinon.stub( console, 'group' );
 
 			Logger.group( 'foo', 'bar' );
 
-			sinon.assert.calledWithExactly( spy.firstCall, 'foo', 'bar' );
+			sinon.assert.calledWithExactly( stub.firstCall, 'foo', 'bar' );
 		} );
 	} );
 
 	describe( '#groupEnd()', () => {
 		it( 'calls console.groupEnd', () => {
-			spy = sinon.spy( console, 'groupEnd' );
+			const stub = sinon.stub( console, 'groupEnd' );
 
 			Logger.groupEnd( 'foo', 'bar' );
 
-			sinon.assert.calledWithExactly( spy.firstCall, 'foo', 'bar' );
+			sinon.assert.calledWithExactly( stub.firstCall, 'foo', 'bar' );
 		} );
 	} );
 
 	describe( '#log()', () => {
 		it( 'calls console.log', () => {
-			spy = sinon.spy( console, 'log' );
+			const stub = sinon.stub( console, 'log' );
 
 			Logger.log( 'foo', 'bar' );
 
-			sinon.assert.calledWithExactly( spy.firstCall, 'foo', 'bar' );
+			sinon.assert.calledWithExactly( stub.firstCall, 'foo', 'bar' );
 		} );
 	} );
 
 	describe( '#warn()', () => {
 		it( 'calls console.warn', () => {
-			spy = sinon.spy( console, 'warn' );
+			const stub = sinon.stub( console, 'warn' );
 
 			Logger.warn( 'foo', 'bar' );
 
-			sinon.assert.calledWithExactly( spy.firstCall, 'foo', 'bar' );
+			sinon.assert.calledWithExactly( stub.firstCall, 'foo', 'bar' );
 		} );
 	} );
 } );
