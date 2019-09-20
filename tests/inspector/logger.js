@@ -8,9 +8,15 @@
 import Logger from '../../src/logger';
 
 describe( 'Logger', () => {
+	let spy;
+
+	afterEach( () => {
+		spy.restore();
+	} );
+
 	describe( '#group()', () => {
 		it( 'calls console.group', () => {
-			const spy = sinon.spy( console, 'group' );
+			spy = sinon.spy( console, 'group' );
 
 			Logger.group( 'foo', 'bar' );
 
@@ -20,7 +26,7 @@ describe( 'Logger', () => {
 
 	describe( '#groupEnd()', () => {
 		it( 'calls console.groupEnd', () => {
-			const spy = sinon.spy( console, 'groupEnd' );
+			spy = sinon.spy( console, 'groupEnd' );
 
 			Logger.groupEnd( 'foo', 'bar' );
 
@@ -30,7 +36,7 @@ describe( 'Logger', () => {
 
 	describe( '#log()', () => {
 		it( 'calls console.log', () => {
-			const spy = sinon.spy( console, 'log' );
+			spy = sinon.spy( console, 'log' );
 
 			Logger.log( 'foo', 'bar' );
 
@@ -40,7 +46,7 @@ describe( 'Logger', () => {
 
 	describe( '#warn()', () => {
 		it( 'calls console.warn', () => {
-			const spy = sinon.spy( console, 'warn' );
+			spy = sinon.spy( console, 'warn' );
 
 			Logger.warn( 'foo', 'bar' );
 
