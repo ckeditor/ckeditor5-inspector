@@ -18,7 +18,8 @@ export function normalizeArguments( args ) {
 		Logger.warn(
 			`[CKEditorInspector] The CKEditorInspector.attach( '${ args[ 0 ] }', editor ) syntax has been deprecated ` +
 			'and will be removed in the near future. To pass a name of an editor instance, use ' +
-			`CKEditorInspector.attach( { '${ args[ 0 ] }': editor } ) instead.`
+			`CKEditorInspector.attach( { '${ args[ 0 ] }': editor } ) instead. ` +
+			'Learn more in https://github.com/ckeditor/ckeditor5-inspector/blob/master/README.md.'
 		);
 
 		normalized.editors[ args[ 0 ] ] = args[ 1 ];

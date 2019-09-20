@@ -40,6 +40,14 @@ describe( 'CKEditorInspector', () => {
 		} );
 	} );
 
+	it( 'warns if called the constructor()', () => {
+		// eslint-disable-next-line no-unused-vars
+		const inspector = new CKEditorInspector();
+
+		sinon.assert.calledOnce( warnStub );
+		sinon.assert.calledWithMatch( warnStub, /^\[CKEditorInspector\]/ );
+	} );
+
 	describe( '#attach()', () => {
 		it( 'adds inspector to DOM', () => {
 			expect( document.querySelector( '.ck-inspector-wrapper' ) ).to.be.null;

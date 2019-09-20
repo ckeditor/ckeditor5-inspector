@@ -17,6 +17,14 @@ import './ckeditorinspector.css';
 window.CKEDITOR_INSPECTOR_VERSION = CKEDITOR_INSPECTOR_VERSION;
 
 export default class CKEditorInspector {
+	constructor() {
+		Logger.warn(
+			'[CKEditorInspector] Whoops! Looks like you tried to create an instance of the CKEditorInspector class. ' +
+			'To attach the inspector, use the static CKEditorInspector.attach( editor ) method instead. ' +
+			'For the latest API, please refer to https://github.com/ckeditor/ckeditor5-inspector/blob/master/README.md. '
+		);
+	}
+
 	/**
 	 * Attaches the inspector to an editor instance.
 	 *
