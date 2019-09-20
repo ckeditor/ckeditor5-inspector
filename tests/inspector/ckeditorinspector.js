@@ -60,13 +60,18 @@ describe( 'CKEditorInspector', () => {
 		} );
 
 		it( 'adds inspector to DOM only once when attaching to the first editor', () => {
-			return TestEditor.create( element )
+			const anotherEditorElement = document.createElement( 'div' );
+			document.body.appendChild( anotherEditorElement );
+
+			return TestEditor.create( anotherEditorElement )
 				.then( anotherEditor => {
 					CKEditorInspector.attach( { foo: editor } );
 					CKEditorInspector.attach( { bar: anotherEditor } );
 
 					expect( document.querySelectorAll( '.ck-inspector-wrapper' ) ).to.be.lengthOf( 1 );
 					expect( document.querySelectorAll( '.ck-inspector' ) ).to.be.lengthOf( 1 );
+
+					anotherEditorElement.remove();
 
 					return anotherEditor.destroy();
 				} )
