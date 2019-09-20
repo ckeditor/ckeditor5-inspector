@@ -126,6 +126,8 @@ describe( '<ViewNodeInspector />', () => {
 			expect( lists[ 0 ].name ).to.equal( 'Attributes' );
 			expect( lists[ 0 ].items ).to.deep.equal( [
 				[ 'aria-label', '"Rich Text Editor, main"' ],
+				[ 'lang', '"en"' ],
+				[ 'dir', '"ltr"' ],
 				[ 'role', '"textbox"' ],
 				[ 'contenteditable', '"true"' ],
 				[ 'class', '"ck-blurred ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline"' ],
