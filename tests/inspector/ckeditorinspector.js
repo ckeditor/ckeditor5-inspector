@@ -26,9 +26,7 @@ describe( 'CKEditorInspector', () => {
 	} );
 
 	afterEach( () => {
-		Logger.log.restore();
-		Logger.warn.restore();
-
+		sinon.restore();
 		element.remove();
 
 		CKEditorInspector.destroy();
@@ -74,9 +72,6 @@ describe( 'CKEditorInspector', () => {
 					anotherEditorElement.remove();
 
 					return anotherEditor.destroy();
-				} )
-				.catch( err => {
-					throw err;
 				} );
 		} );
 
@@ -94,9 +89,6 @@ describe( 'CKEditorInspector', () => {
 					expect( secondNames ).to.have.members( [ 'editor-2' ] );
 
 					return anotherEditor.destroy();
-				} )
-				.catch( err => {
-					throw err;
 				} );
 		} );
 
@@ -130,9 +122,6 @@ describe( 'CKEditorInspector', () => {
 					expect( names ).to.have.members( [ 'foo', 'bar' ] );
 
 					return anotherEditor.destroy();
-				} )
-				.catch( err => {
-					throw err;
 				} );
 		} );
 
@@ -162,10 +151,6 @@ describe( 'CKEditorInspector', () => {
 
 		describe( 'options', () => {
 			describe( '#isCollapsed', () => {
-				beforeEach( () => {
-					CKEditorInspector.destroy();
-				} );
-
 				it( 'does nothing if unspecified', () => {
 					CKEditorInspector.attach( editor );
 
@@ -210,9 +195,6 @@ describe( 'CKEditorInspector', () => {
 					expect( editorNames ).to.have.members( [ 'editor-5', 'editor-6' ] );
 
 					return anotherEditor.destroy();
-				} )
-				.catch( err => {
-					throw err;
 				} );
 		} );
 
@@ -237,9 +219,6 @@ describe( 'CKEditorInspector', () => {
 					expect( inspectorRef.state.editors.size ).to.equal( 2 );
 
 					return anotherEditor.destroy();
-				} )
-				.catch( err => {
-					throw err;
 				} );
 		} );
 
@@ -259,9 +238,6 @@ describe( 'CKEditorInspector', () => {
 					spy.restore();
 
 					return anotherEditor.destroy();
-				} )
-				.catch( err => {
-					throw err;
 				} );
 		} );
 	} );
