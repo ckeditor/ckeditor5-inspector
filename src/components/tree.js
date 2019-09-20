@@ -4,7 +4,10 @@
  */
 
 import React, { Component } from 'react';
+import { truncateString } from './utils';
 import './tree.css';
+
+const MAX_ATTRIBUTE_VALUE_LENGTH = 500;
 
 export default class Tree extends Component {
 	render() {
@@ -131,15 +134,16 @@ export class TreeTextNode extends TreeNode {
 export class TreeNodeAttribute extends Component {
 	render() {
 		let valueElement;
+		const value = truncateString( this.props.value, MAX_ATTRIBUTE_VALUE_LENGTH );
 
 		if ( !this.props.dontRenderValue ) {
 			valueElement = <span className="ck-inspector-tree-node__attribute__value">
-				{this.props.value}
+				{value}
 			</span>;
 		}
 
 		return <span className="ck-inspector-tree-node__attribute">
-			<span className="ck-inspector-tree-node__attribute__name" title={this.props.value}>
+			<span className="ck-inspector-tree-node__attribute__name" title={value}>
 				{this.props.name}
 			</span>
 			{valueElement}
@@ -161,6 +165,14 @@ export class TreePlainText extends Component {
 	}
 }
 
+export class TreeComment extends Component {
+	render() {
+		return <span
+			className="ck-inspector-tree-comment"
+			dangerouslySetInnerHTML={{ __html: this.props.item.text }}></span>;
+	}
+}
+
 function renderTreeItem( item, index, treeProps ) {
 	if ( typeof item === 'string' ) {
 		return <TreePlainText key={index} text={item} />;
@@ -168,6 +180,8 @@ function renderTreeItem( item, index, treeProps ) {
 		return <TreeElement key={index} item={item} {...treeProps} />;
 	} else if ( item.type === 'text' ) {
 		return <TreeTextNode key={index} item={item} {...treeProps} />;
+	} else if ( item.type === 'comment' ) {
+		return <TreeComment key={index} item={item} />;
 	} else {
 		return <TreeSelection key={index} isEnd={item.isEnd} />;
 	}

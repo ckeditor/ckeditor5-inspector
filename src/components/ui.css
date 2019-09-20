@@ -110,6 +110,7 @@
 
 .ck-inspector a:hover {
 	text-decoration: underline;
+	cursor: pointer;
 }
 
 .ck-inspector button {

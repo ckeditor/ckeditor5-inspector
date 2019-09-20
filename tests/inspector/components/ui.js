@@ -38,7 +38,7 @@ describe( '<InspectorUI />', () => {
 			TestEditor.create( editor2Element )
 		] ).then( ( [ editor1, editor2 ] ) => {
 			editors = new Map( [ [ 'first', editor1 ], [ 'second', editor2 ] ] );
-			wrapper = mount(
+			wrapper = shallow(
 				<InspectorUI editors={editors} />,
 				{ attachTo: container }
 			);
@@ -70,7 +70,7 @@ describe( '<InspectorUI />', () => {
 		it( 'restores state#height from the storage and sets it to body', () => {
 			window.localStorage.setItem( 'ck5-inspector-height', '123px' );
 
-			const wrapper = mount(
+			const wrapper = shallow(
 				<InspectorUI editors={editors} />,
 				{ attachTo: container }
 			);
@@ -84,7 +84,7 @@ describe( '<InspectorUI />', () => {
 		it( 'restores state#isCollapsed from the storage', () => {
 			window.localStorage.setItem( 'ck5-inspector-is-collapsed', 'true' );
 
-			const wrapper = mount(
+			const wrapper = shallow(
 				<InspectorUI editors={editors} />,
 				{ attachTo: container }
 			);
@@ -97,7 +97,7 @@ describe( '<InspectorUI />', () => {
 		it( 'restores state#activeTab from the storage', () => {
 			window.localStorage.setItem( 'ck5-inspector-active-tab-name', 'Commands' );
 
-			const wrapper = mount(
+			const wrapper = shallow(
 				<InspectorUI editors={editors} />,
 				{ attachTo: container }
 			);
@@ -148,10 +148,12 @@ describe( '<InspectorUI />', () => {
 			const instance = wrapper.instance();
 
 			expect( document.body.classList.contains( 'ck-inspector-body-expanded' ) ).to.be.true;
+			expect( document.body.classList.contains( 'ck-inspector-body-collapsed' ) ).to.be.false;
 
 			instance.setState( { isCollapsed: true } );
 
 			expect( document.body.classList.contains( 'ck-inspector-body-expanded' ) ).to.be.false;
+			expect( document.body.classList.contains( 'ck-inspector-body-collapsed' ) ).to.be.true;
 		} );
 
 		describe( 'resizable container', () => {
@@ -186,6 +188,12 @@ describe( '<InspectorUI />', () => {
 					const rnd = wrapper.find( Rnd ).first();
 
 					expect( rnd.props().minHeight ).to.equal( '100' );
+				} );
+
+				it( 'has #maxHeight', () => {
+					const rnd = wrapper.find( Rnd ).first();
+
+					expect( rnd.props().maxHeight ).to.equal( '100%' );
 				} );
 
 				it( 'has #style', () => {

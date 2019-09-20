@@ -218,7 +218,12 @@ describe( '<ViewTree />', () => {
 										name: 'ui:foo',
 										node: uiElement,
 										attributes: [],
-										children: [],
+										children: [
+											{
+												type: 'comment',
+												text: /The View UI element content has been skipped/
+											}
+										]
 									},
 									{
 										type: 'element',
@@ -239,6 +244,60 @@ describe( '<ViewTree />', () => {
 													'foo'
 												]
 											},
+										]
+									}
+								],
+							}
+						],
+					}
+				] );
+			} );
+
+			it( 'renders UI element content as a comment', () => {
+				editor.setData( '<p></p>' );
+
+				let uiElement;
+
+				editor.editing.view.change( writer => {
+					uiElement = writer.createUIElement( 'foo' );
+					writer.insert(
+						writer.createPositionAt( editor.editing.view.document.getRoot().getChild( 0 ), 0 ),
+						uiElement );
+				} );
+
+				const tree = wrapper.find( Tree );
+				const root = editor.editing.view.document.getRoot();
+
+				assertTreeItems( tree.props().items, [
+					{
+						type: 'element',
+						name: 'div',
+						node: root,
+						attributes: ROOT_ATTRIBUTES,
+						children: [
+							{
+								type: 'element',
+								name: 'p',
+								node: root.getChild( 0 ),
+								attributes: [],
+								children: [
+									{
+										type: 'selection'
+									},
+									{
+										type: 'selection',
+										isEnd: true
+									},
+									{
+										type: 'element',
+										name: 'foo',
+										node: uiElement,
+										attributes: [],
+										children: [
+											{
+												type: 'comment',
+												text: /The View UI element content has been skipped/
+											}
 										]
 									}
 								],

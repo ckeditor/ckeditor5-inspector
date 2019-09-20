@@ -8,7 +8,9 @@ import Tree, {
 	TreeTextNode,
 	TreePlainText,
 	TreeSelection,
-	TreeElement
+	TreeElement,
+	TreeComment,
+	TreeNodeAttribute
 } from '../../../src/components/tree';
 
 describe( '<Tree />', () => {
@@ -325,6 +327,86 @@ describe( '<Tree />', () => {
 			expect( selEnd.props().isEnd ).to.be.true;
 
 			expect( wrapper.children().childAt( 0 ).text() ).to.equal( '"some[text]"' );
+		} );
+	} );
+
+	describe( 'comment', () => {
+		let wrapper, itemA, itemAA, itemAB;
+
+		beforeEach( () => {
+			itemAA = {
+				type: 'comment',
+				text: 'foo'
+			};
+			itemAB = {
+				type: 'comment',
+				text: '<b>bar</b>'
+			};
+			itemA = {
+				type: 'element',
+				name: 'span',
+				node: 'a-node',
+				attributes: [],
+				children: [
+					itemAA,
+					itemAB
+				]
+			};
+
+			wrapper = mount( <Tree items={[ itemA ]} /> );
+		} );
+
+		afterEach( () => {
+			wrapper.unmount();
+		} );
+
+		it( 'is rendered', () => {
+			expect( wrapper.find( TreeComment ).length ).to.equal( 2 );
+
+			const childAA = wrapper.children().childAt( 0 ).children().find( TreeComment ).first();
+			const childAB = wrapper.children().childAt( 0 ).children().find( TreeComment ).last();
+
+			expect( childAA.type() ).to.equal( TreeComment );
+			expect( childAB.type() ).to.equal( TreeComment );
+
+			expect( childAA.props().item ).to.equal( itemAA );
+			expect( childAB.props().item ).to.equal( itemAB );
+		} );
+
+		it( 'is rendered with unsafe html', () => {
+			const childAB = wrapper.children().childAt( 0 ).children().find( TreeComment ).last();
+
+			expect( childAB.html() ).to.equal( '<span class="ck-inspector-tree-comment"><b>bar</b></span>' );
+		} );
+	} );
+
+	describe( 'attribute', () => {
+		it( 'truncates values above 500 characters', () => {
+			const wrapper = mount( <Tree
+				items={[
+					{
+						type: 'text',
+						node: 'node',
+						attributes: [
+							[ 'foo', new Array( 499 ).fill( 0 ).join( '' ) ],
+							[ 'bar', new Array( 500 ).fill( 0 ).join( '' ) ],
+							[ 'baz', new Array( 550 ).fill( 0 ).join( '' ) ]
+						],
+						children: []
+					}
+				]}
+			/> );
+
+			const firstAttribute = wrapper.children().find( TreeNodeAttribute ).first();
+			const secondAttribute = wrapper.children().find( TreeNodeAttribute ).at( 1 );
+			const thirdAttribute = wrapper.children().find( TreeNodeAttribute ).last();
+
+			expect( firstAttribute.childAt( 0 ).childAt( 1 ).text() ).to.have.length( 499 );
+			expect( secondAttribute.childAt( 0 ).childAt( 1 ).text() ).to.have.length( 500 );
+			expect( thirdAttribute.childAt( 0 ).childAt( 1 ).text() ).to.have.lengthOf.below( 550 );
+			expect( thirdAttribute.childAt( 0 ).childAt( 1 ).text() ).to.match( /characters left]$/ );
+
+			wrapper.unmount();
 		} );
 	} );
 } );

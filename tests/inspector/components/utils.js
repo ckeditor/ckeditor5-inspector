@@ -6,7 +6,8 @@
 import {
 	stringify,
 	uid,
-	stringifyPropertyList
+	stringifyPropertyList,
+	truncateString,
 } from '../../../src/components/utils';
 
 describe( 'Utils', () => {
@@ -47,6 +48,18 @@ describe( 'Utils', () => {
 				[ 'baz', '"qux"' ],
 				[ 'Symbol(42)', '"abc"' ]
 			] );
+		} );
+	} );
+
+	describe( 'truncateString()', () => {
+		it( 'truncates when too long', () => {
+			expect( truncateString( '1234', 3 ) ).to.equal( '123… [1 characters left]' );
+			expect( truncateString( '1234', 2 ) ).to.equal( '12… [2 characters left]' );
+		} );
+
+		it( 'does nothing when in limit', () => {
+			expect( truncateString( '1234', 4 ) ).to.equal( '1234' );
+			expect( truncateString( '1234', 5 ) ).to.equal( '1234' );
 		} );
 	} );
 } );

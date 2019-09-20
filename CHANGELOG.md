@@ -1,6 +1,19 @@
 Changelog
 =========
 
+## [1.3.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v1.2.0...v1.3.0) (2019-03-20)
+
+### Features
+
+* Added a comment to each UIElement in the view tree to make it more distinguishable. Closes [#13](https://github.com/ckeditor/ckeditor5-inspector/issues/13). ([aef8995](https://github.com/ckeditor/ckeditor5-inspector/commit/aef8995))
+* Added Custom Properties lists to the editor view node inspector. Closes [#16](https://github.com/ckeditor/ckeditor5-inspector/issues/16). ([b44708f](https://github.com/ckeditor/ckeditor5-inspector/commit/b44708f))
+
+### Bug fixes
+
+* Long values should be truncated in the `Tree` and `PropertyList` to avoid performance issues. Closes [#31](https://github.com/ckeditor/ckeditor5-inspector/issues/31). ([16fa0e4](https://github.com/ckeditor/ckeditor5-inspector/commit/16fa0e4))
+* The inspector should not scale beyond the height of the visible viewport. Closes [#34](https://github.com/ckeditor/ckeditor5-inspector/issues/34). ([86c287b](https://github.com/ckeditor/ckeditor5-inspector/commit/86c287b))
+
+
 ## [1.2.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v1.1.0...v1.2.0) (2019-03-11)
 
 ### Features

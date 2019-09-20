@@ -13,6 +13,7 @@ import {
 	isViewRoot,
 	isViewAttributeElement,
 	isViewUiElement,
+	isViewEditableElement,
 	isViewEmptyElement
 } from './utils';
 import { stringifyPropertyList } from '../utils';
@@ -112,6 +113,9 @@ class NodeInspector extends Component {
 				} else if ( isViewUiElement( node ) ) {
 					info.type = 'UIElement';
 					info.url = `${ DOCS_URL_PREFIX }_uielement-UIElement.html`;
+				} else if ( isViewEditableElement( node ) ) {
+					info.type = 'EditableElement';
+					info.url = `${ DOCS_URL_PREFIX }_editableelement-EditableElement.html`;
 				} else {
 					info.type = 'ContainerElement';
 					info.url = `${ DOCS_URL_PREFIX }_containerelement-ContainerElement.html`;
