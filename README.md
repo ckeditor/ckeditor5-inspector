@@ -1,7 +1,6 @@
 CKEditor 5 inspector
 =====================================
 
-[![Join the chat at https://gitter.im/ckeditor/ckeditor5](https://badges.gitter.im/ckeditor/ckeditor5.svg)](https://gitter.im/ckeditor/ckeditor5?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![npm version](https://badge.fury.io/js/%40ckeditor%2Fckeditor5-inspector.svg)](https://www.npmjs.com/package/@ckeditor/ckeditor5-inspector)
 [![Build Status](https://travis-ci.org/ckeditor/ckeditor5-inspector.svg?branch=master)](https://travis-ci.org/ckeditor/ckeditor5-inspector)
 [![Coverage Status](https://coveralls.io/repos/github/ckeditor/ckeditor5-inspector/badge.svg?branch=master)](https://coveralls.io/github/ckeditor/ckeditor5-inspector?branch=master)
@@ -13,7 +12,11 @@ The official [CKEditor 5](https://ckeditor.com/ckeditor-5) rich text editor inst
 
 ![The inspector panel attached to the editor instance.](/sample/screenshot.png)
 
-## Usage
+## Documentation 📖
+
+Learn how to use the inspector and see it live in the [Development tools](https://ckeditor.com/docs/ckeditor5/latest/framework/guides/development-tools.html) guide.
+
+## Quick start
 
 Include the script to load the inspector:
 
@@ -86,10 +89,6 @@ CKEditorInspector.attach( { 'editor-name': editor }, {
 	isCollapsed: true
 } );
 ```
-
-## Compatibility
-
-The inspector works with CKEditor 5 [v12.0.0](https://github.com/ckeditor/ckeditor5/releases/tag/v12.0.0)+.
 
 ## Development
 
