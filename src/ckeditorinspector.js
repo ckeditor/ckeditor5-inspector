@@ -171,7 +171,7 @@ export default class CKEditorInspector {
 	}
 
 	static _isAttachedTo( editor ) {
-		return [ ...CKEditorInspector._editors.values() ].indexOf( editor ) > -1;
+		return [ ...CKEditorInspector._editors.values() ].includes( editor );
 	}
 }
 
