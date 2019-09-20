@@ -243,8 +243,6 @@ describe( 'CKEditorInspector', () => {
 					sinon.assert.calledWithExactly( spy.firstCall, editor, options );
 					sinon.assert.calledWithExactly( spy.secondCall, anotherEditor, options );
 
-					spy.restore();
-
 					return anotherEditor.destroy();
 				} );
 		} );
