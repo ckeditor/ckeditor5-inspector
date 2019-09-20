@@ -146,7 +146,7 @@ export default class CKEditorInspector {
 	}
 
 	static _updateEditorsState() {
-		// Don't update state if the application was destroy()ed.
+		// Don't update state if the application was destroyed.
 		if ( !CKEditorInspector._isMounted ) {
 			return;
 		}
