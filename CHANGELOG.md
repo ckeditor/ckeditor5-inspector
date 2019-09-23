@@ -1,6 +1,27 @@
 Changelog
 =========
 
+## [1.4.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v1.3.0...v1.4.0) (2019-09-23)
+
+### Features
+
+* Allowed attaching the inspector collapsed using a configuration passed to `CKEditorInspector#attach()`. Implemented the `CKEditorInspector#destroy()` method. Unified `CKEditorInspector#attach()` arguments syntax and allowed attaching to multiple editor instances at a time. Closes [#44](https://github.com/ckeditor/ckeditor5-inspector/issues/44). Closes [#42](https://github.com/ckeditor/ckeditor5-inspector/issues/42). Closes [#48](https://github.com/ckeditor/ckeditor5-inspector/issues/48). ([69ad014](https://github.com/ckeditor/ckeditor5-inspector/commit/69ad014))
+* Implemented the `CKEditorInspector#attachToAll()` method. Closes [#56](https://github.com/ckeditor/ckeditor5-inspector/issues/56). ([8a3c7ea](https://github.com/ckeditor/ckeditor5-inspector/commit/8a3c7ea))
+* Introduced the `.ck-inspector-body-collapsed` class on `<body>` (next to `.ck-inspector-body-expanded`) to clearly distinguish expanded and collapsed inspector states. ([664b9cd](https://github.com/ckeditor/ckeditor5-inspector/commit/664b9cd))
+
+  Thanks to [@skurfuerst](https://github.com/skurfuerst)!
+
+### Bug fixes
+
+* `EditableElement` should be recognized in the View node inspector. Closes [#49](https://github.com/ckeditor/ckeditor5-inspector/issues/49). ([729a922](https://github.com/ckeditor/ckeditor5-inspector/commit/729a922))
+
+### BREAKING CHANGES
+
+* The `CKEditorInspector.attach( 'editor-name', editor );` syntax was deprecated and replaced by an object literal `CKEditorInspector.attach( { 'editor-name': editor, ... } );`.
+
+  **Note**: The old syntax works (backward compatibility) but it produces a warning in the console and will be removed in the future. We highly recommend using the new `attach()` method syntax ([learn more](https://github.com/ckeditor/ckeditor5-inspector/blob/master/README.md#quick-start)).
+
+
 ## [1.3.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v1.2.0...v1.3.0) (2019-03-20)
 
 ### Features
