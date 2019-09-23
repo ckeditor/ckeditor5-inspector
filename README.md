@@ -24,7 +24,7 @@ Include the script to load the inspector:
 <script src="path/to/inspector.js"></script>
 ```
 
-Call `CKEditorInspector.attach( editor )` when editor instance is ready:
+Call `CKEditorInspector.attach( editor )` when the editor instance is ready:
 
 ```js
 ClassicEditor
@@ -54,18 +54,31 @@ Call `CKEditorInspector.detach( name )` to detach the inspector from an editor i
 ```js
 // Attach the inspector to two editor instances:
 const generatedName = CKEditorInspector.attach( editor1 );
-CKEditorInspector.attach( { myEditor: editor2 } );
+CKEditorInspector.attach( { arbitraryName: editor2 } );
 
 // ...
 
 // Detach from the instances:
 CKEditorInspector.detach( generatedName );
-CKEditorInspector.detach( 'myEditor' );
+CKEditorInspector.detach( 'arbitraryName' );
 ```
+
+### Attaching to all editor instances
+
+When multiple CKEditor 5 instances are running in DOM, you can call `CKEditorInspector.attachToAll( [ options ] )` to attach the inspector to all of them at the same time. A shorthand for `CKEditorInspector.attach( editor, [ options ] )` called individually for each instance.
+
+```js
+// Discover all editor instances in DOM and inspect them all.
+CKEditorInspector.attachToAll();
+```
+
+You can also pass the optional [configuration object](#configuration) to this method.
+
+**Note**: This method works with CKEditor v12.3.0 or later. Earlier editor versions will not be discovered.
 
 ### Configuration
 
-You can pass configuration options to the `CKEditorInspector.attach()` method as the last argument:
+You can pass configuration options to `CKEditorInspector.attach()` and `CKEditorInspector.attachToAll()` methods as the last argument:
 
 ```js
 CKEditorInspector.attach( editor, {
@@ -73,6 +86,10 @@ CKEditorInspector.attach( editor, {
 } );
 
 CKEditorInspector.attach( { 'editor-name': editor }, {
+	// configuration options
+} );
+
+CKEditorInspector.attachToAll( {
 	// configuration options
 } );
 ```
