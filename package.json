@@ -15,7 +15,6 @@
   "scripts": {
     "build": "webpack --mode production",
     "dev": "webpack --mode development --watch",
-    "preversion": "npm run build",
     "changelog": "node ./scripts/changelog.js",
     "release:bump-version": "node ./scripts/bump-version.js",
     "release:publish": "node ./scripts/publish.js",
