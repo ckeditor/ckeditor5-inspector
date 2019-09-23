@@ -17,4 +17,8 @@ export default class Logger {
 	static log( ...args ) {
 		console.log( ...args );
 	}
+
+	static warn( ...args ) {
+		console.warn( ...args );
+	}
 }

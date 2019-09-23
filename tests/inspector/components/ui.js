@@ -81,17 +81,32 @@ describe( '<InspectorUI />', () => {
 			wrapper.unmount();
 		} );
 
-		it( 'restores state#isCollapsed from the storage', () => {
-			window.localStorage.setItem( 'ck5-inspector-is-collapsed', 'true' );
+		describe( 'state#isCollapsed', () => {
+			it( 'can be passed as a props and override the state saved in the storage', () => {
+				window.localStorage.setItem( 'ck5-inspector-is-collapsed', 'false' );
 
-			const wrapper = shallow(
-				<InspectorUI editors={editors} />,
-				{ attachTo: container }
-			);
+				const wrapper = mount(
+					<InspectorUI editors={editors} isCollapsed={true} />,
+					{ attachTo: container }
+				);
 
-			expect( wrapper.state().isCollapsed ).to.be.true;
+				expect( wrapper.state().isCollapsed ).to.be.true;
 
-			wrapper.unmount();
+				wrapper.unmount();
+			} );
+
+			it( 'is restored from the storage', () => {
+				window.localStorage.setItem( 'ck5-inspector-is-collapsed', 'true' );
+
+				const wrapper = mount(
+					<InspectorUI editors={editors} />,
+					{ attachTo: container }
+				);
+
+				expect( wrapper.state().isCollapsed ).to.be.true;
+
+				wrapper.unmount();
+			} );
 		} );
 
 		it( 'restores state#activeTab from the storage', () => {

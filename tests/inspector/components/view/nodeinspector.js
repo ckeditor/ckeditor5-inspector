@@ -40,6 +40,7 @@ describe( '<ViewNodeInspector />', () => {
 	afterEach( () => {
 		wrapper.unmount();
 		element.remove();
+		sinon.restore();
 
 		return editor.destroy();
 	} );
@@ -102,8 +103,6 @@ describe( '<ViewNodeInspector />', () => {
 
 			logNodeButton.simulate( 'click' );
 			sinon.assert.calledOnce( logSpy );
-
-			logSpy.restore();
 		} );
 
 		it( 'renders for a RootElement', () => {
@@ -124,12 +123,15 @@ describe( '<ViewNodeInspector />', () => {
 			const lists = inspector.props().lists;
 
 			expect( lists[ 0 ].name ).to.equal( 'Attributes' );
-			expect( lists[ 0 ].items ).to.deep.equal( [
-				[ 'aria-label', '"Rich Text Editor, main"' ],
-				[ 'role', '"textbox"' ],
-				[ 'contenteditable', '"true"' ],
-				[ 'class', '"ck-blurred ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline"' ],
-			] );
+			expect( lists[ 0 ].items.sort( ( itemA, itemB ) => itemA[ 0 ] > itemB[ 0 ] ? 1 : -1 ) )
+				.to.deep.equal( [
+					[ 'aria-label', '"Rich Text Editor, main"' ],
+					[ 'class', '"ck-blurred ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline"' ],
+					[ 'contenteditable', '"true"' ],
+					[ 'dir', '"ltr"' ],
+					[ 'lang', '"en"' ],
+					[ 'role', '"textbox"' ]
+				] );
 
 			expect( lists[ 1 ].name ).to.equal( 'Properties' );
 			expect( lists[ 1 ].items ).to.deep.equal( [

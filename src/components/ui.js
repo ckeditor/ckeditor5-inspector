@@ -36,8 +36,12 @@ export default class InspectorUI extends Component {
 
 		const height = StorageManager.get( LOCAL_STORAGE_INSPECTOR_HEIGHT ) || INSPECTOR_DEFAULT_HEIGHT;
 
+		// The collapsed state can be either configured by passing an option to `attach()`
+		// or retrieved from the last "session".
+		const isCollapsed = this.props.isCollapsed === true || StorageManager.get( LOCAL_STORAGE_IS_COLLAPSED ) === 'true';
+
 		this.state = {
-			isCollapsed: StorageManager.get( LOCAL_STORAGE_IS_COLLAPSED ) === 'true',
+			isCollapsed,
 			height,
 			editors: null,
 			currentEditorName: null,
@@ -133,10 +137,10 @@ export default class InspectorUI extends Component {
 			</Tabs>
 		</Rnd>;
 	}
-	
+
 	componentWillUnmount() {
-			document.body.classList.remove( 'ck-inspector-body-expanded' );
-			document.body.classList.remove( 'ck-inspector-body-collapsed' );
+		document.body.classList.remove( 'ck-inspector-body-expanded' );
+		document.body.classList.remove( 'ck-inspector-body-collapsed' );
 	}
 
 	static getDerivedStateFromProps( props, state ) {

@@ -33,6 +33,7 @@ describe( '<CommandInspector />', () => {
 	afterEach( () => {
 		wrapper.unmount();
 		element.remove();
+		sinon.restore();
 
 		return editor.destroy();
 	} );
@@ -63,8 +64,6 @@ describe( '<CommandInspector />', () => {
 
 			logButton.simulate( 'click' );
 			sinon.assert.calledOnce( logSpy );
-
-			logSpy.restore();
 
 			wrapper.unmount();
 		} );
