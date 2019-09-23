@@ -137,10 +137,10 @@ export default class InspectorUI extends Component {
 			</Tabs>
 		</Rnd>;
 	}
-	
+
 	componentWillUnmount() {
-			document.body.classList.remove( 'ck-inspector-body-expanded' );
-			document.body.classList.remove( 'ck-inspector-body-collapsed' );
+		document.body.classList.remove( 'ck-inspector-body-expanded' );
+		document.body.classList.remove( 'ck-inspector-body-collapsed' );
 	}
 
 	static getDerivedStateFromProps( props, state ) {

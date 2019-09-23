@@ -145,19 +145,33 @@ yarn test
 
 ## Releasing
 
-The release process is as follows (order matters):
+### Changelog
 
-**Note:** We recommend using `npm` for that.
+Before starting the release process, you need to generate the changelog and build the package:
 
 ```console
-npm run changelog
-npm run build
+yarn changelog
+yarn build
 ```
 
-Run the sample and make sure global `CKEDITOR_INSPECTOR_VERSION` is right. Then:
+### Publishing
+
+After generating the changelog, you can release the package.
+
+First, you should bump the version:
 
 ```console
-npm run release
+yarn release:bump-version
+```
+
+**Note**: You can use the `--dry-run` option to see what this task does.
+
+After bumping the version, run the sample and make sure global `CKEDITOR_INSPECTOR_VERSION` is right.
+
+Finally, make the changes public:
+
+```console
+yarn release:publish
 ```
 
 ## License
