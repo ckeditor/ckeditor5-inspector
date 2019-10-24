@@ -25,6 +25,7 @@ export default class Tree extends Component {
 
 		return <div className={[
 			'ck-inspector-tree',
+			this.props.textDirection ? 'ck-inspector-tree_text-direction_' + this.props.textDirection : '',
 			this.props.showCompactText ? 'ck-inspector-tree_compact-text' : ''
 		].join( ' ' )}>
 			{treeContent}

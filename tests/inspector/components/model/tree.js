@@ -116,6 +116,7 @@ describe( '<ModelTree />', () => {
 				expect( tree.props().onClick ).to.equal( clickSpy );
 				expect( tree.props().showCompactText ).to.be.false;
 				expect( tree.props().activeNode ).to.be.undefined;
+				expect( tree.props().textDirection ).to.equal( 'ltr' );
 			} );
 
 			it( 'renders a tree #1', () => {

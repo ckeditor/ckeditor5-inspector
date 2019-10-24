@@ -69,6 +69,7 @@ class ViewTree extends Component {
 			]}
 			<Tree
 				items={tree}
+				textDirection={this.props.editor.locale.contentLanguageDirection}
 				onClick={this.props.onClick}
 				showCompactText="true"
 				activeNode={this.props.currentEditorNode}
