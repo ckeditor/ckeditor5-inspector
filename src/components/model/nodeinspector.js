@@ -122,6 +122,13 @@ class ModelNodeInspector extends Component {
 		info.properties = stringifyPropertyList( info.properties );
 		info.attributes = stringifyPropertyList( info.attributes );
 
+		for ( const attribute of info.attributes ) {
+			const attributeName = attribute[ 0 ];
+			const attirbuteProperties = Object.entries( this.props.editor.model.schema.getAttributeProperties( attributeName ) );
+
+			attribute.push( stringifyPropertyList( attirbuteProperties ) );
+		}
+
 		return info;
 	}
 }

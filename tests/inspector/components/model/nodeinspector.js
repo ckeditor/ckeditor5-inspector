@@ -172,7 +172,7 @@ describe( '<ModelNodeInspector />', () => {
 
 			expect( lists[ 0 ].name ).to.equal( 'Attributes' );
 			expect( lists[ 0 ].items ).to.deep.equal( [
-				[ 'bold', 'true' ]
+				[ 'bold', 'true', [ [ 'isFormatting', 'true' ], [ 'copyOnEnter', 'true' ] ] ]
 			] );
 
 			expect( lists[ 1 ].name ).to.equal( 'Properties' );
