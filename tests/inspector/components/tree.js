@@ -29,6 +29,14 @@ describe( '<Tree />', () => {
 		wrapper.unmount();
 	} );
 
+	it( 'supports text direction', () => {
+		wrapper = mount( <Tree textDirection="rtl" /> );
+
+		expect( wrapper ).to.have.className( 'ck-inspector-tree_text-direction_rtl' );
+
+		wrapper.unmount();
+	} );
+
 	describe( 'elements', () => {
 		let wrapper, itemA, itemAA, itemB, activeNode;
 

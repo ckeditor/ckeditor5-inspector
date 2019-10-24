@@ -205,6 +205,16 @@
 	}
 }
 
+/*-- LTR vs. RTL text ------------------------------------------------------------------------*/
+
+.ck-inspector-tree.ck-inspector-tree_text-direction_ltr .ck-inspector-tree-node__content {
+	direction: ltr;
+}
+
+.ck-inspector-tree.ck-inspector-tree_text-direction_rtl .ck-inspector-tree-node__content {
+	direction: rtl;
+}
+
 /*-- Comment -----------------------------------------------------------------------------*/
 
 .ck-inspector-tree .ck-inspector-tree-comment {

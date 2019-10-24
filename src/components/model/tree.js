@@ -63,6 +63,7 @@ class ModelTree extends Component {
 			]}
 			<Tree
 				items={tree}
+				textDirection={this.props.editor.locale.contentLanguageDirection}
 				onClick={this.props.onClick}
 				showCompactText={this.state.showCompactText}
 				activeNode={this.props.currentEditorNode}

@@ -125,6 +125,7 @@ describe( '<ViewTree />', () => {
 				expect( tree.props().onClick ).to.equal( clickSpy );
 				expect( tree.props().showCompactText ).to.equal( 'true' );
 				expect( tree.props().activeNode ).to.be.undefined;
+				expect( tree.props().textDirection ).to.equal( 'ltr' );
 			} );
 
 			it( 'renders empty elements', () => {
