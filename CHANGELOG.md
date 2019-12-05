@@ -1,6 +1,17 @@
 Changelog
 =========
 
+## [1.5.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v1.4.0...v1.5.0) (2019-12-05)
+
+### Features
+
+* Allowed inspecting model attribute properties. Closes [#40](https://github.com/ckeditor/ckeditor5-inspector/issues/40). ([448ae71](https://github.com/ckeditor/ckeditor5-inspector/commit/448ae71))
+
+### Bug fixes
+
+* The inspector should render the RTL content in the trees properly. Closes [#64](https://github.com/ckeditor/ckeditor5-inspector/issues/64). ([40c3102](https://github.com/ckeditor/ckeditor5-inspector/commit/40c3102))
+
+
 ## [1.4.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v1.3.0...v1.4.0) (2019-09-23)
 
 ### Features
