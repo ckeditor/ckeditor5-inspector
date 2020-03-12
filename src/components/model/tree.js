@@ -160,16 +160,17 @@ function fillElementTree( elementTree, element, ranges ) {
 					elementTree.positionInside = position;
 				}
 			} else {
-				for ( let i = elementTree.children.length - 1; i >= 0; i-- ) {
-					const child = elementTree.children[ i ];
+				let childIndex = position.isEnd ? 0 : elementTree.children.length - 1;
+				let child = elementTree.children[ childIndex ];
 
-					if ( child.endOffset === offset ) {
-						child.positionAfter = position;
+				while ( child ) {
+					if ( child.startOffset === offset ) {
+						child.positionBefore = position;
 						break;
 					}
 
-					if ( child.startOffset === offset ) {
-						child.positionBefore = position;
+					if ( child.endOffset === offset ) {
+						child.positionAfter = position;
 						break;
 					}
 
@@ -177,6 +178,9 @@ function fillElementTree( elementTree, element, ranges ) {
 						child.positions.push( position );
 						break;
 					}
+
+					childIndex += position.isEnd ? 1 : -1;
+					child = elementTree.children[ childIndex ];
 				}
 			}
 		}
