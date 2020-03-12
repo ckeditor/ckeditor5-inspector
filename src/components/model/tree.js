@@ -112,7 +112,9 @@ function getNodeTree( node, ranges ) {
 
 	Object.assign( nodeTree, {
 		startOffset, endOffset,
-		path: node.getPath()
+		path: node.getPath(),
+		positionsBefore: [],
+		positionsAfter: []
 	} );
 
 	if ( isModelElement( node ) ) {
@@ -130,7 +132,8 @@ function fillElementTree( elementTree, element, ranges ) {
 		name: element.name,
 		children: [],
 		node: element,
-		maxOffset: element.maxOffset
+		maxOffset: element.maxOffset,
+		positionsInside: []
 	} );
 
 	for ( const child of element.getChildren() ) {
@@ -147,17 +150,17 @@ function fillElementTree( elementTree, element, ranges ) {
 				const firstChild = elementTree.children[ 0 ];
 
 				if ( firstChild ) {
-					firstChild.positionBefore = position;
+					firstChild.positionsBefore.push( position );
 				} else {
-					elementTree.positionInside = position;
+					elementTree.positionsInside.push( position );
 				}
 			} else if ( offset === elementTree.maxOffset ) {
 				const lastChild = elementTree.children[ elementTree.children.length - 1 ];
 
 				if ( lastChild ) {
-					lastChild.positionAfter = position;
+					lastChild.positionsAfter.push( position );
 				} else {
-					elementTree.positionInside = position;
+					elementTree.positionsInside.push( position );
 				}
 			} else {
 				let childIndex = position.isEnd ? 0 : elementTree.children.length - 1;
@@ -165,12 +168,12 @@ function fillElementTree( elementTree, element, ranges ) {
 
 				while ( child ) {
 					if ( child.startOffset === offset ) {
-						child.positionBefore = position;
+						child.positionsBefore.push( position );
 						break;
 					}
 
 					if ( child.endOffset === offset ) {
-						child.positionAfter = position;
+						child.positionsAfter.push( position );
 						break;
 					}
 

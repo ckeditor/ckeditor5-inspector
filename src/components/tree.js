@@ -80,32 +80,34 @@ export class TreeElement extends TreeNode {
 			cssClass
 		];
 
-		let rangePositionBefore, rangePositionInside, rangePositionAfter;
+		const childrenBefore = [];
+		const childrenInside = [];
+		const childrenAfter = [];
 
-		if ( item.positionBefore ) {
-			rangePositionBefore = <TreeSelection />;
-		}
+		item.positionsBefore.forEach( ( position, index ) => {
+			childrenBefore.push( <TreeSelection key={'position' + index} isEnd={position.isEnd} /> );
+		} );
 
-		if ( item.positionAfter ) {
-			rangePositionAfter = <TreeSelection />;
-		}
+		item.positionsAfter.forEach( ( position, index ) => {
+			childrenAfter.push( <TreeSelection key={'position' + index} isEnd={position.isEnd} /> );
+		} );
 
-		if ( item.positionInside ) {
-			rangePositionInside = <TreeSelection />;
-		}
+		item.positionsInside.forEach( ( position, index ) => {
+			childrenInside.push( <TreeSelection key={'position' + index} isEnd={position.isEnd} /> );
+		} );
 
 		return <div className={nodeClasses.join( ' ' )} onClick={this.handleClick}>
-			{rangePositionBefore}
+			{childrenBefore}
 			<span className="ck-inspector-tree-node__name">
 				{item.name}
 				{this.getAttributes()}
 			</span>
 			<div className="ck-inspector-tree-node__content">
-				{rangePositionInside}
+				{childrenInside}
 				{children}
 			</div>
 			{isEmpty ? '' : <span className="ck-inspector-tree-node__name">/{item.name}</span>}
-			{rangePositionAfter}
+			{childrenAfter}
 		</div>;
 	}
 
@@ -129,15 +131,16 @@ export class TreeTextNode extends TreeNode {
 			this.isActive ? 'ck-inspector-tree-node_active' : ''
 		].join( ' ' );
 
-		let rangePositionBefore, rangePositionAfter;
+		const childrenBefore = [];
+		const childrenAfter = [];
 
-		if ( item.positionBefore ) {
-			rangePositionBefore = <TreeSelection />;
-		}
+		item.positionsBefore.forEach( ( position, index ) => {
+			childrenBefore.push( <TreeSelection key={'position' + index} isEnd={position.isEnd} /> );
+		} );
 
-		if ( item.positionAfter ) {
-			rangePositionAfter = <TreeSelection />;
-		}
+		item.positionsAfter.forEach( ( position, index ) => {
+			childrenAfter.push( <TreeSelection key={'position' + index} isEnd={position.isEnd} /> );
+		} );
 
 		let children = this.props.item.text;
 
@@ -156,7 +159,11 @@ export class TreeTextNode extends TreeNode {
 				} )
 				.reverse()
 				.forEach( ( position, index ) => {
-					children.splice( position.offset - item.startOffset, 0, <TreeSelection key={'position' + index} /> );
+					children.splice(
+						position.offset - item.startOffset,
+						0,
+						<TreeSelection key={'position' + index} isEnd={position.isEnd} />
+					);
 				} );
 		}
 
@@ -164,9 +171,9 @@ export class TreeTextNode extends TreeNode {
 			<span className="ck-inspector-tree-node__content">
 				{this.props.showCompactText ? '' : this.getAttributes()}
 				{this.props.showCompactText ? '' : '"' }
-				{rangePositionBefore}
+				{childrenBefore}
 				{children}
-				{rangePositionAfter}
+				{childrenAfter}
 				{this.props.showCompactText ? '' : '"' }
 			</span>
 		</span>;
@@ -210,7 +217,12 @@ export class TreeNodeAttribute extends Component {
 
 export class TreeSelection extends Component {
 	render() {
-		return <span className="ck-inspector-tree__selection">&#8203;</span>;
+		const classes = [
+			'ck-inspector-tree__selection',
+			this.props.isEnd ? 'ck-inspector-tree__selection_end' : ''
+		].join( ' ' );
+
+		return <span className={classes}>&#8203;</span>;
 	}
 }
 
