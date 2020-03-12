@@ -99,15 +99,23 @@ export class TreeElement extends TreeNode {
 		return <div className={nodeClasses.join( ' ' )} onClick={this.handleClick}>
 			{childrenBefore}
 			<span className="ck-inspector-tree-node__name">
+				<span className="ck-inspector-tree-node__name__bracket ck-inspector-tree-node__name__bracket_open" />
 				{item.name}
 				{this.getAttributes()}
+				<span className="ck-inspector-tree-node__name__bracket ck-inspector-tree-node__name__bracket_close" />
 			</span>
 			<div className="ck-inspector-tree-node__content">
 				{childrenInside}
 				{children}
 			</div>
-			{isEmpty ? '' : <span className="ck-inspector-tree-node__name">/{item.name}</span>}
-			{childrenAfter}
+			{isEmpty ? '' :
+				<span className="ck-inspector-tree-node__name ck-inspector-tree-node__name_close">
+					<span className="ck-inspector-tree-node__name__bracket ck-inspector-tree-node__name__bracket_open" />
+					/{item.name}
+					<span className="ck-inspector-tree-node__name__bracket ck-inspector-tree-node__name__bracket_close" />
+					{childrenAfter}
+				</span>
+			}
 		</div>;
 	}
 

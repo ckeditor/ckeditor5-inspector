@@ -59,6 +59,7 @@
 	& .ck-inspector-tree-node__name {
 		color: var(--ck-inspector-color-tree-node-name);
 		display: inline-block;
+		width: 100%;
 		padding: 0 .1em;
 		border-left: 1px solid transparent;
 	}
@@ -80,12 +81,12 @@
 	/*-- Tagged vs. tagless ------------------------------------------------------------------------*/
 
 	&:not(.ck-inspector-tree-node_tagless) {
-		& .ck-inspector-tree-node__name::before {
+		& .ck-inspector-tree-node__name > .ck-inspector-tree-node__name__bracket_open::after {
 			content: "<";
 			color: var(--ck-inspector-color-tree-node-tag);
 		}
 
-		& .ck-inspector-tree-node__name::after {
+		& .ck-inspector-tree-node__name .ck-inspector-tree-node__name__bracket_close::after {
 			content: ">";
 			color: var(--ck-inspector-color-tree-node-tag);
 		}
@@ -101,18 +102,17 @@
 
 	/*-- Active ------------------------------------------------------------------------*/
 
-	&.ck-inspector-tree-node_active > .ck-inspector-tree-node__name:first-child {
+	&.ck-inspector-tree-node_active > .ck-inspector-tree-node__name:not(.ck-inspector-tree-node__name_close) {
 		&,
 		& *:not(.ck-inspector-tree__selection),
-		&::before,
-		&::after {
+		& > .ck-inspector-tree-node__name__bracket::after {
 			background: var(--ck-inspector-color-tree-node-name-active-bg);
 			color: var(--ck-inspector-color-white);
 		}
 	}
 
-	&.ck-inspector-tree-node_active .ck-inspector-tree-node__content,
-	&.ck-inspector-tree-node_active > .ck-inspector-tree-node__name:last-child {
+	&.ck-inspector-tree-node_active > .ck-inspector-tree-node__content,
+	&.ck-inspector-tree-node_active > .ck-inspector-tree-node__name_close {
 		background: var(--ck-inspector-color-tree-node-active-bg);
 	}
 
@@ -120,7 +120,7 @@
 		border-left-color: var(--ck-inspector-color-tree-node-name-active-bg);
 	}
 
-	&.ck-inspector-tree-node_active > .ck-inspector-tree-node__name:last-child {
+	&.ck-inspector-tree-node_active > .ck-inspector-tree-node__name {
 		border-left: 1px solid var(--ck-inspector-color-tree-node-name-active-bg);
 	}
 
