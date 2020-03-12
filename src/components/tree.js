@@ -14,11 +14,13 @@ export default class Tree extends Component {
 		let treeContent;
 
 		if ( this.props.items ) {
-			treeContent = this.props.items.map( ( item, index ) => renderTreeItem( item, index, {
-				onClick: this.props.onClick,
-				showCompactText: this.props.showCompactText,
-				activeNode: this.props.activeNode
-			} ) );
+			treeContent = this.props.items.map( ( item, index ) => {
+				return renderTreeItem( item, index, {
+					onClick: this.props.onClick,
+					showCompactText: this.props.showCompactText,
+					activeNode: this.props.activeNode
+				} );
+			} );
 		} else {
 			treeContent = 'Nothing to show.';
 		}
@@ -45,7 +47,9 @@ export class TreeNode extends Component {
 	}
 
 	getChildren() {
-		return this.props.item.children.map( ( child, index ) => renderTreeItem( child, index, this.treeProps ) );
+		return this.props.item.children.map( ( child, index ) => {
+			return renderTreeItem( child, index, this.treeProps );
+		} );
 	}
 
 	get isActive() {
@@ -53,10 +57,10 @@ export class TreeNode extends Component {
 	}
 
 	get treeProps() {
+		const { onClick, showCompactText, activeNode } = this.props;
+
 		return {
-			onClick: this.props.onClick,
-			showCompactText: this.props.showCompactText,
-			activeNode: this.props.activeNode
+			onClick, showCompactText, activeNode
 		};
 	}
 }
@@ -67,6 +71,7 @@ export class TreeElement extends TreeNode {
 		const presentation = item.presentation;
 		const isEmpty = presentation && presentation.isEmpty;
 		const cssClass = presentation && presentation.cssClass;
+		const children = this.getChildren();
 		const nodeClasses = [
 			'ck-inspector-code',
 			'ck-inspector-tree-node',
@@ -75,15 +80,32 @@ export class TreeElement extends TreeNode {
 			cssClass
 		];
 
+		let rangePositionBefore, rangePositionInside, rangePositionAfter;
+
+		if ( item.positionBefore ) {
+			rangePositionBefore = <TreeSelection />;
+		}
+
+		if ( item.positionAfter ) {
+			rangePositionAfter = <TreeSelection />;
+		}
+
+		if ( item.positionInside ) {
+			rangePositionInside = <TreeSelection />;
+		}
+
 		return <div className={nodeClasses.join( ' ' )} onClick={this.handleClick}>
+			{rangePositionBefore}
 			<span className="ck-inspector-tree-node__name">
 				{item.name}
 				{this.getAttributes()}
 			</span>
 			<div className="ck-inspector-tree-node__content">
-				{this.getChildren()}
+				{rangePositionInside}
+				{children}
 			</div>
 			{isEmpty ? '' : <span className="ck-inspector-tree-node__name">/{item.name}</span>}
+			{rangePositionAfter}
 		</div>;
 	}
 
@@ -101,16 +123,50 @@ export class TreeElement extends TreeNode {
 
 export class TreeTextNode extends TreeNode {
 	render() {
+		const item = this.props.item;
 		const classes = [
 			'ck-inspector-tree-text',
 			this.isActive ? 'ck-inspector-tree-node_active' : ''
 		].join( ' ' );
 
+		let rangePositionBefore, rangePositionAfter;
+
+		if ( item.positionBefore ) {
+			rangePositionBefore = <TreeSelection />;
+		}
+
+		if ( item.positionAfter ) {
+			rangePositionAfter = <TreeSelection />;
+		}
+
+		let children = this.props.item.text;
+
+		if ( item.positions.length ) {
+			children = children.split( '' );
+
+			item.positions
+				.sort( ( posA, posB ) => {
+					if ( posA.offset < posB.offset ) {
+						return -1;
+					} else if ( posA.offset === posB.offset ) {
+						return 0;
+					} else {
+						return 1;
+					}
+				} )
+				.reverse()
+				.forEach( ( position, index ) => {
+					children.splice( position.offset - item.startOffset, 0, <TreeSelection key={'position' + index} /> );
+				} );
+		}
+
 		return <span className={classes} onClick={this.handleClick}>
 			<span className="ck-inspector-tree-node__content">
 				{this.props.showCompactText ? '' : this.getAttributes()}
 				{this.props.showCompactText ? '' : '"' }
-				{this.getChildren()}
+				{rangePositionBefore}
+				{children}
+				{rangePositionAfter}
 				{this.props.showCompactText ? '' : '"' }
 			</span>
 		</span>;
@@ -154,15 +210,7 @@ export class TreeNodeAttribute extends Component {
 
 export class TreeSelection extends Component {
 	render() {
-		return <span className="ck-inspector-tree__selection">
-			{this.props.isEnd ? ']' : '['}
-		</span>;
-	}
-}
-
-export class TreePlainText extends Component {
-	render() {
-		return <span>{this.props.text}</span>;
+		return <span className="ck-inspector-tree__selection">&#8203;</span>;
 	}
 }
 
@@ -175,15 +223,11 @@ export class TreeComment extends Component {
 }
 
 function renderTreeItem( item, index, treeProps ) {
-	if ( typeof item === 'string' ) {
-		return <TreePlainText key={index} text={item} />;
-	} else if ( item.type === 'element' ) {
+	if ( item.type === 'element' ) {
 		return <TreeElement key={index} item={item} {...treeProps} />;
 	} else if ( item.type === 'text' ) {
 		return <TreeTextNode key={index} item={item} {...treeProps} />;
 	} else if ( item.type === 'comment' ) {
 		return <TreeComment key={index} item={item} />;
-	} else {
-		return <TreeSelection key={index} isEnd={item.isEnd} />;
 	}
 }

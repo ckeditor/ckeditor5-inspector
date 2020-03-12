@@ -58,7 +58,7 @@
 .ck-inspector-tree .ck-inspector-tree-node {
 	& .ck-inspector-tree-node__name {
 		color: var(--ck-inspector-color-tree-node-name);
-		display: block;
+		display: inline-block;
 		padding: 0 .1em;
 		border-left: 1px solid transparent;
 	}
@@ -252,8 +252,30 @@
 /*-- Selection ---------------------------------------------------------------------------------------- */
 
 .ck-inspector-tree .ck-inspector-tree__selection {
-	font-weight: bold;
-	color: var(--ck-inspector-color-white);
-	background: var(--ck-inspector-color-tree-selection);
-	padding: 0 .2em;
+	display: inline;
+	position: relative;
+	cursor: default;
+	line-height: 100%;
+
+	&::after {
+		content: "";
+		position: absolute;
+		border: 1px solid red;
+		height: 100%;
+		line-height: 100%;
+		width: 0;
+	}
+
+	&::before {
+		content: "";
+		display: block;
+		position: absolute;
+		left: -2px;
+		top: -6px;
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		cursor: default;
+		background: red;
+	}
 }

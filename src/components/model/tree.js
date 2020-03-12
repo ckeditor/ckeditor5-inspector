@@ -79,132 +79,124 @@ class ModelTree extends Component {
 		const editor = this.props.editor;
 		const model = editor.model;
 		const root = model.document.getRoot( this.props.currentRootName );
-		const selectionRange = editor.model.document.selection.getFirstRange();
+		const ranges = this.getEditorModelRanges();
 
 		return [
-			getNodeTree( root, selectionRange.start, selectionRange.end )
+			getNodeTree( root, ranges )
 		];
 	}
-}
 
-function getNodeTree( node, rangeStart, rangeEnd ) {
-	if ( isModelElement( node ) ) {
-		return getElementTree( node, rangeStart, rangeEnd );
-	} else {
-		return getTextTree( node, rangeStart, rangeEnd );
+	getEditorModelRanges() {
+		if ( !this.props.currentRootName ) {
+			return null;
+		}
+
+		const ranges = [];
+		const editor = this.props.editor;
+		const model = editor.model;
+
+		for ( const range of model.document.selection.getRanges() ) {
+			ranges.push( {
+				startPath: range.start.path,
+				endPath: range.end.path
+			} );
+		}
+
+		return ranges;
 	}
 }
 
-function getElementTree( element, rangeStart, rangeEnd ) {
-	const elementTree = {};
+function getNodeTree( node, ranges ) {
+	const nodeTree = {};
+	const { startOffset, endOffset } = node;
 
+	Object.assign( nodeTree, {
+		startOffset, endOffset,
+		path: node.getPath()
+	} );
+
+	if ( isModelElement( node ) ) {
+		fillElementTree( nodeTree, node, ranges );
+	} else {
+		fillTextTree( nodeTree, node );
+	}
+
+	return nodeTree;
+}
+
+function fillElementTree( elementTree, element, ranges ) {
 	Object.assign( elementTree, {
 		type: 'element',
 		name: element.name,
 		children: [],
-		node: element
+		node: element,
+		maxOffset: element.maxOffset
 	} );
 
-	if ( element.childCount ) {
-		let isSelectionStartAdded = false;
-		let isSelectionEndAdded = false;
+	for ( const child of element.getChildren() ) {
+		elementTree.children.push( getNodeTree( child, ranges ) );
+	}
 
-		for ( const child of element.getChildren() ) {
-			const childTree = getNodeTree( child, rangeStart, rangeEnd );
+	for ( const range of ranges ) {
+		const rangePositions = getRangePositionsInsideNode( elementTree, range );
 
-			// Non–empty element case - start: <paragraph>...[<someNode />...</paragraph>
-			if ( !isSelectionStartAdded && !rangeStart.textNode && rangeStart.nodeAfter === child ) {
-				elementTree.children.push( { type: 'selection', isEnd: false } );
+		for ( const position of rangePositions ) {
+			const offset = position.offset;
 
-				isSelectionStartAdded = true;
+			if ( offset === 0 ) {
+				const firstChild = elementTree.children[ 0 ];
+
+				if ( firstChild ) {
+					firstChild.positionBefore = position;
+				} else {
+					elementTree.positionInside = position;
+				}
+			} else if ( offset === elementTree.maxOffset ) {
+				const lastChild = elementTree.children[ elementTree.children.length - 1 ];
+
+				if ( lastChild ) {
+					lastChild.positionAfter = position;
+				} else {
+					elementTree.positionInside = position;
+				}
+			} else {
+				for ( let i = elementTree.children.length - 1; i >= 0; i-- ) {
+					const child = elementTree.children[ i ];
+
+					if ( child.endOffset === offset ) {
+						child.positionAfter = position;
+						break;
+					}
+
+					if ( child.startOffset === offset ) {
+						child.positionBefore = position;
+						break;
+					}
+
+					if ( child.startOffset < offset && child.endOffset > offset ) {
+						child.positions.push( position );
+						break;
+					}
+				}
 			}
-
-			// Non–empty element case - end: <paragraph>...]<someNode />...</paragraph>
-			if ( !isSelectionEndAdded && !rangeEnd.textNode && rangeEnd.nodeAfter === child ) {
-				elementTree.children.push( { type: 'selection', isEnd: true } );
-
-				isSelectionEndAdded = true;
-			}
-
-			elementTree.children.push( childTree );
-
-			// Non–empty element case - start: <paragraph>...<someNode />[...</paragraph>
-			if ( !isSelectionStartAdded && !rangeStart.textNode && rangeStart.nodeBefore === child ) {
-				elementTree.children.push( { type: 'selection', isEnd: false } );
-
-				isSelectionStartAdded = true;
-			}
-
-			// Non–empty element case - end: <paragraph>...<someNode />]...</paragraph>
-			if ( !isSelectionEndAdded && !rangeEnd.textNode && rangeEnd.nodeBefore === child ) {
-				elementTree.children.push( { type: 'selection', isEnd: true } );
-
-				isSelectionEndAdded = true;
-			}
-		}
-	} else {
-		// Empty element case - start: <paragraph>[</paragraph>
-		if ( !rangeStart.textNode && rangeStart.parent === element && !rangeStart.nodeBefore && !rangeStart.nodeAfter ) {
-			elementTree.children.push( { type: 'selection', isEnd: false } );
-		}
-
-		// Empty element case - end: <paragraph>]</paragraph>
-		if ( !rangeEnd.textNode && rangeEnd.parent === element && !rangeEnd.nodeBefore && !rangeEnd.nodeAfter ) {
-			elementTree.children.push( { type: 'selection', isEnd: true } );
 		}
 	}
 
 	elementTree.attributes = getNodeAttrs( element );
-
-	return elementTree;
 }
 
-function getTextTree( textNode, rangeStart, rangeEnd ) {
-	const textNodeTree = {};
-	let startSliceIndex;
-
-	Object.assign( textNodeTree, {
+function fillTextTree( textTree, textNode ) {
+	Object.assign( textTree, {
 		type: 'text',
-		children: [ textNode.data ],
+		text: textNode.data,
 		node: textNode,
+		positions: [],
 		presentation: {
 			dontRenderAttributeValue: true
 		}
 	} );
 
-	// <$text>f[oobar</$text>
-	if ( rangeStart.textNode === textNode ) {
-		startSliceIndex = rangeStart.offset - textNode.startOffset;
-
-		textNodeTree.children = [
-			textNode.data.slice( 0, startSliceIndex ),
-			{ type: 'selection' },
-			textNode.data.slice( startSliceIndex, textNode.data.length )
-		];
-	}
-
-	// <$text>fooba]r</$text>
-	if ( rangeEnd.textNode === textNode ) {
-		let endSliceIndex = rangeEnd.offset - textNode.startOffset;
-
-		// <$text>fooba[]r</$text>
-		if ( rangeStart.textNode === rangeEnd.textNode ) {
-			endSliceIndex -= startSliceIndex;
-		}
-
-		const lastChild = textNodeTree.children.pop();
-
-		textNodeTree.children.push(
-			lastChild.slice( 0, endSliceIndex ),
-			{ type: 'selection', isEnd: true },
-			lastChild.slice( endSliceIndex, lastChild.length ) );
-	}
-
-	// Filter out empty strings, a leftover after slice().
-	textNodeTree.children = textNodeTree.children.filter( child => child );
-	textNodeTree.attributes = getNodeAttrs( textNode );
-
-	return textNodeTree;
+	textTree.attributes = getNodeAttrs( textNode );
 }
 
 function getNodeAttrs( node ) {
@@ -213,6 +205,64 @@ function getNodeAttrs( node ) {
 	} );
 
 	return new Map( attrs );
+}
+
+function getRangePositionsInsideNode( node, range ) {
+	const nodePath = node.path;
+	const rangeStartPath = range.startPath;
+	const rangeEndPath = range.endPath;
+	const positions = [];
+
+	if ( isPathPrefixingAnother( nodePath, rangeStartPath ) ) {
+		positions.push( {
+			offset: rangeStartPath[ rangeStartPath.length - 1 ],
+			isEnd: false
+		} );
+	}
+
+	if ( isPathPrefixingAnother( nodePath, rangeEndPath ) ) {
+		positions.push( {
+			offset: rangeEndPath[ rangeEndPath.length - 1 ],
+			isEnd: true
+		} );
+	}
+
+	return positions;
+}
+
+function isPathPrefixingAnother( pathA, pathB ) {
+	if ( pathA.length === pathB.length - 1 ) {
+		const comparison = compareArrays( pathA, pathB );
+
+		if ( comparison === 'prefix' ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+function compareArrays( a, b ) {
+	const minLen = Math.min( a.length, b.length );
+
+	for ( let i = 0; i < minLen; i++ ) {
+		if ( a[ i ] != b[ i ] ) {
+			// The arrays are different.
+			return i;
+		}
+	}
+
+	// Both arrays were same at all points.
+	if ( a.length == b.length ) {
+		// If their length is also same, they are the same.
+		return 'same';
+	} else if ( a.length < b.length ) {
+		// Compared array is shorter so it is a prefix of the other array.
+		return 'prefix';
+	} else {
+		// Compared array is longer so it is an extension of the other array.
+		return 'extension';
+	}
 }
 
 export default editorEventObserver( ModelTree );
