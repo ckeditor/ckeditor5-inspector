@@ -100,6 +100,51 @@
 				};
 			}
 
+			function MarkerDemoPlugin( editor ) {
+				const model = editor.model;
+				const markerNames = [];
+
+				editor.conversion.for( 'editingDowncast' ).markerToHighlight( {
+					model: 'highlight',
+					view: data => {
+						const color = data.markerName.split( ':' )[ 1 ];
+
+						return {
+							classes: 'h-' + color,
+							priority: 1
+						};
+					}
+				} );
+
+				editor.conversion.for( 'dataDowncast' ).markerToHighlight( {
+					model: 'highlight',
+					view: data => {
+						const color = data.markerName.split( ':' )[ 1 ];
+
+						return {
+							classes: 'h-' + color,
+							priority: 1
+						};
+					}
+				} );
+
+				editor.on( 'ready', () => {
+					model.change( writer => {
+						const root = model.document.getRoot();
+
+						const nameA = 'highlight:yellow:123';
+						const rangeA = model.createRange( model.createPositionFromPath( root, [ 0, 10 ] ), model.createPositionFromPath( root, [ 0, 16 ] ) );
+
+						const nameB = 'highlight:blue:456';
+						const rangeB = model.createRange( model.createPositionFromPath( root, [ 0, 12 ] ), model.createPositionFromPath( root, [ 0, 22 ] ) );
+
+						markerNames.push( nameA, nameB );
+						writer.addMarker( nameA, { range: rangeA, usingOperation: false, affectsData: true } );
+						writer.addMarker( nameB, { range: rangeB, usingOperation: false, affectsData: true } );
+					} );
+				} );
+			}
+
 			let editorNames = [];
 
 			document.querySelector( '#destroy-inspector' ).addEventListener( 'click', () => {
@@ -120,7 +165,7 @@
 
 			DecoupledEditor
 				.create( document.querySelector( '#first-editor-content' ), {
-					extraPlugins: [ UploadAdapter ]
+					extraPlugins: [ UploadAdapter, MarkerDemoPlugin ]
 				} )
 				.then( editor => {
 					window.firstEditor = editor;
@@ -171,6 +216,14 @@
 
 		.ck.ck-editor__editable {
 			border: 1px solid rgba(0, 0, 0, 0.15);
+		}
+
+		.ck-content .h-yellow {
+			background: rgba(251, 255, 0, 0.534);
+		}
+
+		.ck-content .h-blue {
+			background: rgba(0, 197, 247, 0.568);
 		}
 	</style>
 </html>
