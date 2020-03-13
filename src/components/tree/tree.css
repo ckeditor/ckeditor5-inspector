@@ -149,6 +149,7 @@
 		padding: 0 1px;
 		margin-right: 1px;
 		display: inline-block;
+		word-break: break-all;
 	}
 
 	/*-- Attributes ------------------------------------------------------------------------*/
@@ -232,10 +233,9 @@
 
 .ck-inspector-tree_compact-text .ck-inspector-tree-text {
 	display: inline;
-	word-break: break-all;
 }
 
-.ck-inspector-tree_compact-text .ck-inspector-tree-text  .ck-inspector-tree-node__content  {
+.ck-inspector-tree_compact-text .ck-inspector-tree-text .ck-inspector-tree-node__content  {
 	display: inline;
 }
 
@@ -259,6 +259,7 @@
 	cursor: default;
 	line-height: 100%;
 	opacity: .8;
+	pointer-events: none;
 
 	&::after {
 		content: "";
@@ -283,6 +284,8 @@
 			position: absolute;
 			height: 100%;
 			line-height: 100%;
+			top: -2px;
+			bottom: -2px;
 			left: 0;
 			border-top: 2px solid var(--ck-inspector-color-tree-position);
 			border-bottom: 2px solid var(--ck-inspector-color-tree-position);
@@ -303,7 +306,7 @@
 			display: block;
 			position: absolute;
 			left: 0;
-			top: -2px;
+			top: -1px;
 			cursor: default;
 
 			width: 0;

@@ -84,6 +84,19 @@ export function fillElementPositions( elementDefinition, ranges ) {
 					elementDefinition.positionsInside.push( position );
 				}
 			} else {
+				// Go backward when looking for a child that will host the end position.
+				// Go forward when looking for a child that will host the start position.
+				//
+				//		<foo></foo>
+				//		[<bar></bar>]
+				//		<baz></baz>
+				//
+				// instead of
+				//
+				//		<foo></foo>[
+				//		<bar></bar>
+				//		]<baz></baz>
+				//
 				let childIndex = position.isEnd ? 0 : elementDefinition.children.length - 1;
 				let child = elementDefinition.children[ childIndex ];
 
@@ -94,7 +107,19 @@ export function fillElementPositions( elementDefinition, ranges ) {
 					}
 
 					if ( child.endOffset === offset ) {
-						child.positionsAfter.push( position );
+						const nextChild = elementDefinition.children[ childIndex + 1 ];
+
+						// Avoid the situation where the order of positions could weird around text nodes.
+						//
+						//		do           <element><$text>foo<$/text><$text>[]bar<$/text></element>
+						//		instead of   <element><$text>foo]<$/text><$text>[bar<$/text></element>
+						//
+						if ( position.isEnd && nextChild && nextChild.type === 'text' ) {
+							nextChild.positionsBefore.push( position );
+						} else {
+							child.positionsAfter.push( position );
+						}
+
 						break;
 					}
 
