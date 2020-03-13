@@ -4,7 +4,7 @@
  */
 
 import React, { Component } from 'react';
-import Tree from '../tree';
+import Tree from '../tree/tree';
 import Select from '../select';
 import NavBox from '../navbox';
 import Checkbox from '../checkbox';

@@ -18,14 +18,14 @@ describe( '<TreeSelection />', () => {
 	it( 'is rendered (start)', () => {
 		wrapper = mount( <TreeSelection /> );
 
-		expect( wrapper ).to.have.className( 'ck-inspector-tree__selection' );
+		expect( wrapper ).to.have.className( 'ck-inspector-tree__position' );
 		expect( wrapper.text() ).to.equal( '[' );
 	} );
 
 	it( 'is rendered (end)', () => {
 		wrapper = mount( <TreeSelection isEnd={true} /> );
 
-		expect( wrapper ).to.have.className( 'ck-inspector-tree__selection' );
+		expect( wrapper ).to.have.className( 'ck-inspector-tree__position' );
 		expect( wrapper.text() ).to.equal( ']' );
 	} );
 } );

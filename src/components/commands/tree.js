@@ -4,7 +4,7 @@
  */
 
 import React, { Component } from 'react';
-import Tree from '../tree';
+import Tree from '../tree/tree';
 import NavBox from '../navbox';
 import editorEventObserver from '../editorobserver';
 import { stringify } from '../utils';

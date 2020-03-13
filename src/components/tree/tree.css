@@ -104,7 +104,7 @@
 
 	&.ck-inspector-tree-node_active > .ck-inspector-tree-node__name:not(.ck-inspector-tree-node__name_close) {
 		&,
-		& *:not(.ck-inspector-tree__selection),
+		& *:not(.ck-inspector-tree__position),
 		& > .ck-inspector-tree-node__name__bracket::after {
 			background: var(--ck-inspector-color-tree-node-name-active-bg);
 			color: var(--ck-inspector-color-white);
@@ -251,7 +251,7 @@
 
 /*-- Selection ---------------------------------------------------------------------------------------- */
 
-.ck-inspector-tree .ck-inspector-tree__selection {
+.ck-inspector-tree .ck-inspector-tree__position {
 	display: inline;
 	position: relative;
 	cursor: default;
@@ -282,7 +282,7 @@
 	}
 }
 
-.ck-inspector-tree .ck-inspector-tree__selection_end::before {
+.ck-inspector-tree .ck-inspector-tree__position_end::before {
 	border-width: 0 7px 7px 0;
 	border-color: transparent red transparent transparent;
 	left: -5px;
