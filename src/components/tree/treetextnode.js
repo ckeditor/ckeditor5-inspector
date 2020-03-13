@@ -20,7 +20,7 @@ export default class TreeTextNode extends TreeNode {
 			this.isActive ? 'ck-inspector-tree-node_active' : ''
 		].join( ' ' );
 
-		let nodeText = this.definition.text;
+		let nodeText = this.definition.text.replace( /\s/g, '·' );
 
 		if ( definition.positions.length ) {
 			nodeText = nodeText.split( '' );

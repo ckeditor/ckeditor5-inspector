@@ -143,6 +143,7 @@ function getRangePositionsInsideElement( node, range ) {
 		positions.push( {
 			offset: rangeStartPath[ rangeStartPath.length - 1 ],
 			isEnd: false,
+			presentation: range.presentation,
 			type: range.type,
 			name: range.name,
 		} );
@@ -152,6 +153,7 @@ function getRangePositionsInsideElement( node, range ) {
 		positions.push( {
 			offset: rangeEndPath[ rangeEndPath.length - 1 ],
 			isEnd: true,
+			presentation: range.presentation,
 			type: range.type,
 			name: range.name
 		} );

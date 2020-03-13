@@ -13,6 +13,9 @@ import editorEventObserver from '../editorobserver';
 import { getModelNodeDefinition } from './utils';
 
 const LOCAL_STORAGE_COMPACT_TEXT = 'model-compact-text';
+const MARKER_COLORS = [
+	'#e040fb', '#536dfe', '#00c853', '#f57f17', '#607d8b', '#9e9e9e',
+];
 
 class ModelTree extends Component {
 	constructor( props ) {
@@ -100,10 +103,17 @@ function getEditorModelRanges( editor ) {
 		} );
 	}
 
+	let markerCount = 1;
+
 	for ( const marker of model.markers ) {
 		ranges.push( {
 			type: 'marker',
 			name: marker.name,
+			presentation: {
+				// When there are more markers than colors, let's start over and reuse
+				// the colors.
+				color: MARKER_COLORS[ ( MARKER_COLORS.length - 1 ) % markerCount++ ],
+			},
 			startPath: marker.getStart().path,
 			endPath: marker.getEnd().path
 		} );

@@ -19,6 +19,13 @@ export default class TreePosition extends Component {
 			definition.isEnd ? 'ck-inspector-tree__position_end' : ''
 		].join( ' ' );
 
-		return <span className={classes}>&#8203;</span>;
+		const styles = {
+		};
+
+		if ( definition.presentation && definition.presentation.color ) {
+			styles[ '--ck-inspector-color-tree-position' ] = definition.presentation.color;
+		}
+
+		return <span className={classes} style={styles}>&#8203;</span>;
 	}
 }

@@ -16,7 +16,8 @@
 	--ck-inspector-color-tree-node-active-bg: #f5faff;
 	--ck-inspector-color-tree-node-name-active-bg: #2B98F0;
 	--ck-inspector-color-tree-node-inactive: #8a8a8a;
-	--ck-inspector-color-tree-selection: red;
+	--ck-inspector-color-tree-selection: #ff1744;
+	--ck-inspector-color-tree-position: black;
 	--ck-inspector-color-comment: green;
 }
 
@@ -231,6 +232,7 @@
 
 .ck-inspector-tree_compact-text .ck-inspector-tree-text {
 	display: inline;
+	word-break: break-all;
 }
 
 .ck-inspector-tree_compact-text .ck-inspector-tree-text  .ck-inspector-tree-node__content  {
@@ -256,34 +258,66 @@
 	position: relative;
 	cursor: default;
 	line-height: 100%;
+	opacity: .8;
 
 	&::after {
 		content: "";
 		position: absolute;
-		border: 1px solid red;
+		border: 1px solid var(--ck-inspector-color-tree-position);
 		height: 100%;
 		line-height: 100%;
 		width: 0;
+		margin-left: -1px;
 	}
 
 	&::before {
-		content: "";
-		display: block;
-		position: absolute;
-		left: 0;
-		top: -6px;
-		cursor: default;
+		margin-left: -1px;
+	}
 
-		width: 0;
-		height: 0;
-		border-style: solid;
-		border-width: 7px 7px 0 0;
-		border-color: red transparent transparent transparent;
+	&.ck-inspector-tree__position_selection {
+		z-index: 2;
+		--ck-inspector-color-tree-position: var(--ck-inspector-color-tree-selection);
+
+		&::before {
+			content: "";
+			position: absolute;
+			height: 100%;
+			line-height: 100%;
+			left: 0;
+			border-top: 2px solid var(--ck-inspector-color-tree-position);
+			border-bottom: 2px solid var(--ck-inspector-color-tree-position);
+			width: 8px;
+		}
+
+		&.ck-inspector-tree__position_end::before {
+			right: -1px;
+			left: auto;
+		}
+	}
+
+	&.ck-inspector-tree__position_marker {
+		z-index: 1;
+
+		&::before {
+			content: "";
+			display: block;
+			position: absolute;
+			left: 0;
+			top: -2px;
+			cursor: default;
+
+			width: 0;
+			height: 0;
+			border-style: solid;
+			border-width: 7px 7px 0 0;
+			border-color: var(--ck-inspector-color-tree-position) transparent transparent transparent;
+		}
+
+		&.ck-inspector-tree__position_end::before {
+			border-width: 0 7px 7px 0;
+			border-color: transparent var(--ck-inspector-color-tree-position) transparent transparent;
+			left: -5px;
+		}
 	}
 }
 
-.ck-inspector-tree .ck-inspector-tree__position_end::before {
-	border-width: 0 7px 7px 0;
-	border-color: transparent red transparent transparent;
-	left: -5px;
-}
