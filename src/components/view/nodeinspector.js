@@ -57,17 +57,17 @@ class NodeInspector extends Component {
 				{
 					name: 'Attributes',
 					url: info.url,
-					items: info.attributes
+					itemDefinitions: info.attributes
 				},
 				{
 					name: 'Properties',
 					url: info.url,
-					items: info.properties
+					itemDefinitions: info.properties
 				},
 				{
 					name: 'Custom Properties',
 					url: `${ DOCS_URL_PREFIX }_element-Element.html#function-getCustomProperty`,
-					items: info.customProperties
+					itemDefinitions: info.customProperties
 				}
 			]}
 		/>;
@@ -91,9 +91,9 @@ class NodeInspector extends Component {
 
 		const info = {
 			editorNode: node,
-			properties: [],
-			attributes: [],
-			customProperties: []
+			properties: {},
+			attributes: {},
+			customProperties: {}
 		};
 
 		if ( isViewElement( node ) ) {
@@ -122,21 +122,35 @@ class NodeInspector extends Component {
 				}
 			}
 
-			info.attributes.push( ...node.getAttributes() );
-			info.properties.push(
-				[ 'index', node.index ],
-				[ 'isEmpty', node.isEmpty ],
-				[ 'childCount', node.childCount ],
-			);
-			info.customProperties.push( ...node.getCustomProperties() );
+			for ( const [ name, value ] of node.getAttributes() ) {
+				info.attributes[ name ] = { value };
+			}
+
+			info.properties = {
+				index: {
+					value: node.index
+				},
+				isEmpty: {
+					value: node.isEmpty
+				},
+				childCount: {
+					value: node.childCount
+				},
+			};
+
+			for ( const [ name, value ] of node.getCustomProperties() ) {
+				info.customProperties[ name ] = { value };
+			}
 		} else {
 			info.name = node.data;
 			info.type = 'Text';
 			info.url = `${ DOCS_URL_PREFIX }_text-Text.html`;
 
-			info.properties.push(
-				[ 'index', node.index ]
-			);
+			info.properties = {
+				index: {
+					value: node.index
+				}
+			};
 		}
 
 		info.properties = stringifyPropertyList( info.properties );
