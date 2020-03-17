@@ -9,30 +9,18 @@ import NavBox from '../navbox';
 import Select from '../select';
 import Checkbox from '../checkbox';
 import StorageManager from '../../storagemanager';
-import editorEventObserver from '../editorobserver';
-import { getModelNodeDefinition } from './utils';
 
 const LOCAL_STORAGE_COMPACT_TEXT = 'model-compact-text';
-const MARKER_COLORS = [
-	'#e040fb', '#536dfe', '#00c853', '#f57f17', '#607d8b', '#9e9e9e',
-];
 
-class ModelTree extends Component {
+export default class ModelTree extends Component {
 	constructor( props ) {
 		super( props );
 
 		this.state = {
-			showCompactText: StorageManager.get( LOCAL_STORAGE_COMPACT_TEXT ) === 'true'
+			showCompactText: StorageManager.get( LOCAL_STORAGE_COMPACT_TEXT ) === 'true',
 		};
 
 		this.handleCompactTextChange = this.handleCompactTextChange.bind( this );
-	}
-
-	editorEventObserverConfig( props ) {
-		return {
-			target: props.editor.model.document,
-			event: 'change'
-		};
 	}
 
 	handleCompactTextChange( evt ) {
@@ -42,8 +30,6 @@ class ModelTree extends Component {
 	}
 
 	render() {
-		const treeDefinition = this.getEditorModelTreeDefinition();
-
 		return <NavBox>
 			{[
 				<div className="ck-inspector-tree__config" key="root-cfg">
@@ -62,10 +48,16 @@ class ModelTree extends Component {
 						isChecked={this.state.showCompactText}
 						onChange={this.handleCompactTextChange}
 					/>
+					<Checkbox
+						label="Show markers"
+						id="model-show-markers"
+						isChecked={this.props.showMarkers}
+						onChange={this.props.onShowMarkersChange}
+					/>
 				</div>
 			]}
 			<Tree
-				definition={treeDefinition}
+				definition={this.props.treeDefinition}
 				textDirection={this.props.editor.locale.contentLanguageDirection}
 				onClick={this.props.onClick}
 				showCompactText={this.state.showCompactText}
@@ -73,53 +65,4 @@ class ModelTree extends Component {
 			/>
 		</NavBox>;
 	}
-
-	getEditorModelTreeDefinition() {
-		if ( !this.props.currentRootName ) {
-			return null;
-		}
-
-		const editor = this.props.editor;
-		const model = editor.model;
-
-		return [
-			getModelNodeDefinition(
-				model.document.getRoot( this.props.currentRootName ),
-				getEditorModelRanges( this.props.editor )
-			)
-		];
-	}
 }
-
-function getEditorModelRanges( editor ) {
-	const ranges = [];
-	const model = editor.model;
-
-	for ( const range of model.document.selection.getRanges() ) {
-		ranges.push( {
-			type: 'selection',
-			startPath: range.start.path,
-			endPath: range.end.path
-		} );
-	}
-
-	let markerCount = 1;
-
-	for ( const marker of model.markers ) {
-		ranges.push( {
-			type: 'marker',
-			name: marker.name,
-			presentation: {
-				// When there are more markers than colors, let's start over and reuse
-				// the colors.
-				color: MARKER_COLORS[ ( MARKER_COLORS.length - 1 ) % markerCount++ ],
-			},
-			startPath: marker.getStart().path,
-			endPath: marker.getEnd().path
-		} );
-	}
-
-	return ranges;
-}
-
-export default editorEventObserver( ModelTree );

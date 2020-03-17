@@ -177,34 +177,34 @@
 					console.error( error );
 				} );
 
-			DecoupledEditor
-				.create( document.querySelector( '#second-editor-content' ), {
-					extraPlugins: [ UploadAdapter ]
-				} )
-				.then( editor => {
-					window.secondEditor = editor;
-					document.body.insertBefore( editor.ui.view.toolbar.element, editor.ui.getEditableElement() );
-					const [ name ] = CKEditorInspector.attach( editor );
-					editorNames.push( name );
-				} )
-				.catch( error => {
-					console.error( error );
-				} );
+			// DecoupledEditor
+			// 	.create( document.querySelector( '#second-editor-content' ), {
+			// 		extraPlugins: [ UploadAdapter ]
+			// 	} )
+			// 	.then( editor => {
+			// 		window.secondEditor = editor;
+			// 		document.body.insertBefore( editor.ui.view.toolbar.element, editor.ui.getEditableElement() );
+			// 		const [ name ] = CKEditorInspector.attach( editor );
+			// 		editorNames.push( name );
+			// 	} )
+			// 	.catch( error => {
+			// 		console.error( error );
+			// 	} );
 
-			DecoupledEditor
-				.create( document.querySelector( '#rtl-editor-content' ), {
-					extraPlugins: [ UploadAdapter ],
-					language: 'ar'
-				} )
-				.then( editor => {
-					window.secondEditor = editor;
-					document.body.insertBefore( editor.ui.view.toolbar.element, editor.ui.getEditableElement() );
-					const [ name ] = CKEditorInspector.attach( { 'rtl': editor } );
-					editorNames.push( name );
-				} )
-				.catch( error => {
-					console.error( error );
-				} );
+			// DecoupledEditor
+			// 	.create( document.querySelector( '#rtl-editor-content' ), {
+			// 		extraPlugins: [ UploadAdapter ],
+			// 		language: 'ar'
+			// 	} )
+			// 	.then( editor => {
+			// 		window.secondEditor = editor;
+			// 		document.body.insertBefore( editor.ui.view.toolbar.element, editor.ui.getEditableElement() );
+			// 		const [ name ] = CKEditorInspector.attach( { 'rtl': editor } );
+			// 		editorNames.push( name );
+			// 	} )
+			// 	.catch( error => {
+			// 		console.error( error );
+			// 	} );
 		</script>
 	</body>
 	<style>

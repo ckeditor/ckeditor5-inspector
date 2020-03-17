@@ -8,7 +8,7 @@ import Logger from '../../logger';
 import Button from './../button';
 import editorEventObserver from '../editorobserver';
 import ObjectInspector from './../objectinspector';
-import { getNodePathString } from './utils';
+import { getModelPositionDefinition } from './utils';
 import { stringifyPropertyList } from '../utils';
 
 const API_DOCS_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_selection-Selection.html';
@@ -43,12 +43,12 @@ class ModelSelectionInspector extends Component {
 				{
 					name: 'Attributes',
 					url: `${ API_DOCS_PREFIX }#function-getAttributes`,
-					items: info.attributes
+					itemDefinitions: info.attributes
 				},
 				{
 					name: 'Properties',
 					url: `${ API_DOCS_PREFIX }`,
-					items: info.properties
+					itemDefinitions: info.properties
 				},
 				{
 					name: 'Anchor',
@@ -60,7 +60,7 @@ class ModelSelectionInspector extends Component {
 							onClick: () => Logger.log( this.props.editor.model.document.selection.anchor )
 						}
 					],
-					items: info.anchor
+					itemDefinitions: info.anchor
 				},
 				{
 					name: 'Focus',
@@ -72,7 +72,22 @@ class ModelSelectionInspector extends Component {
 							onClick: () => Logger.log( this.props.editor.model.document.selection.focus )
 						}
 					],
-					items: info.focus
+					itemDefinitions: info.focus
+				},
+				{
+					name: 'Ranges',
+					url: `${ API_DOCS_PREFIX }#function-getRanges`,
+					buttons: [
+						{
+							type: 'log',
+							text: 'Log in console',
+							onClick: () => Logger.log( ...this.props.editor.model.document.selection.getRanges() )
+						}
+					],
+					itemDefinitions: info.ranges,
+					presentation: {
+						expandCollapsibles: true
+					}
 				}
 			]}
 		/>;
@@ -83,18 +98,51 @@ class ModelSelectionInspector extends Component {
 		const anchor = selection.anchor;
 		const focus = selection.focus;
 		const info = {
-			properties: [
-				[ 'isCollapsed', selection.isCollapsed ],
-				[ 'isBackward', selection.isBackward ],
-				[ 'isGravityOverridden', selection.isGravityOverridden ],
-				[ 'rangeCount', selection.rangeCount ],
-			],
-			attributes: [ ...selection.getAttributes() ],
-			anchor: getPositionInfo( anchor ),
-			focus: getPositionInfo( focus )
+			properties: {
+				isCollapsed: {
+					value: selection.isCollapsed
+				},
+				isBackward: {
+					value: selection.isBackward
+				},
+				isGravityOverridden: {
+					value: selection.isGravityOverridden
+				},
+				rangeCount: {
+					value: selection.rangeCount
+				},
+			},
+			attributes: {},
+			anchor: getRangePositionDetails( getModelPositionDefinition( anchor ) ),
+			focus: getRangePositionDetails( getModelPositionDefinition( focus ) ),
+			ranges: {},
 		};
 
+		for ( const [ name, value ] of selection.getAttributes() ) {
+			info.attributes[ name ] = { value };
+		}
+
+		this.props.ranges.forEach( ( range, index ) => {
+			info.ranges[ index ] = {
+				value: '',
+				subProperties: {
+					start: {
+						value: '',
+						subProperties: stringifyPropertyList( getRangePositionDetails( range.start ) )
+					},
+					end: {
+						value: '',
+						subProperties: stringifyPropertyList( getRangePositionDetails( range.end ) )
+					}
+				}
+			};
+		} );
+
 		for ( const category in info ) {
+			if ( category === 'ranges' ) {
+				continue;
+			}
+
 			info[ category ] = stringifyPropertyList( info[ category ] );
 		}
 
@@ -102,16 +150,30 @@ class ModelSelectionInspector extends Component {
 	}
 }
 
-function getPositionInfo( position ) {
-	return [
-		[ 'path', getNodePathString( position ) ],
-		[ 'stickiness', position.stickiness ],
-		[ 'index', position.index ],
-		[ 'isAtEnd', position.isAtEnd ],
-		[ 'isAtStart', position.isAtStart ],
-		[ 'offset', position.offset ],
-		[ 'textNode', position.textNode && position.textNode.data ],
-	];
+function getRangePositionDetails( { path, stickiness, index, isAtEnd, isAtStart, offset, textNode } ) {
+	return {
+		path: {
+			value: path
+		},
+		stickiness: {
+			value: stickiness
+		},
+		index: {
+			value: index
+		},
+		isAtEnd: {
+			value: isAtEnd
+		},
+		isAtStart: {
+			value: isAtStart
+		},
+		offset: {
+			value: offset
+		},
+		textNode: {
+			value: textNode
+		}
+	};
 }
 
 export default editorEventObserver( ModelSelectionInspector );

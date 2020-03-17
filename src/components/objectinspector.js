@@ -13,18 +13,24 @@ export default class ObjectInspector extends Component {
 		const content = [];
 
 		for ( const list of this.props.lists ) {
-			if ( list.items.length ) {
-				content.push(
-					<hr key={`${ list.name }-separator`} />,
-					<h3 key={`${ list.name }-header`}>
-						<a href={list.url} target="_blank" rel="noopener noreferrer">{list.name}</a>
-						{list.buttons && list.buttons.map( ( button, index ) => {
-							return <Button key={'button' + index} {...button} />;
-						} )}
-					</h3>,
-					<PropertyList key={`${ list.name }-list`} items={list.items} />
-				);
+			if ( !Object.keys( list.itemDefinitions ).length ) {
+				continue;
 			}
+
+			content.push(
+				<hr key={`${ list.name }-separator`} />,
+				<h3 key={`${ list.name }-header`}>
+					<a href={list.url} target="_blank" rel="noopener noreferrer">{list.name}</a>
+					{list.buttons && list.buttons.map( ( button, index ) => {
+						return <Button key={'button' + index} {...button} />;
+					} )}
+				</h3>,
+				<PropertyList
+					key={`${ list.name }-list`}
+					itemDefinitions={list.itemDefinitions}
+					presentation={list.presentation}
+				/>
+			);
 		}
 
 		return <div className="ck-inspector__object-inspector">

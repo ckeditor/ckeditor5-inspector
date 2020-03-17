@@ -10,26 +10,43 @@ import Tabs from '../tabs';
 import SidePane from '../sidepane';
 import ModelNodeInspector from './nodeinspector';
 import ModelSelectionInspector from './selectioninspector';
+import ModelMarkerInspector from './markerinspector';
 import StorageManager from '../../storagemanager';
+import editorEventObserver from '../editorobserver';
+import { getModelNodeDefinition, getModelPositionDefinition } from './utils';
 
 const LOCAL_STORAGE_ACTIVE_TAB = 'active-model-tab-name';
+const LOCAL_STORAGE_SHOW_MARKERS = 'model-show-markers';
+const MARKER_COLORS = [
+	'#e040fb', '#536dfe', '#00c853', '#f57f17', '#607d8b', '#9e9e9e',
+];
 
-export default class ModelPane extends Component {
+class ModelPane extends Component {
 	constructor( props ) {
 		super( props );
+
+		const showMarkers = StorageManager.get( LOCAL_STORAGE_SHOW_MARKERS );
 
 		this.state = {
 			editor: null,
 			editorRoots: null,
 			currentRootName: null,
 			currentEditorNode: null,
-
+			showMarkers: showMarkers ? showMarkers === 'true' : true,
 			activeTab: StorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Inspect',
 		};
 
 		this.handleRootChange = this.handleRootChange.bind( this );
 		this.handlePaneChange = this.handlePaneChange.bind( this );
 		this.handleTreeClick = this.handleTreeClick.bind( this );
+		this.handleShowMarkersChange = this.handleShowMarkersChange.bind( this );
+	}
+
+	editorEventObserverConfig( props ) {
+		return {
+			target: props.editor.model.document,
+			event: 'change'
+		};
 	}
 
 	handleTreeClick( evt, currentEditorNode ) {
@@ -62,6 +79,14 @@ export default class ModelPane extends Component {
 		} );
 	}
 
+	handleShowMarkersChange( evt ) {
+		this.setState( {
+			showMarkers: evt.target.checked
+		}, () => {
+			StorageManager.set( LOCAL_STORAGE_SHOW_MARKERS, this.state.showMarkers );
+		} );
+	}
+
 	render() {
 		if ( !this.props.editor ) {
 			return <Pane isEmpty="true">
@@ -69,14 +94,21 @@ export default class ModelPane extends Component {
 			</Pane>;
 		}
 
+		const ranges = getEditorModelRanges( this.props.editor );
+		const markers = getEditorModelMarkers( this.props.editor );
+		const treeDefinition = this.getEditorModelTreeDefinition( ranges, this.state.showMarkers ? markers : [] );
+
 		return <Pane splitVertically="true">
 			<ModelTree
 				editor={this.props.editor}
+				treeDefinition={treeDefinition}
 				editorRoots={this.state.editorRoots}
 				currentEditorNode={this.state.currentEditorNode}
 				currentRootName={this.state.currentRootName}
+				showMarkers={this.state.showMarkers}
 				onClick={this.handleTreeClick}
 				onRootChange={this.handleRootChange}
+				onShowMarkersChange={this.handleShowMarkersChange}
 			/>
 			<SidePane>
 				<Tabs
@@ -92,6 +124,12 @@ export default class ModelPane extends Component {
 					<ModelSelectionInspector
 						label="Selection"
 						editor={this.state.editor}
+						ranges={ranges}
+					/>
+					<ModelMarkerInspector
+						label="Markers"
+						markers={markers}
+						editor={this.state.editor}
 					/>
 				</Tabs>
 			</SidePane>
@@ -100,7 +138,7 @@ export default class ModelPane extends Component {
 
 	static getDerivedStateFromProps( props, state ) {
 		if ( props.editor !== state.editor ) {
-			const editorRoots = getEditorRoots( props.editor );
+			const editorRoots = getEditorModelRoots( props.editor );
 
 			return {
 				editor: props.editor,
@@ -112,9 +150,25 @@ export default class ModelPane extends Component {
 			return null;
 		}
 	}
+
+	getEditorModelTreeDefinition( ranges, markers ) {
+		if ( !this.state.currentRootName ) {
+			return null;
+		}
+
+		const editor = this.props.editor;
+		const model = editor.model;
+		const modelRoot = model.document.getRoot( this.state.currentRootName );
+
+		return [
+			getModelNodeDefinition( modelRoot, [ ...ranges, ...markers ] )
+		];
+	}
 }
 
-function getEditorRoots( editor ) {
+export default editorEventObserver( ModelPane );
+
+function getEditorModelRoots( editor ) {
 	if ( !editor ) {
 		return null;
 	}
@@ -125,4 +179,46 @@ function getEditorRoots( editor ) {
 	return roots
 		.filter( ( { rootName } ) => rootName !== '$graveyard' )
 		.concat( roots.filter( ( { rootName } ) => rootName === '$graveyard' ) );
+}
+
+function getEditorModelRanges( editor ) {
+	const ranges = [];
+	const model = editor.model;
+
+	for ( const range of model.document.selection.getRanges() ) {
+		ranges.push( {
+			type: 'selection',
+			start: getModelPositionDefinition( range.start ),
+			end: getModelPositionDefinition( range.end )
+		} );
+	}
+
+	return ranges;
+}
+
+function getEditorModelMarkers( editor ) {
+	const markers = [];
+	const model = editor.model;
+	let markerCount = 1;
+
+	for ( const marker of model.markers ) {
+		const { name, affectsData, managedUsingOperations } = marker;
+
+		markers.push( {
+			type: 'marker',
+			marker,
+			name,
+			affectsData,
+			managedUsingOperations,
+			presentation: {
+				// When there are more markers than colors, let's start over and reuse
+				// the colors.
+				color: MARKER_COLORS[ ( MARKER_COLORS.length - 1 ) % markerCount++ ],
+			},
+			start: getModelPositionDefinition( marker.getStart() ),
+			end: getModelPositionDefinition( marker.getEnd() )
+		} );
+	}
+
+	return markers;
 }

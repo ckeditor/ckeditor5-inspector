@@ -20,6 +20,18 @@ export function getNodePathString( node ) {
 	return node.getPath ? node.getPath() : node.path;
 }
 
+export function getModelPositionDefinition( position ) {
+	return {
+		path: getNodePathString( position ),
+		stickiness: position.stickiness,
+		index: position.index,
+		isAtEnd: position.isAtEnd,
+		isAtStart: position.isAtStart,
+		offset: position.offset,
+		textNode: position.textNode && position.textNode.data,
+	};
+}
+
 export function getModelNodeDefinition( node, ranges ) {
 	const nodeDefinition = {};
 	const { startOffset, endOffset } = node;
@@ -160,13 +172,13 @@ function getNodeAttributes( node ) {
 
 function getRangePositionsInsideElement( node, range ) {
 	const nodePath = node.path;
-	const rangeStartPath = range.startPath;
-	const rangeEndPath = range.endPath;
+	const startPath = range.start.path;
+	const endPath = range.end.path;
 	const positions = [];
 
-	if ( isPathPrefixingAnother( nodePath, rangeStartPath ) ) {
+	if ( isPathPrefixingAnother( nodePath, startPath ) ) {
 		positions.push( {
-			offset: rangeStartPath[ rangeStartPath.length - 1 ],
+			offset: startPath[ startPath.length - 1 ],
 			isEnd: false,
 			presentation: range.presentation,
 			type: range.type,
@@ -174,9 +186,9 @@ function getRangePositionsInsideElement( node, range ) {
 		} );
 	}
 
-	if ( isPathPrefixingAnother( nodePath, rangeEndPath ) ) {
+	if ( isPathPrefixingAnother( nodePath, endPath ) ) {
 		positions.push( {
-			offset: rangeEndPath[ rangeEndPath.length - 1 ],
+			offset: endPath[ endPath.length - 1 ],
 			isEnd: true,
 			presentation: range.presentation,
 			type: range.type,

@@ -54,12 +54,12 @@ class ModelNodeInspector extends Component {
 				{
 					name: 'Attributes',
 					url: info.url,
-					items: info.attributes
+					itemDefinitions: info.attributes
 				},
 				{
 					name: 'Properties',
 					url: info.url,
-					items: info.properties
+					itemDefinitions: info.properties
 				},
 			]}
 		/>;
@@ -83,8 +83,8 @@ class ModelNodeInspector extends Component {
 
 		const info = {
 			editorNode: node,
-			properties: [],
-			attributes: []
+			properties: {},
+			attributes: {}
 		};
 
 		if ( isModelElement( node ) ) {
@@ -98,35 +98,56 @@ class ModelNodeInspector extends Component {
 				info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_element-Element.html';
 			}
 
-			info.properties.push(
-				[ 'childCount', node.childCount ],
-				[ 'startOffset', node.startOffset ],
-				[ 'endOffset', node.endOffset ],
-				[ 'maxOffset', node.maxOffset ]
-			);
+			info.properties = {
+				childCount: {
+					value: node.childCount
+				},
+				startOffset: {
+					value: node.startOffset
+				},
+				endOffset: {
+					value: node.endOffset
+				},
+				maxOffset: {
+					value: node.maxOffset
+				}
+			};
 		} else {
 			info.name = node.data;
 			info.type = 'Text';
 			info.url = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_text-Text.html';
 
-			info.properties.push(
-				[ 'startOffset', node.startOffset ],
-				[ 'endOffset', node.endOffset ],
-				[ 'offsetSize', node.offsetSize ]
-			);
+			info.properties = {
+				startOffset: {
+					value: node.startOffset
+				},
+				endOffset: {
+					value: node.endOffset
+				},
+				offsetSize: {
+					value: node.offsetSize
+				}
+			};
 		}
 
-		info.properties.push( [ 'path', getNodePathString( node ) ] );
-		info.attributes.push( ...node.getAttributes() );
+		info.properties.path = { value: getNodePathString( node ) };
+
+		for ( const [ name, value ] of node.getAttributes() ) {
+			info.attributes[ name ] = { value };
+		}
 
 		info.properties = stringifyPropertyList( info.properties );
 		info.attributes = stringifyPropertyList( info.attributes );
 
-		for ( const attribute of info.attributes ) {
-			const attributeName = attribute[ 0 ];
-			const attirbuteProperties = Object.entries( this.props.editor.model.schema.getAttributeProperties( attributeName ) );
+		for ( const attribute in info.attributes ) {
+			const attributePropertyDefinitions = {};
+			const attirbuteProperties = this.props.editor.model.schema.getAttributeProperties( attribute );
 
-			attribute.push( stringifyPropertyList( attirbuteProperties ) );
+			for ( const name in attirbuteProperties ) {
+				attributePropertyDefinitions[ name ] = { value: attirbuteProperties[ name ] };
+			}
+
+			info.attributes[ attribute ].subProperties = stringifyPropertyList( attributePropertyDefinitions );
 		}
 
 		return info;
