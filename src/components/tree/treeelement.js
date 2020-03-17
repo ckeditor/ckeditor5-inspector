@@ -38,7 +38,7 @@ export default class TreeElement extends TreeNode {
 			afterNodeName.push( <TreePosition key={'position-after:' + index} definition={position} /> );
 		} );
 
-		definition.positionsInside.forEach( ( position, index ) => {
+		definition.positions.forEach( ( position, index ) => {
 			children.push( <TreePosition key={'position' + index} definition={position} /> );
 		} );
 

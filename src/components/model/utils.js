@@ -39,28 +39,30 @@ export function getModelNodeDefinition( node, ranges ) {
 	Object.assign( nodeDefinition, {
 		startOffset,
 		endOffset,
+		node,
 		path: node.getPath(),
 		positionsBefore: [],
 		positionsAfter: []
 	} );
 
 	if ( isModelElement( node ) ) {
-		fillElementDefinition( nodeDefinition, node, ranges );
+		fillElementDefinition( nodeDefinition, ranges );
 	} else {
-		fillTextNodeDefinition( nodeDefinition, node );
+		fillTextNodeDefinition( nodeDefinition );
 	}
 
 	return nodeDefinition;
 }
 
-export function fillElementDefinition( elementDefinition, element, ranges ) {
+function fillElementDefinition( elementDefinition, ranges ) {
+	const element = elementDefinition.node;
+
 	Object.assign( elementDefinition, {
 		type: 'element',
 		name: element.name,
 		children: [],
-		node: element,
 		maxOffset: element.maxOffset,
-		positionsInside: []
+		positions: []
 	} );
 
 	for ( const child of element.getChildren() ) {
@@ -72,9 +74,9 @@ export function fillElementDefinition( elementDefinition, element, ranges ) {
 	elementDefinition.attributes = getNodeAttributes( element );
 }
 
-export function fillElementPositions( elementDefinition, ranges ) {
+function fillElementPositions( elementDefinition, ranges ) {
 	for ( const range of ranges ) {
-		const positions = getRangePositionsInsideElement( elementDefinition, range );
+		const positions = getRangePositionsInElement( elementDefinition, range );
 
 		for ( const position of positions ) {
 			const offset = position.offset;
@@ -85,7 +87,7 @@ export function fillElementPositions( elementDefinition, ranges ) {
 				if ( firstChild ) {
 					firstChild.positionsBefore.push( position );
 				} else {
-					elementDefinition.positionsInside.push( position );
+					elementDefinition.positions.push( position );
 				}
 			} else if ( offset === elementDefinition.maxOffset ) {
 				const lastChild = elementDefinition.children[ elementDefinition.children.length - 1 ];
@@ -93,7 +95,7 @@ export function fillElementPositions( elementDefinition, ranges ) {
 				if ( lastChild ) {
 					lastChild.positionsAfter.push( position );
 				} else {
-					elementDefinition.positionsInside.push( position );
+					elementDefinition.positions.push( position );
 				}
 			} else {
 				// Go backward when looking for a child that will host the end position.
@@ -148,11 +150,12 @@ export function fillElementPositions( elementDefinition, ranges ) {
 	}
 }
 
-function fillTextNodeDefinition( textNodeDefinition, textNode ) {
+function fillTextNodeDefinition( textNodeDefinition ) {
+	const textNode = textNodeDefinition.node;
+
 	Object.assign( textNodeDefinition, {
 		type: 'text',
 		text: textNode.data,
-		node: textNode,
 		positions: [],
 		presentation: {
 			dontRenderAttributeValue: true
@@ -170,7 +173,7 @@ function getNodeAttributes( node ) {
 	return new Map( attrs );
 }
 
-function getRangePositionsInsideElement( node, range ) {
+function getRangePositionsInElement( node, range ) {
 	const nodePath = node.path;
 	const startPath = range.start.path;
 	const endPath = range.end.path;

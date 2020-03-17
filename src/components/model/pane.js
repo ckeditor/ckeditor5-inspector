@@ -101,7 +101,7 @@ class ModelPane extends Component {
 		return <Pane splitVertically="true">
 			<ModelTree
 				editor={this.props.editor}
-				treeDefinition={treeDefinition}
+				definition={treeDefinition}
 				editorRoots={this.state.editorRoots}
 				currentEditorNode={this.state.currentEditorNode}
 				currentRootName={this.state.currentRootName}

@@ -4,6 +4,7 @@
  */
 
 import React, { Component } from 'react';
+import Pane from '../pane';
 import Logger from '../../logger';
 import Button from './../button';
 import ObjectInspector from './../objectinspector';
@@ -15,6 +16,12 @@ export default class ModelMarkerInspector extends Component {
 	render() {
 		const markerTree = getMarkerTree( this.props.markers );
 		const markerListDefinitions = markerTreeToPropertyListDefinition( markerTree );
+
+		if ( !Object.keys( markerTree ).length ) {
+			return <Pane isEmpty="true">
+				<p>No markers in the document.</p>
+			</Pane>;
+		}
 
 		return <ObjectInspector
 			header={[

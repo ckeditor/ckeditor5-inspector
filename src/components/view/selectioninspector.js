@@ -8,7 +8,7 @@ import Logger from '../../logger';
 import Button from './../button';
 import editorEventObserver from '../editorobserver';
 import ObjectInspector from './../objectinspector';
-import { nodeToString } from './utils';
+import { getViewPositionDefinition } from './utils';
 import { stringifyPropertyList } from '../utils';
 
 const API_DOCS_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_selection-Selection.html';
@@ -43,7 +43,7 @@ class ViewSelectionInspector extends Component {
 				{
 					name: 'Properties',
 					url: `${ API_DOCS_PREFIX }`,
-					items: info.properties
+					itemDefinitions: info.properties
 				},
 				{
 					name: 'Anchor',
@@ -55,7 +55,7 @@ class ViewSelectionInspector extends Component {
 							onClick: () => Logger.log( this.props.editor.editing.view.document.selection.anchor )
 						}
 					],
-					items: info.anchor
+					itemDefinitions: info.anchor
 				},
 				{
 					name: 'Focus',
@@ -67,7 +67,22 @@ class ViewSelectionInspector extends Component {
 							onClick: () => Logger.log( this.props.editor.editing.view.document.selection.focus )
 						}
 					],
-					items: info.focus
+					itemDefinitions: info.focus
+				},
+				{
+					name: 'Ranges',
+					url: `${ API_DOCS_PREFIX }#function-getRanges`,
+					buttons: [
+						{
+							type: 'log',
+							text: 'Log in console',
+							onClick: () => Logger.log( ...this.props.editor.editing.view.document.selection.getRanges() )
+						}
+					],
+					itemDefinitions: info.ranges,
+					presentation: {
+						expandCollapsibles: true
+					}
 				}
 			]}
 		/>;
@@ -76,17 +91,46 @@ class ViewSelectionInspector extends Component {
 	getEditorSelectionInfo() {
 		const selection = this.props.editor.editing.view.document.selection;
 		const info = {
-			properties: [
-				[ 'isCollapsed', selection.isCollapsed ],
-				[ 'isBackward', selection.isBackward ],
-				[ 'isFake', selection.isFake ],
-				[ 'rangeCount', selection.rangeCount ],
-			],
-			anchor: getPositionInfo( selection.anchor ),
-			focus: getPositionInfo( selection.focus ),
+			properties: {
+				isCollapsed: {
+					value: selection.isCollapsed
+				},
+				isBackward: {
+					value: selection.isBackward
+				},
+				isFake: {
+					value: selection.isFake
+				},
+				rangeCount: {
+					value: selection.rangeCount
+				},
+			},
+			anchor: getPositionDetails( getViewPositionDefinition( selection.anchor ) ),
+			focus: getPositionDetails( getViewPositionDefinition( selection.focus ) ),
+			ranges: {}
 		};
 
+		this.props.ranges.forEach( ( range, index ) => {
+			info.ranges[ index ] = {
+				value: '',
+				subProperties: {
+					start: {
+						value: '',
+						subProperties: stringifyPropertyList( getPositionDetails( range.start ) )
+					},
+					end: {
+						value: '',
+						subProperties: stringifyPropertyList( getPositionDetails( range.end ) )
+					}
+				}
+			};
+		} );
+
 		for ( const category in info ) {
+			if ( category === 'ranges' ) {
+				continue;
+			}
+
 			info[ category ] = stringifyPropertyList( info[ category ] );
 		}
 
@@ -94,13 +138,21 @@ class ViewSelectionInspector extends Component {
 	}
 }
 
-function getPositionInfo( position ) {
-	return [
-		[ 'offset', position.offset ],
-		[ 'isAtEnd', position.isAtEnd ],
-		[ 'isAtStart', position.isAtStart ],
-		[ 'parent', nodeToString( position.parent ) ]
-	];
+function getPositionDetails( { offset, isAtEnd, isAtStart, parent } ) {
+	return {
+		offset: {
+			value: offset
+		},
+		isAtEnd: {
+			value: isAtEnd
+		},
+		isAtStart: {
+			value: isAtStart
+		},
+		parent: {
+			value: parent
+		},
+	};
 }
 
 export default editorEventObserver( ViewSelectionInspector );

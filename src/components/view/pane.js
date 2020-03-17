@@ -10,12 +10,15 @@ import Tabs from '../tabs';
 import SidePane from '../sidepane';
 import ViewNodeInspector from './nodeinspector';
 import ViewSelectionInspector from './selectioninspector';
+import { getViewNodeDefinition, getViewPositionDefinition } from './utils';
+import editorEventObserver from '../editorobserver';
 import StorageManager from '../../storagemanager';
 import '../pane.css';
 
 const LOCAL_STORAGE_ACTIVE_TAB = 'active-view-tab-name';
+const LOCAL_STORAGE_ELEMENT_TYPES = 'view-element-types';
 
-export default class ViewPane extends Component {
+class ViewPane extends Component {
 	constructor( props ) {
 		super( props );
 
@@ -25,12 +28,21 @@ export default class ViewPane extends Component {
 			editorRoots: null,
 			currentRootName: null,
 
+			showTypes: StorageManager.get( LOCAL_STORAGE_ELEMENT_TYPES ) === 'true',
 			activeTab: StorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Inspect'
 		};
 
 		this.handleTreeClick = this.handleTreeClick.bind( this );
 		this.handlePaneChange = this.handlePaneChange.bind( this );
 		this.handleRootChange = this.handleRootChange.bind( this );
+		this.handleShowTypesChange = this.handleShowTypesChange.bind( this );
+	}
+
+	editorEventObserverConfig( props ) {
+		return {
+			target: props.editor.editing.view,
+			event: 'render'
+		};
 	}
 
 	handleTreeClick( evt, currentEditorNode ) {
@@ -63,6 +75,12 @@ export default class ViewPane extends Component {
 		} );
 	}
 
+	handleShowTypesChange( evt ) {
+		this.setState( { showTypes: evt.target.checked }, () => {
+			StorageManager.set( LOCAL_STORAGE_ELEMENT_TYPES, this.state.showTypes );
+		} );
+	}
+
 	render() {
 		if ( !this.props.editor ) {
 			return <Pane isEmpty="true">
@@ -70,14 +88,20 @@ export default class ViewPane extends Component {
 			</Pane>;
 		}
 
+		const ranges = getEditorViewRanges( this.props.editor );
+		const treeDefinition = this.getEditorViewTreeDefinition( ranges );
+
 		return <Pane splitVertically="true">
 			<ViewTree
 				currentEditorNode={this.state.currentEditorNode}
 				currentRootName={this.state.currentRootName}
 				editor={this.props.editor}
+				definition={treeDefinition}
 				editorRoots={this.state.editorRoots}
+				showTypes={this.state.showTypes}
 				onClick={this.handleTreeClick}
 				onRootChange={this.handleRootChange}
+				onShowTypesChange={this.handleShowTypesChange}
 			/>
 			<SidePane>
 				<Tabs
@@ -93,6 +117,7 @@ export default class ViewPane extends Component {
 					<ViewSelectionInspector
 						label="Selection"
 						editor={this.state.editor}
+						ranges={ranges}
 					/>
 				</Tabs>
 			</SidePane>
@@ -113,7 +138,23 @@ export default class ViewPane extends Component {
 			return null;
 		}
 	}
+
+	getEditorViewTreeDefinition( ranges ) {
+		if ( !this.state.currentRootName ) {
+			return;
+		}
+
+		const editor = this.props.editor;
+		const document = editor.editing.view.document;
+		const root = document.getRoot( this.state.currentRootName );
+
+		return [
+			getViewNodeDefinition( root, [ ...ranges ], this.state.showTypes )
+		];
+	}
 }
+
+export default editorEventObserver( ViewPane );
 
 function getEditorRoots( editor ) {
 	if ( !editor ) {
@@ -121,4 +162,19 @@ function getEditorRoots( editor ) {
 	}
 
 	return [ ...editor.editing.view.document.roots ];
+}
+
+function getEditorViewRanges( editor ) {
+	const ranges = [];
+	const selection = editor.editing.view.document.selection;
+
+	for ( const range of selection.getRanges() ) {
+		ranges.push( {
+			type: 'selection',
+			start: getViewPositionDefinition( range.start ),
+			end: getViewPositionDefinition( range.end )
+		} );
+	}
+
+	return ranges;
 }

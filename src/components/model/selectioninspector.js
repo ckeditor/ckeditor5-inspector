@@ -113,8 +113,8 @@ class ModelSelectionInspector extends Component {
 				},
 			},
 			attributes: {},
-			anchor: getRangePositionDetails( getModelPositionDefinition( anchor ) ),
-			focus: getRangePositionDetails( getModelPositionDefinition( focus ) ),
+			anchor: getPositionDetails( getModelPositionDefinition( anchor ) ),
+			focus: getPositionDetails( getModelPositionDefinition( focus ) ),
 			ranges: {},
 		};
 
@@ -128,11 +128,11 @@ class ModelSelectionInspector extends Component {
 				subProperties: {
 					start: {
 						value: '',
-						subProperties: stringifyPropertyList( getRangePositionDetails( range.start ) )
+						subProperties: stringifyPropertyList( getPositionDetails( range.start ) )
 					},
 					end: {
 						value: '',
-						subProperties: stringifyPropertyList( getRangePositionDetails( range.end ) )
+						subProperties: stringifyPropertyList( getPositionDetails( range.end ) )
 					}
 				}
 			};
@@ -150,7 +150,7 @@ class ModelSelectionInspector extends Component {
 	}
 }
 
-function getRangePositionDetails( { path, stickiness, index, isAtEnd, isAtStart, offset, textNode } ) {
+function getPositionDetails( { path, stickiness, index, isAtEnd, isAtStart, offset, textNode } ) {
 	return {
 		path: {
 			value: path

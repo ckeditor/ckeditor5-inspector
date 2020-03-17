@@ -57,7 +57,7 @@ export default class ModelTree extends Component {
 				</div>
 			]}
 			<Tree
-				definition={this.props.treeDefinition}
+				definition={this.props.definition}
 				textDirection={this.props.editor.locale.contentLanguageDirection}
 				onClick={this.props.onClick}
 				showCompactText={this.state.showCompactText}
