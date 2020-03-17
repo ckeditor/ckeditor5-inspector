@@ -18,8 +18,28 @@ import { getModelNodeDefinition, getModelPositionDefinition } from './utils';
 const LOCAL_STORAGE_ACTIVE_TAB = 'active-model-tab-name';
 const LOCAL_STORAGE_SHOW_MARKERS = 'model-show-markers';
 const MARKER_COLORS = [
-	'#e040fb', '#536dfe', '#00c853', '#f57f17', '#607d8b', '#9e9e9e',
+	'#03a9f4',
+	'#fb8c00',
+	'#009688',
+	'#e91e63',
+	'#4caf50',
+	'#00bcd4',
+	'#607d8b',
+	'#cddc39',
+	'#9c27b0',
+	'#f44336',
+	'#6d4c41',
+	'#8bc34a',
+	'#3f51b5',
+	'#2196f3',
+	'#f4511e',
+	'#673ab7',
+	'#ffb300',
 ];
+
+// for ( const c of MARKER_COLORS ) {
+// 	document.write( `<span style="background: ${c}">${c}</span>'`);
+// }
 
 class ModelPane extends Component {
 	constructor( props ) {
@@ -199,7 +219,7 @@ function getEditorModelRanges( editor ) {
 function getEditorModelMarkers( editor ) {
 	const markers = [];
 	const model = editor.model;
-	let markerCount = 1;
+	let markerCount = 0;
 
 	for ( const marker of model.markers ) {
 		const { name, affectsData, managedUsingOperations } = marker;
@@ -213,7 +233,7 @@ function getEditorModelMarkers( editor ) {
 			presentation: {
 				// When there are more markers than colors, let's start over and reuse
 				// the colors.
-				color: MARKER_COLORS[ ( MARKER_COLORS.length - 1 ) % markerCount++ ],
+				color: MARKER_COLORS[ markerCount++ % ( MARKER_COLORS.length - 1 ) ],
 			},
 			start: getModelPositionDefinition( marker.getStart() ),
 			end: getModelPositionDefinition( marker.getEnd() )
