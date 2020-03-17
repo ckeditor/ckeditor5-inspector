@@ -19,7 +19,7 @@ class CommandTree extends Component {
 	render() {
 		return <NavBox>
 			<Tree
-				items={this.getCommandStates()}
+				definition={this.getCommandStates()}
 				onClick={this.props.onClick}
 				activeNode={this.props.currentCommandName}
 			/>

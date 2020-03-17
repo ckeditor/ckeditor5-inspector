@@ -30,17 +30,23 @@ export default class TreeElement extends TreeNode {
 		const beforeNodeName = [];
 		const afterNodeName = [];
 
-		definition.positionsBefore.forEach( ( position, index ) => {
-			beforeNodeName.push( <TreePosition key={'position-before:' + index} definition={position} /> );
-		} );
+		if ( definition.positionsBefore ) {
+			definition.positionsBefore.forEach( ( position, index ) => {
+				beforeNodeName.push( <TreePosition key={'position-before:' + index} definition={position} /> );
+			} );
+		}
 
-		definition.positionsAfter.forEach( ( position, index ) => {
-			afterNodeName.push( <TreePosition key={'position-after:' + index} definition={position} /> );
-		} );
+		if ( definition.positionsAfter ) {
+			definition.positionsAfter.forEach( ( position, index ) => {
+				afterNodeName.push( <TreePosition key={'position-after:' + index} definition={position} /> );
+			} );
+		}
 
-		definition.positions.forEach( ( position, index ) => {
-			children.push( <TreePosition key={'position' + index} definition={position} /> );
-		} );
+		if ( definition.positions ) {
+			definition.positions.forEach( ( position, index ) => {
+				children.push( <TreePosition key={'position' + index} definition={position} /> );
+			} );
+		}
 
 		return <div className={nodeClasses.join( ' ' )} onClick={this.handleClick}>
 			{beforeNodeName}

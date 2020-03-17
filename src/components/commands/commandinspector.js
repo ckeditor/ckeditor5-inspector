@@ -53,7 +53,7 @@ class CommandInspector extends Component {
 				{
 					name: 'Properties',
 					url: info.url,
-					items: info.properties
+					itemDefinitions: info.properties
 				}
 			]}
 		/>;
@@ -73,10 +73,14 @@ class CommandInspector extends Component {
 			name,
 			type: 'Command',
 			url: 'https://ckeditor.com/docs/ckeditor5/latest/api/module_core_command-Command.html',
-			properties: stringifyPropertyList( [
-				[ 'isEnabled', command.isEnabled ],
-				[ 'value', command.value ]
-			] ),
+			properties: stringifyPropertyList( {
+				isEnabled: {
+					value: command.isEnabled
+				},
+				value: {
+					value: command.value
+				}
+			} ),
 			command,
 		};
 	}
