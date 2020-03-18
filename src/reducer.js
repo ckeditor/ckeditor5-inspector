@@ -57,7 +57,7 @@ function getNewActiveTabState( state, action ) {
 
 function getNewEditorsState( state, action ) {
 	const newState = {
-		editors: action.editors
+		editors: new Map( action.editors )
 	};
 
 	if ( !action.editors.has( state.currentEditorName ) ) {
