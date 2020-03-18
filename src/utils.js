@@ -46,6 +46,10 @@ function getNextEditorName() {
 	return `editor-${ ++unnamedEditorCount }`;
 }
 
+export function getFirstEditorName( editors ) {
+	return [ ...editors ][ 0 ][ 0 ] || '';
+}
+
 function isEditorInstance( arg ) {
 	// Quack! 🦆
 	return !!arg.model && !!arg.editing;

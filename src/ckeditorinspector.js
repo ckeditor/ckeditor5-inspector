@@ -10,16 +10,20 @@ import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from './reducer';
+import { setEditors } from './actions';
 
 import InspectorUI from './ui';
 import Logger from './logger';
-import { normalizeArguments } from './utils';
+import StorageManager from './storagemanager';
+import { normalizeArguments, getFirstEditorName } from './utils';
 import './ckeditorinspector.css';
 
 // From changelog -> webpack.
 window.CKEDITOR_INSPECTOR_VERSION = CKEDITOR_INSPECTOR_VERSION;
 
-const REDUX_STORE = createStore( reducer );
+const LOCAL_STORAGE_ACTIVE_TAB = 'active-tab-name';
+const LOCAL_STORAGE_IS_COLLAPSED = 'is-collapsed';
+const LOCAL_STORAGE_INSPECTOR_HEIGHT = 'height';
 
 export default class CKEditorInspector {
 	constructor() {
@@ -151,14 +155,7 @@ export default class CKEditorInspector {
 	}
 
 	static _updateEditorsState() {
-		// Don't update state if the application was destroyed.
-		if ( !CKEditorInspector._isMounted ) {
-			return;
-		}
-
-		CKEditorInspector._inspectorRef.current.setState( {
-			editors: CKEditorInspector._editors
-		} );
+		CKEditorInspector._store.dispatch( setEditors( CKEditorInspector._editors ) );
 	}
 
 	static _mount( options ) {
@@ -170,20 +167,20 @@ export default class CKEditorInspector {
 		container.className = 'ck-inspector-wrapper';
 		document.body.appendChild( container );
 
+		CKEditorInspector._store = createStore( reducer, {
+			editors: CKEditorInspector._editors,
+			currentEditorName: getFirstEditorName( CKEditorInspector._editors ),
+			activeTab: StorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Model',
+			isCollapsed: options.isCollapsed || StorageManager.get( LOCAL_STORAGE_IS_COLLAPSED ) === 'true',
+			height: StorageManager.get( LOCAL_STORAGE_INSPECTOR_HEIGHT ) || '400px'
+		} );
+
 		ReactDOM.render(
-			<Provider store={REDUX_STORE}>
-				<InspectorUI
-					ref={CKEditorInspector._inspectorRef}
-					editors={CKEditorInspector._editors}
-					isCollapsed={options.isCollapsed}
-				/>
+			<Provider store={CKEditorInspector._store}>
+				<InspectorUI />
 			</Provider>,
 			container
 		);
-	}
-
-	static get _isMounted() {
-		return !!CKEditorInspector._inspectorRef.current;
 	}
 
 	static _isAttachedTo( editor ) {
@@ -192,7 +189,6 @@ export default class CKEditorInspector {
 }
 
 CKEditorInspector._editors = new Map();
-CKEditorInspector._inspectorRef = React.createRef();
 CKEditorInspector._wrapper = null;
 
 /**

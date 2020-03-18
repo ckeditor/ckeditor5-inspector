@@ -7,6 +7,14 @@
 
 import React, { Component } from 'react';
 import { Rnd } from 'react-rnd';
+import { connect } from 'react-redux';
+import {
+	toggleIsCollapsed,
+	setHeight,
+	setEditors,
+	setCurrentEditorName,
+	setActiveTab
+} from './actions';
 
 import Tabs from './components/tabs';
 import Select from './components/select';
@@ -15,14 +23,9 @@ import ModelPane from './model/pane';
 import ViewPane from './view/pane';
 import CommandsPane from './commands/pane';
 
-import StorageManager from './storagemanager';
 import './ui.css';
 
-const LOCAL_STORAGE_ACTIVE_TAB = 'active-tab-name';
-const LOCAL_STORAGE_IS_COLLAPSED = 'is-collapsed';
-const LOCAL_STORAGE_INSPECTOR_HEIGHT = 'height';
 const INSPECTOR_MIN_HEIGHT = '100';
-const INSPECTOR_DEFAULT_HEIGHT = '400px';
 const INSPECTOR_COLLAPSED_HEIGHT = 30;
 const INSPECTOR_STYLES = {
 	position: 'fixed',
@@ -32,67 +35,24 @@ const INSPECTOR_STYLES = {
 	top: 'auto'
 };
 
-export default class InspectorUI extends Component {
+class InspectorUI extends Component {
 	constructor( props ) {
 		super( props );
 
-		const height = StorageManager.get( LOCAL_STORAGE_INSPECTOR_HEIGHT ) || INSPECTOR_DEFAULT_HEIGHT;
+		updateBodyHeight( this.props.height );
 
-		// The collapsed state can be either configured by passing an option to `attach()`
-		// or retrieved from the last "session".
-		const isCollapsed = this.props.isCollapsed === true || StorageManager.get( LOCAL_STORAGE_IS_COLLAPSED ) === 'true';
-
-		this.state = {
-			isCollapsed,
-			height,
-			editors: null,
-			currentEditorName: null,
-			activeTab: StorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Model'
-		};
-
-		updateBodyHeight( height );
-
-		this.handlePaneChange = this.handlePaneChange.bind( this );
-		this.handleEditorChange = this.handleEditorChange.bind( this );
-		this.handleToggleCollapseClick = this.handleToggleCollapseClick.bind( this );
 		this.handleInspectorResize = this.handleInspectorResize.bind( this );
 	}
 
-	handlePaneChange( activeTab ) {
-		this.setState( {
-			activeTab
-		}, () => {
-			StorageManager.set( LOCAL_STORAGE_ACTIVE_TAB, activeTab );
-		} );
-	}
-
-	handleEditorChange( name ) {
-		this.setState( {
-			currentEditorName: name
-		} );
-	}
-
-	handleToggleCollapseClick() {
-		this.setState( {
-			isCollapsed: !this.state.isCollapsed
-		}, () => {
-			StorageManager.set( LOCAL_STORAGE_IS_COLLAPSED, this.state.isCollapsed );
-		} );
-	}
-
 	handleInspectorResize( evt, direction, ref ) {
-		this.setState( {
-			height: ref.style.height
-		}, () => {
-			const height = ref.style.height;
+		const height = ref.style.height;
 
-			StorageManager.set( LOCAL_STORAGE_INSPECTOR_HEIGHT, height );
-			updateBodyHeight( height );
-		} );
+		this.props.setHeight( height );
+		updateBodyHeight( height );
 	}
 
 	render() {
-		if ( this.state.isCollapsed ) {
+		if ( this.props.isCollapsed ) {
 			document.body.classList.remove( 'ck-inspector-body-expanded' );
 			document.body.classList.add( 'ck-inspector-body-collapsed' );
 		} else {
@@ -100,37 +60,40 @@ export default class InspectorUI extends Component {
 			document.body.classList.add( 'ck-inspector-body-expanded' );
 		}
 
-		const currentEditorInstance = this.state.editors.get( this.state.currentEditorName );
+		const currentEditorInstance = this.props.editors.get( this.props.currentEditorName );
 
 		return <Rnd
 			bounds='window'
-			enableResizing={{ top: !this.state.isCollapsed }}
+			enableResizing={{ top: !this.props.isCollapsed }}
 			disableDragging={true}
 			minHeight={INSPECTOR_MIN_HEIGHT}
 			maxHeight="100%"
 			style={INSPECTOR_STYLES}
 			className={[
 				'ck-inspector',
-				this.state.isCollapsed ? 'ck-inspector_collapsed' : ''
+				this.props.isCollapsed ? 'ck-inspector_collapsed' : ''
 			].join( ' ' )}
 			position={{ x: 0, y: '100%' }}
 			size={{
 				width: '100%',
-				height: this.state.isCollapsed ? INSPECTOR_COLLAPSED_HEIGHT : this.state.height
+				height: this.props.isCollapsed ? INSPECTOR_COLLAPSED_HEIGHT : this.props.height
 			}}
 			onResizeStop={this.handleInspectorResize}>
 			<Tabs
-				onTabChange={this.handlePaneChange}
+				onTabChange={this.props.setActiveTab}
 				contentBefore={<DocsButton key="docs" />}
-				activeTab={this.state.activeTab}
+				activeTab={this.props.activeTab}
 				contentAfter={[
 					<EditorInstanceSelector
 						key="selector"
-						currentEditorName={this.state.currentEditorName}
-						editors={this.state.editors}
-						onChange={evt => this.handleEditorChange( evt.target.value )}
+						currentEditorName={this.props.currentEditorName}
+						editors={this.props.editors}
+						onChange={evt => this.props.setCurrentEditorName( evt.target.value )}
 					/>,
-					<ToggleButton key="inspector-toggle" onClick={this.handleToggleCollapseClick} isUp={this.state.isCollapsed} />
+					<ToggleButton key="inspector-toggle"
+						onClick={this.props.toggleIsCollapsed}
+						isUp={this.props.isCollapsed}
+					/>
 				]}
 			>
 				<ModelPane label="Model" editor={currentEditorInstance} />
@@ -144,18 +107,15 @@ export default class InspectorUI extends Component {
 		document.body.classList.remove( 'ck-inspector-body-expanded' );
 		document.body.classList.remove( 'ck-inspector-body-collapsed' );
 	}
-
-	static getDerivedStateFromProps( props, state ) {
-		if ( !props.editors.has( state.currentEditorName ) ) {
-			return {
-				editors: props.editors,
-				currentEditorName: props.editors.size ? [ ...props.editors ][ 0 ][ 0 ] : ''
-			};
-		} else {
-			return null;
-		}
-	}
 }
+
+const mapStateToProps = ( { isCollapsed, height, editors, currentEditorName, activeTab } ) => {
+	return { isCollapsed, height, editors, currentEditorName, activeTab };
+};
+
+const mapDispatchToProps = { toggleIsCollapsed, setHeight, setEditors, setCurrentEditorName, setActiveTab };
+
+export default connect( mapStateToProps, mapDispatchToProps )( InspectorUI );
 
 export class DocsButton extends Component {
 	render() {
