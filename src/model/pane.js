@@ -14,7 +14,7 @@ import ModelNodeInspector from './nodeinspector';
 import ModelSelectionInspector from './selectioninspector';
 import ModelMarkerInspector from './markerinspector';
 
-import StorageManager from '../storagemanager';
+import LocalStorageManager from '../localstoragemanager';
 import editorEventObserver from '../editorobserver';
 import { getModelNodeDefinition, getModelPositionDefinition } from './utils';
 
@@ -48,7 +48,7 @@ class ModelPane extends Component {
 	constructor( props ) {
 		super( props );
 
-		const showMarkers = StorageManager.get( LOCAL_STORAGE_SHOW_MARKERS );
+		const showMarkers = LocalStorageManager.get( LOCAL_STORAGE_SHOW_MARKERS );
 
 		this.state = {
 			editor: null,
@@ -56,7 +56,7 @@ class ModelPane extends Component {
 			currentRootName: null,
 			currentEditorNode: null,
 			showMarkers: showMarkers ? showMarkers === 'true' : true,
-			activeTab: StorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Inspect'
+			activeTab: LocalStorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Inspect'
 		};
 
 		this.handleRootChange = this.handleRootChange.bind( this );
@@ -84,7 +84,7 @@ class ModelPane extends Component {
 				this.setState( {
 					activeTab: 'Inspect'
 				}, () => {
-					StorageManager.set( LOCAL_STORAGE_ACTIVE_TAB, 'Inspect' );
+					LocalStorageManager.set( LOCAL_STORAGE_ACTIVE_TAB, 'Inspect' );
 				} );
 			}
 		} );
@@ -98,7 +98,7 @@ class ModelPane extends Component {
 		this.setState( {
 			activeTab
 		}, () => {
-			StorageManager.set( LOCAL_STORAGE_ACTIVE_TAB, activeTab );
+			LocalStorageManager.set( LOCAL_STORAGE_ACTIVE_TAB, activeTab );
 		} );
 	}
 
@@ -106,7 +106,7 @@ class ModelPane extends Component {
 		this.setState( {
 			showMarkers: evt.target.checked
 		}, () => {
-			StorageManager.set( LOCAL_STORAGE_SHOW_MARKERS, this.state.showMarkers );
+			LocalStorageManager.set( LOCAL_STORAGE_SHOW_MARKERS, this.state.showMarkers );
 		} );
 	}
 

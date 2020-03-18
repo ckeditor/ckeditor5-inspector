@@ -14,7 +14,7 @@ import ViewNodeInspector from './nodeinspector';
 import ViewSelectionInspector from './selectioninspector';
 import { getViewNodeDefinition, getViewPositionDefinition } from './utils';
 import editorEventObserver from '../editorobserver';
-import StorageManager from '../storagemanager';
+import LocalStorageManager from '../localstoragemanager';
 
 // import '../pane.css';
 
@@ -31,8 +31,8 @@ class ViewPane extends Component {
 			editorRoots: null,
 			currentRootName: null,
 
-			showTypes: StorageManager.get( LOCAL_STORAGE_ELEMENT_TYPES ) === 'true',
-			activeTab: StorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Inspect'
+			showTypes: LocalStorageManager.get( LOCAL_STORAGE_ELEMENT_TYPES ) === 'true',
+			activeTab: LocalStorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Inspect'
 		};
 
 		this.handleTreeClick = this.handleTreeClick.bind( this );
@@ -60,7 +60,7 @@ class ViewPane extends Component {
 				this.setState( {
 					activeTab: 'Inspect'
 				}, () => {
-					StorageManager.set( LOCAL_STORAGE_ACTIVE_TAB, 'Inspect' );
+					LocalStorageManager.set( LOCAL_STORAGE_ACTIVE_TAB, 'Inspect' );
 				} );
 			}
 		} );
@@ -74,13 +74,13 @@ class ViewPane extends Component {
 		this.setState( {
 			activeTab
 		}, () => {
-			StorageManager.set( LOCAL_STORAGE_ACTIVE_TAB, activeTab );
+			LocalStorageManager.set( LOCAL_STORAGE_ACTIVE_TAB, activeTab );
 		} );
 	}
 
 	handleShowTypesChange( evt ) {
 		this.setState( { showTypes: evt.target.checked }, () => {
-			StorageManager.set( LOCAL_STORAGE_ELEMENT_TYPES, this.state.showTypes );
+			LocalStorageManager.set( LOCAL_STORAGE_ELEMENT_TYPES, this.state.showTypes );
 		} );
 	}
 

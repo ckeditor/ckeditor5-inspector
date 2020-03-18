@@ -7,7 +7,7 @@
 
 import React, { Component } from 'react';
 import { Rnd } from 'react-rnd';
-import StorageManager from '../storagemanager';
+import LocalStorageManager from '../localstoragemanager';
 import './sidepane.css';
 
 const LOCAL_STORAGE_SIDE_PANE_WIDTH = 'side-pane-width';
@@ -22,7 +22,7 @@ export default class SidePane extends Component {
 		super( props );
 
 		this.state = {
-			width: StorageManager.get( LOCAL_STORAGE_SIDE_PANE_WIDTH ) || SIDE_PANE_DEFAULT_WIDTH
+			width: LocalStorageManager.get( LOCAL_STORAGE_SIDE_PANE_WIDTH ) || SIDE_PANE_DEFAULT_WIDTH
 		};
 
 		this.handleSidePaneResize = this.handleSidePaneResize.bind( this );
@@ -34,9 +34,9 @@ export default class SidePane extends Component {
 
 	handleSidePaneResize( evt, direction, ref ) {
 		this.setState( {
-			width: ref.style.width,
+			width: ref.style.width
 		}, () => {
-			StorageManager.set( LOCAL_STORAGE_SIDE_PANE_WIDTH, ref.style.width );
+			LocalStorageManager.set( LOCAL_STORAGE_SIDE_PANE_WIDTH, ref.style.width );
 		} );
 	}
 

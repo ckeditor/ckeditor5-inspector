@@ -9,12 +9,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import reducer from './reducer';
-import { setEditors } from './actions';
+import reducer from './data/reducer';
+import { setEditors } from './data/actions';
 
 import InspectorUI from './ui';
 import Logger from './logger';
-import StorageManager from './storagemanager';
+import LocalStorageManager from './localstoragemanager';
 import { normalizeArguments, getFirstEditorName } from './utils';
 import './ckeditorinspector.css';
 
@@ -170,9 +170,9 @@ export default class CKEditorInspector {
 		CKEditorInspector._store = createStore( reducer, {
 			editors: CKEditorInspector._editors,
 			currentEditorName: getFirstEditorName( CKEditorInspector._editors ),
-			activeTab: StorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Model',
-			isCollapsed: options.isCollapsed || StorageManager.get( LOCAL_STORAGE_IS_COLLAPSED ) === 'true',
-			height: StorageManager.get( LOCAL_STORAGE_INSPECTOR_HEIGHT ) || '400px'
+			activeTab: LocalStorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Model',
+			isCollapsed: options.isCollapsed || LocalStorageManager.get( LOCAL_STORAGE_IS_COLLAPSED ) === 'true',
+			height: LocalStorageManager.get( LOCAL_STORAGE_INSPECTOR_HEIGHT ) || '400px'
 		} );
 
 		ReactDOM.render(

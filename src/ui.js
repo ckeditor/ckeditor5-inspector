@@ -14,7 +14,7 @@ import {
 	setEditors,
 	setCurrentEditorName,
 	setActiveTab
-} from './actions';
+} from './data/actions';
 
 import Tabs from './components/tabs';
 import Select from './components/select';

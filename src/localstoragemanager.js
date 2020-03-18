@@ -5,7 +5,7 @@
 
 /* global window */
 
-export default class StorageManager {
+export default class LocalStorageManager {
 	static set( name, value ) {
 		window.localStorage.setItem( 'ck5-inspector-' + name, value );
 	}

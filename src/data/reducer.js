@@ -11,8 +11,8 @@ import {
 	SET_ACTIVE_TAB
 } from './actions';
 
-import StorageManager from './storagemanager';
-import { getFirstEditorName } from './utils';
+import LocalStorageManager from '../localstoragemanager';
+import { getFirstEditorName } from '../utils';
 
 const LOCAL_STORAGE_ACTIVE_TAB = 'active-tab-name';
 const LOCAL_STORAGE_IS_COLLAPSED = 'is-collapsed';
@@ -36,7 +36,7 @@ export default function reducer( state, action ) {
 }
 
 function getNewHeightState( state, action ) {
-	StorageManager.set( LOCAL_STORAGE_INSPECTOR_HEIGHT, action.newHeight );
+	LocalStorageManager.set( LOCAL_STORAGE_INSPECTOR_HEIGHT, action.newHeight );
 
 	return { ...state, height: action.newHeight };
 }
@@ -44,13 +44,13 @@ function getNewHeightState( state, action ) {
 function getNewIsCollapsedState( state ) {
 	const newState = !state.isCollapsed;
 
-	StorageManager.set( LOCAL_STORAGE_IS_COLLAPSED, newState );
+	LocalStorageManager.set( LOCAL_STORAGE_IS_COLLAPSED, newState );
 
 	return { ...state, isCollapsed: newState };
 }
 
 function getNewActiveTabState( state, action ) {
-	StorageManager.set( LOCAL_STORAGE_ACTIVE_TAB, action.tabName );
+	LocalStorageManager.set( LOCAL_STORAGE_ACTIVE_TAB, action.tabName );
 
 	return { ...state, activeTab: action.tabName };
 }

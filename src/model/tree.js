@@ -10,7 +10,7 @@ import NavBox from '../components/navbox';
 import Select from '../components/select';
 import Checkbox from '../components/checkbox';
 
-import StorageManager from '../storagemanager';
+import LocalStorageManager from '../localstoragemanager';
 
 const LOCAL_STORAGE_COMPACT_TEXT = 'model-compact-text';
 
@@ -19,7 +19,7 @@ export default class ModelTree extends Component {
 		super( props );
 
 		this.state = {
-			showCompactText: StorageManager.get( LOCAL_STORAGE_COMPACT_TEXT ) === 'true'
+			showCompactText: LocalStorageManager.get( LOCAL_STORAGE_COMPACT_TEXT ) === 'true'
 		};
 
 		this.handleCompactTextChange = this.handleCompactTextChange.bind( this );
@@ -27,7 +27,7 @@ export default class ModelTree extends Component {
 
 	handleCompactTextChange( evt ) {
 		this.setState( { showCompactText: evt.target.checked }, () => {
-			StorageManager.set( LOCAL_STORAGE_COMPACT_TEXT, this.state.showCompactText );
+			LocalStorageManager.set( LOCAL_STORAGE_COMPACT_TEXT, this.state.showCompactText );
 		} );
 	}
 
