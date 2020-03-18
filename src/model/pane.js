@@ -4,14 +4,17 @@
  */
 
 import React, { Component } from 'react';
+
+import Pane from '../components/pane';
+import Tabs from '../components/tabs';
+import SidePane from '../components/sidepane';
+
 import ModelTree from './tree';
-import Pane from '../pane';
-import Tabs from '../tabs';
-import SidePane from '../sidepane';
 import ModelNodeInspector from './nodeinspector';
 import ModelSelectionInspector from './selectioninspector';
 import ModelMarkerInspector from './markerinspector';
-import StorageManager from '../../storagemanager';
+
+import StorageManager from '../storagemanager';
 import editorEventObserver from '../editorobserver';
 import { getModelNodeDefinition, getModelPositionDefinition } from './utils';
 
@@ -34,7 +37,7 @@ const MARKER_COLORS = [
 	'#2196f3',
 	'#f4511e',
 	'#673ab7',
-	'#ffb300',
+	'#ffb300'
 ];
 
 // for ( const c of MARKER_COLORS ) {
@@ -53,7 +56,7 @@ class ModelPane extends Component {
 			currentRootName: null,
 			currentEditorNode: null,
 			showMarkers: showMarkers ? showMarkers === 'true' : true,
-			activeTab: StorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Inspect',
+			activeTab: StorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Inspect'
 		};
 
 		this.handleRootChange = this.handleRootChange.bind( this );
@@ -233,7 +236,7 @@ function getEditorModelMarkers( editor ) {
 			presentation: {
 				// When there are more markers than colors, let's start over and reuse
 				// the colors.
-				color: MARKER_COLORS[ markerCount++ % ( MARKER_COLORS.length - 1 ) ],
+				color: MARKER_COLORS[ markerCount++ % ( MARKER_COLORS.length - 1 ) ]
 			},
 			start: getModelPositionDefinition( marker.getStart() ),
 			end: getModelPositionDefinition( marker.getEnd() )

@@ -4,10 +4,13 @@
  */
 
 import React, { Component } from 'react';
-import Tree from '../tree/tree';
-import NavBox from '../navbox';
+
+import Tree from '../components/tree/tree';
+import NavBox from '../components/navbox';
+import { stringify } from '../components/utils';
+
 import editorEventObserver from '../editorobserver';
-import { stringify } from '../utils';
+
 class CommandTree extends Component {
 	editorEventObserverConfig( props ) {
 		return {

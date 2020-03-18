@@ -7,14 +7,19 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import reducer from './reducer';
 
-import InspectorUI from './components/ui';
+import InspectorUI from './ui';
 import Logger from './logger';
 import { normalizeArguments } from './utils';
 import './ckeditorinspector.css';
 
 // From changelog -> webpack.
 window.CKEDITOR_INSPECTOR_VERSION = CKEDITOR_INSPECTOR_VERSION;
+
+const REDUX_STORE = createStore( reducer );
 
 export default class CKEditorInspector {
 	constructor() {
@@ -166,12 +171,15 @@ export default class CKEditorInspector {
 		document.body.appendChild( container );
 
 		ReactDOM.render(
-			<InspectorUI
-				ref={CKEditorInspector._inspectorRef}
-				editors={CKEditorInspector._editors}
-				isCollapsed={options.isCollapsed}
-			/>,
-			container );
+			<Provider store={REDUX_STORE}>
+				<InspectorUI
+					ref={CKEditorInspector._inspectorRef}
+					editors={CKEditorInspector._editors}
+					isCollapsed={options.isCollapsed}
+				/>
+			</Provider>,
+			container
+		);
 	}
 
 	static get _isMounted() {

@@ -50,3 +50,26 @@ function isEditorInstance( arg ) {
 	// Quack! 🦆
 	return !!arg.model && !!arg.editing;
 }
+
+export function compareArrays( a, b ) {
+	const minLen = Math.min( a.length, b.length );
+
+	for ( let i = 0; i < minLen; i++ ) {
+		if ( a[ i ] != b[ i ] ) {
+			// The arrays are different.
+			return i;
+		}
+	}
+
+	// Both arrays were same at all points.
+	if ( a.length == b.length ) {
+		// If their length is also same, they are the same.
+		return 'same';
+	} else if ( a.length < b.length ) {
+		// Compared array is shorter so it is a prefix of the other array.
+		return 'prefix';
+	} else {
+		// Compared array is longer so it is an extension of the other array.
+		return 'extension';
+	}
+}

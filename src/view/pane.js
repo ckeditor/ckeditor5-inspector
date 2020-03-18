@@ -4,16 +4,19 @@
  */
 
 import React, { Component } from 'react';
+
+import Pane from '../components/pane';
+import Tabs from '../components/tabs';
+import SidePane from '../components/sidepane';
+
 import ViewTree from './tree';
-import Pane from '../pane';
-import Tabs from '../tabs';
-import SidePane from '../sidepane';
 import ViewNodeInspector from './nodeinspector';
 import ViewSelectionInspector from './selectioninspector';
 import { getViewNodeDefinition, getViewPositionDefinition } from './utils';
 import editorEventObserver from '../editorobserver';
-import StorageManager from '../../storagemanager';
-import '../pane.css';
+import StorageManager from '../storagemanager';
+
+// import '../pane.css';
 
 const LOCAL_STORAGE_ACTIVE_TAB = 'active-view-tab-name';
 const LOCAL_STORAGE_ELEMENT_TYPES = 'view-element-types';

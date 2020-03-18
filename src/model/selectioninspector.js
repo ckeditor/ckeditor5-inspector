@@ -4,12 +4,14 @@
  */
 
 import React, { Component } from 'react';
-import Logger from '../../logger';
-import Button from './../button';
+
+import Button from '../components/button';
+import ObjectInspector from '../components/objectinspector';
+import { stringifyPropertyList } from '../components/utils';
+
+import Logger from '../logger';
 import editorEventObserver from '../editorobserver';
-import ObjectInspector from './../objectinspector';
 import { getModelPositionDefinition } from './utils';
-import { stringifyPropertyList } from '../utils';
 
 const API_DOCS_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_selection-Selection.html';
 
@@ -110,12 +112,12 @@ class ModelSelectionInspector extends Component {
 				},
 				rangeCount: {
 					value: selection.rangeCount
-				},
+				}
 			},
 			attributes: {},
 			anchor: getPositionDetails( getModelPositionDefinition( anchor ) ),
 			focus: getPositionDetails( getModelPositionDefinition( focus ) ),
-			ranges: {},
+			ranges: {}
 		};
 
 		for ( const [ name, value ] of selection.getAttributes() ) {

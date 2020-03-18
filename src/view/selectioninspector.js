@@ -4,12 +4,14 @@
  */
 
 import React, { Component } from 'react';
-import Logger from '../../logger';
-import Button from './../button';
+
+import Button from '../components/button';
+import ObjectInspector from '../components/objectinspector';
+import { stringifyPropertyList } from '../components/utils';
+
+import Logger from '../logger';
 import editorEventObserver from '../editorobserver';
-import ObjectInspector from './../objectinspector';
 import { getViewPositionDefinition } from './utils';
-import { stringifyPropertyList } from '../utils';
 
 const API_DOCS_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_selection-Selection.html';
 
@@ -103,7 +105,7 @@ class ViewSelectionInspector extends Component {
 				},
 				rangeCount: {
 					value: selection.rangeCount
-				},
+				}
 			},
 			anchor: getPositionDetails( getViewPositionDefinition( selection.anchor ) ),
 			focus: getPositionDetails( getViewPositionDefinition( selection.focus ) ),
@@ -151,7 +153,7 @@ function getPositionDetails( { offset, isAtEnd, isAtStart, parent } ) {
 		},
 		parent: {
 			value: parent
-		},
+		}
 	};
 }
 

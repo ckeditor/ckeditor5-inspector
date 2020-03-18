@@ -4,12 +4,14 @@
  */
 
 import React, { Component } from 'react';
-import Button from './../button';
-import Pane from '../pane';
-import Logger from '../../logger';
+
+import Button from '../components/button';
+import Pane from '../components/pane';
+import ObjectInspector from '../components/objectinspector';
+import { stringifyPropertyList } from '../components/utils';
+
+import Logger from '../logger';
 import editorEventObserver from '../editorobserver';
-import ObjectInspector from './../objectinspector';
-import { stringifyPropertyList } from '../utils';
 
 class CommandInspector extends Component {
 	editorEventObserverConfig( props ) {
@@ -81,7 +83,7 @@ class CommandInspector extends Component {
 					value: command.value
 				}
 			} ),
-			command,
+			command
 		};
 	}
 }

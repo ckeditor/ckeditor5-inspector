@@ -4,11 +4,13 @@
  */
 
 import React, { Component } from 'react';
-import Pane from '../pane';
-import Logger from '../../logger';
-import Button from './../button';
-import ObjectInspector from './../objectinspector';
-import { stringifyPropertyList } from '../utils';
+
+import ObjectInspector from './../components/objectinspector';
+import Pane from '../components/pane';
+import Button from './../components/button';
+import { stringifyPropertyList } from '../components/utils';
+
+import Logger from '../logger';
 
 const API_DOCS_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_markercollection-Marker.html';
 
@@ -45,7 +47,7 @@ export default class ModelMarkerInspector extends Component {
 					presentation: {
 						expandCollapsibles: true
 					}
-				},
+				}
 			]}
 		/>;
 	}
@@ -87,7 +89,7 @@ function markerTreeToPropertyListDefinition( markerTree ) {
 				presentation: {
 					colorBox: nodeValue.presentation.color
 				},
-				subProperties: markerDetails,
+				subProperties: markerDetails
 			};
 		} else {
 			const nodeCount = Object.keys( nodeValue ).length;

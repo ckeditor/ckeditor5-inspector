@@ -8,12 +8,14 @@
 import React, { Component } from 'react';
 import { Rnd } from 'react-rnd';
 
-import StorageManager from '../storagemanager';
+import Tabs from './components/tabs';
+import Select from './components/select';
+
 import ModelPane from './model/pane';
 import ViewPane from './view/pane';
 import CommandsPane from './commands/pane';
-import Tabs from './tabs';
-import Select from './select';
+
+import StorageManager from './storagemanager';
 import './ui.css';
 
 const LOCAL_STORAGE_ACTIVE_TAB = 'active-tab-name';
@@ -80,7 +82,7 @@ export default class InspectorUI extends Component {
 
 	handleInspectorResize( evt, direction, ref ) {
 		this.setState( {
-			height: ref.style.height,
+			height: ref.style.height
 		}, () => {
 			const height = ref.style.height;
 
@@ -109,7 +111,7 @@ export default class InspectorUI extends Component {
 			style={INSPECTOR_STYLES}
 			className={[
 				'ck-inspector',
-				this.state.isCollapsed ? 'ck-inspector_collapsed' : '',
+				this.state.isCollapsed ? 'ck-inspector_collapsed' : ''
 			].join( ' ' )}
 			position={{ x: 0, y: '100%' }}
 			size={{

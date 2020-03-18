@@ -4,19 +4,23 @@
  */
 
 import React, { Component } from 'react';
+
+import Pane from '../components/pane';
+import Tabs from '../components/tabs';
+import SidePane from '../components/sidepane';
+
 import CommandTree from './tree';
-import Pane from '../pane';
-import Tabs from '../tabs';
-import SidePane from '../sidepane';
 import CommandInspector from './commandinspector';
-import '../pane.css';
+
+// import '../pane.css';
+
 export default class CommandsPane extends Component {
 	constructor( props ) {
 		super( props );
 
 		this.state = {
 			editor: null,
-			currentCommandName: null,
+			currentCommandName: null
 		};
 
 		this.handleTreeClick = this.handleTreeClick.bind( this );

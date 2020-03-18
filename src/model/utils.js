@@ -3,10 +3,8 @@
  * For licensing, see LICENSE.md.
  */
 
-import {
-	stringify,
-	compareArrays
-} from '../utils';
+import { compareArrays } from '../utils';
+import { stringify } from '../components/utils';
 
 export function isModelElement( node ) {
 	return node && node.is( 'element' );
@@ -28,7 +26,7 @@ export function getModelPositionDefinition( position ) {
 		isAtEnd: position.isAtEnd,
 		isAtStart: position.isAtStart,
 		offset: position.offset,
-		textNode: position.textNode && position.textNode.data,
+		textNode: position.textNode && position.textNode.data
 	};
 }
 
@@ -185,7 +183,7 @@ function getRangePositionsInElement( node, range ) {
 			isEnd: false,
 			presentation: range.presentation,
 			type: range.type,
-			name: range.name,
+			name: range.name
 		} );
 	}
 

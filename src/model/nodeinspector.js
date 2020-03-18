@@ -3,20 +3,20 @@
  * For licensing, see LICENSE.md.
  */
 
-/* global */
-
 import React, { Component } from 'react';
-import Button from './../button';
-import Pane from '../pane';
-import ObjectInspector from '../objectinspector';
-import Logger from '../../logger';
+
+import Button from '../components/button';
+import Pane from '../components/pane';
+import ObjectInspector from '../components/objectinspector';
+import { stringifyPropertyList } from '../components/utils';
+
+import Logger from '../logger';
 import editorEventObserver from '../editorobserver';
 import {
 	isModelElement,
 	isModelRoot,
 	getNodePathString
 } from './utils';
-import { stringifyPropertyList } from '../utils';
 
 class ModelNodeInspector extends Component {
 	editorEventObserverConfig( props ) {
@@ -60,7 +60,7 @@ class ModelNodeInspector extends Component {
 					name: 'Properties',
 					url: info.url,
 					itemDefinitions: info.properties
-				},
+				}
 			]}
 		/>;
 	}

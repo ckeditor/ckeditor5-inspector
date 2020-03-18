@@ -4,11 +4,13 @@
  */
 
 import React, { Component } from 'react';
-import Tree from '../tree/tree';
-import NavBox from '../navbox';
-import Select from '../select';
-import Checkbox from '../checkbox';
-import StorageManager from '../../storagemanager';
+
+import Tree from '../components/tree/tree';
+import NavBox from '../components/navbox';
+import Select from '../components/select';
+import Checkbox from '../components/checkbox';
+
+import StorageManager from '../storagemanager';
 
 const LOCAL_STORAGE_COMPACT_TEXT = 'model-compact-text';
 
@@ -17,7 +19,7 @@ export default class ModelTree extends Component {
 		super( props );
 
 		this.state = {
-			showCompactText: StorageManager.get( LOCAL_STORAGE_COMPACT_TEXT ) === 'true',
+			showCompactText: StorageManager.get( LOCAL_STORAGE_COMPACT_TEXT ) === 'true'
 		};
 
 		this.handleCompactTextChange = this.handleCompactTextChange.bind( this );

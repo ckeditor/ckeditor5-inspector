@@ -3,10 +3,8 @@
  * For licensing, see LICENSE.md.
  */
 
-import {
-	stringify,
-	compareArrays
-} from '../utils';
+import { compareArrays } from '../utils';
+import { stringify } from '../components/utils';
 
 export function isViewElement( node ) {
 	return node && node.name;
@@ -119,7 +117,7 @@ function fillElementDefinition( elementDefinition, ranges, showTypes ) {
 				'Find out why',
 				'</a>.',
 				' --&gt;'
-			].join( '' ),
+			].join( '' )
 		} );
 	}
 
@@ -219,7 +217,7 @@ function getRangePositionsInViewNode( nodeDefinition, range ) {
 			isEnd: false,
 			presentation: range.presentation,
 			type: range.type,
-			name: range.name,
+			name: range.name
 		} );
 	}
 

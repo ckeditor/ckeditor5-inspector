@@ -4,9 +4,12 @@
  */
 
 import React, { Component } from 'react';
-import Button from './../button';
-import Pane from '../pane';
-import Logger from '../../logger';
+
+import ObjectInspector from '../components/objectinspector';
+import Button from '../components/button';
+import Pane from '../components/pane';
+import { stringifyPropertyList } from '../components/utils';
+
 import editorEventObserver from '../editorobserver';
 import {
 	isViewElement,
@@ -16,8 +19,7 @@ import {
 	isViewEditableElement,
 	isViewEmptyElement
 } from './utils';
-import { stringifyPropertyList } from '../utils';
-import ObjectInspector from '../objectinspector';
+import Logger from '../logger';
 
 const DOCS_URL_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view';
 
@@ -135,7 +137,7 @@ class NodeInspector extends Component {
 				},
 				childCount: {
 					value: node.childCount
-				},
+				}
 			};
 
 			for ( const [ name, value ] of node.getCustomProperties() ) {

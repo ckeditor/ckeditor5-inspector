@@ -4,10 +4,11 @@
  */
 
 import React, { Component } from 'react';
-import Tree from '../tree/tree';
-import Select from '../select';
-import NavBox from '../navbox';
-import Checkbox from '../checkbox';
+
+import Tree from '../components/tree/tree';
+import Select from '../components/select';
+import NavBox from '../components/navbox';
+import Checkbox from '../components/checkbox';
 
 export default class ViewTree extends Component {
 	render() {
