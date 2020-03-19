@@ -4,6 +4,7 @@
  */
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import Button from '../components/button';
 import Pane from '../components/pane';
@@ -11,7 +12,6 @@ import ObjectInspector from '../components/objectinspector';
 import { stringifyPropertyList } from '../components/utils';
 
 import Logger from '../logger';
-import editorEventObserver from '../editorobserver';
 import {
 	isModelElement,
 	isModelRoot,
@@ -19,13 +19,6 @@ import {
 } from './utils';
 
 class ModelNodeInspector extends Component {
-	editorEventObserverConfig( props ) {
-		return {
-			target: props.editor.model.document,
-			event: 'change'
-		};
-	}
-
 	render() {
 		const info = this.getInspectedEditorNodeInfo();
 
@@ -66,7 +59,7 @@ class ModelNodeInspector extends Component {
 	}
 
 	getInspectedEditorNodeInfo() {
-		const node = this.props.inspectedNode;
+		const node = this.props.currentNode;
 		const currentRootName = this.props.currentRootName;
 
 		if ( !node ) {
@@ -141,7 +134,7 @@ class ModelNodeInspector extends Component {
 
 		for ( const attribute in info.attributes ) {
 			const attributePropertyDefinitions = {};
-			const attirbuteProperties = this.props.editor.model.schema.getAttributeProperties( attribute );
+			const attirbuteProperties = this.props.currentEditor.model.schema.getAttributeProperties( attribute );
 
 			for ( const name in attirbuteProperties ) {
 				attributePropertyDefinitions[ name ] = { value: attirbuteProperties[ name ] };
@@ -154,4 +147,10 @@ class ModelNodeInspector extends Component {
 	}
 }
 
-export default editorEventObserver( ModelNodeInspector );
+const mapStateToProps = ( { currentEditor, model: { currentNode, currentRootName } } ) => {
+	return { currentEditor, currentNode, currentRootName };
+};
+
+const mapDispatchToProps = {};
+
+export default connect( mapStateToProps, mapDispatchToProps )( ModelNodeInspector );

@@ -4,6 +4,7 @@
  */
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import ObjectInspector from './../components/objectinspector';
 import Pane from '../components/pane';
@@ -14,7 +15,7 @@ import Logger from '../logger';
 
 const API_DOCS_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_markercollection-Marker.html';
 
-export default class ModelMarkerInspector extends Component {
+class ModelMarkerInspector extends Component {
 	render() {
 		const markerTree = getMarkerTree( this.props.markers );
 		const markerListDefinitions = markerTreeToPropertyListDefinition( markerTree );
@@ -37,7 +38,7 @@ export default class ModelMarkerInspector extends Component {
 					key="log"
 					type="log"
 					text="Log in console"
-					onClick={() => Logger.log( [ ...this.props.editor.model.markers ] )}
+					onClick={() => Logger.log( [ ...this.props.currentEditor.model.markers ] )}
 				/>
 			]}
 			lists={[
@@ -52,6 +53,14 @@ export default class ModelMarkerInspector extends Component {
 		/>;
 	}
 }
+
+const mapStateToProps = ( { currentEditor, model: { markers } } ) => {
+	return { currentEditor, markers };
+};
+
+const mapDispatchToProps = {};
+
+export default connect( mapStateToProps, mapDispatchToProps )( ModelMarkerInspector );
 
 function getMarkerTree( markers ) {
 	const markerTree = {};

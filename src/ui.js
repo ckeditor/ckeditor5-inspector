@@ -60,8 +60,6 @@ class InspectorUI extends Component {
 			document.body.classList.add( 'ck-inspector-body-expanded' );
 		}
 
-		const currentEditorInstance = this.props.editors.get( this.props.currentEditorName );
-
 		return <Rnd
 			bounds='window'
 			enableResizing={{ top: !this.props.isCollapsed }}
@@ -84,21 +82,13 @@ class InspectorUI extends Component {
 				contentBefore={<DocsButton key="docs" />}
 				activeTab={this.props.activeTab}
 				contentAfter={[
-					<EditorInstanceSelector
-						key="selector"
-						currentEditorName={this.props.currentEditorName}
-						editors={this.props.editors}
-						onChange={evt => this.props.setCurrentEditorName( evt.target.value )}
-					/>,
-					<ToggleButton key="inspector-toggle"
-						onClick={this.props.toggleIsCollapsed}
-						isUp={this.props.isCollapsed}
-					/>
+					<EditorInstanceSelector key="selector" />,
+					<ToggleButton key="inspector-toggle" />
 				]}
 			>
-				<ModelPane label="Model" editor={currentEditorInstance} />
-				<ViewPane label="View" editor={currentEditorInstance} />
-				<CommandsPane label="Commands" editor={currentEditorInstance} />
+				<ModelPane label="Model" />
+				<ViewPane label="View" />
+				<CommandsPane label="Commands" />
 			</Tabs>
 		</Rnd>;
 	}
@@ -127,22 +117,27 @@ export class DocsButton extends Component {
 	}
 }
 
-export class ToggleButton extends Component {
+class ToggleButtonVisual extends Component {
 	render() {
 		return <button
 			type="button"
-			onClick={this.props.onClick}
+			onClick={this.props.toggleIsCollapsed}
 			title="Toggle inspector"
 			className={[
 				'ck-inspector-navbox__navigation__toggle',
-				this.props.isUp ? ' ck-inspector-navbox__navigation__toggle_up' : ''
+				this.props.isCollapsed ? ' ck-inspector-navbox__navigation__toggle_up' : ''
 			].join( ' ' )}>
 				Toggle inspector
 		</button>;
 	}
 }
 
-export class EditorInstanceSelector extends Component {
+const ToggleButton = connect(
+	( { isCollapsed } ) => ( { isCollapsed } ),
+	{ toggleIsCollapsed }
+)( ToggleButtonVisual );
+
+export class EditorInstanceSelectorVisual extends Component {
 	render() {
 		return <div className="ck-inspector-editor-selector" key="editor-selector">
 			{this.props.currentEditorName ? <Select
@@ -150,11 +145,16 @@ export class EditorInstanceSelector extends Component {
 				label="Editor instance"
 				value={this.props.currentEditorName}
 				options={[ ...this.props.editors ].map( ( [ editorName ] ) => editorName ) }
-				onChange={this.props.onChange}
+				onChange={evt => this.props.setCurrentEditorName( evt.target.value )}
 			/> : ''}
 		</div>;
 	}
 }
+
+const EditorInstanceSelector = connect(
+	( { currentEditorName, editors } ) => ( { currentEditorName, editors } ),
+	{ setCurrentEditorName }
+)( EditorInstanceSelectorVisual );
 
 function updateBodyHeight( height ) {
 	document.body.style.setProperty( '--ck-inspector-height', height );

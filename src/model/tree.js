@@ -4,31 +4,37 @@
  */
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import {
+	toggleModelShowCompactText,
+	setModelCurrentRootName,
+	toggleModelShowMarkers,
+	setModelCurrentNode,
+	setModelActiveTab
+} from './data/actions';
 
 import Tree from '../components/tree/tree';
 import NavBox from '../components/navbox';
 import Select from '../components/select';
 import Checkbox from '../components/checkbox';
 
-import LocalStorageManager from '../localstoragemanager';
-
-const LOCAL_STORAGE_COMPACT_TEXT = 'model-compact-text';
-
-export default class ModelTree extends Component {
+class ModelTree extends Component {
 	constructor( props ) {
 		super( props );
 
-		this.state = {
-			showCompactText: LocalStorageManager.get( LOCAL_STORAGE_COMPACT_TEXT ) === 'true'
-		};
-
-		this.handleCompactTextChange = this.handleCompactTextChange.bind( this );
+		this.handleTreeClick = this.handleTreeClick.bind( this );
 	}
 
-	handleCompactTextChange( evt ) {
-		this.setState( { showCompactText: evt.target.checked }, () => {
-			LocalStorageManager.set( LOCAL_STORAGE_COMPACT_TEXT, this.state.showCompactText );
-		} );
+	handleTreeClick( evt, currentNode ) {
+		evt.persist();
+		evt.stopPropagation();
+
+		this.props.setModelCurrentNode( currentNode );
+
+		// Double click on a tree element should open the inspector.
+		if ( evt.detail === 2 ) {
+			this.props.setModelActiveTab( 'Inspect' );
+		}
 	}
 
 	render() {
@@ -39,32 +45,46 @@ export default class ModelTree extends Component {
 						id="view-root-select"
 						label="Root"
 						value={this.props.currentRootName}
-						options={this.props.editorRoots.map( root => root.rootName )}
-						onChange={evt => this.props.onRootChange( evt.target.value )}
+						options={this.props.roots.map( root => root.rootName )}
+						onChange={evt => this.props.setModelCurrentRootName( evt.target.value )}
 					/>
 				</div>,
 				<div className="ck-inspector-tree__config" key="text-cfg">
 					<Checkbox
 						label="Compact text"
 						id="model-compact-text"
-						isChecked={this.state.showCompactText}
-						onChange={this.handleCompactTextChange}
+						isChecked={this.props.showCompactText}
+						onChange={this.props.toggleModelShowCompactText}
 					/>
 					<Checkbox
 						label="Show markers"
 						id="model-show-markers"
 						isChecked={this.props.showMarkers}
-						onChange={this.props.onShowMarkersChange}
+						onChange={this.props.toggleModelShowMarkers}
 					/>
 				</div>
 			]}
 			<Tree
-				definition={this.props.definition}
-				textDirection={this.props.editor.locale.contentLanguageDirection}
-				onClick={this.props.onClick}
-				showCompactText={this.state.showCompactText}
-				activeNode={this.props.currentEditorNode}
+				definition={this.props.treeDefinition}
+				textDirection={this.props.currentEditor.locale.contentLanguageDirection}
+				onClick={this.handleTreeClick}
+				showCompactText={this.props.showCompactText}
+				activeNode={this.props.currentNode}
 			/>
 		</NavBox>;
 	}
 }
+
+const mapStateToProps = ( { currentEditor, model: { roots, treeDefinition, currentRootName, showMarkers, showCompactText } } ) => {
+	return { treeDefinition, currentEditor, currentRootName, roots, showMarkers, showCompactText };
+};
+
+const mapDispatchToProps = {
+	toggleModelShowCompactText,
+	setModelCurrentRootName,
+	toggleModelShowMarkers,
+	setModelCurrentNode,
+	setModelActiveTab
+};
+
+export default connect( mapStateToProps, mapDispatchToProps )( ModelTree );

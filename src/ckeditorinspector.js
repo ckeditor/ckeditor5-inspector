@@ -15,7 +15,11 @@ import { setEditors } from './data/actions';
 import InspectorUI from './ui';
 import Logger from './logger';
 import LocalStorageManager from './localstoragemanager';
-import { normalizeArguments, getFirstEditorName } from './utils';
+import {
+	normalizeArguments,
+	getFirstEditorName,
+	getFirstEditor
+} from './utils';
 import './ckeditorinspector.css';
 
 // From changelog -> webpack.
@@ -169,10 +173,15 @@ export default class CKEditorInspector {
 
 		CKEditorInspector._store = createStore( reducer, {
 			editors: CKEditorInspector._editors,
+			currentEditor: getFirstEditor( CKEditorInspector._editors ),
 			currentEditorName: getFirstEditorName( CKEditorInspector._editors ),
 			activeTab: LocalStorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Model',
 			isCollapsed: options.isCollapsed || LocalStorageManager.get( LOCAL_STORAGE_IS_COLLAPSED ) === 'true',
 			height: LocalStorageManager.get( LOCAL_STORAGE_INSPECTOR_HEIGHT ) || '400px'
+		} );
+
+		CKEditorInspector._store.subscribe( () => {
+			console.log( 'new model state', CKEditorInspector._store.getState().model );
 		} );
 
 		ReactDOM.render(

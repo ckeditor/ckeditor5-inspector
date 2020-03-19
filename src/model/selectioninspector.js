@@ -4,27 +4,21 @@
  */
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import Button from '../components/button';
 import ObjectInspector from '../components/objectinspector';
 import { stringifyPropertyList } from '../components/utils';
 
 import Logger from '../logger';
-import editorEventObserver from '../editorobserver';
 import { getModelPositionDefinition } from './utils';
 
 const API_DOCS_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_selection-Selection.html';
 
 class ModelSelectionInspector extends Component {
-	editorEventObserverConfig( props ) {
-		return {
-			target: props.editor.model.document,
-			event: 'change'
-		};
-	}
-
 	render() {
 		const info = this.getEditorSelectionInfo();
+		const editor = this.props.currentEditor;
 
 		return <ObjectInspector
 			header={[
@@ -38,7 +32,7 @@ class ModelSelectionInspector extends Component {
 					key="log"
 					type="log"
 					text="Log in console"
-					onClick={() => Logger.log( this.props.editor.model.document.selection )}
+					onClick={() => Logger.log( editor.model.document.selection )}
 				/>
 			]}
 			lists={[
@@ -59,7 +53,7 @@ class ModelSelectionInspector extends Component {
 						{
 							type: 'log',
 							text: 'Log in console',
-							onClick: () => Logger.log( this.props.editor.model.document.selection.anchor )
+							onClick: () => Logger.log( editor.model.document.selection.anchor )
 						}
 					],
 					itemDefinitions: info.anchor
@@ -71,7 +65,7 @@ class ModelSelectionInspector extends Component {
 						{
 							type: 'log',
 							text: 'Log in console',
-							onClick: () => Logger.log( this.props.editor.model.document.selection.focus )
+							onClick: () => Logger.log( editor.model.document.selection.focus )
 						}
 					],
 					itemDefinitions: info.focus
@@ -83,7 +77,7 @@ class ModelSelectionInspector extends Component {
 						{
 							type: 'log',
 							text: 'Log in console',
-							onClick: () => Logger.log( ...this.props.editor.model.document.selection.getRanges() )
+							onClick: () => Logger.log( ...editor.model.document.selection.getRanges() )
 						}
 					],
 					itemDefinitions: info.ranges,
@@ -96,7 +90,7 @@ class ModelSelectionInspector extends Component {
 	}
 
 	getEditorSelectionInfo() {
-		const selection = this.props.editor.model.document.selection;
+		const selection = this.props.currentEditor.model.document.selection;
 		const anchor = selection.anchor;
 		const focus = selection.focus;
 		const info = {
@@ -152,6 +146,14 @@ class ModelSelectionInspector extends Component {
 	}
 }
 
+const mapStateToProps = ( { currentEditor, model: { ranges } } ) => {
+	return { currentEditor, ranges };
+};
+
+const mapDispatchToProps = {};
+
+export default connect( mapStateToProps, mapDispatchToProps )( ModelSelectionInspector );
+
 function getPositionDetails( { path, stickiness, index, isAtEnd, isAtStart, offset, textNode } ) {
 	return {
 		path: {
@@ -177,5 +179,3 @@ function getPositionDetails( { path, stickiness, index, isAtEnd, isAtStart, offs
 		}
 	};
 }
-
-export default editorEventObserver( ModelSelectionInspector );

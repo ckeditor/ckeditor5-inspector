@@ -6,6 +6,12 @@
 import { compareArrays } from '../utils';
 import { stringify } from '../components/utils';
 
+const MARKER_COLORS = [
+	'#03a9f4', '#fb8c00', '#009688', '#e91e63', '#4caf50', '#00bcd4',
+	'#607d8b', '#cddc39', '#9c27b0', '#f44336', '#6d4c41', '#8bc34a', '#3f51b5', '#2196f3',
+	'#f4511e', '#673ab7', '#ffb300'
+];
+
 export function isModelElement( node ) {
 	return node && node.is( 'element' );
 }
@@ -16,6 +22,74 @@ export function isModelRoot( node ) {
 
 export function getNodePathString( node ) {
 	return node.getPath ? node.getPath() : node.path;
+}
+
+export function getEditorModelRoots( editor ) {
+	if ( !editor ) {
+		return null;
+	}
+
+	const roots = [ ...editor.model.document.roots ];
+
+	// Put $graveyard at the end.
+	return roots
+		.filter( ( { rootName } ) => rootName !== '$graveyard' )
+		.concat( roots.filter( ( { rootName } ) => rootName === '$graveyard' ) );
+}
+
+export function getEditorModelTreeDefinition( { currentEditor, currentRootName, ranges, markers } ) {
+	if ( !currentRootName ) {
+		return null;
+	}
+
+	const model = currentEditor.model;
+	const modelRoot = model.document.getRoot( currentRootName );
+
+	return [
+		getModelNodeDefinition( modelRoot, [ ...ranges, ...markers ] )
+	];
+}
+
+export function getEditorModelRanges( editor ) {
+	const ranges = [];
+	const model = editor.model;
+
+	for ( const range of model.document.selection.getRanges() ) {
+		ranges.push( {
+			type: 'selection',
+			start: getModelPositionDefinition( range.start ),
+			end: getModelPositionDefinition( range.end )
+		} );
+	}
+
+	return ranges;
+}
+
+export function getEditorModelMarkers( editor ) {
+	const markers = [];
+	const model = editor.model;
+	let markerCount = 0;
+
+	for ( const marker of model.markers ) {
+		const { name, affectsData, managedUsingOperations } = marker;
+
+		markers.push( {
+			type: 'marker',
+			marker,
+			name,
+			affectsData,
+			managedUsingOperations,
+			presentation: {
+				// When there are more markers than colors, let's start over and reuse
+				// the colors.
+				color: MARKER_COLORS[ markerCount++ % ( MARKER_COLORS.length - 1 ) ]
+			},
+			start: getModelPositionDefinition( marker.getStart() ),
+			end: getModelPositionDefinition( marker.getEnd() )
+		} );
+	}
+
+	return markers;
 }
 
 export function getModelPositionDefinition( position ) {

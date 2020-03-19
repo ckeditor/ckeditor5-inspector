@@ -46,6 +46,10 @@ function getNextEditorName() {
 	return `editor-${ ++unnamedEditorCount }`;
 }
 
+export function getFirstEditor( editors ) {
+	return [ ...editors ][ 0 ][ 1 ];
+}
+
 export function getFirstEditorName( editors ) {
 	return [ ...editors ][ 0 ][ 0 ] || '';
 }

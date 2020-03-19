@@ -3,6 +3,8 @@
  * For licensing, see LICENSE.md.
  */
 
+import modelReducer from '../model/data/reducer';
+
 import {
 	TOGGLE_IS_COLLAPSED,
 	SET_HEIGHT,
@@ -12,13 +14,16 @@ import {
 } from './actions';
 
 import LocalStorageManager from '../localstoragemanager';
-import { getFirstEditorName } from '../utils';
+import {
+	getFirstEditor,
+	getFirstEditorName
+} from '../utils';
 
 const LOCAL_STORAGE_ACTIVE_TAB = 'active-tab-name';
 const LOCAL_STORAGE_IS_COLLAPSED = 'is-collapsed';
 const LOCAL_STORAGE_INSPECTOR_HEIGHT = 'height';
 
-export default function reducer( state, action ) {
+function appReducer( state, action ) {
 	switch ( action.type ) {
 		case TOGGLE_IS_COLLAPSED:
 			return getNewIsCollapsedState( state );
@@ -27,12 +32,23 @@ export default function reducer( state, action ) {
 		case SET_EDITORS:
 			return getNewEditorsState( state, action );
 		case SET_CURRENT_EDITOR_NAME:
-			return { ...state, currentEditorName: action.editorName };
+			return getNewCurrentEditorNameState( state, action );
 		case SET_ACTIVE_TAB:
 			return getNewActiveTabState( state, action );
 		default:
 			return state;
 	}
+}
+
+export default function( state, action ) {
+	const newState = appReducer( state, action );
+
+	newState.model = modelReducer( newState, newState.model, action );
+
+	return {
+		...state,
+		...newState
+	};
 }
 
 function getNewHeightState( state, action ) {
@@ -42,11 +58,20 @@ function getNewHeightState( state, action ) {
 }
 
 function getNewIsCollapsedState( state ) {
-	const newState = !state.isCollapsed;
+	const isCollapsed = !state.isCollapsed;
 
-	LocalStorageManager.set( LOCAL_STORAGE_IS_COLLAPSED, newState );
+	LocalStorageManager.set( LOCAL_STORAGE_IS_COLLAPSED, isCollapsed );
 
-	return { ...state, isCollapsed: newState };
+	return { ...state, isCollapsed };
+}
+
+function getNewCurrentEditorNameState( state, action ) {
+	return {
+		...state,
+
+		currentEditorName: action.editorName,
+		currentEditor: state.editors.get( action.editorName )
+	};
 }
 
 function getNewActiveTabState( state, action ) {
@@ -61,6 +86,7 @@ function getNewEditorsState( state, action ) {
 	};
 
 	if ( !action.editors.has( state.currentEditorName ) ) {
+		newState.currentEditor = getFirstEditor( action.editors );
 		newState.currentEditorName = getFirstEditorName( action.editors );
 	}
 
