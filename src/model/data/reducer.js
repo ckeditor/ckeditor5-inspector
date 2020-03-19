@@ -4,10 +4,6 @@
  */
 
 import {
-	SET_MODEL_TREE_DEFINITION,
-	SET_MODEL_MARKERS,
-	SET_MODEL_RANGES,
-	SET_MODEL_ROOTS,
 	SET_MODEL_CURRENT_ROOT_NAME,
 	SET_MODEL_CURRENT_NODE,
 	SET_MODEL_ACTIVE_TAB,
@@ -46,14 +42,6 @@ export default function modelReducer( globalState, modelState, action ) {
 	}
 
 	switch ( action.type ) {
-		case SET_MODEL_TREE_DEFINITION:
-			return { ...modelState, treeDefinition: action.treeDefinition };
-		case SET_MODEL_MARKERS:
-			return { ...modelState, markers: action.markers };
-		case SET_MODEL_RANGES:
-			return { ...modelState, ranges: action.ranges };
-		case SET_MODEL_ROOTS:
-			return { ...modelState, roots: action.roots };
 		case SET_MODEL_CURRENT_ROOT_NAME:
 			return getNewCurrentRootNameState( globalState, modelState, action );
 		case SET_MODEL_CURRENT_NODE:
