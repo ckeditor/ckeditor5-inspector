@@ -13,7 +13,8 @@ import {
 
 import {
 	SET_EDITORS,
-	SET_CURRENT_EDITOR_NAME
+	SET_CURRENT_EDITOR_NAME,
+	SET_ACTIVE_TAB
 } from '../../data/actions';
 
 import {
@@ -28,6 +29,11 @@ const LOCAL_STORAGE_ACTIVE_TAB = 'active-view-tab-name';
 const LOCAL_STORAGE_ELEMENT_TYPES = 'view-element-types';
 
 export default function modelReducer( globalState, viewState, action ) {
+	// Performance optimization: don't create the view state unless necessary.
+	if ( globalState.activeTab !== 'View' ) {
+		return viewState;
+	}
+
 	if ( !viewState ) {
 		return {
 			...getBlankViewState( globalState, viewState ),
@@ -47,7 +53,10 @@ export default function modelReducer( globalState, viewState, action ) {
 		case TOGGLE_VIEW_SHOW_ELEMENT_TYPES:
 			return getNewShowTypesState( globalState, viewState );
 
-		// An action called by the editor model change observer.
+		// * SET_ACTIVE_TAB – Because of the performance optimization at the beginning, update the state
+		// if we're back in the view tab.
+		// * UPDATE_MODEL_STATE – An action called by the editorEventObserver for the view document render.
+		case SET_ACTIVE_TAB:
 		case UPDATE_VIEW_STATE:
 			return { ...viewState, ...getTreeDefinitionRanges( globalState, viewState ) };
 
