@@ -181,7 +181,7 @@ export default class CKEditorInspector {
 		} );
 
 		CKEditorInspector._store.subscribe( () => {
-			console.log( 'new model state', CKEditorInspector._store.getState().model );
+			console.log( 'new state', CKEditorInspector._store.getState() );
 		} );
 
 		ReactDOM.render(
