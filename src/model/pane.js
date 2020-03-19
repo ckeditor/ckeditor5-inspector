@@ -23,10 +23,8 @@ import editorEventObserver from '../editorobserver';
 
 class ModelPane extends Component {
 	editorEventObserverConfig( props ) {
-		const editor = props.currentEditor;
-
 		return {
-			target: editor.model.document,
+			target: props.currentEditor.model.document,
 			event: 'change'
 		};
 	}
@@ -55,8 +53,8 @@ class ModelPane extends Component {
 	}
 }
 
-const mapStateToProps = ( { currentEditor, model: { roots, currentRootName, activeTab, showMarkers } } ) => {
-	return { currentEditor, roots, activeTab, currentRootName, showMarkers };
+const mapStateToProps = ( { currentEditor, model: { activeTab } } ) => {
+	return { currentEditor, activeTab };
 };
 
 const mapDispatchToProps = {

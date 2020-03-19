@@ -4,13 +4,38 @@
  */
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import {
+	setViewCurrentRootName,
+	toggleViewShowElementTypes,
+	setViewCurrentNode,
+	setViewActiveTab
+} from './data/actions';
 
 import Tree from '../components/tree/tree';
 import Select from '../components/select';
 import NavBox from '../components/navbox';
 import Checkbox from '../components/checkbox';
 
-export default class ViewTree extends Component {
+class ViewTree extends Component {
+	constructor( props ) {
+		super( props );
+
+		this.handleTreeClick = this.handleTreeClick.bind( this );
+	}
+
+	handleTreeClick( evt, currentNode ) {
+		evt.persist();
+		evt.stopPropagation();
+
+		this.props.setViewCurrentNode( currentNode );
+
+		// Double click on a tree element should open the inspector.
+		if ( evt.detail === 2 ) {
+			this.props.setViewActiveTab( 'Inspect' );
+		}
+	}
+
 	render() {
 		return <NavBox>
 			{[
@@ -19,8 +44,8 @@ export default class ViewTree extends Component {
 						id="view-root-select"
 						label="Root"
 						value={this.props.currentRootName}
-						options={this.props.editorRoots.map( root => root.rootName )}
-						onChange={evt => this.props.onRootChange( evt.target.value )}
+						options={this.props.roots.map( root => root.rootName )}
+						onChange={evt => this.props.setViewCurrentRootName( evt.target.value )}
 					/>
 				</div>,
 				<div className="ck-inspector-tree__config" key="types-cfg">
@@ -28,17 +53,30 @@ export default class ViewTree extends Component {
 						label="Show element types"
 						id="view-show-types"
 						isChecked={this.props.showTypes}
-						onChange={this.props.onShowTypesChange}
+						onChange={this.props.toggleViewShowElementTypes}
 					/>
 				</div>
 			]}
 			<Tree
-				definition={this.props.definition}
-				textDirection={this.props.editor.locale.contentLanguageDirection}
-				onClick={this.props.onClick}
+				definition={this.props.treeDefinition}
+				textDirection={this.props.currentEditor.locale.contentLanguageDirection}
+				onClick={this.handleTreeClick}
 				showCompactText="true"
 				activeNode={this.props.currentEditorNode}
 			/>
 		</NavBox>;
 	}
 }
+
+const mapStateToProps = ( { currentEditor, view: { roots, treeDefinition, currentRootName, currentNode, showTypes } } ) => {
+	return { treeDefinition, currentEditor, currentRootName, roots, currentNode, showTypes };
+};
+
+const mapDispatchToProps = {
+	setViewCurrentRootName,
+	toggleViewShowElementTypes,
+	setViewCurrentNode,
+	setViewActiveTab
+};
+
+export default connect( mapStateToProps, mapDispatchToProps )( ViewTree );

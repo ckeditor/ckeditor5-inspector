@@ -30,6 +30,29 @@ export function isViewRoot( node ) {
 	return node && node.is( 'rootElement' );
 }
 
+export function getEditorViewRoots( editor ) {
+	if ( !editor ) {
+		return null;
+	}
+
+	return [ ...editor.editing.view.document.roots ];
+}
+
+export function getEditorViewRanges( editor ) {
+	const ranges = [];
+	const selection = editor.editing.view.document.selection;
+
+	for ( const range of selection.getRanges() ) {
+		ranges.push( {
+			type: 'selection',
+			start: getViewPositionDefinition( range.start ),
+			end: getViewPositionDefinition( range.end )
+		} );
+	}
+
+	return ranges;
+}
+
 export function nodeToString( node ) {
 	if ( isViewElement( node ) ) {
 		if ( isViewAttributeElement( node ) ) {
@@ -42,6 +65,19 @@ export function nodeToString( node ) {
 	} else {
 		return node.data;
 	}
+}
+
+export function getEditorViewTreeDefinition( { currentEditor, currentRootName, ranges } ) {
+	if ( !currentRootName ) {
+		return null;
+	}
+
+	const document = currentEditor.editing.view.document;
+	const root = document.getRoot( currentRootName );
+
+	return [
+		getViewNodeDefinition( root, [ ...ranges ] )
+	];
 }
 
 export function getViewPositionDefinition( position ) {

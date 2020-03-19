@@ -150,9 +150,7 @@ const mapStateToProps = ( { currentEditor, model: { ranges } } ) => {
 	return { currentEditor, ranges };
 };
 
-const mapDispatchToProps = {};
-
-export default connect( mapStateToProps, mapDispatchToProps )( ModelSelectionInspector );
+export default connect( mapStateToProps, {} )( ModelSelectionInspector );
 
 function getPositionDetails( { path, stickiness, index, isAtEnd, isAtStart, offset, textNode } ) {
 	return {

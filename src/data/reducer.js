@@ -4,6 +4,7 @@
  */
 
 import modelReducer from '../model/data/reducer';
+import viewReducer from '../view/data/reducer';
 
 import {
 	TOGGLE_IS_COLLAPSED,
@@ -44,6 +45,7 @@ export default function( state, action ) {
 	const newState = appReducer( state, action );
 
 	newState.model = modelReducer( newState, newState.model, action );
+	newState.view = viewReducer( newState, newState.view, action );
 
 	return {
 		...state,

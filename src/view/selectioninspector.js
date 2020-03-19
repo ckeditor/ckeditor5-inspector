@@ -4,27 +4,21 @@
  */
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import Button from '../components/button';
 import ObjectInspector from '../components/objectinspector';
 import { stringifyPropertyList } from '../components/utils';
 
 import Logger from '../logger';
-import editorEventObserver from '../editorobserver';
 import { getViewPositionDefinition } from './utils';
 
 const API_DOCS_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_selection-Selection.html';
 
 class ViewSelectionInspector extends Component {
-	editorEventObserverConfig( props ) {
-		return {
-			target: props.editor.editing.view,
-			event: 'render'
-		};
-	}
-
 	render() {
 		const info = this.getEditorSelectionInfo();
+		const editor = this.props.currentEditor;
 
 		return <ObjectInspector
 			header={[
@@ -38,7 +32,7 @@ class ViewSelectionInspector extends Component {
 					key="log"
 					type="log"
 					text="Log in console"
-					onClick={() => Logger.log( this.props.editor.editing.view.document.selection )}
+					onClick={() => Logger.log( editor.editing.view.document.selection )}
 				/>
 			]}
 			lists={[
@@ -54,7 +48,7 @@ class ViewSelectionInspector extends Component {
 						{
 							type: 'log',
 							text: 'Log in console',
-							onClick: () => Logger.log( this.props.editor.editing.view.document.selection.anchor )
+							onClick: () => Logger.log( editor.editing.view.document.selection.anchor )
 						}
 					],
 					itemDefinitions: info.anchor
@@ -66,7 +60,7 @@ class ViewSelectionInspector extends Component {
 						{
 							type: 'log',
 							text: 'Log in console',
-							onClick: () => Logger.log( this.props.editor.editing.view.document.selection.focus )
+							onClick: () => Logger.log( editor.editing.view.document.selection.focus )
 						}
 					],
 					itemDefinitions: info.focus
@@ -78,7 +72,7 @@ class ViewSelectionInspector extends Component {
 						{
 							type: 'log',
 							text: 'Log in console',
-							onClick: () => Logger.log( ...this.props.editor.editing.view.document.selection.getRanges() )
+							onClick: () => Logger.log( ...editor.editing.view.document.selection.getRanges() )
 						}
 					],
 					itemDefinitions: info.ranges,
@@ -91,7 +85,7 @@ class ViewSelectionInspector extends Component {
 	}
 
 	getEditorSelectionInfo() {
-		const selection = this.props.editor.editing.view.document.selection;
+		const selection = this.props.currentEditor.editing.view.document.selection;
 		const info = {
 			properties: {
 				isCollapsed: {
@@ -140,6 +134,12 @@ class ViewSelectionInspector extends Component {
 	}
 }
 
+const mapStateToProps = ( { currentEditor, view: { ranges } } ) => {
+	return { currentEditor, ranges };
+};
+
+export default connect( mapStateToProps, {} )( ViewSelectionInspector );
+
 function getPositionDetails( { offset, isAtEnd, isAtStart, parent } ) {
 	return {
 		offset: {
@@ -156,5 +156,3 @@ function getPositionDetails( { offset, isAtEnd, isAtStart, parent } ) {
 		}
 	};
 }
-
-export default editorEventObserver( ViewSelectionInspector );

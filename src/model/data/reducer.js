@@ -59,7 +59,6 @@ export default function modelReducer( globalState, modelState, action ) {
 
 		// Actions related to the external state.
 		case SET_EDITORS:
-			return getBlankModelState( globalState, modelState );
 		case SET_CURRENT_EDITOR_NAME:
 			return getBlankModelState( globalState, modelState );
 

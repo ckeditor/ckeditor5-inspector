@@ -4,13 +4,13 @@
  */
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import ObjectInspector from '../components/objectinspector';
 import Button from '../components/button';
 import Pane from '../components/pane';
 import { stringifyPropertyList } from '../components/utils';
 
-import editorEventObserver from '../editorobserver';
 import {
 	isViewElement,
 	isViewRoot,
@@ -23,14 +23,7 @@ import Logger from '../logger';
 
 const DOCS_URL_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view';
 
-class NodeInspector extends Component {
-	editorEventObserverConfig( props ) {
-		return {
-			target: props.editor.editing.view,
-			event: 'render'
-		};
-	}
-
+class ViewNodeInspector extends Component {
 	render() {
 		const info = this.getInspectedEditorNodeInfo();
 
@@ -76,7 +69,7 @@ class NodeInspector extends Component {
 	}
 
 	getInspectedEditorNodeInfo() {
-		const node = this.props.inspectedNode;
+		const node = this.props.currentNode;
 		const currentRootName = this.props.currentRootName;
 
 		if ( !node ) {
@@ -163,4 +156,8 @@ class NodeInspector extends Component {
 	}
 }
 
-export default editorEventObserver( NodeInspector );
+const mapStateToProps = ( { view: { currentNode, currentRootName } } ) => {
+	return { currentNode, currentRootName };
+};
+
+export default connect( mapStateToProps, {} )( ViewNodeInspector );
