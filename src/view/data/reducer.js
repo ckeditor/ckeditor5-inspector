@@ -20,7 +20,7 @@ import {
 	getEditorViewRanges,
 	getEditorViewRoots,
 	getEditorViewTreeDefinition
-} from '../utils';
+} from './utils';
 
 import LocalStorageManager from '../../localstoragemanager';
 

@@ -41,8 +41,7 @@ class ViewPane extends Component {
 		return <Pane splitVertically="true">
 			<ViewTree />
 			<SidePane>
-				<Tabs onTabChange={this.props.setViewActiveTab} activeTab={this.props.activeTab}
-				>
+				<Tabs onTabChange={this.props.setViewActiveTab} activeTab={this.props.activeTab}>
 					<ViewNodeInspector label="Inspect" />
 					<ViewSelectionInspector label="Selection" />
 				</Tabs>

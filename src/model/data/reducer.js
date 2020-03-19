@@ -22,7 +22,7 @@ import {
 	getEditorModelMarkers,
 	getEditorModelRoots,
 	getEditorModelTreeDefinition
-} from '../utils';
+} from './utils';
 
 import LocalStorageManager from '../../localstoragemanager';
 

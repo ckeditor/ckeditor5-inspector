@@ -43,7 +43,7 @@ class ModelPane extends Component {
 		return <Pane splitVertically="true">
 			<ModelTree />
 			<SidePane>
-				<Tabs onTabChange={this.props.setModelActiveTab} activeTab={this.props.activeTab} >
+				<Tabs onTabChange={this.props.setModelActiveTab} activeTab={this.props.activeTab}>
 					<ModelNodeInspector label="Inspect" />
 					<ModelSelectionInspector label="Selection" />
 					<ModelMarkerInspector label="Markers" />
