@@ -93,12 +93,14 @@ function getNewCurrentRootNameState( globalState, viewState, action ) {
 	// * the model definition tree,
 	// * the ranges
 	// * the markers
+	// * the current note
 	const currentRootName = action.currentRootName;
 
 	return {
 		...viewState,
 
 		...getTreeDefinitionRanges( globalState, viewState, { currentRootName } ),
+		currentNode: null,
 		currentRootName
 	};
 }
@@ -149,8 +151,18 @@ function getTreeDefinitionRanges( globalState, viewState, modelStateOverrides ) 
 		ranges
 	} );
 
+	const currentRootName = overriddenModelState.currentRootName;
+	let currentNode = overriddenModelState.currentNode;
+
+	// If the currentNode no longer belongs to the root, reset the state.
+	// This can happen when, for instance, inspecting an element, and it gets removed from the editor content.
+	if ( currentNode && currentNode.root.rootName !== currentRootName ) {
+		currentNode = null;
+	}
+
 	return {
 		treeDefinition,
+		currentNode,
 		ranges
 	};
 }

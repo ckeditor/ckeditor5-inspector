@@ -60,17 +60,12 @@ class ModelNodeInspector extends Component {
 
 	getInspectedEditorNodeInfo() {
 		const node = this.props.currentNode;
-		const currentRootName = this.props.currentRootName;
 
 		if ( !node ) {
 			return null;
 		}
 
 		if ( !isModelRoot( node ) && !node.parent ) {
-			return;
-		}
-
-		if ( node.root.rootName !== currentRootName ) {
 			return;
 		}
 
@@ -147,8 +142,8 @@ class ModelNodeInspector extends Component {
 	}
 }
 
-const mapStateToProps = ( { currentEditor, model: { currentNode, currentRootName } } ) => {
-	return { currentEditor, currentNode, currentRootName };
+const mapStateToProps = ( { currentEditor, model: { currentNode } } ) => {
+	return { currentEditor, currentNode };
 };
 
 export default connect( mapStateToProps, {} )( ModelNodeInspector );

@@ -70,17 +70,12 @@ class ViewNodeInspector extends Component {
 
 	getInspectedEditorNodeInfo() {
 		const node = this.props.currentNode;
-		const currentRootName = this.props.currentRootName;
 
 		if ( !node ) {
 			return null;
 		}
 
 		if ( !isViewRoot( node ) && !node.parent ) {
-			return;
-		}
-
-		if ( node.root.rootName !== currentRootName ) {
 			return;
 		}
 
@@ -156,8 +151,8 @@ class ViewNodeInspector extends Component {
 	}
 }
 
-const mapStateToProps = ( { view: { currentNode, currentRootName } } ) => {
-	return { currentNode, currentRootName };
+const mapStateToProps = ( { view: { currentNode } } ) => {
+	return { currentNode };
 };
 
 export default connect( mapStateToProps, {} )( ViewNodeInspector );
