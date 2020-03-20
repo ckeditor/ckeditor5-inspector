@@ -6,6 +6,7 @@
 import {
 	isViewElement,
 	isViewAttributeElement,
+	isViewEditableElement,
 	isViewRoot,
 	isViewEmptyElement,
 	isViewUiElement,
@@ -13,7 +14,13 @@ import {
 } from '../utils';
 
 import { compareArrays } from '../../utils';
-import { stringify } from '../../components/utils';
+
+import {
+	stringify,
+	stringifyPropertyList
+} from '../../components/utils';
+
+export const DOCS_URL_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view';
 
 export function getEditorViewRoots( editor ) {
 	if ( !editor ) {
@@ -49,6 +56,86 @@ export function getEditorViewTreeDefinition( { currentEditor, currentRootName, r
 	return [
 		getViewNodeDefinition( root, [ ...ranges ] )
 	];
+}
+
+export function getEditorViewNodeDefinition( node ) {
+	if ( !node ) {
+		return null;
+	}
+
+	if ( !isViewRoot( node ) && !node.parent ) {
+		return;
+	}
+
+	const info = {
+		editorNode: node,
+		properties: {},
+		attributes: {},
+		customProperties: {}
+	};
+
+	if ( isViewElement( node ) ) {
+		if ( isViewRoot( node ) ) {
+			info.type = 'RootEditableElement';
+			info.name = node.rootName;
+			info.url = `${ DOCS_URL_PREFIX }_rooteditableelement-RootEditableElement.html`;
+		} else {
+			info.name = node.name;
+
+			if ( isViewAttributeElement( node ) ) {
+				info.type = 'AttributeElement';
+				info.url = `${ DOCS_URL_PREFIX }_attributeelement-AttributeElement.html`;
+			} else if ( isViewEmptyElement( node ) ) {
+				info.type = 'EmptyElement';
+				info.url = `${ DOCS_URL_PREFIX }_emptyelement-EmptyElement.html`;
+			} else if ( isViewUiElement( node ) ) {
+				info.type = 'UIElement';
+				info.url = `${ DOCS_URL_PREFIX }_uielement-UIElement.html`;
+			} else if ( isViewEditableElement( node ) ) {
+				info.type = 'EditableElement';
+				info.url = `${ DOCS_URL_PREFIX }_editableelement-EditableElement.html`;
+			} else {
+				info.type = 'ContainerElement';
+				info.url = `${ DOCS_URL_PREFIX }_containerelement-ContainerElement.html`;
+			}
+		}
+
+		for ( const [ name, value ] of node.getAttributes() ) {
+			info.attributes[ name ] = { value };
+		}
+
+		info.properties = {
+			index: {
+				value: node.index
+			},
+			isEmpty: {
+				value: node.isEmpty
+			},
+			childCount: {
+				value: node.childCount
+			}
+		};
+
+		for ( const [ name, value ] of node.getCustomProperties() ) {
+			info.customProperties[ name ] = { value };
+		}
+	} else {
+		info.name = node.data;
+		info.type = 'Text';
+		info.url = `${ DOCS_URL_PREFIX }_text-Text.html`;
+
+		info.properties = {
+			index: {
+				value: node.index
+			}
+		};
+	}
+
+	info.properties = stringifyPropertyList( info.properties );
+	info.customProperties = stringifyPropertyList( info.customProperties );
+	info.attributes = stringifyPropertyList( info.attributes );
+
+	return info;
 }
 
 function getViewNodeDefinition( node, ranges ) {

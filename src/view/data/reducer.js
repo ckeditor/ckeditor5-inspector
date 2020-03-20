@@ -20,7 +20,8 @@ import {
 import {
 	getEditorViewRanges,
 	getEditorViewRoots,
-	getEditorViewTreeDefinition
+	getEditorViewTreeDefinition,
+	getEditorViewNodeDefinition
 } from './utils';
 
 import LocalStorageManager from '../../localstoragemanager';
@@ -50,14 +51,19 @@ function viewReducer( globalState, viewState, action ) {
 		case SET_VIEW_CURRENT_ROOT_NAME:
 			return getNewCurrentRootNameState( globalState, viewState, action );
 		case SET_VIEW_CURRENT_NODE:
-			return { ...viewState, currentNode: action.currentNode };
+			return {
+				...viewState,
+
+				currentNode: action.currentNode,
+				currentNodeDefinition: getEditorViewNodeDefinition( action.currentNode )
+			};
 
 		// * SET_ACTIVE_TAB – Because of the performance optimization at the beginning, update the state
 		// if we're back in the view tab.
 		// * UPDATE_MODEL_STATE – An action called by the editorEventObserver for the view document render.
 		case SET_ACTIVE_TAB:
 		case UPDATE_VIEW_STATE:
-			return { ...viewState, ...getTreeDefinitionRanges( globalState, viewState ) };
+			return { ...viewState, ...getEssentialState( globalState, viewState ) };
 
 		// Actions related to the external state.
 		case SET_EDITORS:
@@ -89,18 +95,14 @@ function viewUIReducer( globalState, UIState, action ) {
 }
 
 function getNewCurrentRootNameState( globalState, viewState, action ) {
-	// Changing the current root name changes:
-	// * the model definition tree,
-	// * the ranges
-	// * the markers
-	// * the current note
 	const currentRootName = action.currentRootName;
 
 	return {
 		...viewState,
 
-		...getTreeDefinitionRanges( globalState, viewState, { currentRootName } ),
+		...getEssentialState( globalState, viewState, { currentRootName } ),
 		currentNode: null,
+		currentNodeDefinition: null,
 		currentRootName
 	};
 }
@@ -135,14 +137,15 @@ function getBlankViewState( globalState, viewState = {} ) {
 	return {
 		...viewState,
 
-		...getTreeDefinitionRanges( globalState, viewState, { currentRootName } ),
+		...getEssentialState( globalState, viewState, { currentRootName } ),
 		roots,
 		currentRootName,
-		currentNode: null
+		currentNode: null,
+		currentNodeDefinition: null
 	};
 }
 
-function getTreeDefinitionRanges( globalState, viewState, modelStateOverrides ) {
+function getEssentialState( globalState, viewState, modelStateOverrides ) {
 	const overriddenModelState = { ...viewState, ...modelStateOverrides };
 	const ranges = getEditorViewRanges( globalState.currentEditor );
 	const treeDefinition = getEditorViewTreeDefinition( {
@@ -153,16 +156,27 @@ function getTreeDefinitionRanges( globalState, viewState, modelStateOverrides ) 
 
 	const currentRootName = overriddenModelState.currentRootName;
 	let currentNode = overriddenModelState.currentNode;
+	let currentNodeDefinition = overriddenModelState.currentNodeDefinition;
 
-	// If the currentNode no longer belongs to the root, reset the state.
-	// This can happen when, for instance, inspecting an element, and it gets removed from the editor content.
-	if ( currentNode && currentNode.root.rootName !== currentRootName ) {
-		currentNode = null;
+	if ( currentNode ) {
+		// If the currentNode no longer belongs to the root, reset the state.
+		// This can happen when, for instance, inspecting an element, and it gets removed from the editor content.
+		if ( currentNode.root.rootName !== currentRootName ) {
+			currentNode = null;
+			currentNodeDefinition = null;
+		} else {
+			// Update the current node definition each time the new model state is created.
+			currentNodeDefinition = getEditorViewNodeDefinition( currentNode );
+		}
+	} else {
+		// No current node, no definition.
+		currentNodeDefinition = null;
 	}
 
 	return {
 		treeDefinition,
 		currentNode,
+		currentNodeDefinition,
 		ranges
 	};
 }

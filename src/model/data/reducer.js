@@ -22,7 +22,8 @@ import {
 	getEditorModelRanges,
 	getEditorModelMarkers,
 	getEditorModelRoots,
-	getEditorModelTreeDefinition
+	getEditorModelTreeDefinition,
+	getEditorModelNodeDefinition
 } from './utils';
 
 import LocalStorageManager from '../../localstoragemanager';
@@ -53,14 +54,19 @@ function modelReducer( globalState, modelState, action ) {
 		case SET_MODEL_CURRENT_ROOT_NAME:
 			return getNewCurrentRootNameState( globalState, modelState, action );
 		case SET_MODEL_CURRENT_NODE:
-			return { ...modelState, currentNode: action.currentNode };
+			return {
+				...modelState,
+
+				currentNode: action.currentNode,
+				currentNodeDefinition: getEditorModelNodeDefinition( globalState.currentEditor, action.currentNode )
+			};
 
 		// * SET_ACTIVE_TAB – Because of the performance optimization at the beginning, update the state
 		// if we're back in the model tab.
 		// * UPDATE_MODEL_STATE – An action called by the editorEventObserver for the model document change.
 		case SET_ACTIVE_TAB:
 		case UPDATE_MODEL_STATE:
-			return { ...modelState, ...getTreeDefinitionRangesMarkers( globalState, modelState ) };
+			return { ...modelState, ...getEssentialState( globalState, modelState ) };
 
 		// Actions related to the external state.
 		case SET_EDITORS:
@@ -95,18 +101,14 @@ function modelUIReducer( UIState, action ) {
 }
 
 function getNewCurrentRootNameState( globalState, modelState, action ) {
-	// Changing the current root name changes:
-	// * the model definition tree,
-	// * the ranges
-	// * the markers
-	// * the current node
 	const currentRootName = action.currentRootName;
 
 	return {
 		...modelState,
 
-		...getTreeDefinitionRangesMarkers( globalState, modelState, { currentRootName } ),
+		...getEssentialState( globalState, modelState, { currentRootName } ),
 		currentNode: null,
+		currentNodeDefinition: null,
 		currentRootName
 	};
 }
@@ -153,14 +155,15 @@ function getBlankModelState( globalState, modelState = {} ) {
 	return {
 		...modelState,
 
-		...getTreeDefinitionRangesMarkers( globalState, modelState, { currentRootName } ),
+		...getEssentialState( globalState, modelState, { currentRootName } ),
 		roots,
 		currentRootName,
-		currentNode: null
+		currentNode: null,
+		currentNodeDefinition: null
 	};
 }
 
-function getTreeDefinitionRangesMarkers( globalState, modelState, modelStateOverrides ) {
+function getEssentialState( globalState, modelState, modelStateOverrides ) {
 	const overriddenModelState = { ...modelState, ...modelStateOverrides };
 	const ranges = getEditorModelRanges( globalState.currentEditor );
 	const markers = getEditorModelMarkers( globalState.currentEditor );
@@ -173,16 +176,27 @@ function getTreeDefinitionRangesMarkers( globalState, modelState, modelStateOver
 
 	const currentRootName = overriddenModelState.currentRootName;
 	let currentNode = overriddenModelState.currentNode;
+	let currentNodeDefinition = overriddenModelState.currentNodeDefinition;
 
-	// If the currentNode no longer belongs to the root, reset the state.
-	// This can happen when, for instance, inspecting an element, and it gets removed from the editor content.
-	if ( currentNode && currentNode.root.rootName !== currentRootName ) {
-		currentNode = null;
+	if ( currentNode ) {
+		// If the currentNode no longer belongs to the root, reset the state.
+		// This can happen when, for instance, inspecting an element, and it gets removed from the editor content.
+		if ( currentNode.root.rootName !== currentRootName ) {
+			currentNode = null;
+			currentNodeDefinition = null;
+		} else {
+			// Update the current node definition each time the new model state is created.
+			currentNodeDefinition = getEditorModelNodeDefinition( globalState.currentEditor, currentNode );
+		}
+	} else {
+		// No current node, no definition.
+		currentNodeDefinition = null;
 	}
 
 	return {
 		treeDefinition,
 		currentNode,
+		currentNodeDefinition,
 		ranges,
 		markers
 	};

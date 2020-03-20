@@ -5,12 +5,19 @@
 
 import {
 	isModelElement,
-	getModelPositionDefinition
+	isModelRoot,
+	getModelPositionDefinition,
+	getNodePathString
 } from '../utils';
 
 import { compareArrays } from '../../utils';
-import { stringify } from '../../components/utils';
 
+import {
+	stringify,
+	stringifyPropertyList
+} from '../../components/utils';
+
+const DOCS_URL_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_';
 const MARKER_COLORS = [
 	'#03a9f4', '#fb8c00', '#009688', '#e91e63', '#4caf50', '#00bcd4',
 	'#607d8b', '#cddc39', '#9c27b0', '#f44336', '#6d4c41', '#8bc34a', '#3f51b5', '#2196f3',
@@ -83,6 +90,87 @@ export function getEditorModelTreeDefinition( { currentEditor, currentRootName, 
 	return [
 		getModelNodeDefinition( modelRoot, [ ...ranges, ...markers ] )
 	];
+}
+
+export function getEditorModelNodeDefinition( currentEditor, node ) {
+	if ( !node ) {
+		return null;
+	}
+
+	if ( !isModelRoot( node ) && !node.parent ) {
+		return;
+	}
+
+	const definition = {
+		editorNode: node,
+		properties: {},
+		attributes: {}
+	};
+
+	if ( isModelElement( node ) ) {
+		if ( isModelRoot( node ) ) {
+			definition.type = 'RootElement';
+			definition.name = node.rootName;
+			definition.url = `${ DOCS_URL_PREFIX }rootelement-RootElement.html`;
+		} else {
+			definition.type = 'Element';
+			definition.name = node.name;
+			definition.url = `${ DOCS_URL_PREFIX }element-Element.html`;
+		}
+
+		definition.properties = {
+			childCount: {
+				value: node.childCount
+			},
+			startOffset: {
+				value: node.startOffset
+			},
+			endOffset: {
+				value: node.endOffset
+			},
+			maxOffset: {
+				value: node.maxOffset
+			}
+		};
+	} else {
+		definition.name = node.data;
+		definition.type = 'Text';
+		definition.url = `${ DOCS_URL_PREFIX }text-Text.html`;
+
+		definition.properties = {
+			startOffset: {
+				value: node.startOffset
+			},
+			endOffset: {
+				value: node.endOffset
+			},
+			offsetSize: {
+				value: node.offsetSize
+			}
+		};
+	}
+
+	definition.properties.path = { value: getNodePathString( node ) };
+
+	for ( const [ name, value ] of node.getAttributes() ) {
+		definition.attributes[ name ] = { value };
+	}
+
+	definition.properties = stringifyPropertyList( definition.properties );
+	definition.attributes = stringifyPropertyList( definition.attributes );
+
+	for ( const attribute in definition.attributes ) {
+		const attributePropertyDefinitions = {};
+		const attirbuteProperties = currentEditor.model.schema.getAttributeProperties( attribute );
+
+		for ( const name in attirbuteProperties ) {
+			attributePropertyDefinitions[ name ] = { value: attirbuteProperties[ name ] };
+		}
+
+		definition.attributes[ attribute ].subProperties = stringifyPropertyList( attributePropertyDefinitions );
+	}
+
+	return definition;
 }
 
 function getModelNodeDefinition( node, ranges ) {
