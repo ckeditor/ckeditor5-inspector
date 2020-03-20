@@ -151,6 +151,4 @@ const mapStateToProps = ( { currentEditor, model: { currentNode, currentRootName
 	return { currentEditor, currentNode, currentRootName };
 };
 
-const mapDispatchToProps = {};
-
-export default connect( mapStateToProps, mapDispatchToProps )( ModelNodeInspector );
+export default connect( mapStateToProps, {} )( ModelNodeInspector );

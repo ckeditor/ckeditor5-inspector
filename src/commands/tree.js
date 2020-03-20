@@ -4,61 +4,41 @@
  */
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { setCommandsCurrentCommandName } from './data/actions';
 
 import Tree from '../components/tree/tree';
 import NavBox from '../components/navbox';
-import { stringify } from '../components/utils';
-
-import editorEventObserver from '../editorobserver';
 
 class CommandTree extends Component {
-	editorEventObserverConfig( props ) {
-		return {
-			target: props.editor.model.document,
-			event: 'change'
-		};
+	constructor( props ) {
+		super( props );
+
+		this.handleTreeClick = this.handleTreeClick.bind( this );
+	}
+
+	handleTreeClick( evt, currentCommandName ) {
+		evt.persist();
+		evt.stopPropagation();
+
+		this.props.setCommandsCurrentCommandName( currentCommandName );
 	}
 
 	render() {
 		return <NavBox>
 			<Tree
-				definition={this.getCommandStates()}
-				onClick={this.props.onClick}
+				definition={this.props.treeDefinition}
+				onClick={this.handleTreeClick}
 				activeNode={this.props.currentCommandName}
 			/>
 		</NavBox>;
 	}
-
-	getCommandStates() {
-		const editor = this.props.editor;
-		const list = [];
-
-		for ( const [ name, command ] of editor.commands ) {
-			const attributes = [];
-
-			if ( command.value !== undefined ) {
-				attributes.push( [ 'value', stringify( command.value, false ) ] );
-			}
-
-			list.push( {
-				name,
-				type: 'element',
-				children: [],
-				node: name,
-				attributes,
-
-				presentation: {
-					isEmpty: true,
-					cssClass: [
-						'ck-inspector-tree-node_tagless',
-						command.isEnabled ? '' : 'ck-inspector-tree-node_disabled'
-					].join( ' ' )
-				}
-			} );
-		}
-
-		return list.sort( ( a, b ) => a.name > b.name ? 1 : -1 );
-	}
 }
 
-export default editorEventObserver( CommandTree );
+const mapStateToProps = ( { commands: { treeDefinition, currentCommandName } } ) => {
+	return { treeDefinition, currentCommandName };
+};
+
+const mapDispatchToProps = { setCommandsCurrentCommandName };
+
+export default connect( mapStateToProps, mapDispatchToProps )( CommandTree );

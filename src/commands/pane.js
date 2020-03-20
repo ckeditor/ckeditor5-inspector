@@ -4,6 +4,8 @@
  */
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { updateCommandsState } from './data/actions';
 
 import Pane from '../components/pane';
 import Tabs from '../components/tabs';
@@ -12,60 +14,40 @@ import SidePane from '../components/sidepane';
 import CommandTree from './tree';
 import CommandInspector from './commandinspector';
 
-// import '../pane.css';
+import editorEventObserver from '../editorobserver';
 
-export default class CommandsPane extends Component {
-	constructor( props ) {
-		super( props );
-
-		this.state = {
-			editor: null,
-			currentCommandName: null
+class CommandsPane extends Component {
+	editorEventObserverConfig( props ) {
+		return {
+			target: props.currentEditor.model.document,
+			event: 'change'
 		};
-
-		this.handleTreeClick = this.handleTreeClick.bind( this );
 	}
 
-	handleTreeClick( evt, currentCommandName ) {
-		evt.persist();
-		evt.stopPropagation();
-
-		this.setState( { currentCommandName } );
+	editorEventObserverCallback() {
+		this.props.updateCommandsState();
 	}
 
 	render() {
-		if ( !this.props.editor ) {
+		if ( !this.props.currentEditor ) {
 			return <Pane isEmpty="true">
 				<p>Nothing to show. Attach another editor instance to start inspecting.</p>
 			</Pane>;
 		}
 
 		return <Pane splitVertically="true">
-			<CommandTree
-				editor={this.props.editor}
-				currentCommandName={this.state.currentCommandName}
-				onClick={this.handleTreeClick}
-			/>
+			<CommandTree />
 			<SidePane>
 				<Tabs activeTab="Inspect">
-					<CommandInspector
-						label="Inspect"
-						editor={this.props.editor}
-						inspectedCommandName={this.state.currentCommandName}
-					/>
+					<CommandInspector label="Inspect" />
 				</Tabs>
 			</SidePane>
 		</Pane>;
 	}
-
-	static getDerivedStateFromProps( props, state ) {
-		if ( props.editor !== state.editor ) {
-			return {
-				editor: props.editor,
-				currentCommandName: null
-			};
-		} else {
-			return null;
-		}
-	}
 }
+
+const mapStateToProps = ( { currentEditor } ) => {
+	return { currentEditor };
+};
+
+export default connect( mapStateToProps, { updateCommandsState } )( editorEventObserver( CommandsPane ) );

@@ -4,6 +4,7 @@
  */
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import Button from '../components/button';
 import Pane from '../components/pane';
@@ -11,16 +12,8 @@ import ObjectInspector from '../components/objectinspector';
 import { stringifyPropertyList } from '../components/utils';
 
 import Logger from '../logger';
-import editorEventObserver from '../editorobserver';
 
 class CommandInspector extends Component {
-	editorEventObserverConfig( props ) {
-		return {
-			target: props.editor.model.document,
-			event: 'change'
-		};
-	}
-
 	render() {
 		const info = this.getEditorCommandInfo();
 
@@ -42,7 +35,7 @@ class CommandInspector extends Component {
 					key="exec"
 					type="exec"
 					text="Execute command"
-					onClick={() => this.props.editor.execute( info.name )}
+					onClick={() => this.props.currentEditor.execute( info.name )}
 				/>,
 				<Button
 					key="log"
@@ -62,8 +55,8 @@ class CommandInspector extends Component {
 	}
 
 	getEditorCommandInfo() {
-		const editor = this.props.editor;
-		const name = this.props.inspectedCommandName;
+		const editor = this.props.currentEditor;
+		const name = this.props.currentCommandName;
 
 		if ( !name ) {
 			return null;
@@ -88,4 +81,8 @@ class CommandInspector extends Component {
 	}
 }
 
-export default editorEventObserver( CommandInspector );
+const mapStateToProps = ( { currentEditor, commands: { currentCommandName } } ) => {
+	return { currentEditor, currentCommandName };
+};
+
+export default connect( mapStateToProps, {} )( CommandInspector );
