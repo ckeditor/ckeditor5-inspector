@@ -18,7 +18,7 @@ import { stringify } from '../../components/utils';
 
 export default function modelReducer( globalState, commandsState, action ) {
 	// Performance optimization: don't create the commands state unless necessary.
-	if ( globalState.activeTab !== 'Commands' ) {
+	if ( globalState.ui.activeTab !== 'Commands' ) {
 		return commandsState;
 	}
 

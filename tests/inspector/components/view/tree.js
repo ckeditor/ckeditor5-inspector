@@ -22,7 +22,7 @@ const ROOT_ATTRIBUTES = [
 	[ 'aria-label', 'Rich Text Editor, main' ],
 	[ 'role', 'textbox' ],
 	[ 'contenteditable', 'true' ],
-	[ 'class', 'ck-blurred ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline' ],
+	[ 'class', 'ck-blurred ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline' ]
 ];
 
 describe( '<ViewTree />', () => {
@@ -66,10 +66,10 @@ describe( '<ViewTree />', () => {
 		it( 'has initial state', () => {
 			const state = wrapper.state();
 
-			expect( state.showTypes ).to.be.false;
+			expect( state.showElementTypes ).to.be.false;
 		} );
 
-		it( 'restores state#showTypes from the local storage', () => {
+		it( 'restores state#showElementTypes from the local storage', () => {
 			window.localStorage.setItem( 'ck5-inspector-view-element-types', 'true' );
 
 			const wrapper = mount(
@@ -81,19 +81,19 @@ describe( '<ViewTree />', () => {
 				{ attachTo: container }
 			);
 
-			expect( wrapper.state().showTypes ).to.be.true;
+			expect( wrapper.state().showElementTypes ).to.be.true;
 
 			wrapper.unmount();
 		} );
 	} );
 
-	describe( 'handleShowTypesChange()', () => {
-		it( 'changes state#showTypes and saves to local storage', () => {
+	describe( 'handleshowElementTypesChange()', () => {
+		it( 'changes state#showElementTypes and saves to local storage', () => {
 			const instance = wrapper.instance();
 
-			instance.handleShowTypesChange( { target: { checked: 'foo' } } );
+			instance.handleshowElementTypesChange( { target: { checked: 'foo' } } );
 
-			expect( wrapper.state().showTypes ).to.equal( 'foo' );
+			expect( wrapper.state().showElementTypes ).to.equal( 'foo' );
 			expect( window.localStorage.getItem( 'ck5-inspector-view-element-types' ) ).to.equal( 'foo' );
 		} );
 	} );
@@ -115,7 +115,7 @@ describe( '<ViewTree />', () => {
 
 			expect( checkbox.props().label ).to.equal( 'Show element types' );
 			expect( checkbox.props().isChecked ).to.be.false;
-			expect( checkbox.props().onChange ).to.equal( wrapper.instance().handleShowTypesChange );
+			expect( checkbox.props().onChange ).to.equal( wrapper.instance().handleshowElementTypesChange );
 		} );
 
 		describe( 'tree', () => {
@@ -169,14 +169,14 @@ describe( '<ViewTree />', () => {
 											isEmpty: true
 										}
 									}
-								],
+								]
 							}
-						],
+						]
 					}
 				] );
 			} );
 
-			it( 'renders with element types when state#showTypes is true', () => {
+			it( 'renders with element types when state#showElementTypes is true', () => {
 				editor.setData( '<p><b>foo</b></p>' );
 
 				let emptyElement, uiElement;
@@ -190,7 +190,7 @@ describe( '<ViewTree />', () => {
 				} );
 
 				wrapper.setState( {
-					showTypes: true
+					showElementTypes: true
 				} );
 
 				const tree = wrapper.find( Tree );
@@ -214,7 +214,7 @@ describe( '<ViewTree />', () => {
 										name: 'empty:foo',
 										node: emptyElement,
 										attributes: [],
-										children: [],
+										children: []
 									},
 									{
 										type: 'element',
@@ -246,12 +246,12 @@ describe( '<ViewTree />', () => {
 													},
 													'foo'
 												]
-											},
+											}
 										]
 									}
-								],
+								]
 							}
-						],
+						]
 					}
 				] );
 			} );
@@ -303,9 +303,9 @@ describe( '<ViewTree />', () => {
 											}
 										]
 									}
-								],
+								]
 							}
-						],
+						]
 					}
 				] );
 			} );
@@ -337,9 +337,9 @@ describe( '<ViewTree />', () => {
 										type: 'selection',
 										isEnd: true
 									}
-								],
+								]
 							}
-						],
+						]
 					}
 				] );
 			} );
@@ -373,8 +373,8 @@ describe( '<ViewTree />', () => {
 									{
 										type: 'selection',
 										isEnd: false
-									},
-								],
+									}
+								]
 							},
 							{
 								type: 'element',
@@ -386,9 +386,9 @@ describe( '<ViewTree />', () => {
 										type: 'selection',
 										isEnd: true
 									}
-								],
+								]
 							}
-						],
+						]
 					}
 				] );
 			} );
@@ -427,9 +427,9 @@ describe( '<ViewTree />', () => {
 											'foo'
 										]
 									}
-								],
+								]
 							}
-						],
+						]
 					}
 				] );
 			} );
@@ -462,7 +462,7 @@ describe( '<ViewTree />', () => {
 									{
 										type: 'text',
 										node: root.getChild( 0 ).getChild( 0 ),
-										children: [ 'f' ],
+										children: [ 'f' ]
 									},
 									{
 										type: 'element',
@@ -479,18 +479,18 @@ describe( '<ViewTree />', () => {
 											{
 												type: 'text',
 												node: root.getChild( 0 ).getChild( 1 ).getChild( 0 ),
-												children: [ 'o' ],
+												children: [ 'o' ]
 											}
-										],
+										]
 									},
 									{
 										type: 'text',
 										node: root.getChild( 0 ).getChild( 2 ),
-										children: [ 'o' ],
+										children: [ 'o' ]
 									}
-								],
+								]
 							}
-						],
+						]
 					}
 				] );
 			} );
@@ -523,7 +523,7 @@ describe( '<ViewTree />', () => {
 									{
 										type: 'text',
 										node: root.getChild( 0 ).getChild( 0 ),
-										children: [ 'f' ],
+										children: [ 'f' ]
 									},
 									{
 										type: 'element',
@@ -544,17 +544,17 @@ describe( '<ViewTree />', () => {
 													},
 													'o'
 												]
-											},
-										],
+											}
+										]
 									},
 									{
 										type: 'text',
 										node: root.getChild( 0 ).getChild( 2 ),
-										children: [ 'o' ],
+										children: [ 'o' ]
 									}
-								],
+								]
 							}
-						],
+						]
 					}
 				] );
 			} );
@@ -588,7 +588,7 @@ describe( '<ViewTree />', () => {
 									{
 										type: 'text',
 										node: root.getChild( 0 ).getChild( 0 ),
-										children: [ 'a' ],
+										children: [ 'a' ]
 									},
 									{
 										type: 'element',
@@ -605,8 +605,8 @@ describe( '<ViewTree />', () => {
 													},
 													'c'
 												]
-											},
-										],
+											}
+										]
 									},
 									{
 										type: 'text',
@@ -618,11 +618,11 @@ describe( '<ViewTree />', () => {
 												isEnd: true
 											},
 											'e'
-										],
+										]
 									}
-								],
+								]
 							}
-						],
+						]
 					}
 				] );
 			} );
@@ -656,7 +656,7 @@ describe( '<ViewTree />', () => {
 									{
 										type: 'text',
 										node: root.getChild( 0 ).getChild( 0 ),
-										children: [ 'a' ],
+										children: [ 'a' ]
 									},
 									{
 										type: 'element',
@@ -669,8 +669,8 @@ describe( '<ViewTree />', () => {
 												children: [
 													'bc'
 												]
-											},
-										],
+											}
+										]
 									},
 									{
 										type: 'selection'
@@ -685,11 +685,11 @@ describe( '<ViewTree />', () => {
 												isEnd: true
 											},
 											'e'
-										],
+										]
 									}
-								],
+								]
 							}
-						],
+						]
 					}
 				] );
 			} );
@@ -726,7 +726,7 @@ describe( '<ViewTree />', () => {
 									{
 										type: 'text',
 										node: root.getChild( 0 ).getChild( 0 ),
-										children: [ 'a' ],
+										children: [ 'a' ]
 									},
 									{
 										type: 'element',
@@ -739,8 +739,8 @@ describe( '<ViewTree />', () => {
 												children: [
 													'bc'
 												]
-											},
-										],
+											}
+										]
 									},
 									{
 										type: 'selection',
@@ -751,11 +751,11 @@ describe( '<ViewTree />', () => {
 										node: root.getChild( 0 ).getChild( 2 ),
 										children: [
 											'de'
-										],
+										]
 									}
-								],
+								]
 							}
-						],
+						]
 					}
 				] );
 			} );

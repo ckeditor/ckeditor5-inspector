@@ -28,6 +28,7 @@ window.CKEDITOR_INSPECTOR_VERSION = CKEDITOR_INSPECTOR_VERSION;
 const LOCAL_STORAGE_ACTIVE_TAB = 'active-tab-name';
 const LOCAL_STORAGE_IS_COLLAPSED = 'is-collapsed';
 const LOCAL_STORAGE_INSPECTOR_HEIGHT = 'height';
+const LOCAL_STORAGE_SIDE_PANE_WIDTH = 'side-pane-width';
 
 export default class CKEditorInspector {
 	constructor() {
@@ -175,9 +176,12 @@ export default class CKEditorInspector {
 			editors: CKEditorInspector._editors,
 			currentEditor: getFirstEditor( CKEditorInspector._editors ),
 			currentEditorName: getFirstEditorName( CKEditorInspector._editors ),
-			activeTab: LocalStorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Model',
-			isCollapsed: options.isCollapsed || LocalStorageManager.get( LOCAL_STORAGE_IS_COLLAPSED ) === 'true',
-			height: LocalStorageManager.get( LOCAL_STORAGE_INSPECTOR_HEIGHT ) || '400px'
+			ui: {
+				activeTab: LocalStorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Model',
+				isCollapsed: options.isCollapsed || LocalStorageManager.get( LOCAL_STORAGE_IS_COLLAPSED ) === 'true',
+				height: LocalStorageManager.get( LOCAL_STORAGE_INSPECTOR_HEIGHT ) || '400px',
+				sidePaneWidth: LocalStorageManager.get( LOCAL_STORAGE_SIDE_PANE_WIDTH ) || '500px'
+			}
 		} );
 
 		CKEditorInspector._store.subscribe( () => {

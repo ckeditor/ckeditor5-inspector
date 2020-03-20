@@ -50,7 +50,7 @@ class ViewPane extends Component {
 	}
 }
 
-const mapStateToProps = ( { currentEditor, view: { activeTab } } ) => {
+const mapStateToProps = ( { currentEditor, view: { ui: { activeTab } } } ) => {
 	return { currentEditor, activeTab };
 };
 

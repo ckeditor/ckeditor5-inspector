@@ -28,19 +28,22 @@ import LocalStorageManager from '../../localstoragemanager';
 const LOCAL_STORAGE_ACTIVE_TAB = 'active-view-tab-name';
 const LOCAL_STORAGE_ELEMENT_TYPES = 'view-element-types';
 
-export default function modelReducer( globalState, viewState, action ) {
-	// Performance optimization: don't create the view state unless necessary.
-	if ( globalState.activeTab !== 'View' ) {
-		return viewState;
+export default function( globalState, viewState, action ) {
+	const newState = viewReducer( globalState, viewState, action );
+
+	newState.ui = viewUIReducer( globalState, newState.ui, action );
+
+	return newState;
+}
+
+function viewReducer( globalState, viewState, action ) {
+	if ( !viewState ) {
+		return getBlankViewState( globalState, viewState );
 	}
 
-	if ( !viewState ) {
-		return {
-			...getBlankViewState( globalState, viewState ),
-
-			activeTab: LocalStorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Inspect',
-			showTypes: LocalStorageManager.get( LOCAL_STORAGE_ELEMENT_TYPES ) === 'true'
-		};
+	// Performance optimization: don't create the view state unless necessary.
+	if ( globalState.ui.activeTab !== 'View' ) {
+		return viewState;
 	}
 
 	switch ( action.type ) {
@@ -48,10 +51,6 @@ export default function modelReducer( globalState, viewState, action ) {
 			return getNewCurrentRootNameState( globalState, viewState, action );
 		case SET_VIEW_CURRENT_NODE:
 			return { ...viewState, currentNode: action.currentNode };
-		case SET_VIEW_ACTIVE_TAB:
-			return getNewActiveTabState( viewState, action );
-		case TOGGLE_VIEW_SHOW_ELEMENT_TYPES:
-			return getNewShowTypesState( globalState, viewState );
 
 		// * SET_ACTIVE_TAB – Because of the performance optimization at the beginning, update the state
 		// if we're back in the view tab.
@@ -70,6 +69,25 @@ export default function modelReducer( globalState, viewState, action ) {
 	}
 }
 
+function viewUIReducer( globalState, UIState, action ) {
+	if ( !UIState ) {
+		return {
+			activeTab: LocalStorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Inspect',
+			showElementTypes: LocalStorageManager.get( LOCAL_STORAGE_ELEMENT_TYPES ) === 'true'
+		};
+	}
+
+	switch ( action.type ) {
+		case SET_VIEW_ACTIVE_TAB:
+			return getNewActiveTabState( UIState, action );
+		case TOGGLE_VIEW_SHOW_ELEMENT_TYPES:
+			return getNewShowElementTypesState( globalState, UIState );
+
+		default:
+			return UIState;
+	}
+}
+
 function getNewCurrentRootNameState( globalState, viewState, action ) {
 	// Changing the current root name changes:
 	// * the model definition tree,
@@ -85,31 +103,25 @@ function getNewCurrentRootNameState( globalState, viewState, action ) {
 	};
 }
 
-function getNewActiveTabState( viewState, action ) {
+function getNewActiveTabState( UIState, action ) {
 	LocalStorageManager.set( LOCAL_STORAGE_ACTIVE_TAB, action.tabName );
 
 	return {
-		...viewState,
+		...UIState,
 
 		activeTab: action.tabName
 	};
 }
 
-function getNewShowTypesState( globalState, viewState ) {
-	const showTypes = !viewState.showTypes;
+function getNewShowElementTypesState( globalState, UIState ) {
+	const showElementTypes = !UIState.showElementTypes;
 
-	// Changing showTypes state need re-render the tree definition.
-	const { treeDefinition } = getTreeDefinitionRanges( globalState, viewState, {
-		showTypes
-	} );
-
-	LocalStorageManager.set( LOCAL_STORAGE_ELEMENT_TYPES, showTypes );
+	LocalStorageManager.set( LOCAL_STORAGE_ELEMENT_TYPES, showElementTypes );
 
 	return {
-		...viewState,
+		...UIState,
 
-		showTypes,
-		treeDefinition
+		showElementTypes
 	};
 }
 

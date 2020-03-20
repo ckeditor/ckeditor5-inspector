@@ -7,37 +7,21 @@
 
 import React, { Component } from 'react';
 import { Rnd } from 'react-rnd';
-import LocalStorageManager from '../localstoragemanager';
+import { connect } from 'react-redux';
+import {
+	setSidePaneWidth
+} from '../data/actions';
+
 import './sidepane.css';
 
-const LOCAL_STORAGE_SIDE_PANE_WIDTH = 'side-pane-width';
 const SIDE_PANE_MIN_WIDTH = 200;
-const SIDE_PANE_DEFAULT_WIDTH = '500px';
 const SIDE_PANE_STYLES = {
 	position: 'relative'
 };
 
-export default class SidePane extends Component {
-	constructor( props ) {
-		super( props );
-
-		this.state = {
-			width: LocalStorageManager.get( LOCAL_STORAGE_SIDE_PANE_WIDTH ) || SIDE_PANE_DEFAULT_WIDTH
-		};
-
-		this.handleSidePaneResize = this.handleSidePaneResize.bind( this );
-	}
-
+class SidePane extends Component {
 	get maxSidePaneWidth() {
 		return Math.min( window.innerWidth - 400, window.innerWidth * .8 );
-	}
-
-	handleSidePaneResize( evt, direction, ref ) {
-		this.setState( {
-			width: ref.style.width
-		}, () => {
-			LocalStorageManager.set( LOCAL_STORAGE_SIDE_PANE_WIDTH, ref.style.width );
-		} );
 	}
 
 	render() {
@@ -50,13 +34,23 @@ export default class SidePane extends Component {
 				style={SIDE_PANE_STYLES}
 				position={{ x: '100%', y: '100%' }}
 				size={{
-					width: this.state.width,
+					width: this.props.sidePaneWidth,
 					height: '100%'
 				}}
-				onResizeStop={this.handleSidePaneResize}
+				onResizeStop={( evt, direction, ref ) => this.props.setSidePaneWidth( ref.style.width )}
 			>
 				{this.props.children}
 			</Rnd>
 		</div>;
 	}
 }
+
+const mapStateToProps = ( { ui: { sidePaneWidth } } ) => {
+	return { sidePaneWidth };
+};
+
+const mapDispatchToProps = {
+	setSidePaneWidth
+};
+
+export default connect( mapStateToProps, mapDispatchToProps )( SidePane );

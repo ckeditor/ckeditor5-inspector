@@ -5,6 +5,7 @@
 
 export const TOGGLE_IS_COLLAPSED = 'TOGGLE_IS_COLLAPSED';
 export const SET_HEIGHT = 'SET_HEIGHT';
+export const SET_SIDE_PANE_WIDTH = 'SET_SIDE_PANE_WIDTH';
 export const SET_EDITORS = 'SET_EDITORS';
 export const SET_CURRENT_EDITOR = 'SET_CURRENT_EDITOR';
 export const SET_CURRENT_EDITOR_NAME = 'SET_CURRENT_EDITOR_NAME';
@@ -16,6 +17,10 @@ export function toggleIsCollapsed() {
 
 export function setHeight( newHeight ) {
 	return { type: SET_HEIGHT, newHeight };
+}
+
+export function setSidePaneWidth( newWidth ) {
+	return { type: SET_SIDE_PANE_WIDTH, newWidth };
 }
 
 export function setEditors( editors ) {

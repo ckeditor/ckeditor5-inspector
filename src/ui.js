@@ -99,7 +99,7 @@ class InspectorUI extends Component {
 	}
 }
 
-const mapStateToProps = ( { isCollapsed, height, editors, currentEditorName, activeTab } ) => {
+const mapStateToProps = ( { editors, currentEditorName, ui: { isCollapsed, height, activeTab } } ) => {
 	return { isCollapsed, height, editors, currentEditorName, activeTab };
 };
 
@@ -132,10 +132,9 @@ class ToggleButtonVisual extends Component {
 	}
 }
 
-const ToggleButton = connect(
-	( { isCollapsed } ) => ( { isCollapsed } ),
-	{ toggleIsCollapsed }
-)( ToggleButtonVisual );
+const ToggleButton = connect( ( { ui: { isCollapsed } } ) => {
+	return { isCollapsed };
+}, { toggleIsCollapsed } )( ToggleButtonVisual );
 
 export class EditorInstanceSelectorVisual extends Component {
 	render() {

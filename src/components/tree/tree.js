@@ -19,6 +19,7 @@ export default class Tree extends Component {
 				return renderTreeNodeFromDefinition( definition, index, {
 					onClick: this.props.onClick,
 					showCompactText: this.props.showCompactText,
+					showElementTypes: this.props.showElementTypes,
 					activeNode: this.props.activeNode
 				} );
 			} );

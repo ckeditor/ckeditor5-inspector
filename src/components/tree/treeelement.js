@@ -48,11 +48,17 @@ export default class TreeElement extends TreeNode {
 			} );
 		}
 
+		let nameToDisplay = definition.name;
+
+		if ( this.props.globalTreeProps.showElementTypes ) {
+			nameToDisplay = definition.elementType + ':' + nameToDisplay;
+		}
+
 		return <div className={nodeClasses.join( ' ' )} onClick={this.handleClick}>
 			{beforeNodeName}
 			<span className="ck-inspector-tree-node__name">
 				<span className="ck-inspector-tree-node__name__bracket ck-inspector-tree-node__name__bracket_open" />
-				{definition.name}
+				{nameToDisplay}
 				{this.getAttributes()}
 				<span className="ck-inspector-tree-node__name__bracket ck-inspector-tree-node__name__bracket_close" />
 			</span>
@@ -62,7 +68,7 @@ export default class TreeElement extends TreeNode {
 			{isEmpty ? '' :
 				<span className="ck-inspector-tree-node__name ck-inspector-tree-node__name_close">
 					<span className="ck-inspector-tree-node__name__bracket ck-inspector-tree-node__name__bracket_open" />
-					/{definition.name}
+					/{nameToDisplay}
 					<span className="ck-inspector-tree-node__name__bracket ck-inspector-tree-node__name__bracket_close" />
 					{afterNodeName}
 				</span>

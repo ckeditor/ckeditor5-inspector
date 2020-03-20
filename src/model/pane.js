@@ -55,7 +55,7 @@ class ModelPane extends Component {
 	}
 }
 
-const mapStateToProps = ( { currentEditor, model: { activeTab } } ) => {
+const mapStateToProps = ( { currentEditor, model: { ui: { activeTab } } } ) => {
 	return { currentEditor, activeTab };
 };
 

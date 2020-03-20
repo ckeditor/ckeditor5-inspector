@@ -51,7 +51,7 @@ export function getEditorViewTreeDefinition( { currentEditor, currentRootName, r
 	];
 }
 
-function getViewNodeDefinition( node, ranges, showTypes ) {
+function getViewNodeDefinition( node, ranges ) {
 	const nodeDefinition = {};
 
 	Object.assign( nodeDefinition, {
@@ -63,7 +63,7 @@ function getViewNodeDefinition( node, ranges, showTypes ) {
 	} );
 
 	if ( isViewElement( node ) ) {
-		fillElementDefinition( nodeDefinition, ranges, showTypes );
+		fillElementDefinition( nodeDefinition, ranges );
 	} else {
 		fillViewTextNodeDefinition( nodeDefinition, ranges );
 	}
@@ -71,7 +71,7 @@ function getViewNodeDefinition( node, ranges, showTypes ) {
 	return nodeDefinition;
 }
 
-function fillElementDefinition( elementDefinition, ranges, showTypes ) {
+function fillElementDefinition( elementDefinition, ranges ) {
 	const element = elementDefinition.node;
 
 	Object.assign( elementDefinition, {
@@ -80,20 +80,18 @@ function fillElementDefinition( elementDefinition, ranges, showTypes ) {
 		positions: []
 	} );
 
-	if ( showTypes ) {
-		if ( isViewAttributeElement( element ) ) {
-			elementDefinition.name = 'attribute:' + element.name;
-		} else if ( isViewRoot( element ) ) {
-			elementDefinition.name = 'root:' + element.name;
-		} else if ( isViewEmptyElement( element ) ) {
-			elementDefinition.name = 'empty:' + element.name;
-		} else if ( isViewUiElement( element ) ) {
-			elementDefinition.name = 'ui:' + element.name;
-		} else {
-			elementDefinition.name = 'container:' + element.name;
-		}
+	elementDefinition.name = element.name;
+
+	if ( isViewAttributeElement( element ) ) {
+		elementDefinition.elementType = 'attribute';
+	} else if ( isViewRoot( element ) ) {
+		elementDefinition.elementType = 'root';
+	} else if ( isViewEmptyElement( element ) ) {
+		elementDefinition.elementType = 'empty';
+	} else if ( isViewUiElement( element ) ) {
+		elementDefinition.elementType = 'ui';
 	} else {
-		elementDefinition.name = element.name;
+		elementDefinition.elementType = 'container';
 	}
 
 	// Regardless of other rendering options, empty elements need no closing tags. They will never
@@ -119,7 +117,7 @@ function fillElementDefinition( elementDefinition, ranges, showTypes ) {
 	}
 
 	for ( const child of element.getChildren() ) {
-		elementDefinition.children.push( getViewNodeDefinition( child, ranges, showTypes ) );
+		elementDefinition.children.push( getViewNodeDefinition( child, ranges, ) );
 	}
 
 	fillViewElementDefinitionPositions( elementDefinition, ranges );

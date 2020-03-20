@@ -31,20 +31,22 @@ const LOCAL_STORAGE_ACTIVE_TAB = 'active-model-tab-name';
 const LOCAL_STORAGE_SHOW_MARKERS = 'model-show-markers';
 const LOCAL_STORAGE_COMPACT_TEXT = 'model-compact-text';
 
-export default function modelReducer( globalState, modelState, action ) {
-	// Performance optimization: don't create the model state unless necessary.
-	if ( globalState.activeTab !== 'Model' ) {
-		return modelState;
+export default function( globalState, modelState, action ) {
+	const newState = modelReducer( globalState, modelState, action );
+
+	newState.ui = modelUIReducer( newState.ui, action );
+
+	return newState;
+}
+
+function modelReducer( globalState, modelState, action ) {
+	if ( !modelState ) {
+		return getBlankModelState( globalState, modelState );
 	}
 
-	if ( !modelState ) {
-		return {
-			...getBlankModelState( globalState, modelState ),
-
-			activeTab: LocalStorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Inspect',
-			showMarkers: LocalStorageManager.get( LOCAL_STORAGE_SHOW_MARKERS ) === 'true',
-			showCompactText: LocalStorageManager.get( LOCAL_STORAGE_COMPACT_TEXT ) === 'true'
-		};
+	// Performance optimization: don't create the model state unless necessary.
+	if ( globalState.ui.activeTab !== 'Model' ) {
+		return modelState;
 	}
 
 	switch ( action.type ) {
@@ -52,12 +54,6 @@ export default function modelReducer( globalState, modelState, action ) {
 			return getNewCurrentRootNameState( globalState, modelState, action );
 		case SET_MODEL_CURRENT_NODE:
 			return { ...modelState, currentNode: action.currentNode };
-		case SET_MODEL_ACTIVE_TAB:
-			return getNewActiveTabState( modelState, action );
-		case TOGGLE_MODEL_SHOW_MARKERS:
-			return getNewShowMarkersState( globalState, modelState );
-		case TOGGLE_MODEL_SHOW_COMPACT_TEXT:
-			return getNewShowCompactTextState( globalState, modelState );
 
 		// * SET_ACTIVE_TAB – Because of the performance optimization at the beginning, update the state
 		// if we're back in the model tab.
@@ -76,6 +72,28 @@ export default function modelReducer( globalState, modelState, action ) {
 	}
 }
 
+function modelUIReducer( UIState, action ) {
+	if ( !UIState ) {
+		return {
+			activeTab: LocalStorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Inspect',
+			showMarkers: LocalStorageManager.get( LOCAL_STORAGE_SHOW_MARKERS ) === 'true',
+			showCompactText: LocalStorageManager.get( LOCAL_STORAGE_COMPACT_TEXT ) === 'true'
+		};
+	}
+
+	switch ( action.type ) {
+		case SET_MODEL_ACTIVE_TAB:
+			return getNewActiveTabState( UIState, action );
+		case TOGGLE_MODEL_SHOW_MARKERS:
+			return getNewShowMarkersState( UIState );
+		case TOGGLE_MODEL_SHOW_COMPACT_TEXT:
+			return getNewShowCompactTextState( UIState );
+
+		default:
+			return UIState;
+	}
+}
+
 function getNewCurrentRootNameState( globalState, modelState, action ) {
 	// Changing the current root name changes:
 	// * the model definition tree,
@@ -91,35 +109,35 @@ function getNewCurrentRootNameState( globalState, modelState, action ) {
 	};
 }
 
-function getNewActiveTabState( modelState, action ) {
+function getNewActiveTabState( UIState, action ) {
 	LocalStorageManager.set( LOCAL_STORAGE_ACTIVE_TAB, action.tabName );
 
 	return {
-		...modelState,
+		...UIState,
 
 		activeTab: action.tabName
 	};
 }
 
-function getNewShowMarkersState( globalState, modelState ) {
-	const showMarkers = !modelState.showMarkers;
+function getNewShowMarkersState( UIState ) {
+	const showMarkers = !UIState.showMarkers;
 
 	LocalStorageManager.set( LOCAL_STORAGE_SHOW_MARKERS, showMarkers );
 
 	return {
-		...modelState,
+		...UIState,
 
 		showMarkers
 	};
 }
 
-function getNewShowCompactTextState( globalState, modelState ) {
-	const showCompactText = !modelState.showCompactText;
+function getNewShowCompactTextState( UIState ) {
+	const showCompactText = !UIState.showCompactText;
 
 	LocalStorageManager.set( LOCAL_STORAGE_COMPACT_TEXT, showCompactText );
 
 	return {
-		...modelState,
+		...UIState,
 
 		showCompactText
 	};

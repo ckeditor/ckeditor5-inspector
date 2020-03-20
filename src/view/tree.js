@@ -52,7 +52,7 @@ class ViewTree extends Component {
 					<Checkbox
 						label="Show element types"
 						id="view-show-types"
-						isChecked={this.props.showTypes}
+						isChecked={this.props.showElementTypes}
 						onChange={this.props.toggleViewShowElementTypes}
 					/>
 				</div>
@@ -62,14 +62,15 @@ class ViewTree extends Component {
 				textDirection={this.props.currentEditor.locale.contentLanguageDirection}
 				onClick={this.handleTreeClick}
 				showCompactText="true"
+				showElementTypes={this.props.showElementTypes}
 				activeNode={this.props.currentEditorNode}
 			/>
 		</NavBox>;
 	}
 }
 
-const mapStateToProps = ( { currentEditor, view: { roots, treeDefinition, currentRootName, currentNode, showTypes } } ) => {
-	return { treeDefinition, currentEditor, currentRootName, roots, currentNode, showTypes };
+const mapStateToProps = ( { currentEditor, view: { roots, treeDefinition, currentRootName, currentNode, ui: { showElementTypes } } } ) => {
+	return { treeDefinition, currentEditor, currentRootName, roots, currentNode, showElementTypes };
 };
 
 const mapDispatchToProps = {
