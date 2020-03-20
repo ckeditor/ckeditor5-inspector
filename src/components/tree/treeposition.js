@@ -11,21 +11,24 @@ import React, { Component } from 'react';
 export default class TreePosition extends Component {
 	render() {
 		const definition = this.props.definition;
-
-		const classes = [
-			'ck-inspector-tree__position',
-			definition.type === 'selection' ? 'ck-inspector-tree__position_selection' : '',
-			definition.type === 'marker' ? 'ck-inspector-tree__position_marker' : '',
-			definition.isEnd ? 'ck-inspector-tree__position_end' : ''
-		].join( ' ' );
-
-		const styles = {
+		const attrs = {
+			className: [
+				'ck-inspector-tree__position',
+				definition.type === 'selection' ? 'ck-inspector-tree__position_selection' : '',
+				definition.type === 'marker' ? 'ck-inspector-tree__position_marker' : '',
+				definition.isEnd ? 'ck-inspector-tree__position_end' : ''
+			].join( ' ' ),
+			style: {}
 		};
 
 		if ( definition.presentation && definition.presentation.color ) {
-			styles[ '--ck-inspector-color-tree-position' ] = definition.presentation.color;
+			attrs.style[ '--ck-inspector-color-tree-position' ] = definition.presentation.color;
 		}
 
-		return <span className={classes} style={styles}>&#8203;</span>;
+		if ( definition.type === 'marker' ) {
+			attrs[ 'data-marker-name' ] = definition.name;
+		}
+
+		return <span {...attrs}>&#8203;</span>;
 	}
 }
