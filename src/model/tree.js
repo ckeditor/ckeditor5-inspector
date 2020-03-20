@@ -64,13 +64,17 @@ class ModelTree extends Component {
 					/>
 				</div>
 			]}
-			<Tree
-				definition={this.props.treeDefinition}
-				textDirection={this.props.currentEditor.locale.contentLanguageDirection}
-				onClick={this.handleTreeClick}
-				showCompactText={this.props.showCompactText}
-				activeNode={this.props.currentNode}
-			/>
+			<div className={[
+				!this.props.showMarkers ? 'ck-inspector-model-tree__hide-markers' : ''
+			]}>
+				<Tree
+					definition={this.props.treeDefinition}
+					textDirection={this.props.currentEditor.locale.contentLanguageDirection}
+					onClick={this.handleTreeClick}
+					showCompactText={this.props.showCompactText}
+					activeNode={this.props.currentNode}
+				/>
+			</div>
 		</NavBox>;
 	}
 }

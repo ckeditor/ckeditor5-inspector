@@ -21,6 +21,8 @@ import ModelMarkerInspector from './markerinspector';
 
 import editorEventObserver from '../editorobserver';
 
+import './model.css';
+
 class ModelPane extends Component {
 	editorEventObserverConfig( props ) {
 		return {

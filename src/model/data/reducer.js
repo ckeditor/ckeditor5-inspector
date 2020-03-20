@@ -104,18 +104,12 @@ function getNewActiveTabState( modelState, action ) {
 function getNewShowMarkersState( globalState, modelState ) {
 	const showMarkers = !modelState.showMarkers;
 
-	// Changing showMarkers state need re-render the tree definition.
-	const { treeDefinition } = getTreeDefinitionRangesMarkers( globalState, modelState, {
-		showMarkers
-	} );
-
 	LocalStorageManager.set( LOCAL_STORAGE_SHOW_MARKERS, showMarkers );
 
 	return {
 		...modelState,
 
-		showMarkers,
-		treeDefinition
+		showMarkers
 	};
 }
 
@@ -154,7 +148,7 @@ function getTreeDefinitionRangesMarkers( globalState, modelState, modelStateOver
 		currentEditor: globalState.currentEditor,
 		currentRootName: overriddenModelState.currentRootName,
 		ranges,
-		markers: overriddenModelState.showMarkers ? markers : []
+		markers
 	} );
 
 	return {
