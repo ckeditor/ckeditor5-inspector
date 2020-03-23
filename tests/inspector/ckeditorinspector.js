@@ -8,9 +8,10 @@
 import TestEditor from '../utils/testeditor';
 import CKEditorInspector from '../../src/ckeditorinspector';
 import Logger from '../../src/logger';
+import { getStoreState } from '../utils/utils';
 
 describe( 'CKEditorInspector', () => {
-	let editor, element, inspectorRef, warnStub;
+	let editor, element, warnStub;
 
 	beforeEach( () => {
 		// Silence inspector logs.
@@ -35,12 +36,12 @@ describe( 'CKEditorInspector', () => {
 	} );
 
 	describe( 'CKEDITOR_INSPECTOR_VERSION', () => {
-		it( 'is set', () => {
+		it( 'should be set', () => {
 			expect( window.CKEDITOR_INSPECTOR_VERSION ).to.be.a( 'string' );
 		} );
 	} );
 
-	it( 'warns if called the constructor()', () => {
+	it( 'should warn if called the constructor()', () => {
 		// eslint-disable-next-line no-unused-vars
 		const inspector = new CKEditorInspector();
 
@@ -49,7 +50,7 @@ describe( 'CKEditorInspector', () => {
 	} );
 
 	describe( '#attach()', () => {
-		it( 'adds inspector to DOM', () => {
+		it( 'should add the inspector to DOM', () => {
 			expect( document.querySelector( '.ck-inspector-wrapper' ) ).to.be.null;
 			expect( CKEditorInspector._wrapper ).to.be.null;
 
@@ -65,7 +66,23 @@ describe( 'CKEditorInspector', () => {
 			expect( wrapper.firstChild.classList.contains( 'ck-inspector' ) ).to.be.true;
 		} );
 
-		it( 'adds inspector to DOM only once when attaching to the first editor', () => {
+		it( 'should create a data store and set its initial state', () => {
+			CKEditorInspector.attach( { foo: editor } );
+
+			const state = getStoreState();
+
+			expect( state.editors.get( 'foo' ) ).to.equal( CKEditorInspector._editors.get( 'foo' ) );
+			expect( state.currentEditor ).to.equal( CKEditorInspector._editors.get( 'foo' ) );
+			expect( state.currentEditorName ).to.equal( 'foo' );
+			expect( state.ui ).to.deep.equal( {
+				activeTab: 'Model',
+				isCollapsed: false,
+				height: '400px',
+				sidePaneWidth: '500px'
+			} );
+		} );
+
+		it( 'should add the inspector to DOM only once when attaching to the first editor', () => {
 			const anotherEditorElement = document.createElement( 'div' );
 			document.body.appendChild( anotherEditorElement );
 
@@ -83,16 +100,18 @@ describe( 'CKEditorInspector', () => {
 				} );
 		} );
 
-		it( 'attaches to editors under generated names', () => {
+		it( 'should attach to multiple editors under generated editor names', () => {
 			return TestEditor.create( element )
 				.then( anotherEditor => {
 					const firstNames = CKEditorInspector.attach( editor );
 					const secondNames = CKEditorInspector.attach( anotherEditor );
+					const state = getStoreState();
 
-					inspectorRef = CKEditorInspector._inspectorRef.current;
+					expect( state.editors.get( 'editor-1' ) ).to.equal( editor );
+					expect( state.editors.get( 'editor-2' ) ).to.equal( anotherEditor );
+					expect( state.currentEditor ).to.equal( editor );
+					expect( state.currentEditorName ).to.equal( 'editor-1' );
 
-					expect( inspectorRef.state.editors.get( 'editor-1' ) ).to.equal( editor );
-					expect( inspectorRef.state.editors.get( 'editor-2' ) ).to.equal( anotherEditor );
 					expect( firstNames ).to.have.members( [ 'editor-1' ] );
 					expect( secondNames ).to.have.members( [ 'editor-2' ] );
 
@@ -100,113 +119,117 @@ describe( 'CKEditorInspector', () => {
 				} );
 		} );
 
-		it( 'attaches to a named editor', () => {
+		it( 'should attach to a named editor', () => {
 			CKEditorInspector.attach( { foo: editor } );
 
-			inspectorRef = CKEditorInspector._inspectorRef.current;
+			const state = getStoreState();
 
-			expect( inspectorRef.state.editors.get( 'foo' ) ).to.equal( editor );
+			expect( state.editors.get( 'foo' ) ).to.equal( editor );
+			expect( state.currentEditor ).to.equal( editor );
+			expect( state.currentEditorName ).to.equal( 'foo' );
 		} );
 
-		it( 'attaches to a editor named like one of core editor properties (used in a duck typing)', () => {
+		it( 'should attach to an editor named like one of core editor properties (used in a duck typing)', () => {
 			CKEditorInspector.attach( { model: editor } );
 			CKEditorInspector.attach( { editing: editor } );
 
-			inspectorRef = CKEditorInspector._inspectorRef.current;
+			const state = getStoreState();
 
-			expect( inspectorRef.state.editors.get( 'model' ) ).to.equal( editor );
-			expect( inspectorRef.state.editors.get( 'editing' ) ).to.equal( editor );
+			expect( state.editors.get( 'model' ) ).to.equal( editor );
+			expect( state.editors.get( 'editing' ) ).to.equal( editor );
+			expect( state.currentEditor ).to.equal( editor );
+			expect( state.currentEditorName ).to.equal( 'model' );
 		} );
 
-		it( 'attaches to multiple editors at a time', () => {
+		it( 'should attach to multiple editors at a time', () => {
 			return TestEditor.create( element )
 				.then( anotherEditor => {
 					const names = CKEditorInspector.attach( { foo: editor, bar: anotherEditor } );
+					const state = getStoreState();
 
-					inspectorRef = CKEditorInspector._inspectorRef.current;
-
-					expect( inspectorRef.state.editors.get( 'foo' ) ).to.equal( editor );
-					expect( inspectorRef.state.editors.get( 'bar' ) ).to.equal( anotherEditor );
+					expect( state.editors.get( 'foo' ) ).to.equal( editor );
+					expect( state.editors.get( 'bar' ) ).to.equal( anotherEditor );
+					expect( state.currentEditor ).to.equal( editor );
+					expect( state.currentEditorName ).to.equal( 'foo' );
 					expect( names ).to.have.members( [ 'foo', 'bar' ] );
 
 					return anotherEditor.destroy();
 				} );
 		} );
 
-		it( 'supports the deprecated syntax but warns', () => {
+		it( 'should support the deprecated syntax but warns', () => {
 			CKEditorInspector.attach( 'foo', editor );
 
-			inspectorRef = CKEditorInspector._inspectorRef.current;
-			expect( inspectorRef.state.editors.get( 'foo' ) ).to.equal( editor );
+			const editors = getStoreState().editors;
+
+			expect( editors.get( 'foo' ) ).to.equal( editor );
 			sinon.assert.calledOnce( warnStub );
 			sinon.assert.calledWithMatch( warnStub, /^\[CKEditorInspector\]/ );
 		} );
 
-		it( 'detaches when the editor is destroyed', () => {
+		it( 'should detach when the editor is destroyed', () => {
 			const spy = sinon.spy( CKEditorInspector, 'detach' );
 
 			CKEditorInspector.attach( { bar: editor } );
 
 			return editor.destroy().then( () => {
+				const state = getStoreState();
+
 				sinon.assert.calledOnce( spy );
 				sinon.assert.calledWith( spy, 'bar' );
 
-				inspectorRef = CKEditorInspector._inspectorRef.current;
-
-				expect( inspectorRef.state.editors.size ).to.equal( 0 );
+				expect( state.editors.size ).to.equal( 0 );
+				expect( state.currentEditor ).to.be.null;
+				expect( state.currentEditorName ).to.be.null;
 			} );
 		} );
 
 		describe( 'options', () => {
 			describe( '#isCollapsed', () => {
-				it( 'does nothing if unspecified', () => {
+				it( 'should be false if unspecified', () => {
 					CKEditorInspector.attach( editor );
 
-					inspectorRef = CKEditorInspector._inspectorRef.current;
-
-					expect( inspectorRef.props.isCollapsed ).to.be.undefined;
+					expect( getStoreState().ui.isCollapsed ).to.be.false;
 				} );
 
-				it( 'controlls the initial collapsed state of the editor (single editor)', () => {
+				it( 'should control the initial collapsed state of the inspector (single editor)', () => {
 					CKEditorInspector.attach( editor, { isCollapsed: true } );
 
-					inspectorRef = CKEditorInspector._inspectorRef.current;
-
-					expect( inspectorRef.props.isCollapsed ).to.be.true;
+					expect( getStoreState().ui.isCollapsed ).to.be.true;
 				} );
 
-				it( 'controlls the initial collapsed state of the editor (multiple editors)', () => {
+				it( 'should control the initial collapsed state of the inspector (multiple editors)', () => {
 					CKEditorInspector.attach( { foo: editor }, { isCollapsed: true } );
 
-					inspectorRef = CKEditorInspector._inspectorRef.current;
-
-					expect( inspectorRef.props.isCollapsed ).to.be.true;
+					expect( getStoreState().ui.isCollapsed ).to.be.true;
 				} );
 			} );
 		} );
 	} );
 
 	describe( '#attachToAll()', () => {
-		it( 'attaches to all editors', () => {
+		it( 'should attach to all editors in DOM', () => {
 			return TestEditor.create( element )
 				.then( anotherEditor => {
 					document.body.appendChild( editor.ui.view.element );
 					document.body.appendChild( anotherEditor.ui.view.element );
 
 					const editorNames = CKEditorInspector.attachToAll();
+					const state = getStoreState();
 
-					inspectorRef = CKEditorInspector._inspectorRef.current;
+					expect( state.editors.size ).to.equal( 2 );
+					expect( state.editors.get( 'editor-5' ) ).to.equal( editor );
+					expect( state.editors.get( 'editor-6' ) ).to.equal( anotherEditor );
+					expect( state.currentEditor ).to.equal( editor );
+					expect( state.currentEditorName ).to.equal( 'editor-5' );
 
-					expect( inspectorRef.state.editors.size ).to.equal( 2 );
-					expect( inspectorRef.state.editors.get( 'editor-5' ) ).to.equal( editor );
-					expect( inspectorRef.state.editors.get( 'editor-6' ) ).to.equal( anotherEditor );
 					expect( editorNames ).to.have.members( [ 'editor-5', 'editor-6' ] );
 
 					return anotherEditor.destroy();
 				} );
 		} );
 
-		it( 'detects and prevents duplicates', () => {
+		it( 'should detect and prevent duplicates', () => {
 			return TestEditor.create( element )
 				.then( anotherEditor => {
 					document.body.appendChild( editor.ui.view.element );
@@ -214,23 +237,23 @@ describe( 'CKEditorInspector', () => {
 
 					CKEditorInspector.attachToAll();
 
-					inspectorRef = CKEditorInspector._inspectorRef.current;
+					let editors = getStoreState().editors;
 
-					expect( inspectorRef.state.editors.size ).to.equal( 2 );
-					expect( inspectorRef.state.editors.get( 'editor-7' ) ).to.equal( editor );
-					expect( inspectorRef.state.editors.get( 'editor-8' ) ).to.equal( anotherEditor );
+					expect( editors.size ).to.equal( 2 );
+					expect( editors.get( 'editor-7' ) ).to.equal( editor );
+					expect( editors.get( 'editor-8' ) ).to.equal( anotherEditor );
 
 					CKEditorInspector.attachToAll();
 
-					inspectorRef = CKEditorInspector._inspectorRef.current;
+					editors = getStoreState().editors;
 
-					expect( inspectorRef.state.editors.size ).to.equal( 2 );
+					expect( editors.size ).to.equal( 2 );
 
 					return anotherEditor.destroy();
 				} );
 		} );
 
-		it( 'passes options to #attach()', () => {
+		it( 'should pass the options to #attach()', () => {
 			return TestEditor.create( element )
 				.then( anotherEditor => {
 					document.body.appendChild( editor.ui.view.element );
@@ -249,19 +272,25 @@ describe( 'CKEditorInspector', () => {
 	} );
 
 	describe( '#detach()', () => {
-		it( 'detaches an editor', () => {
+		it( 'should detach an editor', () => {
 			CKEditorInspector.attach( { foo: editor } );
 
-			inspectorRef = CKEditorInspector._inspectorRef.current;
+			let state = getStoreState();
 
-			expect( inspectorRef.state.editors.get( 'foo' ) ).to.equal( editor );
+			expect( state.editors.get( 'foo' ) ).to.equal( editor );
+			expect( state.currentEditor ).to.equal( editor );
+			expect( state.currentEditorName ).to.equal( 'foo' );
 
 			CKEditorInspector.detach( 'foo' );
 
-			expect( inspectorRef.state.editors.size ).to.equal( 0 );
+			state = getStoreState();
+
+			expect( state.editors.size ).to.equal( 0 );
+			expect( state.currentEditor ).to.be.null;
+			expect( state.currentEditorName ).to.be.null;
 		} );
 
-		it( 'does not throw if executed multiple times', () => {
+		it( 'should not throw if executed multiple times', () => {
 			CKEditorInspector.attach( { foo: editor } );
 
 			expect( () => {
@@ -272,15 +301,14 @@ describe( 'CKEditorInspector', () => {
 	} );
 
 	describe( '#destroy()', () => {
-		it( 'destroys the entire inspector application', () => {
+		it( 'should destroy the entire inspector application', () => {
 			CKEditorInspector.attach( { foo: editor } );
-
 			CKEditorInspector.destroy();
 
-			expect( CKEditorInspector._inspectorRef.current ).to.be.null;
 			expect( document.querySelector( '.ck-inspector-wrapper' ) ).to.be.null;
 			expect( CKEditorInspector._editors.size ).to.equal( 0 );
 			expect( CKEditorInspector._wrapper ).to.be.null;
+			expect( CKEditorInspector._store ).to.be.null;
 		} );
 	} );
 } );

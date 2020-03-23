@@ -141,6 +141,10 @@ export default class CKEditorInspector {
 	 * @param {String} string Name of the editor to detach.
 	 */
 	static detach( name ) {
+		if ( !CKEditorInspector._wrapper ) {
+			return;
+		}
+
 		CKEditorInspector._editors.delete( name );
 		CKEditorInspector._updateEditorsState();
 	}
@@ -157,6 +161,7 @@ export default class CKEditorInspector {
 		CKEditorInspector._editors.clear();
 		CKEditorInspector._wrapper.remove();
 		CKEditorInspector._wrapper = null;
+		CKEditorInspector._store = null;
 	}
 
 	static _updateEditorsState() {
@@ -182,10 +187,6 @@ export default class CKEditorInspector {
 				height: LocalStorageManager.get( LOCAL_STORAGE_INSPECTOR_HEIGHT ) || '400px',
 				sidePaneWidth: LocalStorageManager.get( LOCAL_STORAGE_SIDE_PANE_WIDTH ) || '500px'
 			}
-		} );
-
-		CKEditorInspector._store.subscribe( () => {
-			console.log( 'new state', CKEditorInspector._store.getState() );
 		} );
 
 		ReactDOM.render(

@@ -22,7 +22,7 @@ export default class TestEditor extends Editor {
 		super( config );
 
 		this.element = element;
-		this.data.processor = new HtmlDataProcessor();
+		this.data.processor = new HtmlDataProcessor( this.data.viewDocument );
 		this.ui = new ClassicTestEditorUI( this, new BoxedEditorUIView( this.locale ) );
 		this.ui.view.editable = new InlineEditableUIView( this.ui.view.locale, this.editing.view );
 		this.model.document.createRoot();
