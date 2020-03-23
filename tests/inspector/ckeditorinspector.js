@@ -9,19 +9,17 @@ import TestEditor from '../utils/testeditor';
 import CKEditorInspector from '../../src/ckeditorinspector';
 
 import Logger from '../../src/logger';
-import { getStoreState } from '../utils/utils';
+import {
+	getStoreState,
+	dispatchStoreAction
+} from '../utils/utils';
 
 import {
 	SET_EDITORS,
 	setCurrentEditorName
 } from '../../src/data/actions';
 
-import {
-	LOCAL_STORAGE_ACTIVE_TAB,
-	LOCAL_STORAGE_IS_COLLAPSED,
-	LOCAL_STORAGE_INSPECTOR_HEIGHT,
-	LOCAL_STORAGE_SIDE_PANE_WIDTH
-} from '../../src/data/reducer';
+import { LOCAL_STORAGE_IS_COLLAPSED } from '../../src/data/reducer';
 
 import { UPDATE_MODEL_STATE } from '../../src/model/data/actions';
 import { UPDATE_VIEW_STATE } from '../../src/view/data/actions';
@@ -95,39 +93,6 @@ describe( 'CKEditorInspector', () => {
 				expect( state.editors.get( 'foo' ) ).to.equal( CKEditorInspector._editors.get( 'foo' ) );
 				expect( state.currentEditor ).to.equal( CKEditorInspector._editors.get( 'foo' ) );
 				expect( state.currentEditorName ).to.equal( 'foo' );
-			} );
-
-			describe( 'UI state', () => {
-				it( 'should be created with defaults if the LocalStorage is empty', () => {
-					CKEditorInspector.attach( { foo: editor } );
-
-					const state = getStoreState();
-
-					expect( state.ui ).to.deep.equal( {
-						activeTab: 'Model',
-						isCollapsed: false,
-						height: '400px',
-						sidePaneWidth: '500px'
-					} );
-				} );
-
-				it( 'should load the state from the LocalStorage', () => {
-					LocalStorageManager.set( LOCAL_STORAGE_ACTIVE_TAB, 'View' );
-					LocalStorageManager.set( LOCAL_STORAGE_IS_COLLAPSED, 'true' );
-					LocalStorageManager.set( LOCAL_STORAGE_INSPECTOR_HEIGHT, '123px' );
-					LocalStorageManager.set( LOCAL_STORAGE_SIDE_PANE_WIDTH, '321px' );
-
-					CKEditorInspector.attach( { foo: editor } );
-
-					const state = getStoreState();
-
-					expect( state.ui ).to.deep.equal( {
-						activeTab: 'View',
-						isCollapsed: true,
-						height: '123px',
-						sidePaneWidth: '321px'
-					} );
-				} );
 			} );
 
 			it( 'should be created only once when attaching to the first editor', () => {
@@ -216,7 +181,7 @@ describe( 'CKEditorInspector', () => {
 						editor.model.document.fire( 'change' );
 						sinon.assert.calledThrice( spy );
 
-						CKEditorInspector._store.dispatch( setCurrentEditorName( 'bar' ) );
+						dispatchStoreAction( setCurrentEditorName( 'bar' ) );
 						spy.resetHistory();
 
 						editor.model.document.fire( 'change' );

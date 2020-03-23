@@ -16,18 +16,19 @@ import {
 	SET_ACTIVE_TAB
 } from './actions';
 
-import LocalStorageManager from '../localstoragemanager';
 import {
 	getFirstEditor,
 	getFirstEditorName
 } from '../utils';
 
-const LOCAL_STORAGE_ACTIVE_TAB = 'active-tab-name';
-const LOCAL_STORAGE_IS_COLLAPSED = 'is-collapsed';
-const LOCAL_STORAGE_INSPECTOR_HEIGHT = 'height';
-const LOCAL_STORAGE_SIDE_PANE_WIDTH = 'side-pane-width';
+import LocalStorageManager from '../localstoragemanager';
 
-export default function( state, action ) {
+export const LOCAL_STORAGE_ACTIVE_TAB = 'active-tab-name';
+export const LOCAL_STORAGE_IS_COLLAPSED = 'is-collapsed';
+export const LOCAL_STORAGE_INSPECTOR_HEIGHT = 'height';
+export const LOCAL_STORAGE_SIDE_PANE_WIDTH = 'side-pane-width';
+
+export function reducer( state, action ) {
 	const newState = appReducer( state, action );
 
 	newState.ui = appUIReducer( newState.ui, action );
@@ -53,6 +54,29 @@ function appReducer( state, action ) {
 }
 
 function appUIReducer( UIState, action ) {
+	// This happens when the inspector store is created for the first time only.
+	// Only #isCollapsed is passed then because it's configurable in inspector options.
+	// The rest should be loaded from the LocalStorage or from defaults.
+	if ( !UIState.activeTab ) {
+		let isCollapsed;
+
+		// If it was provided as "preloadedState" createStore()...
+		if ( UIState.isCollapsed !== undefined ) {
+			isCollapsed = UIState.isCollapsed;
+		} else {
+			isCollapsed = LocalStorageManager.get( LOCAL_STORAGE_IS_COLLAPSED ) === 'true';
+		}
+
+		return {
+			...UIState,
+
+			isCollapsed,
+			activeTab: LocalStorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Model',
+			height: LocalStorageManager.get( LOCAL_STORAGE_INSPECTOR_HEIGHT ) || '400px',
+			sidePaneWidth: LocalStorageManager.get( LOCAL_STORAGE_SIDE_PANE_WIDTH ) || '500px'
+		};
+	}
+
 	switch ( action.type ) {
 		case TOGGLE_IS_COLLAPSED:
 			return getNewIsCollapsedState( UIState );
@@ -81,7 +105,10 @@ function getNewEditorsState( appState, action ) {
 		editors: new Map( action.editors )
 	};
 
-	if ( !action.editors.has( appState.currentEditorName ) ) {
+	if ( !action.editors.size ) {
+		newState.currentEditor = null;
+		newState.currentEditorName = null;
+	} else if ( !action.editors.has( appState.currentEditorName ) ) {
 		newState.currentEditor = getFirstEditor( action.editors );
 		newState.currentEditorName = getFirstEditorName( action.editors );
 	}

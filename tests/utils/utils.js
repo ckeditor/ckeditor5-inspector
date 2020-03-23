@@ -44,3 +44,7 @@ export function assertTreeItems( items, expected ) {
 export function getStoreState() {
 	return CKEditorInspector._store.getState();
 }
+
+export function dispatchStoreAction( action ) {
+	return CKEditorInspector._store.dispatch( action );
+}

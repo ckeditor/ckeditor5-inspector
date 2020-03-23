@@ -10,13 +10,7 @@ import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
-import {
-	reducer,
-	LOCAL_STORAGE_ACTIVE_TAB,
-	LOCAL_STORAGE_IS_COLLAPSED,
-	LOCAL_STORAGE_INSPECTOR_HEIGHT,
-	LOCAL_STORAGE_SIDE_PANE_WIDTH
-} from './data/reducer';
+import { reducer } from './data/reducer';
 import { setEditors } from './data/actions';
 import { updateModelState } from './model/data/actions';
 import { updateViewState } from './view/data/actions';
@@ -25,7 +19,6 @@ import EditorListener from './data/utils';
 
 import InspectorUI from './ui';
 import Logger from './logger';
-import LocalStorageManager from './localstoragemanager';
 import {
 	normalizeArguments,
 	getFirstEditorName,
@@ -188,8 +181,6 @@ export default class CKEditorInspector {
 		}
 
 		const container = CKEditorInspector._wrapper = document.createElement( 'div' );
-		const isCollapsed = options.hasOwnProperty( 'isCollapsed' ) ?
-			options.isCollapsed : LocalStorageManager.get( LOCAL_STORAGE_IS_COLLAPSED ) === 'true';
 		let previousEditor;
 
 		container.className = 'ck-inspector-wrapper';
@@ -214,10 +205,7 @@ export default class CKEditorInspector {
 			currentEditor: getFirstEditor( CKEditorInspector._editors ),
 			currentEditorName: getFirstEditorName( CKEditorInspector._editors ),
 			ui: {
-				activeTab: LocalStorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Model',
-				isCollapsed,
-				height: LocalStorageManager.get( LOCAL_STORAGE_INSPECTOR_HEIGHT ) || '400px',
-				sidePaneWidth: LocalStorageManager.get( LOCAL_STORAGE_SIDE_PANE_WIDTH ) || '500px'
+				isCollapsed: options.isCollapsed
 			}
 		} );
 
