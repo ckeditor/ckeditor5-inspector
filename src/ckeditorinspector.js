@@ -9,8 +9,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import reducer from './data/reducer';
+
+import {
+	reducer,
+	LOCAL_STORAGE_ACTIVE_TAB,
+	LOCAL_STORAGE_IS_COLLAPSED,
+	LOCAL_STORAGE_INSPECTOR_HEIGHT,
+	LOCAL_STORAGE_SIDE_PANE_WIDTH
+} from './data/reducer';
 import { setEditors } from './data/actions';
+import { updateModelState } from './model/data/actions';
+import { updateViewState } from './view/data/actions';
+import { updateCommandsState } from './commands/data/actions';
+import EditorListener from './data/utils';
 
 import InspectorUI from './ui';
 import Logger from './logger';
@@ -24,11 +35,6 @@ import './ckeditorinspector.css';
 
 // From changelog -> webpack.
 window.CKEDITOR_INSPECTOR_VERSION = CKEDITOR_INSPECTOR_VERSION;
-
-const LOCAL_STORAGE_ACTIVE_TAB = 'active-tab-name';
-const LOCAL_STORAGE_IS_COLLAPSED = 'is-collapsed';
-const LOCAL_STORAGE_INSPECTOR_HEIGHT = 'height';
-const LOCAL_STORAGE_SIDE_PANE_WIDTH = 'side-pane-width';
 
 export default class CKEditorInspector {
 	constructor() {
@@ -160,6 +166,14 @@ export default class CKEditorInspector {
 		ReactDOM.unmountComponentAtNode( CKEditorInspector._wrapper );
 		CKEditorInspector._editors.clear();
 		CKEditorInspector._wrapper.remove();
+
+		const currentEditor = CKEditorInspector._store.getState().currentEditor;
+
+		if ( currentEditor ) {
+			CKEditorInspector._editorListener.stopListening( currentEditor );
+		}
+
+		CKEditorInspector._editorListener = null;
 		CKEditorInspector._wrapper = null;
 		CKEditorInspector._store = null;
 	}
@@ -174,18 +188,61 @@ export default class CKEditorInspector {
 		}
 
 		const container = CKEditorInspector._wrapper = document.createElement( 'div' );
+		const isCollapsed = options.hasOwnProperty( 'isCollapsed' ) ?
+			options.isCollapsed : LocalStorageManager.get( LOCAL_STORAGE_IS_COLLAPSED ) === 'true';
+		let previousEditor;
+
 		container.className = 'ck-inspector-wrapper';
 		document.body.appendChild( container );
 
+		// Create a listener that will trigger the store action when the model
+		// is changing or the view is being rendered.
+		CKEditorInspector._editorListener = new EditorListener( {
+			onModelChange() {
+				CKEditorInspector._store.dispatch( updateModelState() );
+				CKEditorInspector._store.dispatch( updateCommandsState() );
+			},
+			onViewRender() {
+				CKEditorInspector._store.dispatch( updateViewState() );
+			}
+		} );
+
+		// Create a global Redux store for the entire application. The store is extended by model, view and
+		// commands reducers. See the reducer() function to learn more.
 		CKEditorInspector._store = createStore( reducer, {
 			editors: CKEditorInspector._editors,
 			currentEditor: getFirstEditor( CKEditorInspector._editors ),
 			currentEditorName: getFirstEditorName( CKEditorInspector._editors ),
 			ui: {
 				activeTab: LocalStorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) || 'Model',
-				isCollapsed: options.isCollapsed || LocalStorageManager.get( LOCAL_STORAGE_IS_COLLAPSED ) === 'true',
+				isCollapsed,
 				height: LocalStorageManager.get( LOCAL_STORAGE_INSPECTOR_HEIGHT ) || '400px',
 				sidePaneWidth: LocalStorageManager.get( LOCAL_STORAGE_SIDE_PANE_WIDTH ) || '500px'
+			}
+		} );
+
+		// Watch for changes of the current editor in the global store, and update the
+		// EditorListener accordingly. This ensures the EditorListener instance listens
+		// to events from the current editor only (but not the previous one).
+		CKEditorInspector._store.subscribe( () => {
+			const state = CKEditorInspector._store.getState();
+
+			// Either going from
+			// * no editor to a new editor
+			// * from one editor to another,
+			// * from one editor to no editor,
+			if ( previousEditor !== state.currentEditor ) {
+				// If there was no editor before, there's nothing to stop listening to.
+				if ( previousEditor ) {
+					CKEditorInspector._editorListener.stopListening( previousEditor );
+				}
+
+				// If going from one editor to no editor, there's nothing to start listening to.
+				if ( state.currentEditor ) {
+					CKEditorInspector._editorListener.startListening( state.currentEditor );
+				}
+
+				previousEditor = state.currentEditor;
 			}
 		} );
 

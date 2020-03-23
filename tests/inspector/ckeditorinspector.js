@@ -7,13 +7,33 @@
 
 import TestEditor from '../utils/testeditor';
 import CKEditorInspector from '../../src/ckeditorinspector';
+
 import Logger from '../../src/logger';
 import { getStoreState } from '../utils/utils';
+
+import {
+	SET_EDITORS,
+	setCurrentEditorName
+} from '../../src/data/actions';
+
+import {
+	LOCAL_STORAGE_ACTIVE_TAB,
+	LOCAL_STORAGE_IS_COLLAPSED,
+	LOCAL_STORAGE_INSPECTOR_HEIGHT,
+	LOCAL_STORAGE_SIDE_PANE_WIDTH
+} from '../../src/data/reducer';
+
+import { UPDATE_MODEL_STATE } from '../../src/model/data/actions';
+import { UPDATE_VIEW_STATE } from '../../src/view/data/actions';
+import { UPDATE_COMMANDS_STATE } from '../../src/commands/data/actions';
+import LocalStorageManager from '../../src/localstoragemanager';
 
 describe( 'CKEditorInspector', () => {
 	let editor, element, warnStub;
 
 	beforeEach( () => {
+		window.localStorage.clear();
+
 		// Silence inspector logs.
 		sinon.stub( Logger, 'log' ).callsFake( () => {} );
 		warnStub = sinon.stub( Logger, 'warn' ).callsFake( () => {} );
@@ -66,19 +86,167 @@ describe( 'CKEditorInspector', () => {
 			expect( wrapper.firstChild.classList.contains( 'ck-inspector' ) ).to.be.true;
 		} );
 
-		it( 'should create a data store and set its initial state', () => {
-			CKEditorInspector.attach( { foo: editor } );
+		describe( 'redux #_store', () => {
+			it( 'should be created with the first editor', () => {
+				CKEditorInspector.attach( { foo: editor } );
 
-			const state = getStoreState();
+				const state = getStoreState();
 
-			expect( state.editors.get( 'foo' ) ).to.equal( CKEditorInspector._editors.get( 'foo' ) );
-			expect( state.currentEditor ).to.equal( CKEditorInspector._editors.get( 'foo' ) );
-			expect( state.currentEditorName ).to.equal( 'foo' );
-			expect( state.ui ).to.deep.equal( {
-				activeTab: 'Model',
-				isCollapsed: false,
-				height: '400px',
-				sidePaneWidth: '500px'
+				expect( state.editors.get( 'foo' ) ).to.equal( CKEditorInspector._editors.get( 'foo' ) );
+				expect( state.currentEditor ).to.equal( CKEditorInspector._editors.get( 'foo' ) );
+				expect( state.currentEditorName ).to.equal( 'foo' );
+			} );
+
+			describe( 'UI state', () => {
+				it( 'should be created with defaults if the LocalStorage is empty', () => {
+					CKEditorInspector.attach( { foo: editor } );
+
+					const state = getStoreState();
+
+					expect( state.ui ).to.deep.equal( {
+						activeTab: 'Model',
+						isCollapsed: false,
+						height: '400px',
+						sidePaneWidth: '500px'
+					} );
+				} );
+
+				it( 'should load the state from the LocalStorage', () => {
+					LocalStorageManager.set( LOCAL_STORAGE_ACTIVE_TAB, 'View' );
+					LocalStorageManager.set( LOCAL_STORAGE_IS_COLLAPSED, 'true' );
+					LocalStorageManager.set( LOCAL_STORAGE_INSPECTOR_HEIGHT, '123px' );
+					LocalStorageManager.set( LOCAL_STORAGE_SIDE_PANE_WIDTH, '321px' );
+
+					CKEditorInspector.attach( { foo: editor } );
+
+					const state = getStoreState();
+
+					expect( state.ui ).to.deep.equal( {
+						activeTab: 'View',
+						isCollapsed: true,
+						height: '123px',
+						sidePaneWidth: '321px'
+					} );
+				} );
+			} );
+
+			it( 'should be created only once when attaching to the first editor', () => {
+				const anotherEditorElement = document.createElement( 'div' );
+				document.body.appendChild( anotherEditorElement );
+
+				return TestEditor.create( anotherEditorElement )
+					.then( anotherEditor => {
+						CKEditorInspector.attach( { foo: editor } );
+
+						const firstReference = CKEditorInspector._store;
+
+						CKEditorInspector.attach( { bar: anotherEditor } );
+
+						const secondReference = CKEditorInspector._store;
+
+						expect( firstReference ).to.equal( secondReference );
+
+						return anotherEditor.destroy();
+					} );
+			} );
+		} );
+
+		describe( '#_editorListener', () => {
+			it( 'should start listening to the editor events', () => {
+				CKEditorInspector.attach( { foo: editor } );
+
+				const spy = sinon.stub( CKEditorInspector._store, 'dispatch' );
+
+				editor.model.document.fire( 'change' );
+
+				sinon.assert.calledThrice( spy );
+				sinon.assert.calledWithExactly( spy.firstCall, { type: UPDATE_MODEL_STATE } );
+				sinon.assert.calledWithExactly( spy.secondCall, { type: UPDATE_COMMANDS_STATE } );
+
+				// After model->view conversion.
+				sinon.assert.calledWithExactly( spy.thirdCall, { type: UPDATE_VIEW_STATE } );
+
+				editor.editing.view.fire( 'render' );
+				sinon.assert.callCount( spy, 4 );
+				sinon.assert.calledWithExactly( spy.getCall( 3 ), { type: UPDATE_VIEW_STATE } );
+
+				spy.restore();
+			} );
+
+			it( 'should stop listening to editor events when the inspector is being detached', () => {
+				CKEditorInspector.attach( { foo: editor } );
+
+				const spy = sinon.spy( CKEditorInspector._store, 'dispatch' );
+
+				editor.model.document.fire( 'change' );
+				sinon.assert.calledThrice( spy );
+
+				CKEditorInspector.detach( 'foo' );
+
+				editor.model.document.fire( 'change' );
+
+				sinon.assert.callCount( spy, 4 );
+				sinon.assert.calledWithExactly( spy.getCall( 3 ), { type: SET_EDITORS, editors: sinon.match.map } );
+			} );
+
+			it( 'should stop listening to editor events when the inspector is being destroyed', () => {
+				CKEditorInspector.attach( { foo: editor } );
+
+				const spy = sinon.spy( CKEditorInspector._store, 'dispatch' );
+
+				editor.model.document.fire( 'change' );
+				sinon.assert.calledThrice( spy );
+
+				CKEditorInspector.destroy();
+
+				editor.model.document.fire( 'change' );
+				sinon.assert.calledThrice( spy );
+			} );
+
+			it( 'should stop listening to the previous one and start listening to the one when switching editors', () => {
+				const anotherEditorElement = document.createElement( 'div' );
+				document.body.appendChild( anotherEditorElement );
+
+				return TestEditor.create( anotherEditorElement )
+					.then( anotherEditor => {
+						CKEditorInspector.attach( { foo: editor, bar: anotherEditor } );
+
+						const spy = sinon.spy( CKEditorInspector._store, 'dispatch' );
+
+						editor.model.document.fire( 'change' );
+						sinon.assert.calledThrice( spy );
+
+						CKEditorInspector._store.dispatch( setCurrentEditorName( 'bar' ) );
+						spy.resetHistory();
+
+						editor.model.document.fire( 'change' );
+						sinon.assert.notCalled( spy );
+
+						anotherEditor.model.document.fire( 'change' );
+						sinon.assert.calledThrice( spy );
+
+						return anotherEditor.destroy();
+					} );
+			} );
+
+			it( 'should be created only once when attaching to the first editor', () => {
+				const anotherEditorElement = document.createElement( 'div' );
+				document.body.appendChild( anotherEditorElement );
+
+				return TestEditor.create( anotherEditorElement )
+					.then( anotherEditor => {
+						CKEditorInspector.attach( { foo: editor } );
+
+						const firstReference = CKEditorInspector._editorListener;
+
+						CKEditorInspector.attach( { bar: anotherEditor } );
+
+						const secondReference = CKEditorInspector._editorListener;
+
+						expect( firstReference ).to.equal( secondReference );
+
+						return anotherEditor.destroy();
+					} );
 			} );
 		} );
 
@@ -202,6 +370,14 @@ describe( 'CKEditorInspector', () => {
 					CKEditorInspector.attach( { foo: editor }, { isCollapsed: true } );
 
 					expect( getStoreState().ui.isCollapsed ).to.be.true;
+				} );
+
+				it( 'should override the configuration in the LocalStorage', () => {
+					LocalStorageManager.set( LOCAL_STORAGE_IS_COLLAPSED, 'true' );
+
+					CKEditorInspector.attach( { foo: editor }, { isCollapsed: false } );
+
+					expect( getStoreState().ui.isCollapsed ).to.be.false;
 				} );
 			} );
 		} );
