@@ -14,6 +14,7 @@ import ModelPane from '../../../src/model/pane';
 import ModelTree from '../../../src/model/tree';
 import ModelNodeInspector from '../../../src/model/nodeinspector';
 import ModelSelectionInspector from '../../../src/model/selectioninspector';
+import ModelMarkersInspector from '../../../src/model/markerinspector';
 
 describe( '<ModelPane />', () => {
 	let editor, store, wrapper, element;
@@ -138,6 +139,34 @@ describe( '<ModelPane />', () => {
 			const wrapper = mount( <Provider store={store}><ModelPane /></Provider> );
 
 			expect( wrapper.find( ModelSelectionInspector ) ).to.have.length( 1 );
+
+			wrapper.unmount();
+		} );
+
+		it( 'should render a <ModelMarkersInspector/> if the active tab is "Markers"', () => {
+			store = createStore( state => state, {
+				currentEditor: editor,
+				currentEditorName: 'test-editor',
+				ui: {
+					activeTab: 'Model'
+				},
+				model: {
+					roots: [],
+					ranges: [],
+					markers: [],
+					treeDefinition: null,
+					currentRootName: 'main',
+					ui: {
+						activeTab: 'Markers',
+						showMarkers: false,
+						showCompactText: false
+					}
+				}
+			} );
+
+			const wrapper = mount( <Provider store={store}><ModelPane /></Provider> );
+
+			expect( wrapper.find( ModelMarkersInspector ) ).to.have.length( 1 );
 
 			wrapper.unmount();
 		} );
