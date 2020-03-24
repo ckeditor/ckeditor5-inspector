@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md.
  */
 
-import modelReducer from '../model/data/reducer';
+import { modelReducer } from '../model/data/reducer';
 import viewReducer from '../view/data/reducer';
 import commandsReducer from '../commands/data/reducer';
 
@@ -13,7 +13,7 @@ import {
 	SET_SIDE_PANE_WIDTH,
 	SET_EDITORS,
 	SET_CURRENT_EDITOR_NAME,
-	SET_ACTIVE_TAB
+	SET_ACTIVE_INSPECTOR_TAB
 } from './actions';
 
 import {
@@ -84,7 +84,7 @@ function appUIReducer( UIState, action ) {
 			return getNewHeightState( UIState, action );
 		case SET_SIDE_PANE_WIDTH:
 			return getNewSidePaneWidthState( UIState, action );
-		case SET_ACTIVE_TAB:
+		case SET_ACTIVE_INSPECTOR_TAB:
 			return getNewActiveTabState( UIState, action );
 		default:
 			return UIState;

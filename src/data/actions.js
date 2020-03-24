@@ -8,7 +8,7 @@ export const SET_HEIGHT = 'SET_HEIGHT';
 export const SET_SIDE_PANE_WIDTH = 'SET_SIDE_PANE_WIDTH';
 export const SET_EDITORS = 'SET_EDITORS';
 export const SET_CURRENT_EDITOR_NAME = 'SET_CURRENT_EDITOR_NAME';
-export const SET_ACTIVE_TAB = 'SET_ACTIVE_TAB';
+export const SET_ACTIVE_INSPECTOR_TAB = 'SET_ACTIVE_INSPECTOR_TAB';
 
 export function toggleIsCollapsed() {
 	return { type: TOGGLE_IS_COLLAPSED };
@@ -31,5 +31,5 @@ export function setCurrentEditorName( editorName ) {
 }
 
 export function setActiveTab( tabName ) {
-	return { type: SET_ACTIVE_TAB, tabName };
+	return { type: SET_ACTIVE_INSPECTOR_TAB, tabName };
 }

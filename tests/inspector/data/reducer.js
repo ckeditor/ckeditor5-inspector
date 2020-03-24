@@ -26,7 +26,7 @@ import {
 } from '../../../src/data/actions';
 
 describe( 'global data store reducer', () => {
-	let editorA, editorB, editors, currentEditor, currentEditorName;
+	let editorA, editorB;
 	let elementA, elementB;
 	let state;
 
@@ -44,18 +44,13 @@ describe( 'global data store reducer', () => {
 			return TestEditor.create( elementB ).then( newEditor => {
 				editorB = newEditor;
 
-				editors = new Map( [
-					[ 'a', editorA ],
-					[ 'b', editorB ]
-				] );
-
-				currentEditor = editorA;
-				currentEditorName = 'a';
-
 				state = reducer( {
-					editors,
-					currentEditor,
-					currentEditorName,
+					currentEditor: editorA,
+					currentEditorName: 'a',
+					editors: new Map( [
+						[ 'a', editorA ],
+						[ 'b', editorB ]
+					] ),
 					ui: {}
 				}, {} );
 			} );
@@ -74,7 +69,7 @@ describe( 'global data store reducer', () => {
 
 	describe( 'application state', () => {
 		describe( '#editors', () => {
-			it( 'should be updated on SET_EDITORS action', () => {
+			it( 'should be updated on setEditors() action', () => {
 				state = reducer( state, setEditors( new Map( [ [ 'b', editorB ] ] ) ) );
 
 				expect( [ ...state.editors ] ).to.deep.equal( [
@@ -105,7 +100,7 @@ describe( 'global data store reducer', () => {
 		} );
 
 		describe( '#currentEditorName', () => {
-			it( 'should be updated on SET_CURRENT_EDITOR_NAME action', () => {
+			it( 'should be updated on setCurrentEditorName() action', () => {
 				state = reducer( state, setCurrentEditorName( 'b' ) );
 
 				expect( state.currentEditorName ).to.equal( 'b' );
@@ -136,9 +131,12 @@ describe( 'global data store reducer', () => {
 			LocalStorageManager.set( LOCAL_STORAGE_SIDE_PANE_WIDTH, '321px' );
 
 			const state = reducer( {
-				editors,
-				currentEditor,
-				currentEditorName,
+				currentEditor: editorA,
+				currentEditorName: 'a',
+				editors: new Map( [
+					[ 'a', editorA ],
+					[ 'b', editorB ]
+				] ),
 				ui: {}
 			}, {} );
 
@@ -151,7 +149,7 @@ describe( 'global data store reducer', () => {
 		} );
 
 		describe( '#height', () => {
-			it( 'should be updated on SET_HEIGHT action', () => {
+			it( 'should be updated on setHeight action', () => {
 				state = reducer( state, setHeight( '60px' ) );
 
 				expect( state.ui.height ).to.equal( '60px' );
@@ -165,7 +163,7 @@ describe( 'global data store reducer', () => {
 		} );
 
 		describe( '#isCollapsed', () => {
-			it( 'should be updated on TOGGLE_IS_COLLAPSED action', () => {
+			it( 'should be updated on toggleIsCollapsed() action', () => {
 				expect( state.ui.isCollapsed ).to.be.false;
 
 				state = reducer( state, toggleIsCollapsed() );
@@ -181,7 +179,7 @@ describe( 'global data store reducer', () => {
 		} );
 
 		describe( '#sidePaneWidth', () => {
-			it( 'should be updated on SET_SIDE_PANE_WIDTH action', () => {
+			it( 'should be updated on setSidePaneWidth() action', () => {
 				state = reducer( state, setSidePaneWidth( '160px' ) );
 
 				expect( state.ui.sidePaneWidth ).to.equal( '160px' );
@@ -195,7 +193,7 @@ describe( 'global data store reducer', () => {
 		} );
 
 		describe( '#activeTab', () => {
-			it( 'should be updated on SET_SIDE_PANE_WIDTH action', () => {
+			it( 'should be updated on setActiveTab() action', () => {
 				state = reducer( state, setActiveTab( 'Model' ) );
 
 				expect( state.ui.activeTab ).to.equal( 'Model' );

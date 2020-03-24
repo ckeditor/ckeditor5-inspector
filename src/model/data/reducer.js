@@ -15,7 +15,7 @@ import {
 import {
 	SET_EDITORS,
 	SET_CURRENT_EDITOR_NAME,
-	SET_ACTIVE_TAB
+	SET_ACTIVE_INSPECTOR_TAB
 } from '../../data/actions';
 
 import {
@@ -28,26 +28,28 @@ import {
 
 import LocalStorageManager from '../../localstoragemanager';
 
-const LOCAL_STORAGE_ACTIVE_TAB = 'active-model-tab-name';
-const LOCAL_STORAGE_SHOW_MARKERS = 'model-show-markers';
-const LOCAL_STORAGE_COMPACT_TEXT = 'model-compact-text';
+export const LOCAL_STORAGE_ACTIVE_TAB = 'active-model-tab-name';
+export const LOCAL_STORAGE_SHOW_MARKERS = 'model-show-markers';
+export const LOCAL_STORAGE_COMPACT_TEXT = 'model-compact-text';
 
-export default function( globalState, modelState, action ) {
-	const newState = modelReducer( globalState, modelState, action );
+export function modelReducer( globalState, modelState, action ) {
+	const newState = modelDataReducer( globalState, modelState, action );
 
-	newState.ui = modelUIReducer( newState.ui, action );
+	if ( newState ) {
+		newState.ui = modelUIReducer( newState.ui, action );
+	}
 
 	return newState;
 }
 
-function modelReducer( globalState, modelState, action ) {
-	if ( !modelState ) {
-		return getBlankModelState( globalState, modelState );
-	}
-
+function modelDataReducer( globalState, modelState, action ) {
 	// Performance optimization: don't create the model state unless necessary.
 	if ( globalState.ui.activeTab !== 'Model' ) {
 		return modelState;
+	}
+
+	if ( !modelState ) {
+		return getBlankModelState( globalState, modelState );
 	}
 
 	switch ( action.type ) {
@@ -61,10 +63,10 @@ function modelReducer( globalState, modelState, action ) {
 				currentNodeDefinition: getEditorModelNodeDefinition( globalState.currentEditor, action.currentNode )
 			};
 
-		// * SET_ACTIVE_TAB – Because of the performance optimization at the beginning, update the state
+		// * SET_ACTIVE_INSPECTOR_TAB – Because of the performance optimization at the beginning, update the state
 		// if we're back in the model tab.
-		// * UPDATE_MODEL_STATE – An action called by the editorEventObserver for the model document change.
-		case SET_ACTIVE_TAB:
+		// * UPDATE_MODEL_STATE – An action called by the EditorListener for the model document change.
+		case SET_ACTIVE_INSPECTOR_TAB:
 		case UPDATE_MODEL_STATE:
 			return { ...modelState, ...getEssentialState( globalState, modelState ) };
 
@@ -149,6 +151,13 @@ function getNewShowCompactTextState( UIState ) {
 
 function getBlankModelState( globalState, modelState = {} ) {
 	const currentEditor = globalState.currentEditor;
+
+	if ( !currentEditor ) {
+		return {
+			ui: modelState.ui
+		};
+	}
+
 	const roots = getEditorModelRoots( currentEditor );
 	const currentRootName = roots[ 0 ].rootName;
 

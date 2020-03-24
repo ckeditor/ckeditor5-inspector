@@ -16,7 +16,7 @@ import {
 	SET_SIDE_PANE_WIDTH,
 	SET_EDITORS,
 	SET_CURRENT_EDITOR_NAME,
-	SET_ACTIVE_TAB
+	SET_ACTIVE_INSPECTOR_TAB
 } from '../../../src/data/actions';
 
 describe( 'global data store actions', () => {
@@ -56,7 +56,7 @@ describe( 'global data store actions', () => {
 
 	it( 'should export setActiveTab()', () => {
 		expect( setActiveTab( 'foo' ) ).to.deep.equal( {
-			type: SET_ACTIVE_TAB,
+			type: SET_ACTIVE_INSPECTOR_TAB,
 			tabName: 'foo'
 		} );
 	} );
