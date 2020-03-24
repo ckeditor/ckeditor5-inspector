@@ -5,10 +5,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-	setModelActiveTab,
-	updateModelState
-} from './data/actions';
+import { setModelActiveTab } from './data/actions';
 
 import Pane from '../components/pane';
 import Tabs from '../components/tabs';
@@ -19,22 +16,9 @@ import ModelNodeInspector from './nodeinspector';
 import ModelSelectionInspector from './selectioninspector';
 import ModelMarkerInspector from './markerinspector';
 
-import editorEventObserver from '../editorobserver';
-
 import './model.css';
 
 class ModelPane extends Component {
-	editorEventObserverConfig( props ) {
-		return {
-			target: props.currentEditor.model.document,
-			event: 'change'
-		};
-	}
-
-	editorEventObserverCallback() {
-		this.props.updateModelState();
-	}
-
 	render() {
 		if ( !this.props.currentEditor ) {
 			return <Pane isEmpty="true">
@@ -59,9 +43,6 @@ const mapStateToProps = ( { currentEditor, model: { ui: { activeTab } } } ) => {
 	return { currentEditor, activeTab };
 };
 
-const mapDispatchToProps = {
-	setModelActiveTab,
-	updateModelState
-};
+const mapDispatchToProps = { setModelActiveTab };
 
-export default connect( mapStateToProps, mapDispatchToProps )( editorEventObserver( ModelPane ) );
+export default connect( mapStateToProps, mapDispatchToProps )( ModelPane );
