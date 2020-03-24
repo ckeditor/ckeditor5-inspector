@@ -4,14 +4,11 @@
  */
 
 import React from 'react';
-import Tree, {
-	TreeTextNode,
-	TreePlainText,
-	TreeSelection,
-	TreeElement,
-	TreeComment,
-	TreeNodeAttribute
-} from '../../../src/components/tree';
+import Tree from '../../../../src/components/tree/tree';
+import TreeTextNode from '../../../../src/components/tree/treetextnode';
+import TreeElement from '../../../../src/components/tree/treeelement';
+import TreeComment from '../../../../src/components/tree/treecomment';
+import TreeNodeAttribute from '../../../../src/components/tree/treenodeattribute';
 
 describe( '<Tree />', () => {
 	let wrapper, clickSpy;
@@ -20,7 +17,7 @@ describe( '<Tree />', () => {
 		clickSpy = sinon.spy();
 	} );
 
-	it( 'renders tree', () => {
+	it( 'should render a tree', () => {
 		wrapper = mount( <Tree /> );
 
 		expect( wrapper ).to.have.className( 'ck-inspector-tree' );
@@ -72,15 +69,11 @@ describe( '<Tree />', () => {
 				children: []
 			};
 
-			const items = [
-				itemA,
-				itemB
-			];
-
 			wrapper = mount( <Tree
-				items={items}
+				definition={[ itemA, itemB ]}
 				onClick={clickSpy}
 				showCompactText={false}
+				showElementTypes={false}
 				activeNode={activeNode}
 			/> );
 		} );
@@ -89,7 +82,7 @@ describe( '<Tree />', () => {
 			wrapper.unmount();
 		} );
 
-		it( 'are rendered', () => {
+		it( 'should be rendered', () => {
 			expect( wrapper.find( TreeElement ).length ).to.equal( 3 );
 
 			const childA = wrapper.children().childAt( 0 );
@@ -100,36 +93,24 @@ describe( '<Tree />', () => {
 			expect( childAA.type() ).to.equal( TreeElement );
 			expect( childB.type() ).to.equal( TreeElement );
 
-			expect( childA.props().item ).to.equal( itemA );
-			expect( childAA.props().item ).to.equal( itemAA );
-			expect( childB.props().item ).to.equal( itemB );
+			expect( childA.props().definition ).to.equal( itemA );
+			expect( childAA.props().definition ).to.equal( itemAA );
+			expect( childB.props().definition ).to.equal( itemB );
 		} );
 
-		it( 'share props#onClick', () => {
+		it( 'should share tree\'s props#onClick', () => {
 			const childA = wrapper.children().childAt( 0 );
 			const childAA = wrapper.children().childAt( 0 ).children().find( TreeElement );
 
-			expect( childA.props().onClick ).to.equal( clickSpy );
-			expect( childAA.props().onClick ).to.equal( clickSpy );
+			expect( childA.find( 'div' ).first().props().onClick ).to.equal( childA.instance().handleClick );
+			expect( childAA.find( 'div' ).first().props().onClick ).to.equal( childAA.instance().handleClick );
+
+			childA.instance().handleClick();
+
+			sinon.assert.calledOnce( clickSpy );
 		} );
 
-		it( 'share tree\'s props#showCompactText', () => {
-			let childA = wrapper.children().childAt( 0 );
-			let childAA = wrapper.children().childAt( 0 ).children().find( TreeElement );
-
-			expect( childA.props().showCompactText ).to.be.false;
-			expect( childAA.props().showCompactText ).to.be.false;
-
-			wrapper.setProps( { showCompactText: true } );
-
-			childA = wrapper.children().childAt( 0 );
-			childAA = wrapper.children().childAt( 0 ).children().find( TreeElement );
-
-			expect( childA.props().showCompactText ).to.be.true;
-			expect( childAA.props().showCompactText ).to.be.true;
-		} );
-
-		it( 'respond to tree\'s props#activeNode', () => {
+		it( 'should respond to tree\'s props#activeNode', () => {
 			const childA = wrapper.children().childAt( 0 );
 			const childAA = wrapper.children().childAt( 0 ).children().find( TreeElement );
 
@@ -174,12 +155,10 @@ describe( '<Tree />', () => {
 			};
 
 			wrapper = mount( <Tree
-				items={[
-					itemA,
-					itemB
-				]}
+				definition={[ itemA, itemB ]}
 				onClick={clickSpy}
 				showCompactText={false}
+				showElementTypes={false}
 				activeNode={activeNode}
 			/> );
 		} );
@@ -188,7 +167,7 @@ describe( '<Tree />', () => {
 			wrapper.unmount();
 		} );
 
-		it( 'are rendered', () => {
+		it( 'should be rendered', () => {
 			expect( wrapper.find( TreeElement ).length ).to.equal( 1 );
 			expect( wrapper.find( TreeTextNode ).length ).to.equal( 2 );
 
@@ -200,33 +179,35 @@ describe( '<Tree />', () => {
 			expect( childAA.type() ).to.equal( TreeTextNode );
 			expect( childB.type() ).to.equal( TreeTextNode );
 
-			expect( childA.props().item ).to.equal( itemA );
-			expect( childAA.props().item ).to.equal( itemAA );
-			expect( childB.props().item ).to.equal( itemB );
+			expect( childA.props().definition ).to.equal( itemA );
+			expect( childAA.props().definition ).to.equal( itemAA );
+			expect( childB.props().definition ).to.equal( itemB );
 		} );
 
-		it( 'share props#onClick', () => {
+		it( 'should share tree\'s props#onClick', () => {
 			const childA = wrapper.children().childAt( 0 );
 			const childAA = wrapper.children().childAt( 0 ).children().find( TreeTextNode );
 
-			expect( childA.props().onClick ).to.equal( clickSpy );
-			expect( childAA.props().onClick ).to.equal( clickSpy );
+			childA.instance().handleClick();
+			childAA.instance().handleClick();
+
+			sinon.assert.calledTwice( clickSpy );
 		} );
 
 		it( 'share tree\'s props#showCompactText', () => {
 			let childA = wrapper.children().childAt( 0 );
 			let childAA = wrapper.children().childAt( 0 ).children().find( TreeTextNode );
 
-			expect( childA.props().showCompactText ).to.be.false;
-			expect( childAA.props().showCompactText ).to.be.false;
+			expect( childA.props().globalTreeProps.showCompactText ).to.be.false;
+			expect( childAA.props().globalTreeProps.showCompactText ).to.be.false;
 
 			wrapper.setProps( { showCompactText: true } );
 
 			childA = wrapper.children().childAt( 0 );
 			childAA = wrapper.children().childAt( 0 ).children().find( TreeTextNode );
 
-			expect( childA.props().showCompactText ).to.be.true;
-			expect( childAA.props().showCompactText ).to.be.true;
+			expect( childA.props().globalTreeProps.showCompactText ).to.be.true;
+			expect( childAA.props().globalTreeProps.showCompactText ).to.be.true;
 		} );
 
 		it( 'respond to tree\'s props#activeNode', () => {
@@ -239,11 +220,9 @@ describe( '<Tree />', () => {
 	} );
 
 	describe( 'plain text', () => {
-		let wrapper, itemA, itemAA, itemAB;
+		let wrapper, itemA;
 
 		beforeEach( () => {
-			itemAA = 'some text';
-			itemAB = 'other text';
 			itemA = {
 				type: 'text',
 				name: 'a',
@@ -252,14 +231,11 @@ describe( '<Tree />', () => {
 					[ 'foo', 'bar' ],
 					[ 'qux', 'abc' ]
 				],
-				children: [
-					itemAA,
-					itemAB
-				]
+				text: 'foo'
 			};
 
 			wrapper = mount( <Tree
-				items={[ itemA ]}
+				definition={[ itemA ]}
 				onClick={clickSpy}
 			/> );
 		} );
@@ -270,71 +246,6 @@ describe( '<Tree />', () => {
 
 		it( 'is rendered', () => {
 			expect( wrapper.find( TreeTextNode ).length ).to.equal( 1 );
-			expect( wrapper.find( TreePlainText ).length ).to.equal( 2 );
-
-			const childA = wrapper.children().childAt( 0 );
-			const childAA = wrapper.children().childAt( 0 ).children().find( TreePlainText ).first();
-			const childAB = wrapper.children().childAt( 0 ).children().find( TreePlainText ).last();
-
-			expect( childA.type() ).to.equal( TreeTextNode );
-			expect( childAA.type() ).to.equal( TreePlainText );
-			expect( childAB.type() ).to.equal( TreePlainText );
-
-			expect( childA.props().item ).to.equal( itemA );
-			expect( childAA.props().text ).to.equal( itemAA );
-			expect( childAB.props().text ).to.equal( itemAB );
-		} );
-	} );
-
-	describe( 'selection', () => {
-		let wrapper, itemA, itemAA, itemAB, itemAC, itemAD;
-
-		beforeEach( () => {
-			itemAA = 'some';
-			itemAB = {
-				type: 'selection'
-			};
-			itemAC = 'text';
-			itemAD = {
-				type: 'selection',
-				isEnd: true
-			};
-			itemA = {
-				type: 'text',
-				name: 'a',
-				node: 'a-node',
-				attributes: [],
-				children: [
-					itemAA,
-					itemAB,
-					itemAC,
-					itemAD,
-				]
-			};
-
-			wrapper = mount( <Tree
-				items={[ itemA ]}
-				onClick={clickSpy}
-			/> );
-		} );
-
-		afterEach( () => {
-			wrapper.unmount();
-		} );
-
-		it( 'is rendered', () => {
-			expect( wrapper.find( TreeSelection ).length ).to.equal( 2 );
-
-			const selStart = wrapper.children().childAt( 0 ).children().find( TreeSelection ).first();
-			const selEnd = wrapper.children().childAt( 0 ).children().find( TreeSelection ).last();
-
-			expect( selStart.type() ).to.equal( TreeSelection );
-			expect( selEnd.type() ).to.equal( TreeSelection );
-
-			expect( selStart.props().isEnd ).to.be.undefined;
-			expect( selEnd.props().isEnd ).to.be.true;
-
-			expect( wrapper.children().childAt( 0 ).text() ).to.equal( '"some[text]"' );
 		} );
 	} );
 
@@ -361,7 +272,7 @@ describe( '<Tree />', () => {
 				]
 			};
 
-			wrapper = mount( <Tree items={[ itemA ]} /> );
+			wrapper = mount( <Tree definition={[ itemA ]} /> );
 		} );
 
 		afterEach( () => {
@@ -377,8 +288,8 @@ describe( '<Tree />', () => {
 			expect( childAA.type() ).to.equal( TreeComment );
 			expect( childAB.type() ).to.equal( TreeComment );
 
-			expect( childAA.props().item ).to.equal( itemAA );
-			expect( childAB.props().item ).to.equal( itemAB );
+			expect( childAA.props().definition ).to.equal( itemAA );
+			expect( childAB.props().definition ).to.equal( itemAB );
 		} );
 
 		it( 'is rendered with unsafe html', () => {
@@ -391,7 +302,7 @@ describe( '<Tree />', () => {
 	describe( 'attribute', () => {
 		it( 'truncates values above 500 characters', () => {
 			const wrapper = mount( <Tree
-				items={[
+				definition={[
 					{
 						type: 'text',
 						node: 'node',

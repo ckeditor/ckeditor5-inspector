@@ -4,10 +4,8 @@
  */
 
 import React from 'react';
-import {
-	TreeElement,
-	TreeNodeAttribute
-} from '../../../src/components/tree';
+import TreeElement from '../../../../src/components/tree/treeelement';
+import TreeNodeAttribute from '../../../../src/components/tree/treenodeattribute';
 
 describe( '<TreeElement />', () => {
 	let wrapper, clickSpy;
@@ -21,7 +19,7 @@ describe( '<TreeElement />', () => {
 	} );
 
 	it( 'is rendered', () => {
-		wrapper = mount( <TreeElement item={{
+		wrapper = mount( <TreeElement definition={{
 			name: 'foo',
 			attributes: [],
 			children: []
@@ -32,7 +30,7 @@ describe( '<TreeElement />', () => {
 	} );
 
 	it( 'reacts to props#isActive', () => {
-		wrapper = mount( <TreeElement item={{
+		wrapper = mount( <TreeElement definition={{
 			name: 'foo',
 			isActive: true,
 			attributes: [],
@@ -43,7 +41,7 @@ describe( '<TreeElement />', () => {
 	} );
 
 	it( 'reacts to props.presentation#isEmpty', () => {
-		wrapper = mount( <TreeElement item={{
+		wrapper = mount( <TreeElement definition={{
 			name: 'foo',
 			attributes: [],
 			presentation: {
@@ -56,7 +54,7 @@ describe( '<TreeElement />', () => {
 	} );
 
 	it( 'reacts to props.presentation#cssClass', () => {
-		wrapper = mount( <TreeElement item={{
+		wrapper = mount( <TreeElement definition={{
 			name: 'foo',
 			attributes: [],
 			presentation: {
@@ -69,11 +67,13 @@ describe( '<TreeElement />', () => {
 	} );
 
 	it( 'executes props#onClick when clicked', () => {
-		wrapper = mount( <TreeElement onClick={clickSpy} item={{
+		wrapper = mount( <TreeElement definition={{
 			name: 'foo',
 			isActive: true,
 			attributes: [],
 			children: []
+		}} globalTreeProps={{
+			onClick: clickSpy
 		}} /> );
 
 		wrapper.simulate( 'click' );
@@ -82,7 +82,7 @@ describe( '<TreeElement />', () => {
 
 	describe( 'name', () => {
 		it( 'is rendered', () => {
-			wrapper = mount( <TreeElement item={{
+			wrapper = mount( <TreeElement definition={{
 				name: 'foo',
 				attributes: [],
 				children: []
@@ -94,18 +94,18 @@ describe( '<TreeElement />', () => {
 		} );
 
 		it( 'comes with attributes', () => {
-			wrapper = mount( <TreeElement item={{
+			wrapper = mount( <TreeElement definition={{
 				name: 'foo',
 				attributes: [
 					[ 'a', 'b' ],
-					[ 'c', 'd' ],
+					[ 'c', 'd' ]
 				],
 				children: []
 			}} /> );
 
 			const name = wrapper.children().childAt( 0 );
-			const firstAt = name.childAt( 0 );
-			const secondAt = name.childAt( 1 );
+			const firstAt = wrapper.find( TreeNodeAttribute ).first();
+			const secondAt = wrapper.find( TreeNodeAttribute ).last();
 
 			expect( name.find( TreeNodeAttribute ) ).to.have.length( 2 );
 			expect( firstAt.props().name ).to.equal( 'a' );
@@ -113,11 +113,26 @@ describe( '<TreeElement />', () => {
 			expect( secondAt.props().name ).to.equal( 'c' );
 			expect( secondAt.props().value ).to.equal( 'd' );
 		} );
+
+		it( 'should support #showElementTypes', () => {
+			wrapper = mount( <TreeElement definition={{
+				name: 'foo',
+				elementType: 'some',
+				attributes: [],
+				children: []
+			}} globalTreeProps={{
+				showElementTypes: true
+			}} /> );
+
+			const name = wrapper.children().childAt( 0 );
+
+			expect( name.text() ).to.equal( 'some:foo' );
+		} );
 	} );
 
 	describe( 'content', () => {
 		it( 'is rendered', () => {
-			wrapper = mount( <TreeElement item={{
+			wrapper = mount( <TreeElement definition={{
 				name: 'foo',
 				attributes: [],
 				children: []
@@ -129,21 +144,29 @@ describe( '<TreeElement />', () => {
 		} );
 
 		it( 'comes with children', () => {
-			wrapper = mount( <TreeElement item={{
+			wrapper = mount( <TreeElement definition={{
 				name: 'foo',
 				attributes: [],
-				children: [ 'abc' ]
+				children: [
+					{
+						type: 'text',
+						name: 'aa',
+						text: 'abc',
+						attributes: [],
+						children: []
+					}
+				]
 			}} /> );
 
 			const content = wrapper.children().childAt( 1 );
 
-			expect( content.childAt( 0 ).html() ).to.equal( '<span>abc</span>' );
+			expect( content.childAt( 0 ).text() ).to.equal( '"abc"' );
 		} );
 	} );
 
 	describe( 'closing tag', () => {
 		it( 'is rendered by default', () => {
-			wrapper = mount( <TreeElement item={{
+			wrapper = mount( <TreeElement definition={{
 				name: 'foo',
 				attributes: [],
 				children: []
@@ -158,7 +181,7 @@ describe( '<TreeElement />', () => {
 		} );
 
 		it( 'is not rendered when props.presentation#isEmpty', () => {
-			wrapper = mount( <TreeElement item={{
+			wrapper = mount( <TreeElement definition={{
 				name: 'foo',
 				attributes: [],
 				children: [],
@@ -168,6 +191,21 @@ describe( '<TreeElement />', () => {
 			}} /> );
 
 			expect( wrapper.find( '.ck-inspector-tree-node__name' ) ).to.have.length( 1 );
+		} );
+
+		it( 'should support #showElementTypes', () => {
+			wrapper = mount( <TreeElement definition={{
+				name: 'foo',
+				elementType: 'some',
+				attributes: [],
+				children: []
+			}} globalTreeProps={{
+				showElementTypes: true
+			}} /> );
+
+			const closing = wrapper.children().childAt( 2 );
+
+			expect( closing.text() ).to.equal( '/some:foo' );
 		} );
 	} );
 } );

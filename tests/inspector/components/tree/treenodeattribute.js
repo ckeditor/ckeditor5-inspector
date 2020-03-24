@@ -4,11 +4,9 @@
  */
 
 import React from 'react';
-import {
-	TreeNodeAttribute
-} from '../../../src/components/tree';
+import TreeNodeAttribute from '../../../../src/components/tree/treenodeattribute';
 
-describe( '<TreeTextNode />', () => {
+describe( '<TreeNodeAttribute />', () => {
 	let wrapper;
 
 	afterEach( () => {

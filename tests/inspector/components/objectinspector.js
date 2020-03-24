@@ -38,7 +38,7 @@ describe( '<ObjectInspector />', () => {
 							label: 'ABC'
 						}
 					],
-					items: []
+					itemDefinitions: {}
 				}
 			]} /> );
 
@@ -56,19 +56,19 @@ describe( '<ObjectInspector />', () => {
 							label: 'ABC'
 						}
 					],
-					items: [
-						[ 'foo', 'bar' ],
-						[ 'qux', 'baz' ]
-					]
+					itemDefinitions: {
+						foo: { value: 'bar' },
+						qux: { value: 'baz' }
+					}
 				}
 			]} /> );
 
 			expect( wrapper.find( 'hr' ) ).to.have.length( 1 );
 			expect( wrapper.find( 'h3' ).text() ).to.equal( 'foo' );
-			expect( wrapper.find( PropertyList ).props().items ).to.deep.equal( [
-				[ 'foo', 'bar' ],
-				[ 'qux', 'baz' ]
-			] );
+			expect( wrapper.find( PropertyList ).props().itemDefinitions ).to.deep.equal( {
+				foo: { value: 'bar' },
+				qux: { value: 'baz' }
+			} );
 		} );
 	} );
 } );

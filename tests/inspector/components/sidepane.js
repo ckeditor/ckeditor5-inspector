@@ -3,42 +3,36 @@
  * For licensing, see LICENSE.md.
  */
 
-/* global window, document */
+/* global window */
 
 import React from 'react';
 import { Rnd } from 'react-rnd';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+
 import SidePane from '../../../src/components/sidepane';
+import { SET_SIDE_PANE_WIDTH } from '../../../src/data/actions';
 
 describe( '<SidePane />', () => {
-	let wrapper;
-
-	const container = document.createElement( 'div' );
-	document.body.appendChild( container );
+	let wrapper, store, dispatchSpy;
 
 	beforeEach( () => {
 		window.localStorage.clear();
 
-		wrapper = mount( <SidePane>foo</SidePane> );
+		store = createStore( ( state, action ) => ( { ...state, ...action.state } ), {
+			ui: {
+				sidePaneWidth: '123px'
+			}
+		} );
+
+		dispatchSpy = sinon.spy( store, 'dispatch' );
+
+		wrapper = mount( <Provider store={store}><SidePane>foo</SidePane></Provider> );
 	} );
 
 	describe( 'state', () => {
-		it( 'has initial state', () => {
-			const state = wrapper.state();
-
-			expect( state.width ).to.equal( '500px' );
-		} );
-
-		it( 'restores state#width from the local storage', () => {
-			window.localStorage.setItem( 'ck5-inspector-side-pane-width', '123px' );
-
-			const wrapper = mount(
-				<SidePane>foo</SidePane>,
-				{ attachTo: container }
-			);
-
-			expect( wrapper.state().width ).to.equal( '123px' );
-
-			wrapper.unmount();
+		it( 'restores the width from the store', () => {
+			expect( wrapper.find( SidePane ).find( Rnd ).props().size.width ).to.equal( '123px' );
 		} );
 	} );
 
@@ -85,24 +79,30 @@ describe( '<SidePane />', () => {
 			} );
 
 			it( 'has #size', () => {
-				wrapper.setState( {
-					width: '42px'
+				store.dispatch( {
+					type: 'testAction',
+					state: {
+						ui: {
+							sidePaneWidth: '42px'
+						}
+					}
 				} );
 
-				expect( wrapper.find( Rnd ).props().size ).to.deep.equal( {
+				wrapper.update();
+
+				expect( wrapper.find( SidePane ).find( Rnd ).props().size ).to.deep.equal( {
 					width: '42px',
 					height: '100%'
 				} );
 			} );
 
 			it( 'has #onResizeStop', () => {
-				const rnd = wrapper.find( Rnd );
+				wrapper.find( SidePane ).find( Rnd ).props().onResizeStop( {}, {}, { style: { width: '321px' } } );
 
-				expect( rnd.props().onResizeStop ).to.equal( wrapper.instance().handleSidePaneResize );
-
-				wrapper.instance().handleSidePaneResize( {}, {}, { style: { width: '321px' } } );
-
-				expect( window.localStorage.getItem( 'ck5-inspector-side-pane-width' ) ).to.equal( '321px' );
+				sinon.assert.calledWithExactly( dispatchSpy, {
+					newWidth: '321px',
+					type: SET_SIDE_PANE_WIDTH
+				} );
 			} );
 		} );
 	} );

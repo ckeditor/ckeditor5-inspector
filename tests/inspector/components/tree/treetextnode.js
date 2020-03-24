@@ -4,10 +4,8 @@
  */
 
 import React from 'react';
-import {
-	TreeTextNode,
-	TreeNodeAttribute
-} from '../../../src/components/tree';
+import TreeTextNode from '../../../../src/components/tree/treetextnode';
+import TreeNodeAttribute from '../../../../src/components/tree/treenodeattribute';
 
 describe( '<TreeTextNode />', () => {
 	let wrapper, clickSpy;
@@ -21,7 +19,7 @@ describe( '<TreeTextNode />', () => {
 	} );
 
 	it( 'is rendered', () => {
-		wrapper = mount( <TreeTextNode item={{
+		wrapper = mount( <TreeTextNode definition={{
 			attributes: [],
 			children: []
 		}} /> );
@@ -30,7 +28,7 @@ describe( '<TreeTextNode />', () => {
 	} );
 
 	it( 'reacts to props#isActive', () => {
-		wrapper = mount( <TreeTextNode item={{
+		wrapper = mount( <TreeTextNode definition={{
 			isActive: true,
 			attributes: [],
 			children: []
@@ -40,9 +38,11 @@ describe( '<TreeTextNode />', () => {
 	} );
 
 	it( 'executes props#onClick when clicked', () => {
-		wrapper = mount( <TreeTextNode onClick={clickSpy} item={{
+		wrapper = mount( <TreeTextNode definition={{
 			attributes: [],
 			children: []
+		}} globalTreeProps={{
+			onClick: clickSpy
 		}} /> );
 
 		wrapper.simulate( 'click' );
@@ -51,7 +51,7 @@ describe( '<TreeTextNode />', () => {
 
 	describe( 'content', () => {
 		it( 'is rendered', () => {
-			wrapper = mount( <TreeTextNode item={{
+			wrapper = mount( <TreeTextNode definition={{
 				name: 'foo',
 				attributes: [],
 				children: [
@@ -67,12 +67,14 @@ describe( '<TreeTextNode />', () => {
 
 		describe( 'props#showCompactText true', () => {
 			it( 'renders text only', () => {
-				wrapper = mount( <TreeTextNode showCompactText={true} item={{
+				wrapper = mount( <TreeTextNode definition={{
 					name: 'foo',
 					attributes: [
 						[ 'a', 'b' ]
 					],
-					children: [ 'abc' ]
+					text: 'abc'
+				}} globalTreeProps={{
+					showCompactText: true
 				}} /> );
 
 				const content = wrapper.children().childAt( 0 );
@@ -83,12 +85,14 @@ describe( '<TreeTextNode />', () => {
 
 		describe( 'props#showCompactText false', () => {
 			it( 'renders text in quotes with attributes', () => {
-				wrapper = mount( <TreeTextNode showCompactText={false} item={{
+				wrapper = mount( <TreeTextNode showCompactText={false} definition={{
 					name: 'foo',
 					attributes: [
 						[ 'a', 'b' ]
 					],
-					children: [ 'abc' ]
+					text: 'abc'
+				}} globalTreeProps={{
+					showCompactText: false
 				}} /> );
 
 				const content = wrapper.children().childAt( 0 );
@@ -102,7 +106,7 @@ describe( '<TreeTextNode />', () => {
 			} );
 
 			it( 'can render attributes without values when presentation#dontRenderAttributeValue', () => {
-				wrapper = mount( <TreeTextNode showCompactText={false} item={{
+				wrapper = mount( <TreeTextNode showCompactText={false} definition={{
 					name: 'foo',
 					attributes: [
 						[ 'a', 'b' ]

@@ -14,7 +14,7 @@ describe( '<PropertyList />', () => {
 	} );
 
 	it( 'renders', () => {
-		wrapper = mount( <PropertyList items={[]} /> );
+		wrapper = mount( <PropertyList itemDefinitions={[]} /> );
 
 		expect( wrapper ).to.have.className( 'ck-inspector-property-list' );
 		expect( wrapper ).to.have.className( 'ck-inspector-code' );
@@ -22,12 +22,12 @@ describe( '<PropertyList />', () => {
 	} );
 
 	it( 'renders names and values', () => {
-		const items = [
-			[ 'foo', 'bar' ],
-			[ 'qux', 'baz' ]
-		];
+		const definitions = {
+			foo: { value: 'bar' },
+			qux: { value: 'baz' }
+		};
 
-		wrapper = mount( <PropertyList items={items} /> );
+		wrapper = mount( <PropertyList itemDefinitions={definitions} /> );
 
 		const dt1 = wrapper.children().childAt( 0 );
 		const dd1 = wrapper.children().childAt( 1 );
@@ -45,11 +45,17 @@ describe( '<PropertyList />', () => {
 	} );
 
 	it( 'renders sub-properties', () => {
-		const items = [
-			[ 'foo', 'bar', [ [ 'subA-name', 'subA-value' ], [ 'subB-name', 'subB-value' ] ] ],
-		];
+		const definitions = {
+			foo: {
+				value: 'bar',
+				subProperties: {
+					'subA-name': { value: 'subA-value' },
+					'subB-name': { value: 'subB-value' }
+				}
+			}
+		};
 
-		wrapper = mount( <PropertyList items={items} /> );
+		wrapper = mount( <PropertyList itemDefinitions={definitions} /> );
 
 		const dt1 = wrapper.children().childAt( 0 );
 		const dd1 = wrapper.children().childAt( 1 );
@@ -67,15 +73,24 @@ describe( '<PropertyList />', () => {
 		) );
 
 		expect( dd1.html() ).to.match( /<dd><input id="[^-]+-foo-input" type="text" readonly="" value="bar"><\/dd>/ );
-		expect( dl.props().items ).to.have.deep.members( [ [ 'subA-name', 'subA-value' ], [ 'subB-name', 'subB-value' ] ] );
+		expect( dl.props().itemDefinitions ).to.deep.equal( {
+			'subA-name': { value: 'subA-value' },
+			'subB-name': { value: 'subB-value' }
+		} );
 	} );
 
 	it( 'toggles title class when clicked the toggler', () => {
-		const items = [
-			[ 'foo', 'bar', [ [ 'subA-name', 'subA-value' ], [ 'subB-name', 'subB-value' ] ] ],
-		];
+		const definitions = {
+			foo: {
+				value: 'bar',
+				subProperties: {
+					'subA-name': { value: 'subA-value' },
+					'subB-name': { value: 'subB-value' }
+				}
+			}
+		};
 
-		wrapper = mount( <PropertyList items={items} /> );
+		wrapper = mount( <PropertyList itemDefinitions={definitions} /> );
 
 		const dt = wrapper.children().childAt( 0 );
 		const toggler = dt.children().childAt( 0 );
@@ -86,13 +101,13 @@ describe( '<PropertyList />', () => {
 	} );
 
 	it( 'truncates property values to 2000 characters', () => {
-		const items = [
-			[ 'foo', new Array( 1999 ).fill( 0 ).join( '' ) ],
-			[ 'bar', new Array( 2000 ).fill( 0 ).join( '' ) ],
-			[ 'baz', new Array( 2100 ).fill( 0 ).join( '' ) ]
-		];
+		const definitions = {
+			foo: { value: new Array( 1999 ).fill( 0 ).join( '' ) },
+			bar: { value: new Array( 2000 ).fill( 0 ).join( '' ) },
+			baz: { value: new Array( 2100 ).fill( 0 ).join( '' ) }
+		};
 
-		wrapper = mount( <PropertyList items={items} /> );
+		wrapper = mount( <PropertyList itemDefinitions={definitions} /> );
 
 		const dd1 = wrapper.children().childAt( 1 );
 		const dd2 = wrapper.children().childAt( 3 );
