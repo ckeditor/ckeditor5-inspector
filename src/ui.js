@@ -132,7 +132,7 @@ class ToggleButtonVisual extends Component {
 	}
 }
 
-const ToggleButton = connect( ( { ui: { isCollapsed } } ) => {
+export const ToggleButton = connect( ( { ui: { isCollapsed } } ) => {
 	return { isCollapsed };
 }, { toggleIsCollapsed } )( ToggleButtonVisual );
 
@@ -150,7 +150,7 @@ export class EditorInstanceSelectorVisual extends Component {
 	}
 }
 
-const EditorInstanceSelector = connect(
+export const EditorInstanceSelector = connect(
 	( { currentEditorName, editors } ) => ( { currentEditorName, editors } ),
 	{ setCurrentEditorName }
 )( EditorInstanceSelectorVisual );
