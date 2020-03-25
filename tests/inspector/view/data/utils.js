@@ -80,8 +80,8 @@ describe( 'view data utils', () => {
 									node: root.getChild( 0 ).getChild( 0 ),
 									attributes: [],
 									positionsBefore: [
-										{ offset: 0, isEnd: false, presentation: undefined, type: 'selection', name: undefined },
-										{ offset: 0, isEnd: true, presentation: undefined, type: 'selection', name: undefined }
+										{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null },
+										{ offset: 0, isEnd: true, presentation: null, type: 'selection', name: null }
 									],
 									presentation: {
 										isEmpty: true
@@ -160,8 +160,8 @@ describe( 'view data utils', () => {
 											type: 'text',
 											node: root.getChild( 0 ).getChild( 2 ).getChild( 0 ),
 											positions: [
-												{ offset: 0, isEnd: false, presentation: undefined, type: 'selection', name: undefined },
-												{ offset: 0, isEnd: true, presentation: undefined, type: 'selection', name: undefined }
+												{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null },
+												{ offset: 0, isEnd: true, presentation: null, type: 'selection', name: null }
 											],
 											text: 'foo'
 										}
@@ -212,8 +212,8 @@ describe( 'view data utils', () => {
 									node: uiElement,
 									attributes: [],
 									positionsBefore: [
-										{ offset: 0, isEnd: false, presentation: undefined, type: 'selection', name: undefined },
-										{ offset: 0, isEnd: true, presentation: undefined, type: 'selection', name: undefined }
+										{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null },
+										{ offset: 0, isEnd: true, presentation: null, type: 'selection', name: null }
 									],
 									children: [
 										{
@@ -252,8 +252,8 @@ describe( 'view data utils', () => {
 							node: root.getChild( 0 ),
 							attributes: [],
 							positions: [
-								{ offset: 0, isEnd: false, presentation: undefined, type: 'selection', name: undefined },
-								{ offset: 0, isEnd: true, presentation: undefined, type: 'selection', name: undefined }
+								{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null },
+								{ offset: 0, isEnd: true, presentation: null, type: 'selection', name: null }
 							]
 						}
 					]
@@ -292,7 +292,7 @@ describe( 'view data utils', () => {
 							node: root.getChild( 0 ),
 							attributes: [],
 							positions: [
-								{ offset: 0, isEnd: false, presentation: undefined, type: 'selection', name: undefined }
+								{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null }
 							]
 						},
 						{
@@ -301,7 +301,7 @@ describe( 'view data utils', () => {
 							node: root.getChild( 1 ),
 							attributes: [],
 							positions: [
-								{ offset: 0, isEnd: true, presentation: undefined, type: 'selection', name: undefined }
+								{ offset: 0, isEnd: true, presentation: null, type: 'selection', name: null }
 							]
 						}
 					]
@@ -338,8 +338,8 @@ describe( 'view data utils', () => {
 									node: root.getChild( 0 ).getChild( 0 ),
 									text: 'foo',
 									positions: [
-										{ offset: 0, isEnd: false, presentation: undefined, type: 'selection', name: undefined },
-										{ offset: 0, isEnd: true, presentation: undefined, type: 'selection', name: undefined }
+										{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null },
+										{ offset: 0, isEnd: true, presentation: null, type: 'selection', name: null }
 									]
 								}
 							]
@@ -394,8 +394,8 @@ describe( 'view data utils', () => {
 											node: root.getChild( 0 ).getChild( 1 ).getChild( 0 ),
 											text: 'o',
 											positionsBefore: [
-												{ offset: 0, isEnd: false, presentation: undefined, type: 'selection', name: undefined },
-												{ offset: 0, isEnd: true, presentation: undefined, type: 'selection', name: undefined }
+												{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null },
+												{ offset: 0, isEnd: true, presentation: null, type: 'selection', name: null }
 											]
 										}
 									]
@@ -457,8 +457,8 @@ describe( 'view data utils', () => {
 											node: root.getChild( 0 ).getChild( 1 ).getChild( 0 ),
 											text: 'oo',
 											positions: [
-												{ offset: 1, isEnd: false, presentation: undefined, type: 'selection', name: undefined },
-												{ offset: 1, isEnd: true, presentation: undefined, type: 'selection', name: undefined }
+												{ offset: 1, isEnd: false, presentation: null, type: 'selection', name: null },
+												{ offset: 1, isEnd: true, presentation: null, type: 'selection', name: null }
 											]
 										}
 									]
@@ -521,7 +521,7 @@ describe( 'view data utils', () => {
 											node: root.getChild( 0 ).getChild( 1 ).getChild( 0 ),
 											text: 'bc',
 											positions: [
-												{ offset: 1, isEnd: false, presentation: undefined, type: 'selection', name: undefined }
+												{ offset: 1, isEnd: false, presentation: null, type: 'selection', name: null }
 											]
 										}
 									]
@@ -531,7 +531,7 @@ describe( 'view data utils', () => {
 									node: root.getChild( 0 ).getChild( 2 ),
 									text: 'de',
 									positions: [
-										{ offset: 1, isEnd: true, presentation: undefined, type: 'selection', name: undefined }
+										{ offset: 1, isEnd: true, presentation: null, type: 'selection', name: null }
 									]
 								}
 							]
@@ -594,10 +594,10 @@ describe( 'view data utils', () => {
 									node: root.getChild( 0 ).getChild( 2 ),
 									text: 'de',
 									positionsBefore: [
-										{ offset: 2, isEnd: false, presentation: undefined, type: 'selection', name: undefined }
+										{ offset: 2, isEnd: false, presentation: null, type: 'selection', name: null }
 									],
 									positions: [
-										{ offset: 1, isEnd: true, presentation: undefined, type: 'selection', name: undefined }
+										{ offset: 1, isEnd: true, presentation: null, type: 'selection', name: null }
 									]
 								}
 							]
@@ -643,7 +643,7 @@ describe( 'view data utils', () => {
 									node: root.getChild( 0 ).getChild( 0 ),
 									text: 'a',
 									positionsBefore: [
-										{ offset: 0, isEnd: false, presentation: undefined, type: 'selection', name: undefined }
+										{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null }
 									]
 								},
 								{
@@ -658,7 +658,7 @@ describe( 'view data utils', () => {
 										}
 									],
 									positionsAfter: [
-										{ offset: 2, isEnd: true, presentation: undefined, type: 'selection', name: undefined }
+										{ offset: 2, isEnd: true, presentation: null, type: 'selection', name: null }
 									]
 								},
 								{

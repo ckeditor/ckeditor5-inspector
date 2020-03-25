@@ -308,9 +308,9 @@ function getRangePositionsInElement( node, range ) {
 		positions.push( {
 			offset: startPath[ startPath.length - 1 ],
 			isEnd: false,
-			presentation: range.presentation,
+			presentation: range.presentation || null,
 			type: range.type,
-			name: range.name
+			name: range.name || null
 		} );
 	}
 
@@ -318,9 +318,9 @@ function getRangePositionsInElement( node, range ) {
 		positions.push( {
 			offset: endPath[ endPath.length - 1 ],
 			isEnd: true,
-			presentation: range.presentation,
+			presentation: range.presentation || null,
 			type: range.type,
-			name: range.name
+			name: range.name || null
 		} );
 	}
 

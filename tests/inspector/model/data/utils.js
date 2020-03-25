@@ -64,8 +64,8 @@ describe( 'model data utils', () => {
 							node: root.getChild( 0 ),
 							attributes: [],
 							positions: [
-								{ offset: 0, isEnd: false, presentation: undefined, type: 'selection', name: undefined },
-								{ offset: 0, isEnd: true, presentation: undefined, type: 'selection', name: undefined }
+								{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null },
+								{ offset: 0, isEnd: true, presentation: null, type: 'selection', name: null }
 							],
 							children: []
 						}
@@ -107,7 +107,7 @@ describe( 'model data utils', () => {
 							node: root.getChild( 0 ),
 							attributes: [],
 							positions: [
-								{ offset: 0, isEnd: false, presentation: undefined, type: 'selection', name: undefined }
+								{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null }
 							],
 							children: []
 						},
@@ -117,7 +117,7 @@ describe( 'model data utils', () => {
 							node: root.getChild( 1 ),
 							attributes: [],
 							positions: [
-								{ offset: 0, isEnd: true, presentation: undefined, type: 'selection', name: undefined }
+								{ offset: 0, isEnd: true, presentation: null, type: 'selection', name: null }
 							],
 							children: []
 						}
@@ -159,8 +159,8 @@ describe( 'model data utils', () => {
 										dontRenderAttributeValue: true
 									},
 									positionsBefore: [
-										{ offset: 0, isEnd: false, presentation: undefined, type: 'selection', name: undefined },
-										{ offset: 0, isEnd: true, presentation: undefined, type: 'selection', name: undefined }
+										{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null },
+										{ offset: 0, isEnd: true, presentation: null, type: 'selection', name: null }
 									],
 									text: 'foo'
 								}
@@ -219,8 +219,8 @@ describe( 'model data utils', () => {
 										[ 'bold', 'true' ]
 									],
 									positionsBefore: [
-										{ offset: 1, isEnd: false, presentation: undefined, type: 'selection', name: undefined },
-										{ offset: 1, isEnd: true, presentation: undefined, type: 'selection', name: undefined }
+										{ offset: 1, isEnd: false, presentation: null, type: 'selection', name: null },
+										{ offset: 1, isEnd: true, presentation: null, type: 'selection', name: null }
 									],
 									text: 'o'
 								},
@@ -287,8 +287,8 @@ describe( 'model data utils', () => {
 										[ 'bold', 'true' ]
 									],
 									positions: [
-										{ offset: 2, isEnd: false, presentation: undefined, type: 'selection', name: undefined },
-										{ offset: 2, isEnd: true, presentation: undefined, type: 'selection', name: undefined }
+										{ offset: 2, isEnd: false, presentation: null, type: 'selection', name: null },
+										{ offset: 2, isEnd: true, presentation: null, type: 'selection', name: null }
 									],
 									text: 'oo'
 								},
@@ -356,7 +356,7 @@ describe( 'model data utils', () => {
 										[ 'bold', 'true' ]
 									],
 									positions: [
-										{ offset: 2, isEnd: false, presentation: undefined, type: 'selection', name: undefined }
+										{ offset: 2, isEnd: false, presentation: null, type: 'selection', name: null }
 									],
 									text: 'bc'
 								},
@@ -367,7 +367,7 @@ describe( 'model data utils', () => {
 										dontRenderAttributeValue: true
 									},
 									positions: [
-										{ offset: 4, isEnd: true, presentation: undefined, type: 'selection', name: undefined }
+										{ offset: 4, isEnd: true, presentation: null, type: 'selection', name: null }
 									],
 									text: 'de'
 								}

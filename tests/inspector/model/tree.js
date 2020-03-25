@@ -11,6 +11,11 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
 import { SET_MODEL_CURRENT_ROOT_NAME } from '../../../src/model/data/actions';
+import {
+	getEditorModelRanges,
+	getEditorModelMarkers,
+	getEditorModelTreeDefinition
+} from '../../../src/model/data/utils';
 
 import Tree from '../../../src/components/tree/tree.js';
 import Select from '../../../src/components/select';
@@ -33,15 +38,35 @@ describe( '<ModelTree />', () => {
 		document.body.appendChild( element );
 
 		return TestEditor.create( element, {
-			plugins: [ Paragraph, BoldEditing ]
+			plugins: [ Paragraph, BoldEditing ],
+			initialData: '<p>foobar</p>'
 		} ).then( newEditor => {
 			editor = newEditor;
+
+			editor.model.change( writer => {
+				const paragraph = editor.model.document.getRoot().getChild( 0 );
+
+				writer.setSelection(
+					writer.createRange( writer.createPositionAt( paragraph, 1 ), writer.createPositionAt( paragraph, 3 ) )
+				);
+			} );
+
+			const ranges = getEditorModelRanges( editor );
+			const markers = getEditorModelMarkers( editor );
+			const definition = getEditorModelTreeDefinition( {
+				currentEditor: editor,
+				currentRootName: 'main',
+				ranges,
+				markers
+			} );
 
 			store = createStore( state => state, {
 				currentEditor: editor,
 				model: {
 					roots: [ ...editor.model.document.roots ],
-					treeDefinition: null,
+					ranges,
+					markers,
+					treeDefinition: definition,
 					currentRootName: 'main',
 					currentNode: editor.model.document.getRoot(),
 					ui: {

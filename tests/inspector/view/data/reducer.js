@@ -161,7 +161,7 @@ describe( 'view data store reducer', () => {
 				expect( viewState.currentNode ).to.equal( node );
 			} );
 
-			it( 'should be updated on updateViewState() action if the root has changed', () => {
+			it( 'should be reset on updateViewState() action if the root has changed', () => {
 				const node = editorA.editing.view.document.getRoot();
 
 				node.root.rootName = 'other-root';
@@ -173,7 +173,19 @@ describe( 'view data store reducer', () => {
 				expect( viewState.currentNode ).to.be.null;
 			} );
 
-			it( 'should be updated on setActiveTab() action if the root has changed', () => {
+			it( 'should be reset on updateViewState() action if the currentNode has no parent (but isn\'t a root)', () => {
+				const node = editorA.editing.view.document.getRoot().getChild( 0 );
+
+				node.parent = null;
+
+				viewState.currentNode = node;
+				viewState.currentRootName = 'main';
+				viewState = viewReducer( globalState, viewState, updateViewState() );
+
+				expect( viewState.currentNode ).to.be.null;
+			} );
+
+			it( 'should be reset on setActiveTab() action if the root has changed', () => {
 				const node = editorA.editing.view.document.getRoot();
 
 				node.root.rootName = 'other-root';
@@ -187,7 +199,7 @@ describe( 'view data store reducer', () => {
 		} );
 
 		describe( '#currentNodeDefinition', () => {
-			it( 'should be refresh when #currentNode is being updated', () => {
+			it( 'should be updated when #currentNode is being updated', () => {
 				const node = editorA.editing.view.document.getRoot();
 
 				viewState.currentNodeDefinition = null;
@@ -208,6 +220,19 @@ describe( 'view data store reducer', () => {
 
 				viewState.currentNode = node;
 				viewState.currentRootName = null;
+				viewState.currentNodeDefinition = 'foo';
+				viewState = viewReducer( globalState, viewState, updateViewState() );
+
+				expect( viewState.currentNodeDefinition ).to.be.null;
+			} );
+
+			it( 'should be reset on updateViewState() action if the currentNode has no parent (but isn\'t a root)', () => {
+				const node = editorA.editing.view.document.getRoot().getChild( 0 );
+
+				node.parent = null;
+
+				viewState.currentNode = node;
+				viewState.currentRootName = 'main';
 				viewState.currentNodeDefinition = 'foo';
 				viewState = viewReducer( globalState, viewState, updateViewState() );
 

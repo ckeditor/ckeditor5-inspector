@@ -55,14 +55,6 @@ export function getEditorViewTreeDefinition( { currentEditor, currentRootName, r
 }
 
 export function getEditorViewNodeDefinition( node ) {
-	if ( !node ) {
-		return null;
-	}
-
-	if ( !isViewRoot( node ) && !node.parent ) {
-		return;
-	}
-
 	const info = {
 		editorNode: node,
 		properties: {},
@@ -297,9 +289,9 @@ function getRangePositionsInViewNode( nodeDefinition, range ) {
 		positions.push( {
 			offset: startPath[ startPath.length - 1 ],
 			isEnd: false,
-			presentation: range.presentation,
+			presentation: range.presentation || null,
 			type: range.type,
-			name: range.name
+			name: range.name || null
 		} );
 	}
 
@@ -307,9 +299,9 @@ function getRangePositionsInViewNode( nodeDefinition, range ) {
 		positions.push( {
 			offset: endPath[ endPath.length - 1 ],
 			isEnd: true,
-			presentation: range.presentation,
+			presentation: range.presentation || null,
 			type: range.type,
-			name: range.name
+			name: range.name || null
 		} );
 	}
 

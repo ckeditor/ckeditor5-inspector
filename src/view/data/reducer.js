@@ -24,6 +24,8 @@ import {
 	getEditorViewNodeDefinition
 } from './utils';
 
+import { isViewRoot } from '../utils';
+
 import LocalStorageManager from '../../localstoragemanager';
 
 export const LOCAL_STORAGE_ACTIVE_TAB = 'active-view-tab-name';
@@ -163,7 +165,7 @@ function getEssentialState( globalState, viewState, viewStateOverrides ) {
 	if ( currentNode ) {
 		// If the currentNode no longer belongs to the root, reset the state.
 		// This can happen when, for instance, inspecting an element, and it gets removed from the editor content.
-		if ( currentNode.root.rootName !== currentRootName ) {
+		if ( currentNode.root.rootName !== currentRootName || ( !isViewRoot( currentNode ) && !currentNode.parent ) ) {
 			currentNode = null;
 			currentNodeDefinition = null;
 		} else {

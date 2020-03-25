@@ -65,6 +65,60 @@ describe( '<TreeTextNode />', () => {
 			expect( content ).to.have.className( 'ck-inspector-tree-node__content' );
 		} );
 
+		describe( 'positions', () => {
+			it( 'should be rendered before the content', () => {
+				wrapper = mount( <TreeTextNode definition={{
+					name: 'foo',
+					text: 'abc',
+					positionsBefore: [
+						{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null }
+					]
+				}} globalTreeProps={{
+					showCompactText: true
+				}} /> );
+
+				const content = wrapper.children().childAt( 0 );
+				const position = content.childAt( 0 );
+
+				expect( position.props().definition.type ).to.equal( 'selection' );
+			} );
+
+			it( 'should be rendered after the content', () => {
+				wrapper = mount( <TreeTextNode definition={{
+					name: 'foo',
+					text: 'abc',
+					positionsAfter: [
+						{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null }
+					]
+				}} globalTreeProps={{
+					showCompactText: true
+				}} /> );
+
+				const content = wrapper.children().childAt( 0 );
+				const position = content.childAt( 1 );
+
+				expect( position.props().definition.type ).to.equal( 'selection' );
+			} );
+
+			it( 'should be rendered in the middle of the content', () => {
+				wrapper = mount( <TreeTextNode definition={{
+					name: 'foo',
+					text: 'abc',
+					startOffset: 0,
+					positions: [
+						{ offset: 2, isEnd: false, presentation: null, type: 'selection', name: null }
+					]
+				}} globalTreeProps={{
+					showCompactText: true
+				}} /> );
+
+				const content = wrapper.children().childAt( 0 );
+				const position = content.childAt( 2 );
+
+				expect( position.props().definition.type ).to.equal( 'selection' );
+			} );
+		} );
+
 		describe( 'props#showCompactText true', () => {
 			it( 'renders text only', () => {
 				wrapper = mount( <TreeTextNode definition={{

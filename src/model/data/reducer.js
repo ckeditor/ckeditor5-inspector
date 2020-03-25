@@ -26,6 +26,8 @@ import {
 	getEditorModelNodeDefinition
 } from './utils';
 
+import { isModelRoot } from '../utils';
+
 import LocalStorageManager from '../../localstoragemanager';
 
 export const LOCAL_STORAGE_ACTIVE_TAB = 'active-model-tab-name';
@@ -188,9 +190,10 @@ function getEssentialState( globalState, modelState, modelStateOverrides ) {
 	let currentNodeDefinition = overriddenModelState.currentNodeDefinition;
 
 	if ( currentNode ) {
-		// If the currentNode no longer belongs to the root, reset the state.
+		// * If the currentNode no longer belongs to the current root, reset the state.
 		// This can happen when, for instance, inspecting an element, and it gets removed from the editor content.
-		if ( currentNode.root.rootName !== currentRootName ) {
+		// * If the currentNode was detached, reset the state.
+		if ( currentNode.root.rootName !== currentRootName || ( !isModelRoot( currentNode ) && !currentNode.parent ) ) {
 			currentNode = null;
 			currentNodeDefinition = null;
 		} else {
