@@ -28,7 +28,7 @@ class CommandInspector extends Component {
 					<a href={definition.url} target="_blank" rel="noopener noreferrer">
 						<b>{definition.type}</b>
 					</a>
-					:{definition.name}
+					:{definition.currentCommandName}
 				</span>,
 				<Button
 					key="exec"

@@ -4,7 +4,7 @@
  */
 
 import { modelReducer } from '../model/data/reducer';
-import viewReducer from '../view/data/reducer';
+import { viewReducer } from '../view/data/reducer';
 import commandsReducer from '../commands/data/reducer';
 
 import {
