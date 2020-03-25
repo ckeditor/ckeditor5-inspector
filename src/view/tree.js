@@ -63,7 +63,7 @@ class ViewTree extends Component {
 				onClick={this.handleTreeClick}
 				showCompactText="true"
 				showElementTypes={this.props.showElementTypes}
-				activeNode={this.props.currentEditorNode}
+				activeNode={this.props.currentNode}
 			/>
 		</NavBox>;
 	}

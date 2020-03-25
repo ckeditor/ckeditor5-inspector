@@ -78,8 +78,10 @@ class ModelTree extends Component {
 	}
 }
 
-const mapStateToProps = ( { currentEditor, model: { roots, treeDefinition, currentRootName, ui: { showMarkers, showCompactText } } } ) => {
-	return { treeDefinition, currentEditor, currentRootName, roots, showMarkers, showCompactText };
+const mapStateToProps = (
+	{ currentEditor, model: { roots, treeDefinition, currentRootName, currentNode, ui: { showMarkers, showCompactText } } }
+) => {
+	return { treeDefinition, currentEditor, currentRootName, currentNode, roots, showMarkers, showCompactText };
 };
 
 const mapDispatchToProps = {
