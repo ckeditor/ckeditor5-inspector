@@ -263,13 +263,22 @@ function fillElementPositions( elementDefinition, ranges ) {
 
 					if ( child.endOffset === offset ) {
 						const nextChild = elementDefinition.children[ childIndex + 1 ];
+						const isBetweenTextAndElement = child.type === 'text' && nextChild && nextChild.type === 'element';
+						const isBetweenElementAndText = child.type === 'element' && nextChild && nextChild.type === 'text';
+						const isBetweenTwoTexts = child.type === 'text' && nextChild && nextChild.type === 'text';
 
 						// Avoid the situation where the order of positions could weird around text nodes.
 						//
 						//		do           <element><$text>foo<$/text><$text>[]bar<$/text></element>
 						//		instead of   <element><$text>foo]<$/text><$text>[bar<$/text></element>
 						//
-						if ( position.isEnd && nextChild && nextChild.type === 'text' ) {
+						//		do           <element><br />[]bar<$/text></element>
+						//		instead of   <element><br />[<$text>]bar<$/text></element>
+						//
+						//		do           <element>bar<$/text>[]<br /></element>
+						//		instead of   <element><$text>bar[<$/text>]<br /></element>
+						//
+						if ( position.isEnd && ( isBetweenTextAndElement || isBetweenElementAndText || isBetweenTwoTexts ) ) {
 							nextChild.positionsBefore.push( position );
 						} else {
 							child.positionsAfter.push( position );

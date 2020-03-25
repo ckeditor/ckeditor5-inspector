@@ -60,7 +60,7 @@ export default class TreeElement extends TreeNode {
 				<span className="ck-inspector-tree-node__name__bracket ck-inspector-tree-node__name__bracket_open" />
 				{nameToDisplay}
 				{this.getAttributes()}
-				<span className="ck-inspector-tree-node__name__bracket ck-inspector-tree-node__name__bracket_close" />
+				{isEmpty ? '' : <span className="ck-inspector-tree-node__name__bracket ck-inspector-tree-node__name__bracket_close" />}
 			</span>
 			<div className="ck-inspector-tree-node__content">
 				{children}
