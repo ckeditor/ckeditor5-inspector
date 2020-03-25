@@ -26,11 +26,11 @@ import {
 
 import LocalStorageManager from '../../localstoragemanager';
 
-const LOCAL_STORAGE_ACTIVE_TAB = 'active-view-tab-name';
-const LOCAL_STORAGE_ELEMENT_TYPES = 'view-element-types';
+export const LOCAL_STORAGE_ACTIVE_TAB = 'active-view-tab-name';
+export const LOCAL_STORAGE_ELEMENT_TYPES = 'view-element-types';
 
-export default function( globalState, viewState, action ) {
-	const newState = viewReducer( globalState, viewState, action );
+export function viewReducer( globalState, viewState, action ) {
+	const newState = dataReducer( globalState, viewState, action );
 
 	if ( newState ) {
 		newState.ui = viewUIReducer( globalState, newState.ui, action );
@@ -39,7 +39,7 @@ export default function( globalState, viewState, action ) {
 	return newState;
 }
 
-function viewReducer( globalState, viewState, action ) {
+function dataReducer( globalState, viewState, action ) {
 	// Performance optimization: don't create the view state unless necessary.
 	if ( globalState.ui.activeTab !== 'View' ) {
 		return viewState;
@@ -147,18 +147,18 @@ function getBlankViewState( globalState, viewState = {} ) {
 	};
 }
 
-function getEssentialState( globalState, viewState, modelStateOverrides ) {
-	const overriddenModelState = { ...viewState, ...modelStateOverrides };
+function getEssentialState( globalState, viewState, viewStateOverrides ) {
+	const overriddenViewState = { ...viewState, ...viewStateOverrides };
 	const ranges = getEditorViewRanges( globalState.currentEditor );
 	const treeDefinition = getEditorViewTreeDefinition( {
 		currentEditor: globalState.currentEditor,
-		currentRootName: overriddenModelState.currentRootName,
+		currentRootName: overriddenViewState.currentRootName,
 		ranges
 	} );
 
-	const currentRootName = overriddenModelState.currentRootName;
-	let currentNode = overriddenModelState.currentNode;
-	let currentNodeDefinition = overriddenModelState.currentNodeDefinition;
+	const currentRootName = overriddenViewState.currentRootName;
+	let currentNode = overriddenViewState.currentNode;
+	let currentNodeDefinition = overriddenViewState.currentNodeDefinition;
 
 	if ( currentNode ) {
 		// If the currentNode no longer belongs to the root, reset the state.
