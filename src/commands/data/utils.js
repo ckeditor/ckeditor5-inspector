@@ -31,10 +31,10 @@ export function getEditorCommandDefinition( { currentEditor }, currentCommandNam
 	};
 }
 
-export function getCommandsTreeDefinition( globalState ) {
+export function getCommandsTreeDefinition( { currentEditor } ) {
 	const list = [];
 
-	for ( const [ name, command ] of globalState.currentEditor.commands ) {
+	for ( const [ name, command ] of currentEditor.commands ) {
 		const attributes = [];
 
 		if ( command.value !== undefined ) {
