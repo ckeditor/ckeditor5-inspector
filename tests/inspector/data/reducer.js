@@ -45,7 +45,6 @@ describe( 'global data store reducer', () => {
 				editorB = newEditor;
 
 				state = reducer( {
-					currentEditor: editorA,
 					currentEditorName: 'a',
 					editors: new Map( [
 						[ 'a', editorA ],
@@ -77,24 +76,20 @@ describe( 'global data store reducer', () => {
 				] );
 			} );
 
-			it( 'should reset #currentEditor and #currentEditorName when there are no editors', () => {
-				state.currentEditor = editorB;
+			it( 'should reset and #currentEditorName when there are no editors', () => {
 				state.currentEditorName = 'b';
 
 				state = reducer( state, setEditors( new Map() ) );
 
 				expect( [ ...state.editors ] ).to.deep.equal( [] );
-				expect( state.currentEditor ).to.be.null;
 				expect( state.currentEditorName ).to.be.null;
 			} );
 
-			it( 'should set #currentEditor and #currentEditorName to the first editor if current one is not in editors', () => {
-				state.currentEditor = editorB;
+			it( 'should set #currentEditorName to the first editor if current one is not in editors', () => {
 				state.currentEditorName = 'b';
 
 				state = reducer( state, setEditors( new Map( [ [ 'a', editorA ] ] ) ) );
 
-				expect( state.currentEditor ).to.equal( editorA );
 				expect( state.currentEditorName ).to.equal( 'a' );
 			} );
 		} );
@@ -104,12 +99,6 @@ describe( 'global data store reducer', () => {
 				state = reducer( state, setCurrentEditorName( 'b' ) );
 
 				expect( state.currentEditorName ).to.equal( 'b' );
-			} );
-
-			it( 'should change the #currentEditor', () => {
-				state = reducer( state, setCurrentEditorName( 'b' ) );
-
-				expect( state.currentEditor ).to.equal( editorB );
 			} );
 		} );
 	} );
@@ -131,7 +120,6 @@ describe( 'global data store reducer', () => {
 			LocalStorageManager.set( LOCAL_STORAGE_SIDE_PANE_WIDTH, '321px' );
 
 			const state = reducer( {
-				currentEditor: editorA,
 				currentEditorName: 'a',
 				editors: new Map( [
 					[ 'a', editorA ],

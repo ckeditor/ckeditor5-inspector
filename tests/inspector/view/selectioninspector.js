@@ -34,7 +34,8 @@ describe( '<ViewSelectionInspector />', () => {
 			editor = newEditor;
 
 			store = createStore( state => state, {
-				currentEditor: editor,
+				editors: new Map( [ [ 'test-editor', editor ] ] ),
+				currentEditorName: 'test-editor',
 				view: {
 					ranges: getEditorViewRanges( editor )
 				}

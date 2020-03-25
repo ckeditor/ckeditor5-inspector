@@ -29,7 +29,7 @@ describe( '<ModelPane />', () => {
 			editor = newEditor;
 
 			store = createStore( state => state, {
-				currentEditor: editor,
+				editors: new Map( [ [ 'test-editor', editor ] ] ),
 				currentEditorName: 'test-editor',
 				ui: {
 					activeTab: 'Model'
@@ -60,9 +60,9 @@ describe( '<ModelPane />', () => {
 	} );
 
 	describe( 'render()', () => {
-		it( 'should render a placeholder when no props#currentEditor', () => {
+		it( 'should render a placeholder when no props#currentEditorName', () => {
 			store = createStore( state => state, {
-				currentEditor: null,
+				currentEditorName: null,
 				model: {
 					ui: {}
 				}
@@ -89,7 +89,7 @@ describe( '<ModelPane />', () => {
 
 		it( 'should render a <ModelNodeInspector/> if the active tab is "Inspect"', () => {
 			store = createStore( state => state, {
-				currentEditor: editor,
+				editors: new Map( [ [ 'test-editor', editor ] ] ),
 				currentEditorName: 'test-editor',
 				ui: {
 					activeTab: 'Model'
@@ -117,7 +117,7 @@ describe( '<ModelPane />', () => {
 
 		it( 'should render a <ModelSelectionInspector/> if the active tab is "Selection"', () => {
 			store = createStore( state => state, {
-				currentEditor: editor,
+				editors: new Map( [ [ 'test-editor', editor ] ] ),
 				currentEditorName: 'test-editor',
 				ui: {
 					activeTab: 'Model'
@@ -145,7 +145,7 @@ describe( '<ModelPane />', () => {
 
 		it( 'should render a <ModelMarkersInspector/> if the active tab is "Markers"', () => {
 			store = createStore( state => state, {
-				currentEditor: editor,
+				editors: new Map( [ [ 'test-editor', editor ] ] ),
 				currentEditorName: 'test-editor',
 				ui: {
 					activeTab: 'Model'

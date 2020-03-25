@@ -61,7 +61,8 @@ describe( '<ModelTree />', () => {
 			} );
 
 			store = createStore( state => state, {
-				currentEditor: editor,
+				editors: new Map( [ [ 'test-editor', editor ] ] ),
+				currentEditorName: 'test-editor',
 				model: {
 					roots: [ ...editor.model.document.roots ],
 					ranges,

@@ -20,7 +20,7 @@ import ViewSelectionInspector from './selectioninspector';
 
 class ViewPane extends Component {
 	render() {
-		if ( !this.props.currentEditor ) {
+		if ( !this.props.currentEditorName ) {
 			return <Pane isEmpty="true">
 				<p>Nothing to show. Attach another editor instance to start inspecting.</p>
 			</Pane>;
@@ -38,8 +38,8 @@ class ViewPane extends Component {
 	}
 }
 
-const mapStateToProps = ( { currentEditor, view: { ui: { activeTab } } } ) => {
-	return { currentEditor, activeTab };
+const mapStateToProps = ( { currentEditorName, view: { ui: { activeTab } } } ) => {
+	return { currentEditorName, activeTab };
 };
 
 const mapDispatchToProps = {

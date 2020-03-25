@@ -34,7 +34,8 @@ describe( '<ModelSelectionInspector />', () => {
 			editor = newEditor;
 
 			store = createStore( state => state, {
-				currentEditor: editor,
+				editors: new Map( [ [ 'test-editor', editor ] ] ),
+				currentEditorName: 'test-editor',
 				model: {
 					ranges: getEditorModelRanges( editor )
 				}

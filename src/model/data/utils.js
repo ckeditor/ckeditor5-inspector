@@ -25,6 +25,10 @@ const MARKER_COLORS = [
 ];
 
 export function getEditorModelRoots( editor ) {
+	if ( !editor ) {
+		return [];
+	}
+
 	const roots = [ ...editor.model.document.roots ];
 
 	// Put $graveyard at the end.
@@ -34,6 +38,10 @@ export function getEditorModelRoots( editor ) {
 }
 
 export function getEditorModelRanges( editor ) {
+	if ( !editor ) {
+		return [];
+	}
+
 	const ranges = [];
 	const model = editor.model;
 
@@ -49,6 +57,10 @@ export function getEditorModelRanges( editor ) {
 }
 
 export function getEditorModelMarkers( editor ) {
+	if ( !editor ) {
+		return [];
+	}
+
 	const markers = [];
 	const model = editor.model;
 	let markerCount = 0;
@@ -76,6 +88,10 @@ export function getEditorModelMarkers( editor ) {
 }
 
 export function getEditorModelTreeDefinition( { currentEditor, currentRootName, ranges, markers } ) {
+	if ( !currentEditor ) {
+		return [];
+	}
+
 	const model = currentEditor.model;
 	const modelRoot = model.document.getRoot( currentRootName );
 

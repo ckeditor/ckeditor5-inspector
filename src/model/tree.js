@@ -40,6 +40,8 @@ class ModelTree extends Component {
 	}
 
 	render() {
+		const currentEditor = this.props.editors.get( this.props.currentEditorName );
+
 		return <NavBox>
 			{[
 				<div className="ck-inspector-tree__config" key="root-cfg">
@@ -47,7 +49,7 @@ class ModelTree extends Component {
 						id="view-root-select"
 						label="Root"
 						value={this.props.currentRootName}
-						options={getEditorModelRoots( this.props.currentEditor ).map( root => root.rootName )}
+						options={getEditorModelRoots( currentEditor ).map( root => root.rootName )}
 						onChange={evt => this.props.setModelCurrentRootName( evt.target.value )}
 					/>
 				</div>,
@@ -71,7 +73,7 @@ class ModelTree extends Component {
 					!this.props.showMarkers ? 'ck-inspector-model-tree__hide-markers' : ''
 				]}
 				definition={this.props.treeDefinition}
-				textDirection={this.props.currentEditor.locale.contentLanguageDirection}
+				textDirection={currentEditor.locale.contentLanguageDirection}
 				onClick={this.handleTreeClick}
 				showCompactText={this.props.showCompactText}
 				activeNode={this.props.currentNode}
@@ -81,9 +83,9 @@ class ModelTree extends Component {
 }
 
 const mapStateToProps = (
-	{ currentEditor, model: { treeDefinition, currentRootName, currentNode, ui: { showMarkers, showCompactText } } }
+	{ editors, currentEditorName, model: { treeDefinition, currentRootName, currentNode, ui: { showMarkers, showCompactText } } }
 ) => {
-	return { treeDefinition, currentEditor, currentRootName, currentNode, showMarkers, showCompactText };
+	return { treeDefinition, editors, currentEditorName, currentRootName, currentNode, showMarkers, showCompactText };
 };
 
 const mapDispatchToProps = {

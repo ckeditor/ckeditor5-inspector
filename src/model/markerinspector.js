@@ -19,6 +19,7 @@ class ModelMarkerInspector extends Component {
 	render() {
 		const markerTree = getMarkerTree( this.props.markers );
 		const markerListDefinitions = markerTreeToPropertyListDefinition( markerTree );
+		const currentEditor = this.props.editors.get( this.props.currentEditorName );
 
 		if ( !Object.keys( markerTree ).length ) {
 			return <Pane isEmpty="true">
@@ -38,7 +39,7 @@ class ModelMarkerInspector extends Component {
 					key="log"
 					type="log"
 					text="Log in console"
-					onClick={() => Logger.log( [ ...this.props.currentEditor.model.markers ] )}
+					onClick={() => Logger.log( [ ...currentEditor.model.markers ] )}
 				/>
 			]}
 			lists={[
@@ -54,8 +55,8 @@ class ModelMarkerInspector extends Component {
 	}
 }
 
-const mapStateToProps = ( { currentEditor, model: { markers } } ) => {
-	return { currentEditor, markers };
+const mapStateToProps = ( { editors, currentEditorName, model: { markers } } ) => {
+	return { editors, currentEditorName, markers };
 };
 
 const mapDispatchToProps = {};

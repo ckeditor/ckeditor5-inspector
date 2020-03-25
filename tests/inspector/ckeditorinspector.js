@@ -91,7 +91,6 @@ describe( 'CKEditorInspector', () => {
 				const state = getStoreState();
 
 				expect( state.editors.get( 'foo' ) ).to.equal( CKEditorInspector._editors.get( 'foo' ) );
-				expect( state.currentEditor ).to.equal( CKEditorInspector._editors.get( 'foo' ) );
 				expect( state.currentEditorName ).to.equal( 'foo' );
 			} );
 
@@ -242,7 +241,6 @@ describe( 'CKEditorInspector', () => {
 
 					expect( state.editors.get( 'editor-1' ) ).to.equal( editor );
 					expect( state.editors.get( 'editor-2' ) ).to.equal( anotherEditor );
-					expect( state.currentEditor ).to.equal( editor );
 					expect( state.currentEditorName ).to.equal( 'editor-1' );
 
 					expect( firstNames ).to.have.members( [ 'editor-1' ] );
@@ -258,7 +256,6 @@ describe( 'CKEditorInspector', () => {
 			const state = getStoreState();
 
 			expect( state.editors.get( 'foo' ) ).to.equal( editor );
-			expect( state.currentEditor ).to.equal( editor );
 			expect( state.currentEditorName ).to.equal( 'foo' );
 		} );
 
@@ -270,7 +267,6 @@ describe( 'CKEditorInspector', () => {
 
 			expect( state.editors.get( 'model' ) ).to.equal( editor );
 			expect( state.editors.get( 'editing' ) ).to.equal( editor );
-			expect( state.currentEditor ).to.equal( editor );
 			expect( state.currentEditorName ).to.equal( 'model' );
 		} );
 
@@ -282,7 +278,6 @@ describe( 'CKEditorInspector', () => {
 
 					expect( state.editors.get( 'foo' ) ).to.equal( editor );
 					expect( state.editors.get( 'bar' ) ).to.equal( anotherEditor );
-					expect( state.currentEditor ).to.equal( editor );
 					expect( state.currentEditorName ).to.equal( 'foo' );
 					expect( names ).to.have.members( [ 'foo', 'bar' ] );
 
@@ -312,7 +307,6 @@ describe( 'CKEditorInspector', () => {
 				sinon.assert.calledWith( spy, 'bar' );
 
 				expect( state.editors.size ).to.equal( 0 );
-				expect( state.currentEditor ).to.be.null;
 				expect( state.currentEditorName ).to.be.null;
 			} );
 		} );
@@ -361,7 +355,6 @@ describe( 'CKEditorInspector', () => {
 					expect( state.editors.size ).to.equal( 2 );
 					expect( state.editors.get( 'editor-5' ) ).to.equal( editor );
 					expect( state.editors.get( 'editor-6' ) ).to.equal( anotherEditor );
-					expect( state.currentEditor ).to.equal( editor );
 					expect( state.currentEditorName ).to.equal( 'editor-5' );
 
 					expect( editorNames ).to.have.members( [ 'editor-5', 'editor-6' ] );
@@ -419,7 +412,6 @@ describe( 'CKEditorInspector', () => {
 			let state = getStoreState();
 
 			expect( state.editors.get( 'foo' ) ).to.equal( editor );
-			expect( state.currentEditor ).to.equal( editor );
 			expect( state.currentEditorName ).to.equal( 'foo' );
 
 			CKEditorInspector.detach( 'foo' );
@@ -427,7 +419,6 @@ describe( 'CKEditorInspector', () => {
 			state = getStoreState();
 
 			expect( state.editors.size ).to.equal( 0 );
-			expect( state.currentEditor ).to.be.null;
 			expect( state.currentEditorName ).to.be.null;
 		} );
 

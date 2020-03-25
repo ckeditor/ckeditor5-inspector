@@ -20,7 +20,7 @@ import './model.css';
 
 class ModelPane extends Component {
 	render() {
-		if ( !this.props.currentEditor ) {
+		if ( !this.props.currentEditorName ) {
 			return <Pane isEmpty="true">
 				<p>Nothing to show. Attach another editor instance to start inspecting.</p>
 			</Pane>;
@@ -39,8 +39,8 @@ class ModelPane extends Component {
 	}
 }
 
-const mapStateToProps = ( { currentEditor, model: { ui: { activeTab } } } ) => {
-	return { currentEditor, activeTab };
+const mapStateToProps = ( { currentEditorName, model: { ui: { activeTab } } } ) => {
+	return { currentEditorName, activeTab };
 };
 
 const mapDispatchToProps = { setModelActiveTab };

@@ -35,7 +35,7 @@ describe( '<ViewTree />', () => {
 			editor = newEditor;
 
 			store = createStore( ( state, action ) => ( { ...state, ...action.state } ), {
-				currentEditor: editor,
+				editors: new Map( [ [ 'test-editor', editor ] ] ),
 				currentEditorName: 'test-editor',
 				ui: {
 					activeTab: 'View'

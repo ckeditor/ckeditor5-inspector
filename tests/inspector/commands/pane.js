@@ -27,7 +27,7 @@ describe( '<CommandsPane />', () => {
 			editor = newEditor;
 
 			store = createStore( state => state, {
-				currentEditor: editor,
+				editors: new Map( [ [ 'test-editor', editor ] ] ),
 				currentEditorName: 'test-editor',
 				ui: {
 					activeTab: 'Commands'
@@ -48,9 +48,9 @@ describe( '<CommandsPane />', () => {
 	} );
 
 	describe( 'render()', () => {
-		it( 'renders a placeholder when no props#editor', () => {
+		it( 'renders a placeholder when no props#currentEditorName', () => {
 			store = createStore( state => state, {
-				currentEditor: null,
+				currentEditorName: null,
 				model: {
 					ui: {}
 				}

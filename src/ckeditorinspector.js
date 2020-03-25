@@ -21,8 +21,7 @@ import InspectorUI from './ui';
 import Logger from './logger';
 import {
 	normalizeArguments,
-	getFirstEditorName,
-	getFirstEditor
+	getFirstEditorName
 } from './utils';
 import './ckeditorinspector.css';
 
@@ -160,7 +159,8 @@ export default class CKEditorInspector {
 		CKEditorInspector._editors.clear();
 		CKEditorInspector._wrapper.remove();
 
-		const currentEditor = CKEditorInspector._store.getState().currentEditor;
+		const state = CKEditorInspector._store.getState();
+		const currentEditor = state.editors.get( state.currentEditorName );
 
 		if ( currentEditor ) {
 			CKEditorInspector._editorListener.stopListening( currentEditor );
@@ -202,7 +202,6 @@ export default class CKEditorInspector {
 		// commands reducers. See the reducer() function to learn more.
 		CKEditorInspector._store = createStore( reducer, {
 			editors: CKEditorInspector._editors,
-			currentEditor: getFirstEditor( CKEditorInspector._editors ),
 			currentEditorName: getFirstEditorName( CKEditorInspector._editors ),
 			ui: {
 				isCollapsed: options.isCollapsed
@@ -214,23 +213,24 @@ export default class CKEditorInspector {
 		// to events from the current editor only (but not the previous one).
 		CKEditorInspector._store.subscribe( () => {
 			const state = CKEditorInspector._store.getState();
+			const currentEditor = state.editors.get( state.currentEditorName );
 
 			// Either going from
 			// * no editor to a new editor
 			// * from one editor to another,
 			// * from one editor to no editor,
-			if ( previousEditor !== state.currentEditor ) {
+			if ( previousEditor !== currentEditor ) {
 				// If there was no editor before, there's nothing to stop listening to.
 				if ( previousEditor ) {
 					CKEditorInspector._editorListener.stopListening( previousEditor );
 				}
 
 				// If going from one editor to no editor, there's nothing to start listening to.
-				if ( state.currentEditor ) {
-					CKEditorInspector._editorListener.startListening( state.currentEditor );
+				if ( currentEditor ) {
+					CKEditorInspector._editorListener.startListening( currentEditor );
 				}
 
-				previousEditor = state.currentEditor;
+				previousEditor = currentEditor;
 			}
 		} );
 

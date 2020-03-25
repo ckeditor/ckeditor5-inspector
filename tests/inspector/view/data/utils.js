@@ -26,7 +26,7 @@ const ROOT_ATTRIBUTES = [
 ];
 
 describe( 'view data utils', () => {
-	describe( 'getEditorModelTreeDefinition()', () => {
+	describe( 'getEditorViewTreeDefinition()', () => {
 		let editor, element, root;
 
 		beforeEach( () => {

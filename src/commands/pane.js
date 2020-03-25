@@ -16,7 +16,7 @@ import CommandInspector from './commandinspector';
 
 class CommandsPane extends Component {
 	render() {
-		if ( !this.props.currentEditor ) {
+		if ( !this.props.currentEditorName ) {
 			return <Pane isEmpty="true">
 				<p>Nothing to show. Attach another editor instance to start inspecting.</p>
 			</Pane>;
@@ -33,8 +33,8 @@ class CommandsPane extends Component {
 	}
 }
 
-const mapStateToProps = ( { currentEditor } ) => {
-	return { currentEditor };
+const mapStateToProps = ( { currentEditorName } ) => {
+	return { currentEditorName };
 };
 
 export default connect( mapStateToProps, { updateCommandsState } )( CommandsPane );

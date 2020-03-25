@@ -57,7 +57,6 @@ describe( 'model data store reducer', () => {
 				editorB = newEditor;
 
 				globalState = {
-					currentEditor: editorA,
 					currentEditorName: 'a',
 					editors: new Map( [
 						[ 'a', editorA ],
@@ -107,7 +106,6 @@ describe( 'model data store reducer', () => {
 
 			it( 'should be updated on setCurrentEditorName() action', () => {
 				modelState.currentRootName = null;
-				globalState.currentEditor = editorB;
 
 				modelState = modelReducer( globalState, modelState, setCurrentEditorName( 'b' ) );
 

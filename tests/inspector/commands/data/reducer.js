@@ -44,7 +44,6 @@ describe( 'commands data store reducer', () => {
 				editorB = newEditor;
 
 				globalState = {
-					currentEditor: editorA,
 					currentEditorName: 'a',
 					editors: new Map( [
 						[ 'a', editorA ],
@@ -84,8 +83,6 @@ describe( 'commands data store reducer', () => {
 		describe( '#currentCommandName', () => {
 			it( 'should be reset on setEditors() action', () => {
 				commandsState.currentCommandName = 'foo';
-				globalState.currentEditor = editorB;
-
 				commandsState = commandsReducer( globalState, commandsState, setEditors( new Map( [ [ 'b', editorB ] ] ) ) );
 
 				expect( commandsState.currentCommandName ).to.be.null;
@@ -93,8 +90,6 @@ describe( 'commands data store reducer', () => {
 
 			it( 'should be reset on setCurrentEditorName() action', () => {
 				commandsState.currentCommandName = null;
-				globalState.currentEditor = editorB;
-
 				commandsState = commandsReducer( globalState, commandsState, setCurrentEditorName( 'b' ) );
 
 				expect( commandsState.currentCommandName ).to.be.null;
@@ -102,8 +97,6 @@ describe( 'commands data store reducer', () => {
 
 			it( 'should be set on setCommandsCurrentCommandName() action', () => {
 				commandsState.currentCommandName = null;
-				globalState.currentEditor = editorB;
-
 				commandsState = commandsReducer( globalState, commandsState, setCommandsCurrentCommandName( 'foo' ) );
 
 				expect( commandsState.currentCommandName ).to.equal( 'foo' );
@@ -113,8 +106,6 @@ describe( 'commands data store reducer', () => {
 		describe( '#currentCommandDefinition', () => {
 			it( 'should be reset on setEditors() action', () => {
 				commandsState.currentCommandDefinition = 'foo';
-				globalState.currentEditor = editorB;
-
 				commandsState = commandsReducer( globalState, commandsState, setEditors( new Map( [ [ 'b', editorB ] ] ) ) );
 
 				expect( commandsState.currentCommandDefinition ).to.be.null;
@@ -122,8 +113,6 @@ describe( 'commands data store reducer', () => {
 
 			it( 'should be reset on setCurrentEditorName() action', () => {
 				commandsState.currentCommandDefinition = 'foo';
-				globalState.currentEditor = editorB;
-
 				commandsState = commandsReducer( globalState, commandsState, setCurrentEditorName( 'b' ) );
 
 				expect( commandsState.currentCommandDefinition ).to.be.null;
@@ -131,8 +120,6 @@ describe( 'commands data store reducer', () => {
 
 			it( 'should be set on setCommandsCurrentCommandName() action', () => {
 				commandsState.currentCommandDefinition = null;
-				globalState.currentEditor = editorB;
-
 				commandsState = commandsReducer( globalState, commandsState, setCommandsCurrentCommandName( 'foo' ) );
 
 				expect( commandsState.currentCommandDefinition ).to.be.an( 'object' );
@@ -141,8 +128,6 @@ describe( 'commands data store reducer', () => {
 			it( 'should be set on updateCommandsState() action', () => {
 				commandsState.currentCommandName = 'foo';
 				commandsState.currentCommandDefinition = null;
-				globalState.currentEditor = editorB;
-
 				commandsState = commandsReducer( globalState, commandsState, updateCommandsState() );
 
 				expect( commandsState.currentCommandDefinition ).to.be.an( 'object' );
@@ -151,8 +136,6 @@ describe( 'commands data store reducer', () => {
 			it( 'should be set on setActiveTab() action', () => {
 				commandsState.currentCommandName = 'foo';
 				commandsState.currentCommandDefinition = null;
-				globalState.currentEditor = editorB;
-
 				commandsState = commandsReducer( globalState, commandsState, setActiveTab( 'Commands' ) );
 
 				expect( commandsState.currentCommandDefinition ).to.be.an( 'object' );
@@ -162,8 +145,6 @@ describe( 'commands data store reducer', () => {
 		describe( '#treeDefinition', () => {
 			it( 'should be set on setEditors() action', () => {
 				commandsState.treeDefinition = 'foo';
-				globalState.currentEditor = editorB;
-
 				commandsState = commandsReducer( globalState, commandsState, setEditors( new Map( [ [ 'b', editorB ] ] ) ) );
 
 				expect( commandsState.treeDefinition ).to.be.an( 'array' );
@@ -171,8 +152,6 @@ describe( 'commands data store reducer', () => {
 
 			it( 'should be set on setCurrentEditorName() action', () => {
 				commandsState.treeDefinition = 'foo';
-				globalState.currentEditor = editorB;
-
 				commandsState = commandsReducer( globalState, commandsState, setCurrentEditorName( 'b' ) );
 
 				expect( commandsState.treeDefinition ).to.be.an( 'array' );
@@ -180,8 +159,6 @@ describe( 'commands data store reducer', () => {
 
 			it( 'should be set on updateCommandsState() action', () => {
 				commandsState.treeDefinition = 'foo';
-				globalState.currentEditor = editorB;
-
 				commandsState = commandsReducer( globalState, commandsState, updateCommandsState() );
 
 				expect( commandsState.treeDefinition ).to.be.an( 'array' );
@@ -189,8 +166,6 @@ describe( 'commands data store reducer', () => {
 
 			it( 'should be set on setActiveTab() action', () => {
 				commandsState.treeDefinition = 'foo';
-				globalState.currentEditor = editorB;
-
 				commandsState = commandsReducer( globalState, commandsState, setActiveTab( 'Commands' ) );
 
 				expect( commandsState.treeDefinition ).to.be.an( 'array' );

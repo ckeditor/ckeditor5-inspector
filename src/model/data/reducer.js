@@ -62,7 +62,7 @@ function modelDataReducer( globalState, modelState, action ) {
 				...modelState,
 
 				currentNode: action.currentNode,
-				currentNodeDefinition: getEditorModelNodeDefinition( globalState.currentEditor, action.currentNode )
+				currentNodeDefinition: getEditorModelNodeDefinition( getCurrentEditor( globalState ), action.currentNode )
 			};
 
 		// * SET_ACTIVE_INSPECTOR_TAB – Because of the performance optimization at the beginning, update the state
@@ -152,7 +152,7 @@ function getNewShowCompactTextState( UIState ) {
 }
 
 function getBlankModelState( globalState, modelState = {} ) {
-	const currentEditor = globalState.currentEditor;
+	const currentEditor = getCurrentEditor( globalState );
 
 	if ( !currentEditor ) {
 		return {
@@ -173,11 +173,12 @@ function getBlankModelState( globalState, modelState = {} ) {
 }
 
 function getEssentialState( globalState, modelState, modelStateOverrides ) {
+	const currentEditor = getCurrentEditor( globalState );
 	const overriddenModelState = { ...modelState, ...modelStateOverrides };
-	const ranges = getEditorModelRanges( globalState.currentEditor );
-	const markers = getEditorModelMarkers( globalState.currentEditor );
+	const ranges = getEditorModelRanges( currentEditor );
+	const markers = getEditorModelMarkers( currentEditor );
 	const treeDefinition = getEditorModelTreeDefinition( {
-		currentEditor: globalState.currentEditor,
+		currentEditor,
 		currentRootName: overriddenModelState.currentRootName,
 		ranges,
 		markers
@@ -196,7 +197,7 @@ function getEssentialState( globalState, modelState, modelStateOverrides ) {
 			currentNodeDefinition = null;
 		} else {
 			// Update the current node definition each time the new model state is created.
-			currentNodeDefinition = getEditorModelNodeDefinition( globalState.currentEditor, currentNode );
+			currentNodeDefinition = getEditorModelNodeDefinition( currentEditor, currentNode );
 		}
 	} else {
 		// No current node, no definition.
@@ -210,4 +211,8 @@ function getEssentialState( globalState, modelState, modelStateOverrides ) {
 		ranges,
 		markers
 	};
+}
+
+function getCurrentEditor( globalState ) {
+	return globalState.editors.get( globalState.currentEditorName );
 }

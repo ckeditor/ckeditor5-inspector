@@ -42,7 +42,6 @@ describe( '<InspectorUI />', () => {
 
 			store = createStore( ( state, action ) => ( { ...state, ...action.state } ), {
 				editors,
-				currentEditor: editor1,
 				currentEditorName: 'first',
 				ui: {
 					activeTab: 'Model',
@@ -296,6 +295,7 @@ describe( '<InspectorUI />', () => {
 						store.dispatch( {
 							type: 'testAction',
 							state: {
+								editors,
 								currentEditorName: 'second'
 							}
 						} );
@@ -307,7 +307,8 @@ describe( '<InspectorUI />', () => {
 						store.dispatch( {
 							type: 'testAction',
 							state: {
-								editors: new Map()
+								editors: new Map(),
+								currentEditorName: null
 							}
 						} );
 

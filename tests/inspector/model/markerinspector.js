@@ -44,7 +44,8 @@ describe( '<ModelMarkerInspector />', () => {
 			} );
 
 			store = createStore( state => state, {
-				currentEditor: editor,
+				editors: new Map( [ [ 'foo', editor ] ] ),
+				currentEditorName: 'foo',
 				model: {
 					markers: getEditorModelMarkers( editor )
 				}

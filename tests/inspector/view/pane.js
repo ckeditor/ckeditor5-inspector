@@ -28,7 +28,7 @@ describe( '<ViewPane />', () => {
 			editor = newEditor;
 
 			store = createStore( ( state, action ) => ( { ...state, ...action.state } ), {
-				currentEditor: editor,
+				editors: new Map( [ [ 'test-editor', editor ] ] ),
 				currentEditorName: 'test-editor',
 				ui: {
 					activeTab: 'View'
@@ -57,9 +57,9 @@ describe( '<ViewPane />', () => {
 	} );
 
 	describe( 'render()', () => {
-		it( 'should render a placeholder when no props#currentEditor', () => {
+		it( 'should render a placeholder when no props#currentEditorName', () => {
 			store = createStore( state => state, {
-				currentEditor: null,
+				currentEditorName: null,
 				view: {
 					ui: {}
 				}
@@ -86,7 +86,7 @@ describe( '<ViewPane />', () => {
 
 		it( 'should render a <ViewNodeInspector/> if the active tab is "Inspect"', () => {
 			store = createStore( state => state, {
-				currentEditor: editor,
+				editors: new Map( [ [ 'test-editor', editor ] ] ),
 				currentEditorName: 'test-editor',
 				ui: {
 					activeTab: 'View'
@@ -112,7 +112,7 @@ describe( '<ViewPane />', () => {
 
 		it( 'should render a <ViewSelectionInspector/> if the active tab is "Selection"', () => {
 			store = createStore( state => state, {
-				currentEditor: editor,
+				editors: new Map( [ [ 'test-editor', editor ] ] ),
 				currentEditorName: 'test-editor',
 				ui: {
 					activeTab: 'View'

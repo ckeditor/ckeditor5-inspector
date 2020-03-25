@@ -17,8 +17,8 @@ const API_DOCS_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_e
 
 class ModelSelectionInspector extends Component {
 	render() {
-		const info = this.getEditorSelectionInfo();
-		const editor = this.props.currentEditor;
+		const editor = this.props.editors.get( this.props.currentEditorName );
+		const info = this.getEditorSelectionInfo( editor );
 
 		return <ObjectInspector
 			header={[
@@ -89,8 +89,8 @@ class ModelSelectionInspector extends Component {
 		/>;
 	}
 
-	getEditorSelectionInfo() {
-		const selection = this.props.currentEditor.model.document.selection;
+	getEditorSelectionInfo( editor ) {
+		const selection = editor.model.document.selection;
 		const anchor = selection.anchor;
 		const focus = selection.focus;
 		const info = {
@@ -146,8 +146,8 @@ class ModelSelectionInspector extends Component {
 	}
 }
 
-const mapStateToProps = ( { currentEditor, model: { ranges } } ) => {
-	return { currentEditor, ranges };
+const mapStateToProps = ( { editors, currentEditorName, model: { ranges } } ) => {
+	return { editors, currentEditorName, ranges };
 };
 
 export default connect( mapStateToProps, {} )( ModelSelectionInspector );

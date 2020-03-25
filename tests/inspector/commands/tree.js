@@ -25,15 +25,18 @@ describe( '<CommandTree />', () => {
 		return TestEditor.create( element ).then( newEditor => {
 			editor = newEditor;
 
+			const editors = new Map( [ [ 'test-editor', editor ] ] );
+			const currentEditorName = 'test-editor';
+
 			store = createStore( state => state, {
-				currentEditor: editor,
-				currentEditorName: 'test-editor',
+				editors,
+				currentEditorName,
 				ui: {
 					activeTab: 'Commands'
 				},
 				commands: {
 					currentCommandName: 'foo',
-					treeDefinition: getCommandsTreeDefinition( { currentEditor: editor } )
+					treeDefinition: getCommandsTreeDefinition( { editors, currentEditorName } )
 				}
 			} );
 

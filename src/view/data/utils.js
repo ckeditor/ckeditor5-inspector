@@ -23,10 +23,18 @@ import {
 export const DOCS_URL_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view';
 
 export function getEditorViewRoots( editor ) {
+	if ( !editor ) {
+		return [];
+	}
+
 	return [ ...editor.editing.view.document.roots ];
 }
 
 export function getEditorViewRanges( editor ) {
+	if ( !editor ) {
+		return [];
+	}
+
 	const ranges = [];
 	const selection = editor.editing.view.document.selection;
 
@@ -42,7 +50,7 @@ export function getEditorViewRanges( editor ) {
 }
 
 export function getEditorViewTreeDefinition( { currentEditor, currentRootName, ranges } ) {
-	if ( !currentRootName ) {
+	if ( !currentEditor || !currentRootName ) {
 		return null;
 	}
 

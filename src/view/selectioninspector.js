@@ -17,8 +17,8 @@ const API_DOCS_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_e
 
 class ViewSelectionInspector extends Component {
 	render() {
-		const info = this.getEditorSelectionInfo();
-		const editor = this.props.currentEditor;
+		const editor = this.props.editors.get( this.props.currentEditorName );
+		const info = this.getEditorSelectionInfo( editor );
 
 		return <ObjectInspector
 			header={[
@@ -84,8 +84,8 @@ class ViewSelectionInspector extends Component {
 		/>;
 	}
 
-	getEditorSelectionInfo() {
-		const selection = this.props.currentEditor.editing.view.document.selection;
+	getEditorSelectionInfo( editor ) {
+		const selection = editor.editing.view.document.selection;
 		const info = {
 			properties: {
 				isCollapsed: {
@@ -134,8 +134,8 @@ class ViewSelectionInspector extends Component {
 	}
 }
 
-const mapStateToProps = ( { currentEditor, view: { ranges } } ) => {
-	return { currentEditor, ranges };
+const mapStateToProps = ( { editors, currentEditorName, view: { ranges } } ) => {
+	return { editors, currentEditorName, ranges };
 };
 
 export default connect( mapStateToProps, {} )( ViewSelectionInspector );

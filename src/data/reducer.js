@@ -16,10 +16,7 @@ import {
 	SET_ACTIVE_INSPECTOR_TAB
 } from './actions';
 
-import {
-	getFirstEditor,
-	getFirstEditorName
-} from '../utils';
+import { getFirstEditorName } from '../utils';
 
 import LocalStorageManager from '../localstoragemanager';
 
@@ -95,8 +92,7 @@ function getNewCurrentEditorNameState( appState, action ) {
 	return {
 		...appState,
 
-		currentEditorName: action.editorName,
-		currentEditor: appState.editors.get( action.editorName )
+		currentEditorName: action.editorName
 	};
 }
 
@@ -106,10 +102,8 @@ function getNewEditorsState( appState, action ) {
 	};
 
 	if ( !action.editors.size ) {
-		newState.currentEditor = null;
 		newState.currentEditorName = null;
 	} else if ( !action.editors.has( appState.currentEditorName ) ) {
-		newState.currentEditor = getFirstEditor( action.editors );
 		newState.currentEditorName = getFirstEditorName( action.editors );
 	}
 

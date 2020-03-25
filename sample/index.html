@@ -197,7 +197,7 @@
 					language: 'ar'
 				} )
 				.then( editor => {
-					window.secondEditor = editor;
+					window.thirdEditor = editor;
 					document.body.insertBefore( editor.ui.view.toolbar.element, editor.ui.getEditableElement() );
 					const [ name ] = CKEditorInspector.attach( { 'rtl': editor } );
 					editorNames.push( name );

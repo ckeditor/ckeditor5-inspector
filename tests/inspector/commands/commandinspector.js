@@ -27,15 +27,18 @@ describe( '<CommandInspector />', () => {
 		return TestEditor.create( element ).then( newEditor => {
 			editor = newEditor;
 
+			const editors = new Map( [ [ 'test-editor', editor ] ] );
+			const currentEditorName = 'test-editor';
+
 			store = createStore( state => state, {
-				currentEditor: editor,
-				currentEditorName: 'test-editor',
+				editors,
+				currentEditorName,
 				ui: {
 					activeTab: 'Commands'
 				},
 				commands: {
 					currentCommandName: 'foo',
-					currentCommandDefinition: getEditorCommandDefinition( { currentEditor: editor }, 'foo' ),
+					currentCommandDefinition: getEditorCommandDefinition( { editors, currentEditorName }, 'foo' ),
 					treeDefinition: null
 				}
 			} );
@@ -55,6 +58,8 @@ describe( '<CommandInspector />', () => {
 	describe( 'render()', () => {
 		it( 'should render a placeholder when no props#currentCommandDefinition', () => {
 			const store = createStore( state => state, {
+				editors: new Map( [ [ 'test-editor', editor ] ] ),
+				currentEditorName: 'test-editor',
 				commands: {
 					currentCommandDefinition: null
 				}

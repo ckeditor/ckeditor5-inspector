@@ -55,7 +55,6 @@ describe( 'view data store reducer', () => {
 				editorB = newEditor;
 
 				globalState = {
-					currentEditor: editorA,
 					currentEditorName: 'a',
 					editors: new Map( [
 						[ 'a', editorA ],
@@ -106,7 +105,6 @@ describe( 'view data store reducer', () => {
 
 			it( 'should be updated on setCurrentEditorName() action', () => {
 				viewState.currentRootName = null;
-				globalState.currentEditor = editorB;
 
 				viewState = viewReducer( globalState, viewState, setCurrentEditorName( 'b' ) );
 

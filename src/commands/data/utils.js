@@ -8,12 +8,12 @@ import {
 	stringifyPropertyList
 } from '../../components/utils';
 
-export function getEditorCommandDefinition( { currentEditor }, currentCommandName ) {
+export function getEditorCommandDefinition( { editors, currentEditorName }, currentCommandName ) {
 	if ( !currentCommandName ) {
 		return null;
 	}
 
-	const command = currentEditor.commands.get( currentCommandName );
+	const command = editors.get( currentEditorName ).commands.get( currentCommandName );
 
 	return {
 		currentCommandName,
@@ -31,10 +31,16 @@ export function getEditorCommandDefinition( { currentEditor }, currentCommandNam
 	};
 }
 
-export function getCommandsTreeDefinition( { currentEditor } ) {
+export function getCommandsTreeDefinition( { editors, currentEditorName } ) {
+	const editor = editors.get( currentEditorName );
+
+	if ( !editor ) {
+		return [];
+	}
+
 	const list = [];
 
-	for ( const [ name, command ] of currentEditor.commands ) {
+	for ( const [ name, command ] of editors.get( currentEditorName ).commands ) {
 		const attributes = [];
 
 		if ( command.value !== undefined ) {

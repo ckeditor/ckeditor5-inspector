@@ -22,6 +22,8 @@ class CommandInspector extends Component {
 			</Pane>;
 		}
 
+		const currentEditor = this.props.editors.get( this.props.currentEditorName );
+
 		return <ObjectInspector
 			header={[
 				<span key="link">
@@ -34,7 +36,7 @@ class CommandInspector extends Component {
 					key="exec"
 					type="exec"
 					text="Execute command"
-					onClick={() => this.props.currentEditor.execute( this.props.currentCommandName )}
+					onClick={() => currentEditor.execute( this.props.currentCommandName )}
 				/>,
 				<Button
 					key="log"
@@ -54,8 +56,8 @@ class CommandInspector extends Component {
 	}
 }
 
-const mapStateToProps = ( { currentEditor, commands: { currentCommandName, currentCommandDefinition } } ) => {
-	return { currentEditor, currentCommandName, currentCommandDefinition };
+const mapStateToProps = ( { editors, currentEditorName, commands: { currentCommandName, currentCommandDefinition } } ) => {
+	return { editors, currentEditorName, currentCommandName, currentCommandDefinition };
 };
 
 export default connect( mapStateToProps, {} )( CommandInspector );

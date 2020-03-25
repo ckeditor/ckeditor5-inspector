@@ -134,8 +134,9 @@ function getNewShowElementTypesState( globalState, UIState ) {
 }
 
 function getBlankViewState( globalState, viewState = {} ) {
-	const currentEditor = globalState.currentEditor;
-	const currentRootName = getEditorViewRoots( currentEditor )[ 0 ].rootName;
+	const currentEditor = getCurrentEditor( globalState );
+	const roots = getEditorViewRoots( currentEditor );
+	const currentRootName = roots[ 0 ] ? roots[ 0 ].rootName : null;
 
 	return {
 		...viewState,
@@ -149,9 +150,9 @@ function getBlankViewState( globalState, viewState = {} ) {
 
 function getEssentialState( globalState, viewState, viewStateOverrides ) {
 	const overriddenViewState = { ...viewState, ...viewStateOverrides };
-	const ranges = getEditorViewRanges( globalState.currentEditor );
+	const ranges = getEditorViewRanges( getCurrentEditor( globalState ) );
 	const treeDefinition = getEditorViewTreeDefinition( {
-		currentEditor: globalState.currentEditor,
+		currentEditor: getCurrentEditor( globalState ),
 		currentRootName: overriddenViewState.currentRootName,
 		ranges
 	} );
@@ -181,4 +182,8 @@ function getEssentialState( globalState, viewState, viewStateOverrides ) {
 		currentNodeDefinition,
 		ranges
 	};
+}
+
+function getCurrentEditor( globalState ) {
+	return globalState.editors.get( globalState.currentEditorName );
 }
