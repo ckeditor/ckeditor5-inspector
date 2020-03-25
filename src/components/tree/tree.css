@@ -215,7 +215,16 @@
 
 .ck-inspector-tree.ck-inspector-tree_text-direction_rtl .ck-inspector-tree-node__content {
 	direction: rtl;
+
+	& .ck-inspector-tree-node__name {
+		direction: ltr;
+	}
 }
+
+.ck-inspector-tree.ck-inspector-tree_text-direction_rtl .ck-inspector-tree__position {
+	transform: rotate(180deg);
+}
+
 
 /*-- Comment -----------------------------------------------------------------------------*/
 
