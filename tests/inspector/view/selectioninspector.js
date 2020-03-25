@@ -10,17 +10,17 @@ import TestEditor from '../../utils/testeditor';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
-import { getEditorModelRanges } from '../../../src/model/data/utils';
+import { getEditorViewRanges } from '../../../src/view/data/utils';
 
 import Button from '../../../src/components/button';
 import ObjectInspector from '../../../src/components/objectinspector';
 import Logger from '../../../src/logger';
-import ModelSelectionInspector from '../../../src/model/selectioninspector';
+import ViewSelectionInspector from '../../../src/view/selectioninspector';
 
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import BoldEditing from '@ckeditor/ckeditor5-basic-styles/src/bold/boldediting';
 
-describe( '<ModelSelectionInspector />', () => {
+describe( '<ViewSelectionInspector />', () => {
 	let editor, wrapper, element, store;
 
 	beforeEach( () => {
@@ -35,12 +35,12 @@ describe( '<ModelSelectionInspector />', () => {
 
 			store = createStore( state => state, {
 				currentEditor: editor,
-				model: {
-					ranges: getEditorModelRanges( editor )
+				view: {
+					ranges: getEditorViewRanges( editor )
 				}
 			} );
 
-			wrapper = mount( <Provider store={store}><ModelSelectionInspector /></Provider> );
+			wrapper = mount( <Provider store={store}><ViewSelectionInspector /></Provider> );
 		} );
 	} );
 
@@ -74,22 +74,15 @@ describe( '<ModelSelectionInspector />', () => {
 		} );
 
 		describe( 'selection properties', () => {
-			it( '"Attributes" should be rendered', () => {
-				const inspector = wrapper.find( ObjectInspector );
-				const lists = inspector.props().lists;
-
-				expect( lists[ 0 ].name ).to.equal( 'Attributes' );
-				expect( lists[ 0 ].itemDefinitions ).to.deep.equal( {} );
-			} );
-
 			it( '"Properties" should be rendered', () => {
 				const inspector = wrapper.find( ObjectInspector );
 				const lists = inspector.props().lists;
-				expect( lists[ 1 ].name ).to.equal( 'Properties' );
-				expect( lists[ 1 ].itemDefinitions ).to.deep.equal( {
+
+				expect( lists[ 0 ].name ).to.equal( 'Properties' );
+				expect( lists[ 0 ].itemDefinitions ).to.deep.equal( {
 					isCollapsed: { value: 'true' },
 					isBackward: { value: 'false' },
-					isGravityOverridden: { value: 'false' },
+					isFake: { value: 'false' },
 					rangeCount: { value: '1' }
 				} );
 			} );
@@ -98,15 +91,12 @@ describe( '<ModelSelectionInspector />', () => {
 				const inspector = wrapper.find( ObjectInspector );
 				const lists = inspector.props().lists;
 
-				expect( lists[ 2 ].name ).to.equal( 'Anchor' );
-				expect( lists[ 2 ].itemDefinitions ).to.deep.equal( {
-					path: { value: '[0,0]' },
-					stickiness: { value: '"toNone"' },
-					index: { value: '0' },
+				expect( lists[ 1 ].name ).to.equal( 'Anchor' );
+				expect( lists[ 1 ].itemDefinitions ).to.deep.equal( {
+					offset: { value: '0' },
 					isAtEnd: { value: 'false' },
 					isAtStart: { value: 'true' },
-					offset: { value: '0' },
-					textNode: { value: 'null' }
+					parent: { value: '"foo"' }
 				} );
 			} );
 
@@ -114,15 +104,12 @@ describe( '<ModelSelectionInspector />', () => {
 				const inspector = wrapper.find( ObjectInspector );
 				const lists = inspector.props().lists;
 
-				expect( lists[ 3 ].name ).to.equal( 'Focus' );
-				expect( lists[ 3 ].itemDefinitions ).to.deep.equal( {
-					path: { value: '[0,0]' },
-					stickiness: { value: '"toNone"' },
-					index: { value: '0' },
+				expect( lists[ 2 ].name ).to.equal( 'Focus' );
+				expect( lists[ 2 ].itemDefinitions ).to.deep.equal( {
+					offset: { value: '0' },
 					isAtEnd: { value: 'false' },
 					isAtStart: { value: 'true' },
-					offset: { value: '0' },
-					textNode: { value: 'null' }
+					parent: { value: '"foo"' }
 				} );
 			} );
 
@@ -130,31 +117,25 @@ describe( '<ModelSelectionInspector />', () => {
 				const inspector = wrapper.find( ObjectInspector );
 				const lists = inspector.props().lists;
 
-				expect( lists[ 4 ].name ).to.equal( 'Ranges' );
-				expect( lists[ 4 ].itemDefinitions ).to.deep.equal( {
+				expect( lists[ 3 ].name ).to.equal( 'Ranges' );
+				expect( lists[ 3 ].itemDefinitions ).to.deep.equal( {
 					0: {
 						subProperties: {
 							end: {
 								subProperties: {
-									index: { value: '0' },
 									isAtEnd: { value: 'false' },
 									isAtStart: { value: 'true' },
 									offset: { value: '0' },
-									path: { value: '[0,0]' },
-									stickiness: { value: '"toNone"' },
-									textNode: { value: 'null' }
+									parent: { value: '"foo"' }
 								},
 								value: ''
 							},
 							start: {
 								subProperties: {
-									index: { value: '0' },
 									isAtEnd: { value: 'false' },
 									isAtStart: { value: 'true' },
 									offset: { value: '0' },
-									path: { value: '[0,0]' },
-									stickiness: { value: '"toNone"' },
-									textNode: { value: 'null' }
+									parent: { value: '"foo"' }
 								},
 								value: ''
 							}

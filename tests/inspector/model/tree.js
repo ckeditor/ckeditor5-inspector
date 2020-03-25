@@ -43,6 +43,7 @@ describe( '<ModelTree />', () => {
 					roots: [ ...editor.model.document.roots ],
 					treeDefinition: null,
 					currentRootName: 'main',
+					currentNode: editor.model.document.getRoot(),
 					ui: {
 						showMarkers: false,
 						showCompactText: false
@@ -101,7 +102,7 @@ describe( '<ModelTree />', () => {
 			expect( tree.props().definition ).to.equal( modelTree.props().treeDefinition );
 			expect( tree.props().onClick ).to.equal( modelTree.instance().handleTreeClick );
 			expect( tree.props().showCompactText ).to.be.false;
-			expect( tree.props().activeNode ).to.be.undefined;
+			expect( tree.props().activeNode ).to.equal( editor.model.document.getRoot() );
 			expect( tree.props().textDirection ).to.equal( 'ltr' );
 		} );
 	} );
