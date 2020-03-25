@@ -43,14 +43,8 @@ export function stringifyPropertyList( list ) {
 	const stringified = {};
 
 	for ( const name in list ) {
-		let keyName = name;
-
-		if ( typeof name === 'symbol' ) {
-			keyName = name.toString();
-		}
-
-		stringified[ keyName ] = list[ name ];
-		stringified[ keyName ].value = stringify( stringified[ keyName ].value );
+		stringified[ name ] = list[ name ];
+		stringified[ name ].value = stringify( stringified[ name ].value );
 	}
 
 	return stringified;

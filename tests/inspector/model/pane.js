@@ -60,7 +60,7 @@ describe( '<ModelPane />', () => {
 	} );
 
 	describe( 'render()', () => {
-		it( 'renders a placeholder when no props#currentEditor', () => {
+		it( 'should render a placeholder when no props#currentEditor', () => {
 			store = createStore( state => state, {
 				currentEditor: null,
 				model: {

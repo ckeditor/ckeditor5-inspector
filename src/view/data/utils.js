@@ -116,7 +116,11 @@ export function getEditorViewNodeDefinition( node ) {
 			}
 		};
 
-		for ( const [ name, value ] of node.getCustomProperties() ) {
+		for ( let [ name, value ] of node.getCustomProperties() ) {
+			if ( typeof name === 'symbol' ) {
+				name = name.toString();
+			}
+
 			info.customProperties[ name ] = { value };
 		}
 	} else {
