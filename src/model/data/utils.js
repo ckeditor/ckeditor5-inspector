@@ -25,10 +25,6 @@ const MARKER_COLORS = [
 ];
 
 export function getEditorModelRoots( editor ) {
-	if ( !editor ) {
-		return null;
-	}
-
 	const roots = [ ...editor.model.document.roots ];
 
 	// Put $graveyard at the end.
@@ -80,10 +76,6 @@ export function getEditorModelMarkers( editor ) {
 }
 
 export function getEditorModelTreeDefinition( { currentEditor, currentRootName, ranges, markers } ) {
-	if ( !currentRootName ) {
-		return null;
-	}
-
 	const model = currentEditor.model;
 	const modelRoot = model.document.getRoot( currentRootName );
 
@@ -93,14 +85,6 @@ export function getEditorModelTreeDefinition( { currentEditor, currentRootName, 
 }
 
 export function getEditorModelNodeDefinition( currentEditor, node ) {
-	if ( !node ) {
-		return null;
-	}
-
-	if ( !isModelRoot( node ) && !node.parent ) {
-		return;
-	}
-
 	const definition = {
 		editorNode: node,
 		properties: {},

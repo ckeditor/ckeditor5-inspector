@@ -164,7 +164,7 @@ describe( 'model data store reducer', () => {
 				expect( modelState.currentNode ).to.equal( node );
 			} );
 
-			it( 'should be updated on updateModelState() action if the root has changed', () => {
+			it( 'should be reset on updateModelState() action if the root has changed', () => {
 				const node = editorA.model.document.getRoot();
 
 				modelState.currentNode = node;
@@ -174,7 +174,18 @@ describe( 'model data store reducer', () => {
 				expect( modelState.currentNode ).to.be.null;
 			} );
 
-			it( 'should be updated on setActiveTab() action if the root has changed', () => {
+			it( 'should be reset on updateModelState() action if the #currentNode has no parent (and isn\'t a root)', () => {
+				const node = editorA.model.document.getRoot().getChild( 0 );
+
+				node.parent = null;
+
+				modelState.currentNode = node;
+				modelState = modelReducer( globalState, modelState, updateModelState() );
+
+				expect( modelState.currentNode ).to.be.null;
+			} );
+
+			it( 'should be reset on setActiveTab() action if the root has changed', () => {
 				const node = editorA.model.document.getRoot();
 
 				modelState.currentNode = node;
@@ -186,11 +197,21 @@ describe( 'model data store reducer', () => {
 		} );
 
 		describe( '#currentNodeDefinition', () => {
-			it( 'should be refresh when #currentNode is being updated', () => {
+			it( 'should be updated when #currentNode is being updated', () => {
 				const node = editorA.model.document.getRoot();
 
 				modelState.currentNodeDefinition = null;
 				modelState = modelReducer( globalState, modelState, setModelCurrentNode( node ) );
+
+				expect( modelState.currentNodeDefinition ).to.be.an( 'object' );
+			} );
+
+			it( 'should be updated on updateModelState() action if the root has changed', () => {
+				const node = editorA.model.document.getRoot();
+
+				modelState.currentNode = node;
+				modelState.currentNodeDefinition = 'foo';
+				modelState = modelReducer( globalState, modelState, updateModelState() );
 
 				expect( modelState.currentNodeDefinition ).to.be.an( 'object' );
 			} );
@@ -202,7 +223,7 @@ describe( 'model data store reducer', () => {
 				expect( modelState.currentNodeDefinition ).to.be.null;
 			} );
 
-			it( 'should be updated on updateModelState() action if the root has changed', () => {
+			it( 'should be reset on updateModelState() action if the root has changed', () => {
 				const node = editorA.model.document.getRoot();
 
 				modelState.currentNode = node;
@@ -213,7 +234,19 @@ describe( 'model data store reducer', () => {
 				expect( modelState.currentNodeDefinition ).to.be.null;
 			} );
 
-			it( 'should be updated on setActiveTab() action if the root has changed', () => {
+			it( 'should be reset on updateModelState() action if the #currentNode has no parent (and isn\'t a root)', () => {
+				const node = editorA.model.document.getRoot().getChild( 0 );
+
+				node.parent = null;
+
+				modelState.currentNode = node;
+				modelState.currentNodeDefinition = 'foo';
+				modelState = modelReducer( globalState, modelState, updateModelState() );
+
+				expect( modelState.currentNodeDefinition ).to.be.null;
+			} );
+
+			it( 'should be reset on setActiveTab() action if the root has changed', () => {
 				const node = editorA.model.document.getRoot();
 
 				modelState.currentNode = node;
