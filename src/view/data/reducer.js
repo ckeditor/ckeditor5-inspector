@@ -14,7 +14,7 @@ import {
 import {
 	SET_EDITORS,
 	SET_CURRENT_EDITOR_NAME,
-	SET_ACTIVE_TAB
+	SET_ACTIVE_INSPECTOR_TAB
 } from '../../data/actions';
 
 import {
@@ -32,19 +32,21 @@ const LOCAL_STORAGE_ELEMENT_TYPES = 'view-element-types';
 export default function( globalState, viewState, action ) {
 	const newState = viewReducer( globalState, viewState, action );
 
-	newState.ui = viewUIReducer( globalState, newState.ui, action );
+	if ( newState ) {
+		newState.ui = viewUIReducer( globalState, newState.ui, action );
+	}
 
 	return newState;
 }
 
 function viewReducer( globalState, viewState, action ) {
-	if ( !viewState ) {
-		return getBlankViewState( globalState, viewState );
-	}
-
 	// Performance optimization: don't create the view state unless necessary.
 	if ( globalState.ui.activeTab !== 'View' ) {
 		return viewState;
+	}
+
+	if ( !viewState ) {
+		return getBlankViewState( globalState, viewState );
 	}
 
 	switch ( action.type ) {
@@ -58,10 +60,10 @@ function viewReducer( globalState, viewState, action ) {
 				currentNodeDefinition: getEditorViewNodeDefinition( action.currentNode )
 			};
 
-		// * SET_ACTIVE_TAB – Because of the performance optimization at the beginning, update the state
+		// * SET_ACTIVE_INSPECTOR_TAB – Because of the performance optimization at the beginning, update the state
 		// if we're back in the view tab.
 		// * UPDATE_MODEL_STATE – An action called by the editorEventObserver for the view document render.
-		case SET_ACTIVE_TAB:
+		case SET_ACTIVE_INSPECTOR_TAB:
 		case UPDATE_VIEW_STATE:
 			return { ...viewState, ...getEssentialState( globalState, viewState ) };
 

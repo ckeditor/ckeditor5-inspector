@@ -17,20 +17,8 @@ import SidePane from '../components/sidepane';
 import ViewTree from './tree';
 import ViewNodeInspector from './nodeinspector';
 import ViewSelectionInspector from './selectioninspector';
-import editorEventObserver from '../editorobserver';
 
 class ViewPane extends Component {
-	editorEventObserverConfig( props ) {
-		return {
-			target: props.currentEditor.editing.view,
-			event: 'render'
-		};
-	}
-
-	editorEventObserverCallback() {
-		this.props.updateViewState();
-	}
-
 	render() {
 		if ( !this.props.currentEditor ) {
 			return <Pane isEmpty="true">
@@ -59,4 +47,4 @@ const mapDispatchToProps = {
 	updateViewState
 };
 
-export default connect( mapStateToProps, mapDispatchToProps )( editorEventObserver( ViewPane ) );
+export default connect( mapStateToProps, mapDispatchToProps )( ViewPane );

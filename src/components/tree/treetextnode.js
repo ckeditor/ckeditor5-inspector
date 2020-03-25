@@ -22,7 +22,7 @@ export default class TreeTextNode extends TreeNode {
 
 		let nodeText = this.definition.text;
 
-		if ( definition.positions.length ) {
+		if ( definition.positions && definition.positions.length ) {
 			nodeText = nodeText.split( '' );
 
 			definition.positions
@@ -47,13 +47,17 @@ export default class TreeTextNode extends TreeNode {
 
 		const children = [ nodeText ];
 
-		definition.positionsBefore.forEach( ( position, index ) => {
-			children.unshift( <TreePosition key={'position-before:' + index} definition={position} /> );
-		} );
+		if ( definition.positionsBefore && definition.positionsBefore.length ) {
+			definition.positionsBefore.forEach( ( position, index ) => {
+				children.unshift( <TreePosition key={'position-before:' + index} definition={position} /> );
+			} );
+		}
 
-		definition.positionsAfter.forEach( ( position, index ) => {
-			children.push( <TreePosition key={'position-after:' + index} definition={position} /> );
-		} );
+		if ( definition.positionsAfter && definition.positionsAfter.length ) {
+			definition.positionsAfter.forEach( ( position, index ) => {
+				children.push( <TreePosition key={'position-after:' + index} definition={position} /> );
+			} );
+		}
 
 		return <span className={classes} onClick={this.handleClick}>
 			<span className="ck-inspector-tree-node__content">

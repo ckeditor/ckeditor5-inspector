@@ -50,7 +50,7 @@ export default class TreeElement extends TreeNode {
 
 		let nameToDisplay = definition.name;
 
-		if ( this.props.globalTreeProps.showElementTypes ) {
+		if ( this.globalTreeProps.showElementTypes ) {
 			nameToDisplay = definition.elementType + ':' + nameToDisplay;
 		}
 

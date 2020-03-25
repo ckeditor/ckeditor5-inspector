@@ -14,20 +14,7 @@ import SidePane from '../components/sidepane';
 import CommandTree from './tree';
 import CommandInspector from './commandinspector';
 
-import editorEventObserver from '../editorobserver';
-
 class CommandsPane extends Component {
-	editorEventObserverConfig( props ) {
-		return {
-			target: props.currentEditor.model.document,
-			event: 'change'
-		};
-	}
-
-	editorEventObserverCallback() {
-		this.props.updateCommandsState();
-	}
-
 	render() {
 		if ( !this.props.currentEditor ) {
 			return <Pane isEmpty="true">
@@ -50,4 +37,4 @@ const mapStateToProps = ( { currentEditor } ) => {
 	return { currentEditor };
 };
 
-export default connect( mapStateToProps, { updateCommandsState } )( editorEventObserver( CommandsPane ) );
+export default connect( mapStateToProps, { updateCommandsState } )( CommandsPane );

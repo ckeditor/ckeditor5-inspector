@@ -37,7 +37,7 @@ export function getViewPositionDefinition( position ) {
 	};
 }
 
-function nodeToString( node ) {
+export function nodeToString( node ) {
 	if ( isViewElement( node ) ) {
 		if ( isViewAttributeElement( node ) ) {
 			return 'attribute:' + node.name;

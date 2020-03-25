@@ -31,7 +31,7 @@ export default class TreeNode extends Component {
 	}
 
 	get globalTreeProps() {
-		return this.props.globalTreeProps;
+		return this.props.globalTreeProps || {};
 	}
 
 	get isActive() {

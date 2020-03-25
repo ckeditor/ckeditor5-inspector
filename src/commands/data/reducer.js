@@ -11,7 +11,7 @@ import {
 import {
 	SET_EDITORS,
 	SET_CURRENT_EDITOR_NAME,
-	SET_ACTIVE_TAB
+	SET_ACTIVE_INSPECTOR_TAB
 } from '../../data/actions';
 
 import {
@@ -19,7 +19,7 @@ import {
 	getEditorCommandDefinition
 } from './utils';
 
-export default function modelReducer( globalState, commandsState, action ) {
+export default function commandsReducer( globalState, commandsState, action ) {
 	// Performance optimization: don't create the commands state unless necessary.
 	if ( globalState.ui.activeTab !== 'Commands' ) {
 		return commandsState;
@@ -38,10 +38,10 @@ export default function modelReducer( globalState, commandsState, action ) {
 				currentCommandName: action.currentCommandName
 			};
 
-		// * SET_ACTIVE_TAB – Because of the performance optimization at the beginning, update the state
+		// * SET_ACTIVE_INSPECTOR_TAB – Because of the performance optimization at the beginning, update the state
 		// if we're back in the commands tab.
 		// * UPDATE_MODEL_STATE – An action called by the editorEventObserver for the model document change.
-		case SET_ACTIVE_TAB:
+		case SET_ACTIVE_INSPECTOR_TAB:
 		case UPDATE_COMMANDS_STATE:
 			return {
 				...commandsState,
