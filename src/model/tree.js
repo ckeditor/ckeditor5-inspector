@@ -13,6 +13,8 @@ import {
 	setModelActiveTab
 } from './data/actions';
 
+import { getEditorModelRoots } from './data/utils';
+
 import Tree from '../components/tree/tree';
 import NavBox from '../components/navbox';
 import Select from '../components/select';
@@ -45,7 +47,7 @@ class ModelTree extends Component {
 						id="view-root-select"
 						label="Root"
 						value={this.props.currentRootName}
-						options={this.props.roots.map( root => root.rootName )}
+						options={getEditorModelRoots( this.props.currentEditor ).map( root => root.rootName )}
 						onChange={evt => this.props.setModelCurrentRootName( evt.target.value )}
 					/>
 				</div>,
@@ -79,9 +81,9 @@ class ModelTree extends Component {
 }
 
 const mapStateToProps = (
-	{ currentEditor, model: { roots, treeDefinition, currentRootName, currentNode, ui: { showMarkers, showCompactText } } }
+	{ currentEditor, model: { treeDefinition, currentRootName, currentNode, ui: { showMarkers, showCompactText } } }
 ) => {
-	return { treeDefinition, currentEditor, currentRootName, currentNode, roots, showMarkers, showCompactText };
+	return { treeDefinition, currentEditor, currentRootName, currentNode, showMarkers, showCompactText };
 };
 
 const mapDispatchToProps = {

@@ -12,6 +12,8 @@ import {
 	setViewActiveTab
 } from './data/actions';
 
+import { getEditorViewRoots } from './data/utils';
+
 import Tree from '../components/tree/tree';
 import Select from '../components/select';
 import NavBox from '../components/navbox';
@@ -44,7 +46,7 @@ class ViewTree extends Component {
 						id="view-root-select"
 						label="Root"
 						value={this.props.currentRootName}
-						options={this.props.roots.map( root => root.rootName )}
+						options={getEditorViewRoots( this.props.currentEditor ).map( root => root.rootName )}
 						onChange={evt => this.props.setViewCurrentRootName( evt.target.value )}
 					/>
 				</div>,
@@ -69,8 +71,8 @@ class ViewTree extends Component {
 	}
 }
 
-const mapStateToProps = ( { currentEditor, view: { roots, treeDefinition, currentRootName, currentNode, ui: { showElementTypes } } } ) => {
-	return { treeDefinition, currentEditor, currentRootName, roots, currentNode, showElementTypes };
+const mapStateToProps = ( { currentEditor, view: { treeDefinition, currentRootName, currentNode, ui: { showElementTypes } } } ) => {
+	return { treeDefinition, currentEditor, currentRootName, currentNode, showElementTypes };
 };
 
 const mapDispatchToProps = {

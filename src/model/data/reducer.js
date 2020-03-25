@@ -160,14 +160,12 @@ function getBlankModelState( globalState, modelState = {} ) {
 		};
 	}
 
-	const roots = getEditorModelRoots( currentEditor );
-	const currentRootName = roots[ 0 ].rootName;
+	const currentRootName = getEditorModelRoots( currentEditor )[ 0 ].rootName;
 
 	return {
 		...modelState,
 
 		...getEssentialState( globalState, modelState, { currentRootName } ),
-		roots,
 		currentRootName,
 		currentNode: null,
 		currentNodeDefinition: null

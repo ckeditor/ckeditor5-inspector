@@ -135,14 +135,12 @@ function getNewShowElementTypesState( globalState, UIState ) {
 
 function getBlankViewState( globalState, viewState = {} ) {
 	const currentEditor = globalState.currentEditor;
-	const roots = getEditorViewRoots( currentEditor );
-	const currentRootName = roots[ 0 ].rootName;
+	const currentRootName = getEditorViewRoots( currentEditor )[ 0 ].rootName;
 
 	return {
 		...viewState,
 
 		...getEssentialState( globalState, viewState, { currentRootName } ),
-		roots,
 		currentRootName,
 		currentNode: null,
 		currentNodeDefinition: null

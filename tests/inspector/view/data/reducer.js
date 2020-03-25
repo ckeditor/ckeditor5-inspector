@@ -90,32 +90,11 @@ describe( 'view data store reducer', () => {
 		expect( viewState ).to.have.property( 'ranges' );
 		expect( viewState ).to.have.property( 'currentNode' );
 		expect( viewState ).to.have.property( 'currentNodeDefinition' );
-		expect( viewState ).to.have.property( 'roots' );
 		expect( viewState ).to.have.property( 'currentRootName' );
 		expect( viewState ).to.have.property( 'ui' );
 	} );
 
 	describe( 'application state', () => {
-		describe( '#roots', () => {
-			it( 'should be set on setEditors() action', () => {
-				viewState.roots = null;
-				globalState.currentEditor = editorB;
-
-				viewState = viewReducer( globalState, viewState, setEditors( new Map( [ [ 'b', editorB ] ] ) ) );
-
-				expect( viewState.roots[ 0 ] ).to.equal( editorB.editing.view.document.getRoot( 'main' ) );
-			} );
-
-			it( 'should be set on setCurrentEditorName() action', () => {
-				viewState.roots = null;
-				globalState.currentEditor = editorB;
-
-				viewState = viewReducer( globalState, viewState, setCurrentEditorName( 'b' ) );
-
-				expect( viewState.roots[ 0 ] ).to.equal( editorB.editing.view.document.getRoot( 'main' ) );
-			} );
-		} );
-
 		describe( '#currentRootName', () => {
 			it( 'should be updated on setViewCurrentRootName() action', () => {
 				viewState.currentRootName = null;

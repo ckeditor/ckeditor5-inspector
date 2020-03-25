@@ -93,34 +93,11 @@ describe( 'model data store reducer', () => {
 		expect( modelState ).to.have.property( 'markers' );
 		expect( modelState ).to.have.property( 'currentNode' );
 		expect( modelState ).to.have.property( 'currentNodeDefinition' );
-		expect( modelState ).to.have.property( 'roots' );
 		expect( modelState ).to.have.property( 'currentRootName' );
 		expect( modelState ).to.have.property( 'ui' );
 	} );
 
 	describe( 'application state', () => {
-		describe( '#roots', () => {
-			it( 'should be set on setEditors() action', () => {
-				modelState.roots = null;
-				globalState.currentEditor = editorB;
-
-				modelState = modelReducer( globalState, modelState, setEditors( new Map( [ [ 'b', editorB ] ] ) ) );
-
-				expect( modelState.roots[ 0 ] ).to.equal( editorB.model.document.getRoot( 'main' ) );
-				expect( modelState.roots[ 1 ] ).to.equal( editorB.model.document.getRoot( '$graveyard' ) );
-			} );
-
-			it( 'should be set on setCurrentEditorName() action', () => {
-				modelState.roots = null;
-				globalState.currentEditor = editorB;
-
-				modelState = modelReducer( globalState, modelState, setCurrentEditorName( 'b' ) );
-
-				expect( modelState.roots[ 0 ] ).to.equal( editorB.model.document.getRoot( 'main' ) );
-				expect( modelState.roots[ 1 ] ).to.equal( editorB.model.document.getRoot( '$graveyard' ) );
-			} );
-		} );
-
 		describe( '#currentRootName', () => {
 			it( 'should be updated on setModelCurrentRootName() action', () => {
 				modelState = modelReducer( globalState, modelState, setModelCurrentRootName( '$graveyard' ) );
