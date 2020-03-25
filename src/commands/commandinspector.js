@@ -28,13 +28,13 @@ class CommandInspector extends Component {
 					<a href={definition.url} target="_blank" rel="noopener noreferrer">
 						<b>{definition.type}</b>
 					</a>
-					:{definition.currentCommandName}
+					:{this.props.currentCommandName}
 				</span>,
 				<Button
 					key="exec"
 					type="exec"
 					text="Execute command"
-					onClick={() => this.props.currentEditor.execute( definition.name )}
+					onClick={() => this.props.currentEditor.execute( this.props.currentCommandName )}
 				/>,
 				<Button
 					key="log"
@@ -54,8 +54,8 @@ class CommandInspector extends Component {
 	}
 }
 
-const mapStateToProps = ( { currentEditor, commands: { currentCommandDefinition } } ) => {
-	return { currentEditor, currentCommandDefinition };
+const mapStateToProps = ( { currentEditor, commands: { currentCommandName, currentCommandDefinition } } ) => {
+	return { currentEditor, currentCommandName, currentCommandDefinition };
 };
 
 export default connect( mapStateToProps, {} )( CommandInspector );
