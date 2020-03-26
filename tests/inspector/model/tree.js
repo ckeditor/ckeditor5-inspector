@@ -51,8 +51,8 @@ describe( '<ModelTree />', () => {
 				);
 			} );
 
-			const ranges = getEditorModelRanges( editor );
-			const markers = getEditorModelMarkers( editor );
+			const ranges = getEditorModelRanges( editor, 'main' );
+			const markers = getEditorModelMarkers( editor, 'main' );
 			const definition = getEditorModelTreeDefinition( {
 				currentEditor: editor,
 				currentRootName: 'main',

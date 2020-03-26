@@ -47,7 +47,7 @@ describe( '<ModelMarkerInspector />', () => {
 				editors: new Map( [ [ 'foo', editor ] ] ),
 				currentEditorName: 'foo',
 				model: {
-					markers: getEditorModelMarkers( editor )
+					markers: getEditorModelMarkers( editor, 'main' )
 				}
 			} );
 

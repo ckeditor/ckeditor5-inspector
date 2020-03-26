@@ -37,7 +37,7 @@ describe( '<ViewSelectionInspector />', () => {
 				editors: new Map( [ [ 'test-editor', editor ] ] ),
 				currentEditorName: 'test-editor',
 				view: {
-					ranges: getEditorViewRanges( editor )
+					ranges: getEditorViewRanges( editor, 'main' )
 				}
 			} );
 

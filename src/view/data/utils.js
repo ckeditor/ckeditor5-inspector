@@ -30,7 +30,7 @@ export function getEditorViewRoots( editor ) {
 	return [ ...editor.editing.view.document.roots ];
 }
 
-export function getEditorViewRanges( editor ) {
+export function getEditorViewRanges( editor, currentRootName ) {
 	if ( !editor ) {
 		return [];
 	}
@@ -39,6 +39,10 @@ export function getEditorViewRanges( editor ) {
 	const selection = editor.editing.view.document.selection;
 
 	for ( const range of selection.getRanges() ) {
+		if ( range.root.rootName !== currentRootName ) {
+			continue;
+		}
+
 		ranges.push( {
 			type: 'selection',
 			start: getViewPositionDefinition( range.start ),

@@ -175,8 +175,10 @@ function getBlankModelState( globalState, modelState = {} ) {
 function getEssentialState( globalState, modelState, modelStateOverrides ) {
 	const currentEditor = getCurrentEditor( globalState );
 	const overriddenModelState = { ...modelState, ...modelStateOverrides };
-	const ranges = getEditorModelRanges( currentEditor );
-	const markers = getEditorModelMarkers( currentEditor );
+	const currentRootName = overriddenModelState.currentRootName;
+
+	const ranges = getEditorModelRanges( currentEditor, currentRootName );
+	const markers = getEditorModelMarkers( currentEditor, currentRootName );
 	const treeDefinition = getEditorModelTreeDefinition( {
 		currentEditor,
 		currentRootName: overriddenModelState.currentRootName,
@@ -184,7 +186,6 @@ function getEssentialState( globalState, modelState, modelStateOverrides ) {
 		markers
 	} );
 
-	const currentRootName = overriddenModelState.currentRootName;
 	let currentNode = overriddenModelState.currentNode;
 	let currentNodeDefinition = overriddenModelState.currentNodeDefinition;
 

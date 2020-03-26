@@ -42,8 +42,8 @@ describe( 'model data utils', () => {
 			// <paragraph>[]</paragraph>
 			editor.setData( '<p></p>' );
 
-			const ranges = getEditorModelRanges( editor );
-			const markers = getEditorModelMarkers( editor );
+			const ranges = getEditorModelRanges( editor, 'main' );
+			const markers = getEditorModelMarkers( editor, 'main' );
 			const definition = getEditorModelTreeDefinition( {
 				currentEditor: editor,
 				currentRootName: 'main',
@@ -85,8 +85,8 @@ describe( 'model data utils', () => {
 				writer.setSelectionFocus( root.getChild( 0 ), 0 );
 			} );
 
-			const ranges = getEditorModelRanges( editor );
-			const markers = getEditorModelMarkers( editor );
+			const ranges = getEditorModelRanges( editor, 'main' );
+			const markers = getEditorModelMarkers( editor, 'main' );
 			const definition = getEditorModelTreeDefinition( {
 				currentEditor: editor,
 				currentRootName: 'main',
@@ -130,8 +130,8 @@ describe( 'model data utils', () => {
 			// <paragraph>[]foo</paragraph>
 			editor.setData( '<p>foo</p>' );
 
-			const ranges = getEditorModelRanges( editor );
-			const markers = getEditorModelMarkers( editor );
+			const ranges = getEditorModelRanges( editor, 'main' );
+			const markers = getEditorModelMarkers( editor, 'main' );
 			const definition = getEditorModelTreeDefinition( {
 				currentEditor: editor,
 				currentRootName: 'main',
@@ -179,8 +179,8 @@ describe( 'model data utils', () => {
 				writer.setSelection( root.getChild( 0 ), 1 );
 			} );
 
-			const ranges = getEditorModelRanges( editor );
-			const markers = getEditorModelMarkers( editor );
+			const ranges = getEditorModelRanges( editor, 'main' );
+			const markers = getEditorModelMarkers( editor, 'main' );
 			const definition = getEditorModelTreeDefinition( {
 				currentEditor: editor,
 				currentRootName: 'main',
@@ -247,8 +247,8 @@ describe( 'model data utils', () => {
 				writer.setSelection( root.getChild( 0 ), 2 );
 			} );
 
-			const ranges = getEditorModelRanges( editor );
-			const markers = getEditorModelMarkers( editor );
+			const ranges = getEditorModelRanges( editor, 'main' );
+			const markers = getEditorModelMarkers( editor, 'main' );
 			const definition = getEditorModelTreeDefinition( {
 				currentEditor: editor,
 				currentRootName: 'main',
@@ -316,8 +316,8 @@ describe( 'model data utils', () => {
 				writer.setSelectionFocus( root.getChild( 0 ), 2 );
 			} );
 
-			const ranges = getEditorModelRanges( editor );
-			const markers = getEditorModelMarkers( editor );
+			const ranges = getEditorModelRanges( editor, 'main' );
+			const markers = getEditorModelMarkers( editor, 'main' );
 			const definition = getEditorModelTreeDefinition( {
 				currentEditor: editor,
 				currentRootName: 'main',

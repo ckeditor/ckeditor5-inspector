@@ -54,7 +54,7 @@ describe( 'view data utils', () => {
 				writer.insert( editor.editing.view.document.selection.getFirstPosition(), foo );
 			} );
 
-			const ranges = getEditorViewRanges( editor );
+			const ranges = getEditorViewRanges( editor, 'main' );
 			const definition = getEditorViewTreeDefinition( {
 				currentEditor: editor,
 				currentRootName: 'main',
@@ -107,7 +107,7 @@ describe( 'view data utils', () => {
 				writer.insert( editor.editing.view.document.selection.getFirstPosition(), uiElement );
 			} );
 
-			const ranges = getEditorViewRanges( editor );
+			const ranges = getEditorViewRanges( editor, 'main' );
 			const definition = getEditorViewTreeDefinition( {
 				currentEditor: editor,
 				currentRootName: 'main',
@@ -186,7 +186,7 @@ describe( 'view data utils', () => {
 					uiElement );
 			} );
 
-			const ranges = getEditorViewRanges( editor );
+			const ranges = getEditorViewRanges( editor, 'main' );
 			const definition = getEditorViewTreeDefinition( {
 				currentEditor: editor,
 				currentRootName: 'main',
@@ -232,7 +232,7 @@ describe( 'view data utils', () => {
 		it( 'should render a tree #1', () => {
 			editor.setData( '<p></p>' );
 
-			const ranges = getEditorViewRanges( editor );
+			const ranges = getEditorViewRanges( editor, 'main' );
 			const definition = getEditorViewTreeDefinition( {
 				currentEditor: editor,
 				currentRootName: 'main',
@@ -272,7 +272,7 @@ describe( 'view data utils', () => {
 				writer.setSelectionFocus( root.getChild( 0 ), 0 );
 			} );
 
-			const ranges = getEditorViewRanges( editor );
+			const ranges = getEditorViewRanges( editor, 'main' );
 			const definition = getEditorViewTreeDefinition( {
 				currentEditor: editor,
 				currentRootName: 'main',
@@ -313,7 +313,7 @@ describe( 'view data utils', () => {
 			// <p>[]foo</p>
 			editor.setData( '<p>foo</p>' );
 
-			const ranges = getEditorViewRanges( editor );
+			const ranges = getEditorViewRanges( editor, 'main' );
 			const definition = getEditorViewTreeDefinition( {
 				currentEditor: editor,
 				currentRootName: 'main',
@@ -359,7 +359,7 @@ describe( 'view data utils', () => {
 				writer.setSelection( root.getChild( 0 ).getChild( 1 ), 0 );
 			} );
 
-			const ranges = getEditorViewRanges( editor );
+			const ranges = getEditorViewRanges( editor, 'main' );
 			const definition = getEditorViewTreeDefinition( {
 				currentEditor: editor,
 				currentRootName: 'main',
@@ -422,7 +422,7 @@ describe( 'view data utils', () => {
 				writer.setSelection( root.getChild( 0 ).getChild( 1 ).getChild( 0 ), 1 );
 			} );
 
-			const ranges = getEditorViewRanges( editor );
+			const ranges = getEditorViewRanges( editor, 'main' );
 			const definition = getEditorViewTreeDefinition( {
 				currentEditor: editor,
 				currentRootName: 'main',
@@ -486,7 +486,7 @@ describe( 'view data utils', () => {
 				writer.setSelectionFocus( root.getChild( 0 ).getChild( 1 ).getChild( 0 ), 1 );
 			} );
 
-			const ranges = getEditorViewRanges( editor );
+			const ranges = getEditorViewRanges( editor, 'main' );
 			const definition = getEditorViewTreeDefinition( {
 				currentEditor: editor,
 				currentRootName: 'main',
@@ -552,7 +552,7 @@ describe( 'view data utils', () => {
 				writer.setSelectionFocus( root.getChild( 0 ), 2 );
 			} );
 
-			const ranges = getEditorViewRanges( editor );
+			const ranges = getEditorViewRanges( editor, 'main' );
 			const definition = getEditorViewTreeDefinition( {
 				currentEditor: editor,
 				currentRootName: 'main',
@@ -618,7 +618,7 @@ describe( 'view data utils', () => {
 				writer.setSelectionFocus( root.getChild( 0 ), 0 );
 			} );
 
-			const ranges = getEditorViewRanges( editor );
+			const ranges = getEditorViewRanges( editor, 'main' );
 			const definition = getEditorViewTreeDefinition( {
 				currentEditor: editor,
 				currentRootName: 'main',

@@ -37,7 +37,7 @@ export function getEditorModelRoots( editor ) {
 		.concat( roots.filter( ( { rootName } ) => rootName === '$graveyard' ) );
 }
 
-export function getEditorModelRanges( editor ) {
+export function getEditorModelRanges( editor, currentRootName ) {
 	if ( !editor ) {
 		return [];
 	}
@@ -46,6 +46,10 @@ export function getEditorModelRanges( editor ) {
 	const model = editor.model;
 
 	for ( const range of model.document.selection.getRanges() ) {
+		if ( range.root.rootName !== currentRootName ) {
+			continue;
+		}
+
 		ranges.push( {
 			type: 'selection',
 			start: getModelPositionDefinition( range.start ),
@@ -56,7 +60,7 @@ export function getEditorModelRanges( editor ) {
 	return ranges;
 }
 
-export function getEditorModelMarkers( editor ) {
+export function getEditorModelMarkers( editor, currentRootName ) {
 	if ( !editor ) {
 		return [];
 	}
@@ -67,6 +71,12 @@ export function getEditorModelMarkers( editor ) {
 
 	for ( const marker of model.markers ) {
 		const { name, affectsData, managedUsingOperations } = marker;
+		const start = marker.getStart();
+		const end = marker.getEnd();
+
+		if ( start.root.rootName !== currentRootName ) {
+			continue;
+		}
 
 		markers.push( {
 			type: 'marker',
@@ -79,8 +89,8 @@ export function getEditorModelMarkers( editor ) {
 				// the colors.
 				color: MARKER_COLORS[ markerCount++ % ( MARKER_COLORS.length - 1 ) ]
 			},
-			start: getModelPositionDefinition( marker.getStart() ),
-			end: getModelPositionDefinition( marker.getEnd() )
+			start: getModelPositionDefinition( start ),
+			end: getModelPositionDefinition( end )
 		} );
 	}
 

@@ -37,7 +37,7 @@ describe( '<ModelSelectionInspector />', () => {
 				editors: new Map( [ [ 'test-editor', editor ] ] ),
 				currentEditorName: 'test-editor',
 				model: {
-					ranges: getEditorModelRanges( editor )
+					ranges: getEditorModelRanges( editor, 'main' )
 				}
 			} );
 

@@ -150,14 +150,15 @@ function getBlankViewState( globalState, viewState = {} ) {
 
 function getEssentialState( globalState, viewState, viewStateOverrides ) {
 	const overriddenViewState = { ...viewState, ...viewStateOverrides };
-	const ranges = getEditorViewRanges( getCurrentEditor( globalState ) );
+	const currentRootName = overriddenViewState.currentRootName;
+
+	const ranges = getEditorViewRanges( getCurrentEditor( globalState ), currentRootName );
 	const treeDefinition = getEditorViewTreeDefinition( {
 		currentEditor: getCurrentEditor( globalState ),
-		currentRootName: overriddenViewState.currentRootName,
+		currentRootName,
 		ranges
 	} );
 
-	const currentRootName = overriddenViewState.currentRootName;
 	let currentNode = overriddenViewState.currentNode;
 	let currentNodeDefinition = overriddenViewState.currentNodeDefinition;
 
