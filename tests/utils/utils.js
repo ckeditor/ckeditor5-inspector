@@ -3,6 +3,8 @@
  * For licensing, see LICENSE.md.
  */
 
+import CKEditorInspector from '../../src/ckeditorinspector';
+
 export function assertTreeItems( items, expected ) {
 	if ( expected.length != items.length ) {
 		expect.fail( items, expected, 'number of items should match' );
@@ -37,4 +39,12 @@ export function assertTreeItems( items, expected ) {
 			assertTreeItems( assertedItem.children, expectedItem.children );
 		}
 	}
+}
+
+export function getStoreState() {
+	return CKEditorInspector._store.getState();
+}
+
+export function dispatchStoreAction( action ) {
+	return CKEditorInspector._store.dispatch( action );
 }

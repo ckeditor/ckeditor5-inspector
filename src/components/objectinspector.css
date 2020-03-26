@@ -29,6 +29,7 @@
 		}
 
 		& a {
+			font-weight: bold;
 			color: var(--ck-inspector-color-tree-node-name);
 		}
 
@@ -44,6 +45,7 @@
 
 		& a {
 			color: inherit;
+			font-weight: bold;
 		}
 
 		& .ck-inspector-button {

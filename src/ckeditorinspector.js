@@ -7,10 +7,22 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 
-import InspectorUI from './components/ui';
+import { reducer } from './data/reducer';
+import { setEditors } from './data/actions';
+import { updateModelState } from './model/data/actions';
+import { updateViewState } from './view/data/actions';
+import { updateCommandsState } from './commands/data/actions';
+import EditorListener from './data/utils';
+
+import InspectorUI from './ui';
 import Logger from './logger';
-import { normalizeArguments } from './utils';
+import {
+	normalizeArguments,
+	getFirstEditorName
+} from './utils';
 import './ckeditorinspector.css';
 
 // From changelog -> webpack.
@@ -127,6 +139,10 @@ export default class CKEditorInspector {
 	 * @param {String} string Name of the editor to detach.
 	 */
 	static detach( name ) {
+		if ( !CKEditorInspector._wrapper ) {
+			return;
+		}
+
 		CKEditorInspector._editors.delete( name );
 		CKEditorInspector._updateEditorsState();
 	}
@@ -142,18 +158,21 @@ export default class CKEditorInspector {
 		ReactDOM.unmountComponentAtNode( CKEditorInspector._wrapper );
 		CKEditorInspector._editors.clear();
 		CKEditorInspector._wrapper.remove();
+
+		const state = CKEditorInspector._store.getState();
+		const currentEditor = state.editors.get( state.currentEditorName );
+
+		if ( currentEditor ) {
+			CKEditorInspector._editorListener.stopListening( currentEditor );
+		}
+
+		CKEditorInspector._editorListener = null;
 		CKEditorInspector._wrapper = null;
+		CKEditorInspector._store = null;
 	}
 
 	static _updateEditorsState() {
-		// Don't update state if the application was destroyed.
-		if ( !CKEditorInspector._isMounted ) {
-			return;
-		}
-
-		CKEditorInspector._inspectorRef.current.setState( {
-			editors: CKEditorInspector._editors
-		} );
+		CKEditorInspector._store.dispatch( setEditors( CKEditorInspector._editors ) );
 	}
 
 	static _mount( options ) {
@@ -162,20 +181,65 @@ export default class CKEditorInspector {
 		}
 
 		const container = CKEditorInspector._wrapper = document.createElement( 'div' );
+		let previousEditor;
+
 		container.className = 'ck-inspector-wrapper';
 		document.body.appendChild( container );
 
-		ReactDOM.render(
-			<InspectorUI
-				ref={CKEditorInspector._inspectorRef}
-				editors={CKEditorInspector._editors}
-				isCollapsed={options.isCollapsed}
-			/>,
-			container );
-	}
+		// Create a listener that will trigger the store action when the model
+		// is changing or the view is being rendered.
+		CKEditorInspector._editorListener = new EditorListener( {
+			onModelChange() {
+				CKEditorInspector._store.dispatch( updateModelState() );
+				CKEditorInspector._store.dispatch( updateCommandsState() );
+			},
+			onViewRender() {
+				CKEditorInspector._store.dispatch( updateViewState() );
+			}
+		} );
 
-	static get _isMounted() {
-		return !!CKEditorInspector._inspectorRef.current;
+		// Create a global Redux store for the entire application. The store is extended by model, view and
+		// commands reducers. See the reducer() function to learn more.
+		CKEditorInspector._store = createStore( reducer, {
+			editors: CKEditorInspector._editors,
+			currentEditorName: getFirstEditorName( CKEditorInspector._editors ),
+			ui: {
+				isCollapsed: options.isCollapsed
+			}
+		} );
+
+		// Watch for changes of the current editor in the global store, and update the
+		// EditorListener accordingly. This ensures the EditorListener instance listens
+		// to events from the current editor only (but not the previous one).
+		CKEditorInspector._store.subscribe( () => {
+			const state = CKEditorInspector._store.getState();
+			const currentEditor = state.editors.get( state.currentEditorName );
+
+			// Either going from
+			// * no editor to a new editor
+			// * from one editor to another,
+			// * from one editor to no editor,
+			if ( previousEditor !== currentEditor ) {
+				// If there was no editor before, there's nothing to stop listening to.
+				if ( previousEditor ) {
+					CKEditorInspector._editorListener.stopListening( previousEditor );
+				}
+
+				// If going from one editor to no editor, there's nothing to start listening to.
+				if ( currentEditor ) {
+					CKEditorInspector._editorListener.startListening( currentEditor );
+				}
+
+				previousEditor = currentEditor;
+			}
+		} );
+
+		ReactDOM.render(
+			<Provider store={CKEditorInspector._store}>
+				<InspectorUI />
+			</Provider>,
+			container
+		);
 	}
 
 	static _isAttachedTo( editor ) {
@@ -184,7 +248,6 @@ export default class CKEditorInspector {
 }
 
 CKEditorInspector._editors = new Map();
-CKEditorInspector._inspectorRef = React.createRef();
 CKEditorInspector._wrapper = null;
 
 /**

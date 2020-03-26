@@ -22,7 +22,7 @@ export default class TestEditor extends Editor {
 		super( config );
 
 		this.element = element;
-		this.data.processor = new HtmlDataProcessor();
+		this.data.processor = new HtmlDataProcessor( this.data.viewDocument );
 		this.ui = new ClassicTestEditorUI( this, new BoxedEditorUIView( this.locale ) );
 		this.ui.view.editable = new InlineEditableUIView( this.ui.view.locale, this.editing.view );
 		this.model.document.createRoot();
@@ -34,7 +34,7 @@ export default class TestEditor extends Editor {
 		return super.destroy();
 	}
 
-	static create( element, config ) {
+	static create( element, config = {} ) {
 		return new Promise( resolve => {
 			const editor = new this( element, config );
 
@@ -42,7 +42,7 @@ export default class TestEditor extends Editor {
 				editor.initPlugins()
 					.then( () => editor.ui.init( element ) )
 					.then( () => editor.editing.view.attachDomRoot( editor.ui.getEditableElement() ) )
-					.then( () => editor.data.init( getDataFromElement( element ) ) )
+					.then( () => editor.data.init( config.initialData || getDataFromElement( element ) ) )
 					.then( () => {
 						editor.state = 'ready';
 						editor.fire( 'ready' );

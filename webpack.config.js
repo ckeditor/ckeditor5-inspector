@@ -6,6 +6,7 @@
 /* eslint-env node */
 
 const versionUtils = require( '@ckeditor/ckeditor5-dev-env/lib/release-tools/utils/versions' );
+const TerserPlugin = require( 'terser-webpack-plugin' );
 const webpack = require( 'webpack' );
 const path = require( 'path' );
 
@@ -22,7 +23,14 @@ module.exports = ( env, argv ) => {
 					exclude: /node_modules/,
 					loader: 'babel-loader',
 					query: {
-						presets: [ '@babel/react' ]
+						presets: [
+							[
+								'@babel/react',
+								{
+									development: devMode
+								}
+							]
+						]
 					}
 				},
 				{
@@ -50,6 +58,10 @@ module.exports = ( env, argv ) => {
 					]
 				}
 			]
+		},
+		optimization: {
+			minimize: !devMode,
+			minimizer: [ new TerserPlugin() ]
 		},
 		output: {
 			path: path.resolve( __dirname, 'build' ),

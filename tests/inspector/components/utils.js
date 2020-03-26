@@ -7,7 +7,7 @@ import {
 	stringify,
 	uid,
 	stringifyPropertyList,
-	truncateString,
+	truncateString
 } from '../../../src/components/utils';
 
 describe( 'Utils', () => {
@@ -39,15 +39,15 @@ describe( 'Utils', () => {
 
 	describe( 'stringifyPropertyList()', () => {
 		it( 'stringifies props', () => {
-			expect( stringifyPropertyList( [
-				[ 'foo', 'bar' ],
-				[ 'baz', 'qux' ],
-				[ Symbol( '42' ), 'abc' ]
-			] ) ).to.have.deep.members( [
-				[ 'foo', '"bar"' ],
-				[ 'baz', '"qux"' ],
-				[ 'Symbol(42)', '"abc"' ]
-			] );
+			expect( stringifyPropertyList( {
+				foo: { value: 'bar' },
+				baz: { value: 'qux' },
+				[ Symbol( '42' ) ]: { value: 'abc' }
+			} ) ).to.deep.equal( {
+				foo: { value: '"bar"' },
+				baz: { value: '"qux"' },
+				[ Symbol( '42' ) ]: { value: '"abc"' }
+			} );
 		} );
 	} );
 

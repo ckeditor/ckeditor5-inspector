@@ -40,13 +40,14 @@ export function uid() {
 }
 
 export function stringifyPropertyList( list ) {
-	return list.map( ( [ name, value ] ) => {
-		if ( typeof name === 'symbol' ) {
-			name = name.toString();
-		}
+	const stringified = {};
 
-		return [ name, stringify( value ) ];
-	} );
+	for ( const name in list ) {
+		stringified[ name ] = list[ name ];
+		stringified[ name ].value = stringify( stringified[ name ].value );
+	}
+
+	return stringified;
 }
 
 export function truncateString( string, length ) {

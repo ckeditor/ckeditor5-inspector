@@ -51,6 +51,16 @@
 		&.ck-inspector-property-list__title_collapsed + dd + .ck-inspector-property-list {
 			display: none;
 		}
+
+		& .ck-inspector-property-list__title__color-box {
+			width: 12px;
+			height: 12px;
+			vertical-align: text-top;
+			display: inline-block;
+			margin-right: 3px;
+			border-radius: 2px;
+			border: 1px solid black;
+		}
 	}
 
 	& dt label {

@@ -10,8 +10,22 @@
 		<h2>First editor</h2>
 		<div id="first-editor-content">
 			<h2>The three greatest things you learn from traveling</h2>
-			<p>Like <a href="https://ckeditor.com">all the <b>great things on earth</b> traveling teaches</a> us by example. Here are some of the most precious lessons I’ve
+			<p>Like <a href="https://ckeditor.com">all the <b>great things on earth</b> traveling teaches</a> us by example. Here are some <br>of the most precious lessons I’ve
 				learned over the years of traveling.</p>
+			<figure class="table">
+				<table>
+					<tbody>
+						<tr>
+							<td>a</td>
+							<td>b</td>
+						</tr>
+						<tr>
+							<td>d</td>
+							<td>e</td>
+						</tr>
+					</tbody>
+				</table>
+			</figure>
 			<figure class="media">
 				<oembed url="https://www.youtube.com/watch?v=BLJ4GKKaiXw"></oembed>
 			</figure>
@@ -86,6 +100,51 @@
 				};
 			}
 
+			function MarkerDemoPlugin( editor ) {
+				const model = editor.model;
+				const markerNames = [];
+
+				editor.conversion.for( 'editingDowncast' ).markerToHighlight( {
+					model: 'highlight',
+					view: data => {
+						const color = data.markerName.split( ':' )[ 1 ];
+
+						return {
+							classes: 'h-' + color,
+							priority: 1
+						};
+					}
+				} );
+
+				editor.conversion.for( 'dataDowncast' ).markerToHighlight( {
+					model: 'highlight',
+					view: data => {
+						const color = data.markerName.split( ':' )[ 1 ];
+
+						return {
+							classes: 'h-' + color,
+							priority: 1
+						};
+					}
+				} );
+
+				editor.on( 'ready', () => {
+					model.change( writer => {
+						const root = model.document.getRoot();
+
+						const nameA = 'highlight:yellow:123';
+						const rangeA = model.createRange( model.createPositionFromPath( root, [ 0, 10 ] ), model.createPositionFromPath( root, [ 0, 16 ] ) );
+
+						const nameB = 'highlight:blue:456';
+						const rangeB = model.createRange( model.createPositionFromPath( root, [ 0, 12 ] ), model.createPositionFromPath( root, [ 0, 22 ] ) );
+
+						markerNames.push( nameA, nameB );
+						writer.addMarker( nameA, { range: rangeA, usingOperation: false, affectsData: true } );
+						writer.addMarker( nameB, { range: rangeB, usingOperation: false, affectsData: true } );
+					} );
+				} );
+			}
+
 			let editorNames = [];
 
 			document.querySelector( '#destroy-inspector' ).addEventListener( 'click', () => {
@@ -106,7 +165,7 @@
 
 			DecoupledEditor
 				.create( document.querySelector( '#first-editor-content' ), {
-					extraPlugins: [ UploadAdapter ]
+					extraPlugins: [ UploadAdapter, MarkerDemoPlugin ]
 				} )
 				.then( editor => {
 					window.firstEditor = editor;
@@ -138,7 +197,7 @@
 					language: 'ar'
 				} )
 				.then( editor => {
-					window.secondEditor = editor;
+					window.thirdEditor = editor;
 					document.body.insertBefore( editor.ui.view.toolbar.element, editor.ui.getEditableElement() );
 					const [ name ] = CKEditorInspector.attach( { 'rtl': editor } );
 					editorNames.push( name );
@@ -150,13 +209,19 @@
 	</body>
 	<style>
 		body {
-			width: 960px;
-			margin: 0 auto;
 			padding: 2em;
 		}
 
 		.ck.ck-editor__editable {
 			border: 1px solid rgba(0, 0, 0, 0.15);
+		}
+
+		.ck-content .h-yellow {
+			background: rgba(251, 255, 0, 0.534);
+		}
+
+		.ck-content .h-blue {
+			background: rgba(0, 197, 247, 0.568);
 		}
 	</style>
 </html>
