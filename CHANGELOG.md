@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## [2.0.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v1.5.0...v2.0.0) (2020-03-26)
+
+### Features
+
+* Implemented markers preview in the "Model" tree. Implemented the "Markers" tab. Implemented support for multiple model/view ranges both in the trees and "Selection" tabs. Improved selection rendering in trees for smooth UX. Closes [#12](https://github.com/ckeditor/ckeditor5-inspector/issues/12). Closes [#7](https://github.com/ckeditor/ckeditor5-inspector/issues/7). Closes [#68](https://github.com/ckeditor/ckeditor5-inspector/issues/68). Closes [#73](https://github.com/ckeditor/ckeditor5-inspector/issues/73). ([0d58db6](https://github.com/ckeditor/ckeditor5-inspector/commit/0d58db6))
+
+
 ## [1.5.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v1.4.0...v1.5.0) (2019-12-05)
 
 ### Features
