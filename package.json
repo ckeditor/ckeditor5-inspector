@@ -86,6 +86,7 @@
     "redux": "^4.0.5",
     "sinon": "^7.2.3",
     "style-loader": "^0.23.1",
+    "terser-webpack-plugin": "^2.3.5",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.2.3"
   },
