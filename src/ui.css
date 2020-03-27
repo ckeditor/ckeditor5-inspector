@@ -15,7 +15,7 @@
 
 /* Reset first */
 .ck-inspector,
-.ck-inspector * {
+.ck-inspector *:not(select) {
 	box-sizing: border-box;
 	width: auto;
 	height: auto;
@@ -93,6 +93,10 @@
 .ck-inspector .ck-inspector-editor-selector {
 	margin-left: auto;
 	margin-right: 1em;
+
+	& select {
+		margin-left: 1em;
+	}
 }
 
 .ck-inspector .ck-inspector-code {
