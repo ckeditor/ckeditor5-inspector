@@ -73,27 +73,43 @@ describe( '<ModelSelectionInspector />', () => {
 				sinon.assert.calledOnce( logSpy );
 			} );
 
-			it( 'should contain the scroll to selection button', () => {
-				const scrollToSelButton = wrapper.find( Button ).at( 1 );
+			describe( 'scroll to selection button', () => {
+				it( 'should be created and scroll to the selection', () => {
+					const scrollToSelButton = wrapper.find( Button ).at( 1 );
 
-				const domSelectionElementStub = {
-					scrollIntoView: sinon.spy()
-				};
+					const domSelectionElementStub = {
+						scrollIntoView: sinon.spy()
+					};
 
-				sinon.stub( document, 'querySelector' );
+					sinon.stub( document, 'querySelector' );
 
-				document.querySelector.withArgs( '.ck-inspector-tree__position.ck-inspector-tree__position_selection' )
-					.returns( domSelectionElementStub );
+					document.querySelector.withArgs( '.ck-inspector-tree__position.ck-inspector-tree__position_selection' )
+						.returns( domSelectionElementStub );
 
-				scrollToSelButton.simulate( 'click' );
+					scrollToSelButton.simulate( 'click' );
 
-				sinon.assert.calledOnce( domSelectionElementStub.scrollIntoView );
-				sinon.assert.calledWithExactly( domSelectionElementStub.scrollIntoView, {
-					behavior: 'smooth',
-					block: 'center'
+					sinon.assert.calledOnce( domSelectionElementStub.scrollIntoView );
+					sinon.assert.calledWithExactly( domSelectionElementStub.scrollIntoView, {
+						behavior: 'smooth',
+						block: 'center'
+					} );
+
+					document.querySelector.restore();
 				} );
 
-				document.querySelector.restore();
+				it( 'should not throw when the selection is in a different root', () => {
+					const scrollToSelButton = wrapper.find( Button ).at( 1 );
+
+					sinon.stub( document, 'querySelector' );
+
+					document.querySelector.returns( null );
+
+					expect( () => {
+						scrollToSelButton.simulate( 'click' );
+					} ).to.not.throw();
+
+					document.querySelector.restore();
+				} );
 			} );
 
 			it( 'should contain the log selection anchor button', () => {

@@ -27,6 +27,11 @@ class ViewSelectionInspector extends Component {
 	handleScrollToSelectionButtonClick() {
 		const domSelectionElement = document.querySelector( '.ck-inspector-tree__position.ck-inspector-tree__position_selection' );
 
+		// E.g. wrong root is selected.
+		if ( !domSelectionElement ) {
+			return;
+		}
+
 		domSelectionElement.scrollIntoView( {
 			behavior: 'smooth',
 			block: 'center'
