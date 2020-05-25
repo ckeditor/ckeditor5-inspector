@@ -41,9 +41,27 @@
 				align-items: center;
 			}
 
-			& .ck-inspector-tree__config label {
-				margin-left: 1em;
-				margin-right: 1em;
+			& .ck-inspector-tree__config {
+				& + .ck-inspector-tree__config {
+					&::before {
+						content: "";
+						border-right: 1px solid #999;
+						display: inline-block;
+						width: 0px;
+						height: 20px;
+						opacity: .5;
+						margin: 0 1em;
+						vertical-align: middle;
+					}
+				}
+
+				& label {
+					margin: 0 .5em;
+				}
+
+				& input + label {
+					margin-right: 1em;
+				}
 			}
 		}
 	}

@@ -9,13 +9,13 @@ import './checkbox.css';
 export default class Checkbox extends Component {
 	render() {
 		return [
-			<label htmlFor={this.props.id} key="label">{this.props.label}:</label>,
 			<input type="checkbox"
 				className="ck-inspector-checkbox"
 				id={this.props.id}
 				key="input"
 				checked={this.props.isChecked}
-				onChange={this.props.onChange} />
+				onChange={this.props.onChange} />,
+			<label htmlFor={this.props.id} key="label">{this.props.label}</label>
 		];
 	}
 }
