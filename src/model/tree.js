@@ -25,6 +25,7 @@ class ModelTree extends Component {
 		super( props );
 
 		this.handleTreeClick = this.handleTreeClick.bind( this );
+		this.handleRootChange = this.handleRootChange.bind( this );
 	}
 
 	handleTreeClick( evt, currentNode ) {
@@ -39,6 +40,10 @@ class ModelTree extends Component {
 		}
 	}
 
+	handleRootChange( evt ) {
+		this.props.setModelCurrentRootName( evt.target.value );
+	}
+
 	render() {
 		const currentEditor = this.props.editors.get( this.props.currentEditorName );
 
@@ -50,7 +55,7 @@ class ModelTree extends Component {
 						label="Root"
 						value={this.props.currentRootName}
 						options={getEditorModelRoots( currentEditor ).map( root => root.rootName )}
-						onChange={evt => this.props.setModelCurrentRootName( evt.target.value )}
+						onChange={this.handleRootChange}
 					/>
 				</div>,
 				<div className="ck-inspector-tree__config" key="text-cfg">

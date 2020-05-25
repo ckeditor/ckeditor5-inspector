@@ -14,6 +14,16 @@ import { DOCS_URL_PREFIX } from './data/utils';
 import Logger from '../logger';
 
 class ViewNodeInspector extends Component {
+	constructor( props ) {
+		super( props );
+
+		this.handleNodeLogButtonClick = this.handleNodeLogButtonClick.bind( this );
+	}
+
+	handleNodeLogButtonClick() {
+		Logger.log( this.props.currentNodeDefinition.editorNode );
+	}
+
 	render() {
 		const definition = this.props.currentNodeDefinition;
 
@@ -35,7 +45,7 @@ class ViewNodeInspector extends Component {
 					key="log"
 					type="log"
 					text="Log in console"
-					onClick={() => Logger.log( definition.editorNode )}
+					onClick={this.handleNodeLogButtonClick}
 				/>
 			]}
 			lists={[

@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import isEqual from 'react-fast-compare';
 
 import TreeNode from './treenode';
 import TreeNodeAttribute from './treenodeattribute';
@@ -25,7 +26,9 @@ export default class TreeTextNode extends TreeNode {
 		if ( definition.positions && definition.positions.length ) {
 			nodeText = nodeText.split( '' );
 
-			definition.positions
+			// Don't alter the props (sort&reverse would do that in place) because next time it will cause unnecessary
+			// rendering due to equality check indicating old and new props are different arrays.
+			Array.from( definition.positions )
 				.sort( ( posA, posB ) => {
 					if ( posA.offset < posB.offset ) {
 						return -1;
@@ -82,5 +85,9 @@ export default class TreeTextNode extends TreeNode {
 		return <span className="ck-inspector-tree-text__attributes">
 			{attributes}
 		</span>;
+	}
+
+	shouldComponentUpdate( nextProps ) {
+		return !isEqual( this.props, nextProps );
 	}
 }

@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-
+import isEqual from 'react-fast-compare';
 import TreeNode from './treenode';
 import TreeNodeAttribute from './treenodeattribute';
 import TreePosition from './treeposition';
@@ -85,5 +85,9 @@ export default class TreeElement extends TreeNode {
 		}
 
 		return attributes;
+	}
+
+	shouldComponentUpdate( nextProps ) {
+		return !isEqual( this.props, nextProps );
 	}
 }

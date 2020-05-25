@@ -27,18 +27,22 @@ describe( '<PropertyList />', () => {
 			qux: { value: 'baz' }
 		};
 
-		wrapper = mount( <PropertyList itemDefinitions={definitions} /> );
+		wrapper = mount( <PropertyList itemDefinitions={definitions} name="listName" /> );
 
 		const dt1 = wrapper.children().childAt( 0 );
 		const dd1 = wrapper.children().childAt( 1 );
 		const dt2 = wrapper.children().childAt( 2 );
 		const dd2 = wrapper.children().childAt( 3 );
 
-		expect( dt1.html() ).to.match( /<dt class="ck-inspector-property-list__title"><label for="[^-]+-foo-input">foo<\/label>:<\/dt>/ );
-		expect( dt2.html() ).to.match( /<dt class="ck-inspector-property-list__title"><label for="[^-]+-qux-input">qux<\/label>:<\/dt>/ );
+		expect( dt1.html() ).to.match(
+			/<dt class="ck-inspector-property-list__title"><label for="[^-]+-foo-value-input">foo<\/label>:<\/dt>/
+		);
+		expect( dt2.html() ).to.match(
+			/<dt class="ck-inspector-property-list__title"><label for="[^-]+-qux-value-input">qux<\/label>:<\/dt>/
+		);
 
-		expect( dd1.html() ).to.match( /<dd><input id="[^-]+-foo-input" type="text" readonly="" value="bar"><\/dd>/ );
-		expect( dd2.html() ).to.match( /<dd><input id="[^-]+-qux-input" type="text" readonly="" value="baz"><\/dd>/ );
+		expect( dd1.html() ).to.match( /<dd><input id="[^-]+-foo-value-input" type="text" readonly="" value="bar"><\/dd>/ );
+		expect( dd2.html() ).to.match( /<dd><input id="[^-]+-qux-value-input" type="text" readonly="" value="baz"><\/dd>/ );
 
 		expect( dt1.find( 'label' ) ).to.have.attr( 'for' ).equal( dd1.find( 'input' ).prop( 'id' ) );
 		expect( dt2.find( 'label' ) ).to.have.attr( 'for' ).equal( dd2.find( 'input' ).prop( 'id' ) );
@@ -55,7 +59,7 @@ describe( '<PropertyList />', () => {
 			}
 		};
 
-		wrapper = mount( <PropertyList itemDefinitions={definitions} /> );
+		wrapper = mount( <PropertyList itemDefinitions={definitions} name="listName" /> );
 
 		const dt1 = wrapper.children().childAt( 0 );
 		const dd1 = wrapper.children().childAt( 1 );
@@ -68,11 +72,11 @@ describe( '<PropertyList />', () => {
 				'ck-inspector-property-list__title_collapsed' +
 			'">' +
 				'<button type="button">Toggle</button>' +
-				'<label for="[^-]+-foo-input">foo</label>:' +
+				'<label for="[^-]+-foo-value-input">foo</label>:' +
 			'</dt>'
 		) );
 
-		expect( dd1.html() ).to.match( /<dd><input id="[^-]+-foo-input" type="text" readonly="" value="bar"><\/dd>/ );
+		expect( dd1.html() ).to.match( /<dd><input id="[^-]+-foo-value-input" type="text" readonly="" value="bar"><\/dd>/ );
 		expect( dl.props().itemDefinitions ).to.deep.equal( {
 			'subA-name': { value: 'subA-value' },
 			'subB-name': { value: 'subB-value' }

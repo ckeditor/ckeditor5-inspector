@@ -4,6 +4,7 @@
  */
 
 import React, { Component } from 'react';
+import isEqual from 'react-fast-compare';
 
 export default class Select extends Component {
 	render() {
@@ -20,5 +21,9 @@ export default class Select extends Component {
 				} )}
 			</select>
 		];
+	}
+
+	shouldComponentUpdate( nextProps ) {
+		return !isEqual( this.props, nextProps );
 	}
 }

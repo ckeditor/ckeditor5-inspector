@@ -13,6 +13,16 @@ import ObjectInspector from '../components/objectinspector';
 import Logger from '../logger';
 
 class ModelNodeInspector extends Component {
+	constructor( props ) {
+		super( props );
+
+		this.handleNodeLogButtonClick = this.handleNodeLogButtonClick.bind( this );
+	}
+
+	handleNodeLogButtonClick() {
+		Logger.log( this.props.currentNodeDefinition.editorNode );
+	}
+
 	render() {
 		const definition = this.props.currentNodeDefinition;
 
@@ -34,7 +44,7 @@ class ModelNodeInspector extends Component {
 					key="log"
 					type="log"
 					text="Log in console"
-					onClick={() => Logger.log( definition.editorNode )}
+					onClick={this.handleNodeLogButtonClick}
 				/>
 			]}
 			lists={[

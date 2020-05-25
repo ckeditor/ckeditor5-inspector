@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md.
  */
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { truncateString } from '../utils';
 
 const MAX_ATTRIBUTE_VALUE_LENGTH = 500;
@@ -11,7 +11,7 @@ const MAX_ATTRIBUTE_VALUE_LENGTH = 500;
 /**
  * A class which instances represent attributes in the tree.
  */
-export default class TreeNodeAttribute extends Component {
+export default class TreeNodeAttribute extends PureComponent {
 	render() {
 		let valueElement;
 		const value = truncateString( this.props.value, MAX_ATTRIBUTE_VALUE_LENGTH );

@@ -3,12 +3,12 @@
  * For licensing, see LICENSE.md.
  */
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropertyList from './propertylist';
 import Button from './button';
 import './objectinspector.css';
 
-export default class ObjectInspector extends Component {
+export default class ObjectInspector extends PureComponent {
 	render() {
 		const content = [];
 
@@ -27,6 +27,7 @@ export default class ObjectInspector extends Component {
 				</h3>,
 				<PropertyList
 					key={`${ list.name }-list`}
+					name={list.name}
 					itemDefinitions={list.itemDefinitions}
 					presentation={list.presentation}
 				/>

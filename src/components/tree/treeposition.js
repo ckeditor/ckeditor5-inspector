@@ -4,6 +4,7 @@
  */
 
 import React, { Component } from 'react';
+import isEqual from 'react-fast-compare';
 
 /**
  * A class which instances represent positions (selection, markers) in the tree.
@@ -30,5 +31,9 @@ export default class TreePosition extends Component {
 		}
 
 		return <span {...attrs}>&#8203;</span>;
+	}
+
+	shouldComponentUpdate( nextProps ) {
+		return !isEqual( this.props, nextProps );
 	}
 }
