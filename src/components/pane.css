@@ -45,11 +45,10 @@
 				& + .ck-inspector-tree__config {
 					&::before {
 						content: "";
-						border-right: 1px solid #999;
+						border-right: 1px solid var(--ck-inspector-color-border);
 						display: inline-block;
 						width: 0px;
 						height: 20px;
-						opacity: .5;
 						margin: 0 1em;
 						vertical-align: middle;
 					}
