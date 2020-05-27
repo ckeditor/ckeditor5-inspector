@@ -3,6 +3,8 @@
  * For licensing, see LICENSE.md.
  */
 
+/* global document */
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
@@ -16,6 +18,26 @@ import { getModelPositionDefinition } from './utils';
 const API_DOCS_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_selection-Selection.html';
 
 class ModelSelectionInspector extends Component {
+	constructor( props ) {
+		super( props );
+
+		this.handleScrollToSelectionButtonClick = this.handleScrollToSelectionButtonClick.bind( this );
+	}
+
+	handleScrollToSelectionButtonClick() {
+		const domSelectionElement = document.querySelector( '.ck-inspector-tree__position.ck-inspector-tree__position_selection' );
+
+		// E.g. wrong root is selected.
+		if ( !domSelectionElement ) {
+			return;
+		}
+
+		domSelectionElement.scrollIntoView( {
+			behavior: 'smooth',
+			block: 'center'
+		} );
+	}
+
 	render() {
 		const editor = this.props.editors.get( this.props.currentEditorName );
 		const info = this.getEditorSelectionInfo( editor );
@@ -33,6 +55,12 @@ class ModelSelectionInspector extends Component {
 					type="log"
 					text="Log in console"
 					onClick={() => Logger.log( editor.model.document.selection )}
+				/>,
+				<Button
+					key="scroll"
+					type="scroll"
+					text="Scroll to selection"
+					onClick={this.handleScrollToSelectionButtonClick}
 				/>
 			]}
 			lists={[

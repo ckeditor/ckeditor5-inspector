@@ -54,24 +54,84 @@ describe( '<ViewSelectionInspector />', () => {
 	} );
 
 	describe( 'render()', () => {
-		it( 'should render the inspector', () => {
-			const logSelButton = wrapper.find( Button ).first();
-			const logAnchorButton = wrapper.find( Button ).at( 1 );
-			const logFocusButton = wrapper.find( Button ).last();
+		describe( 'inspector child components', () => {
+			let logSpy;
 
-			const logSpy = sinon.stub( Logger, 'log' ).callsFake( () => {} );
+			beforeEach( () => {
+				logSpy = sinon.stub( Logger, 'log' ).callsFake( () => {} );
+			} );
 
-			expect( wrapper.find( ObjectInspector ) ).to.have.length( 1 );
-			expect( wrapper.childAt( 0 ).find( 'h2 span' ).text() ).to.equal( 'Selection' );
+			afterEach( () => {
+				Logger.log.restore();
+			} );
 
-			logSelButton.simulate( 'click' );
-			sinon.assert.calledOnce( logSpy );
+			it( 'should contain the log selection button', () => {
+				const logSelButton = wrapper.find( Button ).first();
 
-			logAnchorButton.simulate( 'click' );
-			sinon.assert.calledTwice( logSpy );
+				logSelButton.simulate( 'click' );
 
-			logFocusButton.simulate( 'click' );
-			sinon.assert.calledThrice( logSpy );
+				sinon.assert.calledOnce( logSpy );
+			} );
+
+			describe( 'scroll to selection button', () => {
+				it( 'should be created and scroll to the selection', () => {
+					const scrollToSelButton = wrapper.find( Button ).at( 1 );
+
+					const domSelectionElementStub = {
+						scrollIntoView: sinon.spy()
+					};
+
+					sinon.stub( document, 'querySelector' );
+
+					document.querySelector.withArgs( '.ck-inspector-tree__position.ck-inspector-tree__position_selection' )
+						.returns( domSelectionElementStub );
+
+					scrollToSelButton.simulate( 'click' );
+
+					sinon.assert.calledOnce( domSelectionElementStub.scrollIntoView );
+					sinon.assert.calledWithExactly( domSelectionElementStub.scrollIntoView, {
+						behavior: 'smooth',
+						block: 'center'
+					} );
+
+					document.querySelector.restore();
+				} );
+
+				it( 'should not throw when the selection is in a different root', () => {
+					const scrollToSelButton = wrapper.find( Button ).at( 1 );
+
+					sinon.stub( document, 'querySelector' );
+
+					document.querySelector.returns( null );
+
+					expect( () => {
+						scrollToSelButton.simulate( 'click' );
+					} ).to.not.throw();
+
+					document.querySelector.restore();
+				} );
+			} );
+
+			it( 'should contain the log selection anchor button', () => {
+				const logAnchorButton = wrapper.find( Button ).at( 2 );
+
+				logAnchorButton.simulate( 'click' );
+
+				sinon.assert.calledOnce( logSpy );
+			} );
+
+			it( 'should contain the log selection focus button', () => {
+				const logFocusButton = wrapper.find( Button ).last();
+
+				logFocusButton.simulate( 'click' );
+
+				sinon.assert.calledOnce( logSpy );
+			} );
+
+			it( 'should contain the object inspector', () => {
+				expect( wrapper.find( ObjectInspector ) ).to.have.length( 1 );
+				expect( wrapper.childAt( 0 ).find( 'h2 span' ).text() ).to.equal( 'Selection' );
+			} );
 		} );
 
 		describe( 'selection properties', () => {
