@@ -21,7 +21,14 @@ class ModelSelectionInspector extends Component {
 	constructor( props ) {
 		super( props );
 
+		this.handleSelectionLogButtonClick = this.handleSelectionLogButtonClick.bind( this );
 		this.handleScrollToSelectionButtonClick = this.handleScrollToSelectionButtonClick.bind( this );
+	}
+
+	handleSelectionLogButtonClick() {
+		const editor = this.props.editor;
+
+		Logger.log( editor.model.document.selection );
 	}
 
 	handleScrollToSelectionButtonClick() {
@@ -39,8 +46,8 @@ class ModelSelectionInspector extends Component {
 	}
 
 	render() {
-		const editor = this.props.editors.get( this.props.currentEditorName );
-		const info = this.getEditorSelectionInfo( editor );
+		const editor = this.props.editor;
+		const info = this.props.info;
 
 		return <ObjectInspector
 			header={[
@@ -54,7 +61,7 @@ class ModelSelectionInspector extends Component {
 					key="log"
 					type="log"
 					text="Log in console"
-					onClick={() => Logger.log( editor.model.document.selection )}
+					onClick={this.handleSelectionLogButtonClick}
 				/>,
 				<Button
 					key="scroll"
@@ -116,66 +123,15 @@ class ModelSelectionInspector extends Component {
 			]}
 		/>;
 	}
-
-	getEditorSelectionInfo( editor ) {
-		const selection = editor.model.document.selection;
-		const anchor = selection.anchor;
-		const focus = selection.focus;
-		const info = {
-			properties: {
-				isCollapsed: {
-					value: selection.isCollapsed
-				},
-				isBackward: {
-					value: selection.isBackward
-				},
-				isGravityOverridden: {
-					value: selection.isGravityOverridden
-				},
-				rangeCount: {
-					value: selection.rangeCount
-				}
-			},
-			attributes: {},
-			anchor: getPositionDetails( getModelPositionDefinition( anchor ) ),
-			focus: getPositionDetails( getModelPositionDefinition( focus ) ),
-			ranges: {}
-		};
-
-		for ( const [ name, value ] of selection.getAttributes() ) {
-			info.attributes[ name ] = { value };
-		}
-
-		this.props.ranges.forEach( ( range, index ) => {
-			info.ranges[ index ] = {
-				value: '',
-				subProperties: {
-					start: {
-						value: '',
-						subProperties: stringifyPropertyList( getPositionDetails( range.start ) )
-					},
-					end: {
-						value: '',
-						subProperties: stringifyPropertyList( getPositionDetails( range.end ) )
-					}
-				}
-			};
-		} );
-
-		for ( const category in info ) {
-			if ( category === 'ranges' ) {
-				continue;
-			}
-
-			info[ category ] = stringifyPropertyList( info[ category ] );
-		}
-
-		return info;
-	}
 }
 
 const mapStateToProps = ( { editors, currentEditorName, model: { ranges } } ) => {
-	return { editors, currentEditorName, ranges };
+	const editor = editors.get( currentEditorName );
+	const info = getEditorSelectionInfo( editor, ranges );
+
+	return {
+		editor, currentEditorName, info
+	};
 };
 
 export default connect( mapStateToProps, {} )( ModelSelectionInspector );
@@ -204,4 +160,60 @@ function getPositionDetails( { path, stickiness, index, isAtEnd, isAtStart, offs
 			value: textNode
 		}
 	};
+}
+
+function getEditorSelectionInfo( editor, ranges ) {
+	const selection = editor.model.document.selection;
+	const anchor = selection.anchor;
+	const focus = selection.focus;
+	const info = {
+		properties: {
+			isCollapsed: {
+				value: selection.isCollapsed
+			},
+			isBackward: {
+				value: selection.isBackward
+			},
+			isGravityOverridden: {
+				value: selection.isGravityOverridden
+			},
+			rangeCount: {
+				value: selection.rangeCount
+			}
+		},
+		attributes: {},
+		anchor: getPositionDetails( getModelPositionDefinition( anchor ) ),
+		focus: getPositionDetails( getModelPositionDefinition( focus ) ),
+		ranges: {}
+	};
+
+	for ( const [ name, value ] of selection.getAttributes() ) {
+		info.attributes[ name ] = { value };
+	}
+
+	ranges.forEach( ( range, index ) => {
+		info.ranges[ index ] = {
+			value: '',
+			subProperties: {
+				start: {
+					value: '',
+					subProperties: stringifyPropertyList( getPositionDetails( range.start ) )
+				},
+				end: {
+					value: '',
+					subProperties: stringifyPropertyList( getPositionDetails( range.end ) )
+				}
+			}
+		};
+	} );
+
+	for ( const category in info ) {
+		if ( category === 'ranges' ) {
+			continue;
+		}
+
+		info[ category ] = stringifyPropertyList( info[ category ] );
+	}
+
+	return info;
 }

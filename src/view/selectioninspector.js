@@ -21,7 +21,14 @@ class ViewSelectionInspector extends Component {
 	constructor( props ) {
 		super( props );
 
+		this.handleSelectionLogButtonClick = this.handleSelectionLogButtonClick.bind( this );
 		this.handleScrollToSelectionButtonClick = this.handleScrollToSelectionButtonClick.bind( this );
+	}
+
+	handleSelectionLogButtonClick() {
+		const editor = this.props.editor;
+
+		Logger.log( editor.editing.view.document.selection );
 	}
 
 	handleScrollToSelectionButtonClick() {
@@ -39,8 +46,8 @@ class ViewSelectionInspector extends Component {
 	}
 
 	render() {
-		const editor = this.props.editors.get( this.props.currentEditorName );
-		const info = this.getEditorSelectionInfo( editor );
+		const editor = this.props.editor;
+		const info = this.props.info;
 
 		return <ObjectInspector
 			header={[
@@ -54,7 +61,7 @@ class ViewSelectionInspector extends Component {
 					key="log"
 					type="log"
 					text="Log in console"
-					onClick={() => Logger.log( editor.editing.view.document.selection )}
+					onClick={this.handleSelectionLogButtonClick}
 				/>,
 				<Button
 					key="scroll"
@@ -111,59 +118,13 @@ class ViewSelectionInspector extends Component {
 			]}
 		/>;
 	}
-
-	getEditorSelectionInfo( editor ) {
-		const selection = editor.editing.view.document.selection;
-		const info = {
-			properties: {
-				isCollapsed: {
-					value: selection.isCollapsed
-				},
-				isBackward: {
-					value: selection.isBackward
-				},
-				isFake: {
-					value: selection.isFake
-				},
-				rangeCount: {
-					value: selection.rangeCount
-				}
-			},
-			anchor: getPositionDetails( getViewPositionDefinition( selection.anchor ) ),
-			focus: getPositionDetails( getViewPositionDefinition( selection.focus ) ),
-			ranges: {}
-		};
-
-		this.props.ranges.forEach( ( range, index ) => {
-			info.ranges[ index ] = {
-				value: '',
-				subProperties: {
-					start: {
-						value: '',
-						subProperties: stringifyPropertyList( getPositionDetails( range.start ) )
-					},
-					end: {
-						value: '',
-						subProperties: stringifyPropertyList( getPositionDetails( range.end ) )
-					}
-				}
-			};
-		} );
-
-		for ( const category in info ) {
-			if ( category === 'ranges' ) {
-				continue;
-			}
-
-			info[ category ] = stringifyPropertyList( info[ category ] );
-		}
-
-		return info;
-	}
 }
 
 const mapStateToProps = ( { editors, currentEditorName, view: { ranges } } ) => {
-	return { editors, currentEditorName, ranges };
+	const editor = editors.get( currentEditorName );
+	const info = getEditorSelectionInfo( editor, ranges );
+
+	return { editor, currentEditorName, info };
 };
 
 export default connect( mapStateToProps, {} )( ViewSelectionInspector );
@@ -183,4 +144,53 @@ function getPositionDetails( { offset, isAtEnd, isAtStart, parent } ) {
 			value: parent
 		}
 	};
+}
+
+function getEditorSelectionInfo( editor, ranges ) {
+	const selection = editor.editing.view.document.selection;
+	const info = {
+		properties: {
+			isCollapsed: {
+				value: selection.isCollapsed
+			},
+			isBackward: {
+				value: selection.isBackward
+			},
+			isFake: {
+				value: selection.isFake
+			},
+			rangeCount: {
+				value: selection.rangeCount
+			}
+		},
+		anchor: getPositionDetails( getViewPositionDefinition( selection.anchor ) ),
+		focus: getPositionDetails( getViewPositionDefinition( selection.focus ) ),
+		ranges: {}
+	};
+
+	ranges.forEach( ( range, index ) => {
+		info.ranges[ index ] = {
+			value: '',
+			subProperties: {
+				start: {
+					value: '',
+					subProperties: stringifyPropertyList( getPositionDetails( range.start ) )
+				},
+				end: {
+					value: '',
+					subProperties: stringifyPropertyList( getPositionDetails( range.end ) )
+				}
+			}
+		};
+	} );
+
+	for ( const category in info ) {
+		if ( category === 'ranges' ) {
+			continue;
+		}
+
+		info[ category ] = stringifyPropertyList( info[ category ] );
+	}
+
+	return info;
 }

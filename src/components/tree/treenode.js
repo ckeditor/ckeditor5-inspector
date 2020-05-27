@@ -5,6 +5,7 @@
 
 import { Component } from 'react';
 import { renderTreeNodeFromDefinition } from './utils';
+import isEqual from 'react-fast-compare';
 
 /**
  * A base class for nodes in the tree.
@@ -36,5 +37,9 @@ export default class TreeNode extends Component {
 
 	get isActive() {
 		return this.definition.node === this.globalTreeProps.activeNode;
+	}
+
+	shouldComponentUpdate( nextProps ) {
+		return !isEqual( this.props, nextProps );
 	}
 }

@@ -13,6 +13,21 @@ import ObjectInspector from '../components/objectinspector';
 import Logger from '../logger';
 
 class CommandInspector extends Component {
+	constructor( props ) {
+		super( props );
+
+		this.handleCommandLogButtonClick = this.handleCommandLogButtonClick.bind( this );
+		this.handleCommandExecuteButtonClick = this.handleCommandExecuteButtonClick.bind( this );
+	}
+
+	handleCommandLogButtonClick() {
+		Logger.log( this.props.currentCommandDefinition.command );
+	}
+
+	handleCommandExecuteButtonClick() {
+		this.props.editors.get( this.props.currentEditorName ).execute( this.props.currentCommandName );
+	}
+
 	render() {
 		const definition = this.props.currentCommandDefinition;
 
@@ -21,8 +36,6 @@ class CommandInspector extends Component {
 				<p>Select a command to inspect</p>
 			</Pane>;
 		}
-
-		const currentEditor = this.props.editors.get( this.props.currentEditorName );
 
 		return <ObjectInspector
 			header={[
@@ -36,13 +49,13 @@ class CommandInspector extends Component {
 					key="exec"
 					type="exec"
 					text="Execute command"
-					onClick={() => currentEditor.execute( this.props.currentCommandName )}
+					onClick={this.handleCommandExecuteButtonClick}
 				/>,
 				<Button
 					key="log"
 					type="log"
 					text="Log in console"
-					onClick={() => Logger.log( definition.command )}
+					onClick={this.handleCommandLogButtonClick}
 				/>
 			]}
 			lists={[

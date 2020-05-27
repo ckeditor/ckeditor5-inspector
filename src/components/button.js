@@ -3,10 +3,10 @@
  * For licensing, see LICENSE.md.
  */
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import './button.css';
 
-export default class Button extends Component {
+export default class Button extends PureComponent {
 	render() {
 		return <button
 			className={`ck-inspector-button ck-inspector-button_${ this.props.type }`}

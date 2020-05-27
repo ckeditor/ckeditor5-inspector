@@ -3,15 +3,15 @@
  * For licensing, see LICENSE.md.
  */
 
-import React, { Component } from 'react';
-import { uid, truncateString } from './utils';
+import React, { PureComponent, Component } from 'react';
+import isEqual from 'react-fast-compare';
+import { truncateString } from './utils';
 import './propertylist.css';
 
 const MAX_PROPERTY_VALUE_LENGTH = 2000;
 
 export default class PropertyList extends Component {
 	render() {
-		const listUid = uid();
 		const expandCollapsibles = this.props.presentation && this.props.presentation.expandCollapsibles;
 		const children = [];
 
@@ -23,16 +23,16 @@ export default class PropertyList extends Component {
 
 			const itemChildren = [
 				<PropertyTitle
-					key={`${ this.props.name }-name`}
+					key={`${ this.props.name }-${ name }-name`}
 					name={name}
-					listUid={listUid}
+					listUid={this.props.name}
 					canCollapse={hasSubProperties}
 					colorBox={presentation.colorBox}
 					expandCollapsibles={expandCollapsibles}
 				/>,
-				<dd key={`${ name }-value`}>
+				<dd key={`${ this.props.name }-${ name }-value`}>
 					<input
-						id={`${ listUid }-${ name }-input`}
+						id={`${ this.props.name }-${ name }-value-input`}
 						type="text"
 						value={value}
 						readOnly={true}
@@ -43,7 +43,8 @@ export default class PropertyList extends Component {
 			if ( hasSubProperties ) {
 				itemChildren.push(
 					<PropertyList
-						key={`${ name }-subProperties`}
+						name={`${ this.props.name }-${ name }`}
+						key={`${ this.props.name }-${ name }`}
 						itemDefinitions={subProperties}
 						presentation={this.props.presentation}
 					/>
@@ -57,9 +58,13 @@ export default class PropertyList extends Component {
 			{children}
 		</dl>;
 	}
+
+	shouldComponentUpdate( nextProps ) {
+		return !isEqual( this.props, nextProps );
+	}
 }
 
-class PropertyTitle extends Component {
+class PropertyTitle extends PureComponent {
 	constructor( props ) {
 		super( props );
 
@@ -93,7 +98,7 @@ class PropertyTitle extends Component {
 		return <dt className={classNames.join( ' ' ).trim()}>
 			{collapseButton}
 			{colorBox}
-			<label htmlFor={`${ this.props.listUid }-${ this.props.name }-input`}>
+			<label htmlFor={`${ this.props.listUid }-${ this.props.name }-value-input`}>
 				{this.props.name}
 			</label>:
 		</dt>;

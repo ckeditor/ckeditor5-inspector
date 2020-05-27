@@ -24,6 +24,7 @@ class ViewTree extends Component {
 		super( props );
 
 		this.handleTreeClick = this.handleTreeClick.bind( this );
+		this.handleRootChange = this.handleRootChange.bind( this );
 	}
 
 	handleTreeClick( evt, currentNode ) {
@@ -38,6 +39,10 @@ class ViewTree extends Component {
 		}
 	}
 
+	handleRootChange( evt ) {
+		this.props.setViewCurrentRootName( evt.target.value );
+	}
+
 	render() {
 		const currentEditor = this.props.editors.get( this.props.currentEditorName );
 
@@ -49,7 +54,7 @@ class ViewTree extends Component {
 						label="Root"
 						value={this.props.currentRootName}
 						options={getEditorViewRoots( currentEditor ).map( root => root.rootName )}
-						onChange={evt => this.props.setViewCurrentRootName( evt.target.value )}
+						onChange={this.handleRootChange}
 					/>
 				</div>,
 				<div className="ck-inspector-tree__config" key="types-cfg">

@@ -3,10 +3,10 @@
  * For licensing, see LICENSE.md.
  */
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import './checkbox.css';
 
-export default class Checkbox extends Component {
+export default class Checkbox extends PureComponent {
 	render() {
 		return [
 			<input type="checkbox"
