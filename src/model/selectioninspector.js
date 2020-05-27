@@ -3,6 +3,8 @@
  * For licensing, see LICENSE.md.
  */
 
+/* global document */
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
@@ -20,12 +22,27 @@ class ModelSelectionInspector extends Component {
 		super( props );
 
 		this.handleSelectionLogButtonClick = this.handleSelectionLogButtonClick.bind( this );
+		this.handleScrollToSelectionButtonClick = this.handleScrollToSelectionButtonClick.bind( this );
 	}
 
 	handleSelectionLogButtonClick() {
 		const editor = this.props.editor;
 
 		Logger.log( editor.model.document.selection );
+	}
+
+	handleScrollToSelectionButtonClick() {
+		const domSelectionElement = document.querySelector( '.ck-inspector-tree__position.ck-inspector-tree__position_selection' );
+
+		// E.g. wrong root is selected.
+		if ( !domSelectionElement ) {
+			return;
+		}
+
+		domSelectionElement.scrollIntoView( {
+			behavior: 'smooth',
+			block: 'center'
+		} );
 	}
 
 	render() {
@@ -45,6 +62,12 @@ class ModelSelectionInspector extends Component {
 					type="log"
 					text="Log in console"
 					onClick={this.handleSelectionLogButtonClick}
+				/>,
+				<Button
+					key="scroll"
+					type="scroll"
+					text="Scroll to selection"
+					onClick={this.handleScrollToSelectionButtonClick}
 				/>
 			]}
 			lists={[
