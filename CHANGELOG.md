@@ -1,6 +1,19 @@
 Changelog
 =========
 
+## [2.1.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v2.0.0...v2.1.0) (2020-06-01)
+
+### Features
+
+* Added the "Scroll to selection" buttons in the Model and View tabs. Closes [#77](https://github.com/ckeditor/ckeditor5-inspector/issues/77). ([699eab6](https://github.com/ckeditor/ckeditor5-inspector/commit/699eab6))
+
+### Bug fixes
+
+* Checkboxes in the inspector UI should be centered vertically. Closes [#84](https://github.com/ckeditor/ckeditor5-inspector/issues/84). ([65b8aca](https://github.com/ckeditor/ckeditor5-inspector/commit/65b8aca))
+* Improved performance of the inspector by avoiding unnecessary React rendering. Closes [#79](https://github.com/ckeditor/ckeditor5-inspector/issues/79). ([44e7850](https://github.com/ckeditor/ckeditor5-inspector/commit/44e7850))
+* User-agent styles of HTML select elements should not be overridden by the inspector. Closes [#65](https://github.com/ckeditor/ckeditor5-inspector/issues/65). ([396af59](https://github.com/ckeditor/ckeditor5-inspector/commit/396af59))
+
+
 ## [2.0.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v1.5.0...v2.0.0) (2020-03-26)
 
 ### Features
