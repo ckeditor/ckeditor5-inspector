@@ -190,24 +190,21 @@ function getModelNodeDefinition( node, ranges ) {
 	Object.assign( nodeDefinition, {
 		startOffset,
 		endOffset,
-		node,
 		path: node.getPath(),
 		positionsBefore: [],
 		positionsAfter: []
 	} );
 
 	if ( isModelElement( node ) ) {
-		fillElementDefinition( nodeDefinition, ranges );
+		fillElementDefinition( node, nodeDefinition, ranges );
 	} else {
-		fillTextNodeDefinition( nodeDefinition );
+		fillTextNodeDefinition( node, nodeDefinition );
 	}
 
 	return nodeDefinition;
 }
 
-function fillElementDefinition( elementDefinition, ranges ) {
-	const element = elementDefinition.node;
-
+function fillElementDefinition( element, elementDefinition, ranges ) {
 	Object.assign( elementDefinition, {
 		type: 'element',
 		name: element.name,
@@ -310,9 +307,7 @@ function fillElementPositions( elementDefinition, ranges ) {
 	}
 }
 
-function fillTextNodeDefinition( textNodeDefinition ) {
-	const textNode = textNodeDefinition.node;
-
+function fillTextNodeDefinition( textNode, textNodeDefinition ) {
 	Object.assign( textNodeDefinition, {
 		type: 'text',
 		text: textNode.data,

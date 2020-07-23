@@ -27,7 +27,7 @@ const ROOT_ATTRIBUTES = [
 
 describe( 'view data utils', () => {
 	describe( 'getEditorViewTreeDefinition()', () => {
-		let editor, element, root;
+		let editor, element;
 
 		beforeEach( () => {
 			element = document.createElement( 'div' );
@@ -37,8 +37,6 @@ describe( 'view data utils', () => {
 				plugins: [ Paragraph, BoldEditing ]
 			} ).then( newEditor => {
 				editor = newEditor;
-
-				root = editor.editing.view.document.getRoot();
 			} );
 		} );
 
@@ -65,19 +63,16 @@ describe( 'view data utils', () => {
 				{
 					type: 'element',
 					name: 'div',
-					node: root,
 					attributes: ROOT_ATTRIBUTES,
 					children: [
 						{
 							type: 'element',
 							name: 'p',
-							node: root.getChild( 0 ),
 							attributes: [],
 							children: [
 								{
 									type: 'element',
 									name: 'foo',
-									node: root.getChild( 0 ).getChild( 0 ),
 									attributes: [],
 									positionsBefore: [
 										{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null },
@@ -119,21 +114,18 @@ describe( 'view data utils', () => {
 					type: 'element',
 					name: 'div',
 					elementType: 'root',
-					node: root,
 					attributes: ROOT_ATTRIBUTES,
 					children: [
 						{
 							type: 'element',
 							name: 'p',
 							elementType: 'container',
-							node: root.getChild( 0 ),
 							attributes: [],
 							children: [
 								{
 									type: 'element',
 									name: 'foo',
 									elementType: 'empty',
-									node: emptyElement,
 									attributes: [],
 									children: []
 								},
@@ -141,7 +133,6 @@ describe( 'view data utils', () => {
 									type: 'element',
 									name: 'foo',
 									elementType: 'ui',
-									node: uiElement,
 									attributes: [],
 									children: [
 										{
@@ -154,11 +145,9 @@ describe( 'view data utils', () => {
 									type: 'element',
 									name: 'strong',
 									elementType: 'attribute',
-									node: root.getChild( 0 ).getChild( 2 ),
 									children: [
 										{
 											type: 'text',
-											node: root.getChild( 0 ).getChild( 2 ).getChild( 0 ),
 											positions: [
 												{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null },
 												{ offset: 0, isEnd: true, presentation: null, type: 'selection', name: null }
@@ -197,19 +186,16 @@ describe( 'view data utils', () => {
 				{
 					type: 'element',
 					name: 'div',
-					node: root,
 					attributes: ROOT_ATTRIBUTES,
 					children: [
 						{
 							type: 'element',
 							name: 'p',
-							node: root.getChild( 0 ),
 							attributes: [],
 							children: [
 								{
 									type: 'element',
 									name: 'foo',
-									node: uiElement,
 									attributes: [],
 									positionsBefore: [
 										{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null },
@@ -243,13 +229,11 @@ describe( 'view data utils', () => {
 				{
 					type: 'element',
 					name: 'div',
-					node: root,
 					attributes: ROOT_ATTRIBUTES,
 					children: [
 						{
 							type: 'element',
 							name: 'p',
-							node: root.getChild( 0 ),
 							attributes: [],
 							positions: [
 								{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null },
@@ -283,13 +267,11 @@ describe( 'view data utils', () => {
 				{
 					type: 'element',
 					name: 'div',
-					node: root,
 					attributes: ROOT_ATTRIBUTES,
 					children: [
 						{
 							type: 'element',
 							name: 'p',
-							node: root.getChild( 0 ),
 							attributes: [],
 							positions: [
 								{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null }
@@ -298,7 +280,6 @@ describe( 'view data utils', () => {
 						{
 							type: 'element',
 							name: 'p',
-							node: root.getChild( 1 ),
 							attributes: [],
 							positions: [
 								{ offset: 0, isEnd: true, presentation: null, type: 'selection', name: null }
@@ -324,18 +305,15 @@ describe( 'view data utils', () => {
 				{
 					type: 'element',
 					name: 'div',
-					node: root,
 					attributes: ROOT_ATTRIBUTES,
 					children: [
 						{
 							type: 'element',
 							name: 'p',
-							node: root.getChild( 0 ),
 							attributes: [],
 							children: [
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 0 ),
 									text: 'foo',
 									positions: [
 										{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null },
@@ -370,28 +348,23 @@ describe( 'view data utils', () => {
 				{
 					type: 'element',
 					name: 'div',
-					node: root,
 					attributes: ROOT_ATTRIBUTES,
 					children: [
 						{
 							type: 'element',
 							name: 'p',
-							node: root.getChild( 0 ),
 							attributes: [],
 							children: [
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 0 ),
 									text: 'f'
 								},
 								{
 									type: 'element',
 									name: 'strong',
-									node: root.getChild( 0 ).getChild( 1 ),
 									children: [
 										{
 											type: 'text',
-											node: root.getChild( 0 ).getChild( 1 ).getChild( 0 ),
 											text: 'o',
 											positionsBefore: [
 												{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null },
@@ -402,7 +375,6 @@ describe( 'view data utils', () => {
 								},
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 2 ),
 									text: 'o'
 								}
 							]
@@ -433,28 +405,23 @@ describe( 'view data utils', () => {
 				{
 					type: 'element',
 					name: 'div',
-					node: root,
 					attributes: ROOT_ATTRIBUTES,
 					children: [
 						{
 							type: 'element',
 							name: 'p',
-							node: root.getChild( 0 ),
 							attributes: [],
 							children: [
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 0 ),
 									text: 'f'
 								},
 								{
 									type: 'element',
 									name: 'strong',
-									node: root.getChild( 0 ).getChild( 1 ),
 									children: [
 										{
 											type: 'text',
-											node: root.getChild( 0 ).getChild( 1 ).getChild( 0 ),
 											text: 'oo',
 											positions: [
 												{ offset: 1, isEnd: false, presentation: null, type: 'selection', name: null },
@@ -465,7 +432,6 @@ describe( 'view data utils', () => {
 								},
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 2 ),
 									text: 'o'
 								}
 							]
@@ -497,28 +463,23 @@ describe( 'view data utils', () => {
 				{
 					type: 'element',
 					name: 'div',
-					node: root,
 					attributes: ROOT_ATTRIBUTES,
 					children: [
 						{
 							type: 'element',
 							name: 'p',
-							node: root.getChild( 0 ),
 							attributes: [],
 							children: [
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 0 ),
 									text: 'a'
 								},
 								{
 									type: 'element',
 									name: 'strong',
-									node: root.getChild( 0 ).getChild( 1 ),
 									children: [
 										{
 											type: 'text',
-											node: root.getChild( 0 ).getChild( 1 ).getChild( 0 ),
 											text: 'bc',
 											positions: [
 												{ offset: 1, isEnd: false, presentation: null, type: 'selection', name: null }
@@ -528,7 +489,6 @@ describe( 'view data utils', () => {
 								},
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 2 ),
 									text: 'de',
 									positions: [
 										{ offset: 1, isEnd: true, presentation: null, type: 'selection', name: null }
@@ -563,35 +523,29 @@ describe( 'view data utils', () => {
 				{
 					type: 'element',
 					name: 'div',
-					node: root,
 					attributes: ROOT_ATTRIBUTES,
 					children: [
 						{
 							type: 'element',
 							name: 'p',
-							node: root.getChild( 0 ),
 							attributes: [],
 							children: [
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 0 ),
 									text: 'a'
 								},
 								{
 									type: 'element',
 									name: 'strong',
-									node: root.getChild( 0 ).getChild( 1 ),
 									children: [
 										{
 											type: 'text',
-											node: root.getChild( 0 ).getChild( 1 ).getChild( 0 ),
 											text: 'bc'
 										}
 									]
 								},
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 2 ),
 									text: 'de',
 									positionsBefore: [
 										{ offset: 2, isEnd: false, presentation: null, type: 'selection', name: null }
@@ -629,18 +583,15 @@ describe( 'view data utils', () => {
 				{
 					type: 'element',
 					name: 'div',
-					node: root,
 					attributes: ROOT_ATTRIBUTES,
 					children: [
 						{
 							type: 'element',
 							name: 'p',
-							node: root.getChild( 0 ),
 							attributes: [],
 							children: [
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 0 ),
 									text: 'a',
 									positionsBefore: [
 										{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null }
@@ -649,11 +600,9 @@ describe( 'view data utils', () => {
 								{
 									type: 'element',
 									name: 'strong',
-									node: root.getChild( 0 ).getChild( 1 ),
 									children: [
 										{
 											type: 'text',
-											node: root.getChild( 0 ).getChild( 1 ).getChild( 0 ),
 											text: 'bc'
 										}
 									],
@@ -663,7 +612,6 @@ describe( 'view data utils', () => {
 								},
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 2 ),
 									text: 'de'
 								}
 							]

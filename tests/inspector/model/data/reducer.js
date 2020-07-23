@@ -253,12 +253,10 @@ describe( 'model data store reducer', () => {
 
 		describe( '#treeDefinition', () => {
 			it( 'should reflect the model tree of the current root of the current editor', () => {
-				const modelRoot = editorA.model.document.getRoot();
-
 				modelState.treeDefinition = null;
 				modelState = modelReducer( globalState, modelState, updateModelState() );
 
-				expect( modelState.treeDefinition[ 0 ].node ).to.equal( modelRoot );
+				expect( modelState.treeDefinition[ 0 ].name ).to.equal( '$root' );
 			} );
 
 			it( 'should be updated on updateModelState() action', () => {

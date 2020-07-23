@@ -148,23 +148,20 @@ function getViewNodeDefinition( node, ranges ) {
 	Object.assign( nodeDefinition, {
 		index: node.index,
 		path: node.getPath(),
-		node,
 		positionsBefore: [],
 		positionsAfter: []
 	} );
 
 	if ( isViewElement( node ) ) {
-		fillElementDefinition( nodeDefinition, ranges );
+		fillElementDefinition( node, nodeDefinition, ranges );
 	} else {
-		fillViewTextNodeDefinition( nodeDefinition, ranges );
+		fillViewTextNodeDefinition( node, nodeDefinition, ranges );
 	}
 
 	return nodeDefinition;
 }
 
-function fillElementDefinition( elementDefinition, ranges ) {
-	const element = elementDefinition.node;
-
+function fillElementDefinition( element, elementDefinition, ranges ) {
 	Object.assign( elementDefinition, {
 		type: 'element',
 		children: [],
@@ -216,11 +213,11 @@ function fillElementDefinition( elementDefinition, ranges ) {
 	elementDefinition.attributes = getNodeAttrs( element );
 }
 
-function fillViewTextNodeDefinition( textNodeDefinition, ranges ) {
+function fillViewTextNodeDefinition( textNode, textNodeDefinition, ranges ) {
 	Object.assign( textNodeDefinition, {
 		type: 'text',
 		startOffset: 0,
-		text: textNodeDefinition.node.data,
+		text: textNode.data,
 		positions: []
 	} );
 

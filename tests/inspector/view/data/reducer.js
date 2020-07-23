@@ -248,12 +248,10 @@ describe( 'view data store reducer', () => {
 
 		describe( '#treeDefinition', () => {
 			it( 'should reflect the view tree of the current root of the current editor', () => {
-				const viewRoot = editorA.editing.view.document.getRoot();
-
 				viewState.treeDefinition = null;
 				viewState = viewReducer( globalState, viewState, updateViewState() );
 
-				expect( viewState.treeDefinition[ 0 ].node ).to.equal( viewRoot );
+				expect( viewState.treeDefinition[ 0 ].elementType ).to.equal( 'root' );
 			} );
 
 			it( 'should be updated on updateViewState() action', () => {

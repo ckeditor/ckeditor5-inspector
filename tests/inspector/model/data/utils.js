@@ -55,13 +55,11 @@ describe( 'model data utils', () => {
 				{
 					type: 'element',
 					name: '$root',
-					node: root,
 					attributes: [],
 					children: [
 						{
 							type: 'element',
 							name: 'paragraph',
-							node: root.getChild( 0 ),
 							attributes: [],
 							positions: [
 								{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null },
@@ -98,13 +96,11 @@ describe( 'model data utils', () => {
 				{
 					type: 'element',
 					name: '$root',
-					node: root,
 					attributes: [],
 					children: [
 						{
 							type: 'element',
 							name: 'paragraph',
-							node: root.getChild( 0 ),
 							attributes: [],
 							positions: [
 								{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null }
@@ -114,7 +110,6 @@ describe( 'model data utils', () => {
 						{
 							type: 'element',
 							name: 'paragraph',
-							node: root.getChild( 1 ),
 							attributes: [],
 							positions: [
 								{ offset: 0, isEnd: true, presentation: null, type: 'selection', name: null }
@@ -143,18 +138,15 @@ describe( 'model data utils', () => {
 				{
 					type: 'element',
 					name: '$root',
-					node: root,
 					attributes: [],
 					children: [
 						{
 							type: 'element',
 							name: 'paragraph',
-							node: root.getChild( 0 ),
 							attributes: [],
 							children: [
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 0 ),
 									presentation: {
 										dontRenderAttributeValue: true
 									},
@@ -192,18 +184,15 @@ describe( 'model data utils', () => {
 				{
 					type: 'element',
 					name: '$root',
-					node: root,
 					attributes: [],
 					children: [
 						{
 							type: 'element',
 							name: 'paragraph',
-							node: root.getChild( 0 ),
 							attributes: [],
 							children: [
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 0 ),
 									presentation: {
 										dontRenderAttributeValue: true
 									},
@@ -211,7 +200,6 @@ describe( 'model data utils', () => {
 								},
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 1 ),
 									presentation: {
 										dontRenderAttributeValue: true
 									},
@@ -226,7 +214,6 @@ describe( 'model data utils', () => {
 								},
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 2 ),
 									presentation: {
 										dontRenderAttributeValue: true
 									},
@@ -260,18 +247,15 @@ describe( 'model data utils', () => {
 				{
 					type: 'element',
 					name: '$root',
-					node: root,
 					attributes: [],
 					children: [
 						{
 							type: 'element',
 							name: 'paragraph',
-							node: root.getChild( 0 ),
 							attributes: [],
 							children: [
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 0 ),
 									presentation: {
 										dontRenderAttributeValue: true
 									},
@@ -279,7 +263,6 @@ describe( 'model data utils', () => {
 								},
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 1 ),
 									presentation: {
 										dontRenderAttributeValue: true
 									},
@@ -294,7 +277,6 @@ describe( 'model data utils', () => {
 								},
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 2 ),
 									presentation: {
 										dontRenderAttributeValue: true
 									},
@@ -329,18 +311,15 @@ describe( 'model data utils', () => {
 				{
 					type: 'element',
 					name: '$root',
-					node: root,
 					attributes: [],
 					children: [
 						{
 							type: 'element',
 							name: 'paragraph',
-							node: root.getChild( 0 ),
 							attributes: [],
 							children: [
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 0 ),
 									presentation: {
 										dontRenderAttributeValue: true
 									},
@@ -348,7 +327,6 @@ describe( 'model data utils', () => {
 								},
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 1 ),
 									presentation: {
 										dontRenderAttributeValue: true
 									},
@@ -362,7 +340,6 @@ describe( 'model data utils', () => {
 								},
 								{
 									type: 'text',
-									node: root.getChild( 0 ).getChild( 2 ),
 									presentation: {
 										dontRenderAttributeValue: true
 									},
