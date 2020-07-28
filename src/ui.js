@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md.
  */
 
-/* global document */
+/* global document, window */
 
 import React, { Component } from 'react';
 import { Rnd } from 'react-rnd';
@@ -118,17 +118,37 @@ export class DocsButton extends Component {
 }
 
 class ToggleButtonVisual extends Component {
+	constructor( props ) {
+		super( props );
+
+		this.handleShortcut = this.handleShortcut.bind( this );
+	}
+
 	render() {
 		return <button
 			type="button"
 			onClick={this.props.toggleIsCollapsed}
-			title="Toggle inspector"
+			title="Toggle inspector (Alt+F12)"
 			className={[
 				'ck-inspector-navbox__navigation__toggle',
 				this.props.isCollapsed ? ' ck-inspector-navbox__navigation__toggle_up' : ''
 			].join( ' ' )}>
 				Toggle inspector
 		</button>;
+	}
+
+	componentDidMount() {
+		window.addEventListener( 'keydown', this.handleShortcut );
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener( 'keydown', this.handleShortcut );
+	}
+
+	handleShortcut( event ) {
+		if ( isToggleShortcut( event ) ) {
+			this.props.toggleIsCollapsed();
+		}
 	}
 }
 
@@ -157,4 +177,8 @@ export const EditorInstanceSelector = connect(
 
 function updateBodyHeight( height ) {
 	document.body.style.setProperty( '--ck-inspector-height', height );
+}
+
+function isToggleShortcut( event ) {
+	return event.altKey && event.key === 'F12';
 }
