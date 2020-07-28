@@ -22,6 +22,8 @@ import {
 describe( '<InspectorUI />', () => {
 	let editors, wrapper, store, editor1Element, editor2Element, dispatchSpy;
 
+	const origAddEventListener = window.addEventListener;
+	const windowEventMap = {};
 	const container = document.createElement( 'div' );
 	document.body.appendChild( container );
 
@@ -33,6 +35,12 @@ describe( '<InspectorUI />', () => {
 
 		document.body.appendChild( editor1Element );
 		document.body.appendChild( editor2Element );
+
+		window.addEventListener = ( event, cb ) => {
+			windowEventMap[ event ] = cb;
+
+			origAddEventListener( event, cb );
+		};
 
 		return Promise.all( [
 			TestEditor.create( editor1Element ),
@@ -73,6 +81,8 @@ describe( '<InspectorUI />', () => {
 
 		editor1Element.remove();
 		editor2Element.remove();
+
+		window.addEventListener = origAddEventListener;
 
 		return Promise.all( Array.from( editors )
 			.map( ( [ , editor ] ) => editor.destroy() ) );
@@ -337,6 +347,17 @@ describe( '<InspectorUI />', () => {
 								}
 							}
 						} );
+
+						expect( getToggle().find( 'button' ) ).to.have.className( 'ck-inspector-navbox__navigation__toggle_up' );
+					} );
+
+					it( 'should toggle the UI on a global ALT+F12 keyboard shortcut', () => {
+						const toggle = getToggle();
+						const button = toggle.find( 'button' );
+
+						expect( button ).to.not.have.className( 'ck-inspector-navbox__navigation__toggle_up' );
+
+						windowEventMap.keydown( { key: 'F12', altKey: true } );
 
 						expect( getToggle().find( 'button' ) ).to.have.className( 'ck-inspector-navbox__navigation__toggle_up' );
 					} );
