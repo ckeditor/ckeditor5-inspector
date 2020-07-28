@@ -5,7 +5,7 @@
 
 import {
 	SET_MODEL_CURRENT_ROOT_NAME,
-	SET_MODEL_CURRENT_NODE,
+	SET_MODEL_CURRENT_NODE_PATH,
 	SET_MODEL_ACTIVE_TAB,
 	TOGGLE_MODEL_SHOW_MARKERS,
 	TOGGLE_MODEL_SHOW_COMPACT_TEXT,
@@ -21,14 +21,15 @@ import {
 import {
 	getEditorModelRanges,
 	getEditorModelMarkers,
-	getEditorModelRoots,
-	getEditorModelTreeDefinition,
-	getEditorModelNodeDefinition
-} from './utils';
+	getEditorModelRoots
+} from './utils/utils';
 
-import { isModelRoot } from '../utils';
+import { getEditorModelNodeDefinition } from './utils/nodeinspector';
+import { getEditorModelTreeDefinition } from './utils/tree';
+import { isModelRoot, getEditorModelNodeByRootAndPath } from '../utils';
 
 import LocalStorageManager from '../../localstoragemanager';
+import { getCurrentEditorInstance } from '../../data/utils';
 
 export const LOCAL_STORAGE_ACTIVE_TAB = 'active-model-tab-name';
 export const LOCAL_STORAGE_SHOW_MARKERS = 'model-show-markers';
@@ -57,12 +58,16 @@ function modelDataReducer( globalState, modelState, action ) {
 	switch ( action.type ) {
 		case SET_MODEL_CURRENT_ROOT_NAME:
 			return getNewCurrentRootNameState( globalState, modelState, action );
-		case SET_MODEL_CURRENT_NODE:
+		case SET_MODEL_CURRENT_NODE_PATH:
 			return {
 				...modelState,
 
-				currentNode: action.currentNode,
-				currentNodeDefinition: getEditorModelNodeDefinition( getCurrentEditor( globalState ), action.currentNode )
+				currentNodePath: action.currentNodePath,
+				currentNodeDefinition: getEditorModelNodeDefinition(
+					getCurrentEditorInstance( globalState ),
+					modelState.currentRootName,
+					action.currentNodePath
+				)
 			};
 
 		// * SET_ACTIVE_INSPECTOR_TAB – Because of the performance optimization at the beginning, update the state
@@ -111,7 +116,7 @@ function getNewCurrentRootNameState( globalState, modelState, action ) {
 		...modelState,
 
 		...getEssentialState( globalState, modelState, { currentRootName } ),
-		currentNode: null,
+		currentNodePath: null,
 		currentNodeDefinition: null,
 		currentRootName
 	};
@@ -152,7 +157,7 @@ function getNewShowCompactTextState( UIState ) {
 }
 
 function getBlankModelState( globalState, modelState = {} ) {
-	const currentEditor = getCurrentEditor( globalState );
+	const currentEditor = getCurrentEditorInstance( globalState );
 
 	if ( !currentEditor ) {
 		return {
@@ -165,15 +170,18 @@ function getBlankModelState( globalState, modelState = {} ) {
 	return {
 		...modelState,
 
-		...getEssentialState( globalState, modelState, { currentRootName } ),
+		...getEssentialState( globalState, modelState, {
+			currentRootName,
+			currentNodeDefinition: null
+		} ),
 		currentRootName,
-		currentNode: null,
+		currentNodePath: null,
 		currentNodeDefinition: null
 	};
 }
 
 function getEssentialState( globalState, modelState, modelStateOverrides ) {
-	const currentEditor = getCurrentEditor( globalState );
+	const currentEditor = getCurrentEditorInstance( globalState );
 	const overriddenModelState = { ...modelState, ...modelStateOverrides };
 	const currentRootName = overriddenModelState.currentRootName;
 
@@ -186,34 +194,28 @@ function getEssentialState( globalState, modelState, modelStateOverrides ) {
 		markers
 	} );
 
-	let currentNode = overriddenModelState.currentNode;
-	let currentNodeDefinition = overriddenModelState.currentNodeDefinition;
+	let currentNodeDefinition = overriddenModelState.currentNodeDefinition || null;
+	let currentNodePath = null;
 
-	if ( currentNode ) {
-		// * If the currentNode no longer belongs to the current root, reset the state.
-		// This can happen when, for instance, inspecting an element, and it gets removed from the editor content.
-		// * If the currentNode was detached, reset the state.
-		if ( currentNode.root.rootName !== currentRootName || ( !isModelRoot( currentNode ) && !currentNode.parent ) ) {
-			currentNode = null;
+	// If there was an inspected node definition, try updating it.
+	if ( currentNodeDefinition ) {
+		currentNodePath	= currentNodeDefinition.path;
+
+		// It could be the root has changed so the current node does no belong to the new inspected root.
+		if ( !getEditorModelNodeByRootAndPath( currentEditor, currentRootName, currentNodePath ) ) {
+			currentNodePath = null;
 			currentNodeDefinition = null;
 		} else {
 			// Update the current node definition each time the new model state is created.
-			currentNodeDefinition = getEditorModelNodeDefinition( currentEditor, currentNode );
+			currentNodeDefinition = getEditorModelNodeDefinition( currentEditor, currentRootName, currentNodePath );
 		}
-	} else {
-		// No current node, no definition.
-		currentNodeDefinition = null;
 	}
 
 	return {
 		treeDefinition,
-		currentNode,
+		currentNodePath,
 		currentNodeDefinition,
 		ranges,
 		markers
 	};
-}
-
-function getCurrentEditor( globalState ) {
-	return globalState.editors.get( globalState.currentEditorName );
 }

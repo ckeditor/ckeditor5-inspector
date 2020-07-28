@@ -12,7 +12,7 @@ import {
 	updateModelState,
 
 	SET_MODEL_CURRENT_ROOT_NAME,
-	SET_MODEL_CURRENT_NODE,
+	SET_MODEL_CURRENT_NODE_PATH,
 	SET_MODEL_ACTIVE_TAB,
 	TOGGLE_MODEL_SHOW_MARKERS,
 	TOGGLE_MODEL_SHOW_COMPACT_TEXT,
@@ -29,7 +29,7 @@ describe( 'model data store actions', () => {
 
 	it( 'should export setModelCurrentNode()', () => {
 		expect( setModelCurrentNode( 'foo' ) ).to.deep.equal( {
-			type: SET_MODEL_CURRENT_NODE,
+			type: SET_MODEL_CURRENT_NODE_PATH,
 			currentNode: 'foo'
 		} );
 	} );

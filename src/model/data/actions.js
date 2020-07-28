@@ -4,7 +4,7 @@
  */
 
 export const SET_MODEL_CURRENT_ROOT_NAME = 'SET_MODEL_CURRENT_ROOT_NAME';
-export const SET_MODEL_CURRENT_NODE = 'SET_MODEL_CURRENT_NODE';
+export const SET_MODEL_CURRENT_NODE_PATH = 'SET_MODEL_CURRENT_NODE_PATH';
 export const SET_MODEL_ACTIVE_TAB = 'SET_MODEL_ACTIVE_TAB';
 export const TOGGLE_MODEL_SHOW_MARKERS = 'TOGGLE_MODEL_SHOW_MARKERS';
 export const TOGGLE_MODEL_SHOW_COMPACT_TEXT = 'TOGGLE_MODEL_SHOW_COMPACT_TEXT';
@@ -14,8 +14,8 @@ export function setModelCurrentRootName( currentRootName ) {
 	return { type: SET_MODEL_CURRENT_ROOT_NAME, currentRootName };
 }
 
-export function setModelCurrentNode( currentNode ) {
-	return { type: SET_MODEL_CURRENT_NODE, currentNode };
+export function setModelCurrentNodePath( currentNodePath ) {
+	return { type: SET_MODEL_CURRENT_NODE_PATH, currentNodePath };
 }
 
 export function setModelActiveTab( tabName ) {

@@ -11,13 +11,13 @@ export function isModelRoot( node ) {
 	return node && node.is( 'rootElement' );
 }
 
-export function getNodePathString( node ) {
+export function getModelNodePathString( node ) {
 	return node.getPath ? node.getPath() : node.path;
 }
 
 export function getModelPositionDefinition( position ) {
 	return {
-		path: getNodePathString( position ),
+		path: getModelNodePathString( position ),
 		stickiness: position.stickiness,
 		index: position.index,
 		isAtEnd: position.isAtEnd,
@@ -25,4 +25,14 @@ export function getModelPositionDefinition( position ) {
 		offset: position.offset,
 		textNode: position.textNode && position.textNode.data
 	};
+}
+
+export function getEditorModelNodeByRootAndPath( editor, rootName, nodePath ) {
+	try {
+		return editor.model.document
+			.getRoot( rootName )
+			.getNodeByPath( nodePath );
+	} catch {
+		return null;
+	}
 }

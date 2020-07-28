@@ -11,6 +11,7 @@ import Pane from '../components/pane';
 import ObjectInspector from '../components/objectinspector';
 
 import Logger from '../logger';
+import { getEditorModelNodeByRootAndPath } from './utils';
 
 class ModelNodeInspector extends Component {
 	constructor( props ) {
@@ -20,7 +21,10 @@ class ModelNodeInspector extends Component {
 	}
 
 	handleNodeLogButtonClick() {
-		Logger.log( this.props.currentNodeDefinition.editorNode );
+		const editor = this.props.editors.get( this.props.currentEditorName );
+		const node = getEditorModelNodeByRootAndPath( editor, this.props.currentRootName, this.props.currentNodeDefinition.path );
+
+		Logger.log( node );
 	}
 
 	render() {
@@ -63,8 +67,8 @@ class ModelNodeInspector extends Component {
 	}
 }
 
-const mapStateToProps = ( { model: { currentNodeDefinition } } ) => {
-	return { currentNodeDefinition };
+const mapStateToProps = ( { editors, currentEditorName, model: { currentNodeDefinition, currentRootName } } ) => {
+	return { editors, currentEditorName, currentNodeDefinition, currentRootName };
 };
 
 export default connect( mapStateToProps, {} )( ModelNodeInspector );

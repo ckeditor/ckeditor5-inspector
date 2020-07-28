@@ -9,11 +9,11 @@ import {
 	toggleModelShowCompactText,
 	setModelCurrentRootName,
 	toggleModelShowMarkers,
-	setModelCurrentNode,
+	setModelCurrentNodePath,
 	setModelActiveTab
 } from './data/actions';
 
-import { getEditorModelRoots } from './data/utils';
+import { getEditorModelRoots } from './data/utils/utils';
 
 import Tree from '../components/tree/tree';
 import NavBox from '../components/navbox';
@@ -28,11 +28,11 @@ class ModelTree extends Component {
 		this.handleRootChange = this.handleRootChange.bind( this );
 	}
 
-	handleTreeClick( evt, currentNode ) {
+	handleTreeClick( evt, currentNodePath ) {
 		evt.persist();
 		evt.stopPropagation();
 
-		this.props.setModelCurrentNode( currentNode );
+		this.props.setModelCurrentNodePath( currentNodePath );
 
 		// Double click on a tree element should open the inspector.
 		if ( evt.detail === 2 ) {
@@ -81,23 +81,23 @@ class ModelTree extends Component {
 				textDirection={currentEditor.locale.contentLanguageDirection}
 				onClick={this.handleTreeClick}
 				showCompactText={this.props.showCompactText}
-				activeNode={this.props.currentNode}
+				activeNodePath={this.props.currentNodePath}
 			/>
 		</NavBox>;
 	}
 }
 
 const mapStateToProps = (
-	{ editors, currentEditorName, model: { treeDefinition, currentRootName, currentNode, ui: { showMarkers, showCompactText } } }
+	{ editors, currentEditorName, model: { treeDefinition, currentRootName, currentNodePath, ui: { showMarkers, showCompactText } } }
 ) => {
-	return { treeDefinition, editors, currentEditorName, currentRootName, currentNode, showMarkers, showCompactText };
+	return { treeDefinition, editors, currentEditorName, currentRootName, currentNodePath, showMarkers, showCompactText };
 };
 
 const mapDispatchToProps = {
 	toggleModelShowCompactText,
 	setModelCurrentRootName,
 	toggleModelShowMarkers,
-	setModelCurrentNode,
+	setModelCurrentNodePath,
 	setModelActiveTab
 };
 

@@ -18,3 +18,7 @@ export default class EditorListener {
 		currentEditor.editing.view.off( 'render', this._config.onViewRender );
 	}
 }
+
+export function getCurrentEditorInstance( globalState ) {
+	return globalState.editors.get( globalState.currentEditorName );
+}

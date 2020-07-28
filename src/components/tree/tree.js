@@ -20,7 +20,7 @@ export default class Tree extends Component {
 					onClick: this.props.onClick,
 					showCompactText: this.props.showCompactText,
 					showElementTypes: this.props.showElementTypes,
-					activeNode: this.props.activeNode
+					activeNodePath: this.props.activeNodePath
 				} );
 			} );
 		} else {

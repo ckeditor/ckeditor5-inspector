@@ -4,99 +4,24 @@
  */
 
 import {
-	isModelElement,
-	isModelRoot,
-	getModelPositionDefinition,
-	getNodePathString
-} from '../utils';
+	getModelNodePathString,
+	isModelElement
+} from '../../utils';
 
-import { compareArrays } from '../../utils';
+import { compareArrays } from '../../../utils';
+import { stringify } from '../../../components/utils';
 
-import {
-	stringify,
-	stringifyPropertyList
-} from '../../components/utils';
-
-const DOCS_URL_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_';
-const MARKER_COLORS = [
-	'#03a9f4', '#fb8c00', '#009688', '#e91e63', '#4caf50', '#00bcd4',
-	'#607d8b', '#cddc39', '#9c27b0', '#f44336', '#6d4c41', '#8bc34a', '#3f51b5', '#2196f3',
-	'#f4511e', '#673ab7', '#ffb300'
-];
-
-export function getEditorModelRoots( editor ) {
-	if ( !editor ) {
-		return [];
-	}
-
-	const roots = [ ...editor.model.document.roots ];
-
-	// Put $graveyard at the end.
-	return roots
-		.filter( ( { rootName } ) => rootName !== '$graveyard' )
-		.concat( roots.filter( ( { rootName } ) => rootName === '$graveyard' ) );
-}
-
-export function getEditorModelRanges( editor, currentRootName ) {
-	if ( !editor ) {
-		return [];
-	}
-
-	const ranges = [];
-	const model = editor.model;
-
-	for ( const range of model.document.selection.getRanges() ) {
-		if ( range.root.rootName !== currentRootName ) {
-			continue;
-		}
-
-		ranges.push( {
-			type: 'selection',
-			start: getModelPositionDefinition( range.start ),
-			end: getModelPositionDefinition( range.end )
-		} );
-	}
-
-	return ranges;
-}
-
-export function getEditorModelMarkers( editor, currentRootName ) {
-	if ( !editor ) {
-		return [];
-	}
-
-	const markers = [];
-	const model = editor.model;
-	let markerCount = 0;
-
-	for ( const marker of model.markers ) {
-		const { name, affectsData, managedUsingOperations } = marker;
-		const start = marker.getStart();
-		const end = marker.getEnd();
-
-		if ( start.root.rootName !== currentRootName ) {
-			continue;
-		}
-
-		markers.push( {
-			type: 'marker',
-			marker,
-			name,
-			affectsData,
-			managedUsingOperations,
-			presentation: {
-				// When there are more markers than colors, let's start over and reuse
-				// the colors.
-				color: MARKER_COLORS[ markerCount++ % ( MARKER_COLORS.length - 1 ) ]
-			},
-			start: getModelPositionDefinition( start ),
-			end: getModelPositionDefinition( end )
-		} );
-	}
-
-	return markers;
-}
-
+/**
+ * Returns a definition for the model tree.
+ *
+ * @param {options}
+ * @param {options.currentEditor}
+ * @param {options.currentRootName}
+ * @param {options.ranges}
+ * @param {options.markers}
+ *
+ * @returns {Object}
+ */
 export function getEditorModelTreeDefinition( { currentEditor, currentRootName, ranges, markers } ) {
 	if ( !currentEditor ) {
 		return [];
@@ -110,79 +35,6 @@ export function getEditorModelTreeDefinition( { currentEditor, currentRootName, 
 	];
 }
 
-export function getEditorModelNodeDefinition( currentEditor, node ) {
-	const definition = {
-		editorNode: node,
-		properties: {},
-		attributes: {}
-	};
-
-	if ( isModelElement( node ) ) {
-		if ( isModelRoot( node ) ) {
-			definition.type = 'RootElement';
-			definition.name = node.rootName;
-			definition.url = `${ DOCS_URL_PREFIX }rootelement-RootElement.html`;
-		} else {
-			definition.type = 'Element';
-			definition.name = node.name;
-			definition.url = `${ DOCS_URL_PREFIX }element-Element.html`;
-		}
-
-		definition.properties = {
-			childCount: {
-				value: node.childCount
-			},
-			startOffset: {
-				value: node.startOffset
-			},
-			endOffset: {
-				value: node.endOffset
-			},
-			maxOffset: {
-				value: node.maxOffset
-			}
-		};
-	} else {
-		definition.name = node.data;
-		definition.type = 'Text';
-		definition.url = `${ DOCS_URL_PREFIX }text-Text.html`;
-
-		definition.properties = {
-			startOffset: {
-				value: node.startOffset
-			},
-			endOffset: {
-				value: node.endOffset
-			},
-			offsetSize: {
-				value: node.offsetSize
-			}
-		};
-	}
-
-	definition.properties.path = { value: getNodePathString( node ) };
-
-	for ( const [ name, value ] of node.getAttributes() ) {
-		definition.attributes[ name ] = { value };
-	}
-
-	definition.properties = stringifyPropertyList( definition.properties );
-	definition.attributes = stringifyPropertyList( definition.attributes );
-
-	for ( const attribute in definition.attributes ) {
-		const attributePropertyDefinitions = {};
-		const attirbuteProperties = currentEditor.model.schema.getAttributeProperties( attribute );
-
-		for ( const name in attirbuteProperties ) {
-			attributePropertyDefinitions[ name ] = { value: attirbuteProperties[ name ] };
-		}
-
-		definition.attributes[ attribute ].subProperties = stringifyPropertyList( attributePropertyDefinitions );
-	}
-
-	return definition;
-}
-
 function getModelNodeDefinition( node, ranges ) {
 	const nodeDefinition = {};
 	const { startOffset, endOffset } = node;
@@ -190,7 +42,7 @@ function getModelNodeDefinition( node, ranges ) {
 	Object.assign( nodeDefinition, {
 		startOffset,
 		endOffset,
-		path: node.getPath(),
+		path: getModelNodePathString( node ),
 		positionsBefore: [],
 		positionsAfter: []
 	} );

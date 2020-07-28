@@ -18,7 +18,7 @@ export default class TreeNode extends Component {
 	}
 
 	handleClick( evt ) {
-		this.globalTreeProps.onClick( evt, this.definition.node );
+		this.globalTreeProps.onClick( evt, this.definition.path );
 	}
 
 	getChildren() {
@@ -36,7 +36,7 @@ export default class TreeNode extends Component {
 	}
 
 	get isActive() {
-		return this.definition.node === this.globalTreeProps.activeNode;
+		return JSON.stringify( this.definition.path ) === JSON.stringify( this.globalTreeProps.activeNodePath );
 	}
 
 	shouldComponentUpdate( nextProps ) {
