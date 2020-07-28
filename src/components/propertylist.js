@@ -4,7 +4,7 @@
  */
 
 import React, { PureComponent, Component } from 'react';
-import isEqual from 'react-fast-compare';
+import isEqual from 'lodash.isequal';
 import { truncateString } from './utils';
 import './propertylist.css';
 

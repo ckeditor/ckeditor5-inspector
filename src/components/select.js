@@ -4,7 +4,7 @@
  */
 
 import React, { Component } from 'react';
-import isEqual from 'react-fast-compare';
+import isEqual from 'lodash.isequal';
 
 export default class Select extends Component {
 	render() {
