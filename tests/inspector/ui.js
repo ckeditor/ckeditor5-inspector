@@ -16,7 +16,8 @@ import TestEditor from '../utils/testeditor';
 
 import {
 	SET_HEIGHT,
-	SET_CURRENT_EDITOR_NAME
+	SET_CURRENT_EDITOR_NAME,
+	TOGGLE_IS_COLLAPSED
 } from '../../src/data/actions';
 
 describe( '<InspectorUI />', () => {
@@ -336,7 +337,8 @@ describe( '<InspectorUI />', () => {
 						const toggle = getToggle();
 						const button = toggle.find( 'button' );
 
-						expect( toggle.props().onClick ).to.equal( wrapper.props().toggleIsCollapsed );
+						expect( toggle.props().toggleIsCollapsed ).to.be.a( 'function' );
+						expect( button.props().onClick ).to.equal( toggle.props().toggleIsCollapsed );
 						expect( button ).to.not.have.className( 'ck-inspector-navbox__navigation__toggle_up' );
 
 						store.dispatch( {
@@ -352,14 +354,11 @@ describe( '<InspectorUI />', () => {
 					} );
 
 					it( 'should toggle the UI on a global ALT+F12 keyboard shortcut', () => {
-						const toggle = getToggle();
-						const button = toggle.find( 'button' );
-
-						expect( button ).to.not.have.className( 'ck-inspector-navbox__navigation__toggle_up' );
-
 						windowEventMap.keydown( { key: 'F12', altKey: true } );
 
-						expect( getToggle().find( 'button' ) ).to.have.className( 'ck-inspector-navbox__navigation__toggle_up' );
+						sinon.assert.calledWithExactly( dispatchSpy.lastCall, {
+							type: TOGGLE_IS_COLLAPSED
+						} );
 					} );
 				} );
 			} );
