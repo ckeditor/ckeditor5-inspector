@@ -180,5 +180,5 @@ function updateBodyHeight( height ) {
 }
 
 function isToggleShortcut( event ) {
-	return event.altKey && event.key === 'F12';
+	return event.altKey && !event.shiftKey && !event.ctrlKey && event.key === 'F12';
 }

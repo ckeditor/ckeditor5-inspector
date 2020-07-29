@@ -360,6 +360,18 @@ describe( '<InspectorUI />', () => {
 							type: TOGGLE_IS_COLLAPSED
 						} );
 					} );
+
+					it( 'should not toggle the UI on a global SHIFT+ALT+F12 keyboard shortcut', () => {
+						windowEventMap.keydown( { key: 'F12', altKey: true, shiftKey: true } );
+
+						sinon.assert.notCalled( dispatchSpy );
+					} );
+
+					it( 'should not toggle the UI on a global CTRL+ALT+F12 keyboard shortcut', () => {
+						windowEventMap.keydown( { key: 'F12', altKey: true, ctrlKey: true } );
+
+						sinon.assert.notCalled( dispatchSpy );
+					} );
 				} );
 			} );
 
