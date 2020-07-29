@@ -10,6 +10,7 @@ import {
 	isViewRoot,
 	isViewEmptyElement,
 	isViewUiElement,
+	isViewRawElement,
 	getViewPositionDefinition
 } from '../utils';
 
@@ -91,6 +92,9 @@ export function getEditorViewNodeDefinition( node ) {
 			} else if ( isViewUiElement( node ) ) {
 				info.type = 'UIElement';
 				info.url = `${ DOCS_URL_PREFIX }_uielement-UIElement.html`;
+			} else if ( isViewRawElement( node ) ) {
+				info.type = 'RawElement';
+				info.url = `${ DOCS_URL_PREFIX }_rawelement-RawElement.html`;
 			} else if ( isViewEditableElement( node ) ) {
 				info.type = 'EditableElement';
 				info.url = `${ DOCS_URL_PREFIX }_editableelement-EditableElement.html`;
@@ -181,6 +185,8 @@ function fillElementDefinition( elementDefinition, ranges ) {
 		elementDefinition.elementType = 'empty';
 	} else if ( isViewUiElement( element ) ) {
 		elementDefinition.elementType = 'ui';
+	} else if ( isViewRawElement( element ) ) {
+		elementDefinition.elementType = 'raw';
 	} else {
 		elementDefinition.elementType = 'container';
 	}
@@ -191,15 +197,25 @@ function fillElementDefinition( elementDefinition, ranges ) {
 		elementDefinition.presentation = {
 			isEmpty: true
 		};
-	}
-
-	if ( isViewUiElement( element ) ) {
+	} else if ( isViewUiElement( element ) ) {
 		elementDefinition.children.push( {
 			type: 'comment',
 			text: [
 				'&lt;!--',
 				'The View UI element content has been skipped. ',
-				'<a href="https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_uielement-UIElement.html" target="_blank">',
+				`<a href="${ DOCS_URL_PREFIX }_uielement-UIElement.html" target="_blank">`,
+				'Find out why',
+				'</a>.',
+				' --&gt;'
+			].join( '' )
+		} );
+	} else if ( isViewRawElement( element ) ) {
+		elementDefinition.children.push( {
+			type: 'comment',
+			text: [
+				'&lt;!--',
+				'The View raw element content has been skipped. ',
+				`<a href="${ DOCS_URL_PREFIX }_rawelement-RawElement.html" target="_blank">`,
 				'Find out why',
 				'</a>.',
 				' --&gt;'

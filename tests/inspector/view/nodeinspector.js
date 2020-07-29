@@ -301,6 +301,57 @@ describe( '<ViewNodeInspector />', () => {
 			wrapper.unmount();
 		} );
 
+		it( 'should render for a <RawElement>', () => {
+			editor.setData( '<p>foo</p>' );
+
+			editor.editing.view.change( writer => {
+				const foo = writer.createRawElement( 'foo', {
+					class: 'bar'
+				}, domElement => {
+					domElement.innerHTML = '<b>baz</b>';
+				} );
+
+				writer.insert( editor.editing.view.document.selection.getFirstPosition(), foo );
+				writer.setCustomProperty( 'foo', 'bar', foo );
+			} );
+
+			const element = editor.editing.view.document.getRoot().getChild( 0 ).getChild( 0 );
+
+			const store = createStore( state => state, {
+				view: {
+					currentNode: element,
+					currentNodeDefinition: getEditorViewNodeDefinition( element )
+				}
+			} );
+
+			const wrapper = mount( <Provider store={store}><ViewNodeInspector /></Provider> );
+
+			expect( wrapper.childAt( 0 ).find( 'h2 span' ).text() ).to.equal( 'RawElement:foo' );
+			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
+
+			const inspector = wrapper.find( ObjectInspector );
+			const lists = inspector.props().lists;
+
+			expect( lists[ 0 ].name ).to.equal( 'Attributes' );
+			expect( lists[ 0 ].itemDefinitions ).to.deep.equal( {
+				class: { value: 'bar' }
+			} );
+
+			expect( lists[ 1 ].name ).to.equal( 'Properties' );
+			expect( lists[ 1 ].itemDefinitions ).to.deep.equal( {
+				index: { value: '0' },
+				isEmpty: { value: 'true' },
+				childCount: { value: '0' }
+			} );
+
+			expect( lists[ 2 ].name ).to.equal( 'Custom Properties' );
+			expect( lists[ 2 ].itemDefinitions ).to.deep.equal( {
+				foo: { value: '"bar"' }
+			} );
+
+			wrapper.unmount();
+		} );
+
 		it( 'should render for an <EditableElement>', () => {
 			editor.setData( '' );
 

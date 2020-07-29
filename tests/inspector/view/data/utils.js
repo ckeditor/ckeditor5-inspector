@@ -97,14 +97,17 @@ describe( 'view data utils', () => {
 		it( 'should render with element types when state#showElementTypes is true', () => {
 			editor.setData( '<p><b>foo</b></p>' );
 
-			let emptyElement, uiElement;
+			let emptyElement, uiElement, rawElement;
 
 			editor.editing.view.change( writer => {
 				emptyElement = writer.createEmptyElement( 'foo' );
 				writer.insert( editor.editing.view.document.selection.getFirstPosition(), emptyElement );
 
-				uiElement = writer.createUIElement( 'foo' );
+				uiElement = writer.createUIElement( 'bar' );
 				writer.insert( editor.editing.view.document.selection.getFirstPosition(), uiElement );
+
+				rawElement = writer.createRawElement( 'baz' );
+				writer.insert( editor.editing.view.document.selection.getFirstPosition(), rawElement );
 			} );
 
 			const ranges = getEditorViewRanges( editor, 'main' );
@@ -139,7 +142,7 @@ describe( 'view data utils', () => {
 								},
 								{
 									type: 'element',
-									name: 'foo',
+									name: 'bar',
 									elementType: 'ui',
 									node: uiElement,
 									attributes: [],
@@ -147,6 +150,19 @@ describe( 'view data utils', () => {
 										{
 											type: 'comment',
 											text: /The View UI element content has been skipped/
+										}
+									]
+								},
+								{
+									type: 'element',
+									name: 'baz',
+									elementType: 'raw',
+									node: rawElement,
+									attributes: [],
+									children: [
+										{
+											type: 'comment',
+											text: /The View raw element content has been skipped/
 										}
 									]
 								},
@@ -219,6 +235,61 @@ describe( 'view data utils', () => {
 										{
 											type: 'comment',
 											text: /The View UI element content has been skipped/
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			] );
+		} );
+
+		it( 'should render a raw element content as a comment', () => {
+			editor.setData( '<p></p>' );
+
+			let uiElement;
+
+			editor.editing.view.change( writer => {
+				uiElement = writer.createRawElement( 'foo' );
+				writer.insert(
+					writer.createPositionAt( editor.editing.view.document.getRoot().getChild( 0 ), 0 ),
+					uiElement );
+			} );
+
+			const ranges = getEditorViewRanges( editor, 'main' );
+			const definition = getEditorViewTreeDefinition( {
+				currentEditor: editor,
+				currentRootName: 'main',
+				ranges
+			} );
+
+			assertTreeItems( definition, [
+				{
+					type: 'element',
+					name: 'div',
+					node: root,
+					attributes: ROOT_ATTRIBUTES,
+					children: [
+						{
+							type: 'element',
+							name: 'p',
+							node: root.getChild( 0 ),
+							attributes: [],
+							children: [
+								{
+									type: 'element',
+									name: 'foo',
+									node: uiElement,
+									attributes: [],
+									positionsBefore: [
+										{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null },
+										{ offset: 0, isEnd: true, presentation: null, type: 'selection', name: null }
+									],
+									children: [
+										{
+											type: 'comment',
+											text: /The View raw element content has been skipped/
 										}
 									]
 								}
