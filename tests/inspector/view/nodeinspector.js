@@ -334,7 +334,7 @@ describe( '<ViewNodeInspector />', () => {
 
 			expect( lists[ 0 ].name ).to.equal( 'Attributes' );
 			expect( lists[ 0 ].itemDefinitions ).to.deep.equal( {
-				class: { value: 'bar' }
+				class: { value: '"bar"' }
 			} );
 
 			expect( lists[ 1 ].name ).to.equal( 'Properties' );

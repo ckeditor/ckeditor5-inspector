@@ -170,11 +170,11 @@ describe( 'view data utils', () => {
 									type: 'element',
 									name: 'strong',
 									elementType: 'attribute',
-									node: root.getChild( 0 ).getChild( 2 ),
+									node: root.getChild( 0 ).getChild( 3 ),
 									children: [
 										{
 											type: 'text',
-											node: root.getChild( 0 ).getChild( 2 ).getChild( 0 ),
+											node: root.getChild( 0 ).getChild( 3 ).getChild( 0 ),
 											positions: [
 												{ offset: 0, isEnd: false, presentation: null, type: 'selection', name: null },
 												{ offset: 0, isEnd: true, presentation: null, type: 'selection', name: null }
