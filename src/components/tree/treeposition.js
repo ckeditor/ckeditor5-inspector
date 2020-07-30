@@ -4,7 +4,7 @@
  */
 
 import React, { Component } from 'react';
-import isEqual from 'react-fast-compare';
+import isEqual from 'lodash.isequal';
 
 /**
  * A class which instances represent positions (selection, markers) in the tree.
