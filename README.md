@@ -76,6 +76,12 @@ You can also pass the optional [configuration object](#configuration) to this me
 
 **Note**: This method works with CKEditor v12.3.0 or later. Earlier editor versions will not be discovered.
 
+### Toggling the inspector visibility
+
+Click the button in the upper-right corner of the inspector to quickly show or hide it. You can also use the <kbd>Alt</kbd>+<kbd>F12</kbd> (<kbd>⌥</kbd>+<kbd>F12</kbd> on Mac) keyboard shortcut.
+
+![The button that toggles the inspector visibility.](/sample/toggle.png)
+
 ### Configuration
 
 You can pass configuration options to `CKEditorInspector.attach()` and `CKEditorInspector.attachToAll()` methods as the last argument:
