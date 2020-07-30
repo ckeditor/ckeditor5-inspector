@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import isEqual from 'react-fast-compare';
+import isEqual from 'lodash.isequal';
 import TreeNode from './treenode';
 import TreeNodeAttribute from './treenodeattribute';
 import TreePosition from './treeposition';
