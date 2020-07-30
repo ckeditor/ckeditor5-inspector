@@ -16,12 +16,15 @@ import TestEditor from '../utils/testeditor';
 
 import {
 	SET_HEIGHT,
-	SET_CURRENT_EDITOR_NAME
+	SET_CURRENT_EDITOR_NAME,
+	TOGGLE_IS_COLLAPSED
 } from '../../src/data/actions';
 
 describe( '<InspectorUI />', () => {
 	let editors, wrapper, store, editor1Element, editor2Element, dispatchSpy;
 
+	const origAddEventListener = window.addEventListener;
+	const windowEventMap = {};
 	const container = document.createElement( 'div' );
 	document.body.appendChild( container );
 
@@ -33,6 +36,12 @@ describe( '<InspectorUI />', () => {
 
 		document.body.appendChild( editor1Element );
 		document.body.appendChild( editor2Element );
+
+		window.addEventListener = ( event, cb ) => {
+			windowEventMap[ event ] = cb;
+
+			origAddEventListener( event, cb );
+		};
 
 		return Promise.all( [
 			TestEditor.create( editor1Element ),
@@ -73,6 +82,8 @@ describe( '<InspectorUI />', () => {
 
 		editor1Element.remove();
 		editor2Element.remove();
+
+		window.addEventListener = origAddEventListener;
 
 		return Promise.all( Array.from( editors )
 			.map( ( [ , editor ] ) => editor.destroy() ) );
@@ -326,7 +337,8 @@ describe( '<InspectorUI />', () => {
 						const toggle = getToggle();
 						const button = toggle.find( 'button' );
 
-						expect( toggle.props().onClick ).to.equal( wrapper.props().toggleIsCollapsed );
+						expect( toggle.props().toggleIsCollapsed ).to.be.a( 'function' );
+						expect( button.props().onClick ).to.equal( toggle.props().toggleIsCollapsed );
 						expect( button ).to.not.have.className( 'ck-inspector-navbox__navigation__toggle_up' );
 
 						store.dispatch( {
@@ -339,6 +351,26 @@ describe( '<InspectorUI />', () => {
 						} );
 
 						expect( getToggle().find( 'button' ) ).to.have.className( 'ck-inspector-navbox__navigation__toggle_up' );
+					} );
+
+					it( 'should toggle the UI on a global ALT+F12 keyboard shortcut', () => {
+						windowEventMap.keydown( { key: 'F12', altKey: true } );
+
+						sinon.assert.calledWithExactly( dispatchSpy.lastCall, {
+							type: TOGGLE_IS_COLLAPSED
+						} );
+					} );
+
+					it( 'should not toggle the UI on a global SHIFT+ALT+F12 keyboard shortcut', () => {
+						windowEventMap.keydown( { key: 'F12', altKey: true, shiftKey: true } );
+
+						sinon.assert.notCalled( dispatchSpy );
+					} );
+
+					it( 'should not toggle the UI on a global CTRL+ALT+F12 keyboard shortcut', () => {
+						windowEventMap.keydown( { key: 'F12', altKey: true, ctrlKey: true } );
+
+						sinon.assert.notCalled( dispatchSpy );
 					} );
 				} );
 			} );
