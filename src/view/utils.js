@@ -19,6 +19,10 @@ export function isViewUiElement( node ) {
 	return node && isViewElement( node ) && node.is( 'uiElement' );
 }
 
+export function isViewRawElement( node ) {
+	return node && isViewElement( node ) && node.is( 'rawElement' );
+}
+
 export function isViewEditableElement( node ) {
 	return node && isViewElement( node ) && node.is( 'editableElement' );
 }
