@@ -16,7 +16,8 @@ import {
 
 import {
 	SET_EDITORS,
-	setCurrentEditorName
+	setCurrentEditorName,
+	toggleIsCollapsed
 } from '../../src/data/actions';
 
 import { LOCAL_STORAGE_IS_COLLAPSED } from '../../src/data/reducer';
@@ -133,6 +134,19 @@ describe( 'CKEditorInspector', () => {
 				editor.editing.view.fire( 'render' );
 				sinon.assert.callCount( spy, 4 );
 				sinon.assert.calledWithExactly( spy.getCall( 3 ), { type: UPDATE_VIEW_STATE } );
+
+				spy.restore();
+			} );
+
+			// https://github.com/ckeditor/ckeditor5-inspector/issues/80
+			it( 'should not respond to editor events when the inspector UI is collapsed', () => {
+				CKEditorInspector.attach( { foo: editor } );
+				dispatchStoreAction( toggleIsCollapsed() );
+
+				const spy = sinon.stub( CKEditorInspector._store, 'dispatch' );
+
+				editor.model.document.fire( 'change' );
+				sinon.assert.notCalled( spy );
 
 				spy.restore();
 			} );
@@ -309,6 +323,28 @@ describe( 'CKEditorInspector', () => {
 				expect( state.editors.size ).to.equal( 0 );
 				expect( state.currentEditorName ).to.be.null;
 			} );
+		} );
+
+		// https://github.com/ckeditor/ckeditor5-inspector/issues/80
+		it( 'should update model/view/commands state immediatelly when the inspector UI uncollapses', () => {
+			CKEditorInspector.attach( { foo: editor } );
+
+			dispatchStoreAction( toggleIsCollapsed() );
+
+			const spy = sinon.spy( CKEditorInspector._store, 'dispatch' );
+
+			editor.model.document.fire( 'change' );
+			sinon.assert.notCalled( spy );
+
+			dispatchStoreAction( toggleIsCollapsed() );
+
+			sinon.assert.callCount( spy, 4 );
+			// Note: The 0 call was TOGGLE_IS_COLLAPSED.
+			sinon.assert.calledWithExactly( spy.getCall( 1 ), { type: UPDATE_MODEL_STATE } );
+			sinon.assert.calledWithExactly( spy.getCall( 2 ), { type: UPDATE_COMMANDS_STATE } );
+			sinon.assert.calledWithExactly( spy.getCall( 3 ), { type: UPDATE_VIEW_STATE } );
+
+			spy.restore();
 		} );
 
 		describe( 'options', () => {

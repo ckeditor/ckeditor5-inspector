@@ -182,6 +182,7 @@ export default class CKEditorInspector {
 
 		const container = CKEditorInspector._wrapper = document.createElement( 'div' );
 		let previousEditor;
+		let wasUICollapsed;
 
 		container.className = 'ck-inspector-wrapper';
 		document.body.appendChild( container );
@@ -190,11 +191,29 @@ export default class CKEditorInspector {
 		// is changing or the view is being rendered.
 		CKEditorInspector._editorListener = new EditorListener( {
 			onModelChange() {
-				CKEditorInspector._store.dispatch( updateModelState() );
-				CKEditorInspector._store.dispatch( updateCommandsState() );
+				const store = CKEditorInspector._store;
+				const isUICollapsed = store.getState().ui.isCollapsed;
+
+				// Don't update the model and commands state if the entire inspector is collapsed.
+				// See https://github.com/ckeditor/ckeditor5-inspector/issues/80.
+				if ( isUICollapsed ) {
+					return;
+				}
+
+				store.dispatch( updateModelState() );
+				store.dispatch( updateCommandsState() );
 			},
 			onViewRender() {
-				CKEditorInspector._store.dispatch( updateViewState() );
+				const store = CKEditorInspector._store;
+				const isUICollapsed = store.getState().ui.isCollapsed;
+
+				// Don't update the view state if the entire inspector is collapsed.
+				// See https://github.com/ckeditor/ckeditor5-inspector/issues/80.
+				if ( isUICollapsed ) {
+					return;
+				}
+
+				store.dispatch( updateViewState() );
 			}
 		} );
 
@@ -231,6 +250,24 @@ export default class CKEditorInspector {
 				}
 
 				previousEditor = currentEditor;
+			}
+		} );
+
+		// Watch for changes of the current editor in the global store, and update the
+		// model/view/commands state when the UI uncollapses. Normally, when the inspector
+		// is collapsed, it does not respond to changes in the model/view/commands to improve
+		// the performance and DX. See https://github.com/ckeditor/ckeditor5-inspector/issues/80.
+		CKEditorInspector._store.subscribe( () => {
+			const store = CKEditorInspector._store;
+			const isUICollapsed = store.getState().ui.isCollapsed;
+			const hasUIUncollapsed = wasUICollapsed && !isUICollapsed;
+
+			wasUICollapsed = isUICollapsed;
+
+			if ( hasUIUncollapsed ) {
+				store.dispatch( updateModelState() );
+				store.dispatch( updateCommandsState() );
+				store.dispatch( updateViewState() );
 			}
 		} );
 
