@@ -1,6 +1,22 @@
 Changelog
 =========
 
+## [2.2.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v2.1.0...v2.2.0) (2020-08-05)
+
+### Features
+
+* Brought support for the editor view [`RawElement`](https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_rawelement-RawElement.html). Closes [#89](https://github.com/ckeditor/ckeditor5-inspector/issues/89). ([commit](https://github.com/ckeditor/ckeditor5-inspector/commit/f8d4c9f16a2a1a31aea133bf7e9253f3bd2e853c))
+* Made it possible to toggle the inspector using the <kbd>Alt</kbd>+<kbd>F12</kbd> keyboard shortcut. Closes [#87](https://github.com/ckeditor/ckeditor5-inspector/issues/87). ([commit](https://github.com/ckeditor/ckeditor5-inspector/commit/8059d72599c8cbbae16b5e831485b10e57a29da9))
+
+### Bug fixes
+
+* Addressed the "react-fast-compare circular refs" warning by switching to Lodash `isEqual()`. Closes [#86](https://github.com/ckeditor/ckeditor5-inspector/issues/86). ([commit](https://github.com/ckeditor/ckeditor5-inspector/commit/a5b4e672df8c0f4261197aa2db1debe2f4f61699))
+
+### Other changes
+
+* The inspector should not update on editor events when the UI is collapsed. Closes [#80](https://github.com/ckeditor/ckeditor5-inspector/issues/80). ([commit](https://github.com/ckeditor/ckeditor5-inspector/commit/03b3ec662ffded9da0c18344261b328248a922d4))
+
+
 ## [2.1.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v2.0.0...v2.1.0) (2020-06-01)
 
 ### Features
