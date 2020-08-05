@@ -153,18 +153,15 @@ yarn test
 
 ### Changelog
 
-Before starting the release process, you need to generate the changelog and build the package:
+Before starting the release process, you need to generate the changelog:
 
 ```console
 yarn changelog
-yarn build
 ```
 
-### Publishing
+### Updating the version
 
-After generating the changelog, you can release the package.
-
-First, you should bump the version:
+When the changelog is ready, you should bump the version:
 
 ```console
 yarn release:bump-version
@@ -172,13 +169,25 @@ yarn release:bump-version
 
 **Note**: You can use the `--dry-run` option to see what this task does.
 
-After bumping the version, run the sample and make sure global `CKEDITOR_INSPECTOR_VERSION` is right.
+### Building for production
+
+When the changelog is ready and the version was bumped, build the inspector for production:
+
+```console
+yarn build
+```
+
+**Note**: Run the sample and make sure global `CKEDITOR_INSPECTOR_VERSION` is correct.
+
+### Publishing the npm package
 
 Finally, make the changes public:
 
 ```console
 yarn release:publish
 ```
+
+**Note**: You can use the `--dry-run` option to see what this task does.
 
 ## License
 
