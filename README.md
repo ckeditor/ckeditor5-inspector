@@ -184,7 +184,7 @@ yarn build
 Finally, make the changes public:
 
 ```console
-yarn release:publish
+npm run release:publish
 ```
 
 **Note**: You can use the `--dry-run` option to see what this task does.
