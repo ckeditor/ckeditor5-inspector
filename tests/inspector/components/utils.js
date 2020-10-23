@@ -17,7 +17,7 @@ describe( 'Utils', () => {
 			expect( stringify( true ) ).to.equal( 'true' );
 			expect( stringify( 'foo' ) ).to.equal( '"foo"' );
 			expect( stringify( [ 'a' ] ) ).to.equal( '["a"]' );
-			expect( stringify( { a: false } ) ).to.equal( '{"a":false}' );
+			expect( stringify( { a: false } ) ).to.equal( '{a:false}' );
 			expect( stringify( () => 'foo' ) ).to.equal( 'function() {…}' );
 		} );
 
@@ -26,8 +26,28 @@ describe( 'Utils', () => {
 			expect( stringify( true ) ).to.equal( 'true' );
 			expect( stringify( 'foo', false ) ).to.equal( 'foo' );
 			expect( stringify( [ 'a' ], false ) ).to.equal( '["a"]' );
-			expect( stringify( { a: false }, false ) ).to.equal( '{"a":false}' );
+			expect( stringify( { a: false }, false ) ).to.equal( '{a:false}' );
 			expect( stringify( () => 'foo' ), false ).to.equal( 'function() {…}' );
+		} );
+
+		it( 'should not throw while processing circular references', () => {
+			const obj = { foo: 'bar' };
+			obj.baz = obj;
+
+			expect( () => {
+				expect( stringify( obj ) ).to.equal( '{foo:"bar"}' );
+			} ).to.not.throw();
+		} );
+
+		it( 'should process only the very first level of objects', () => {
+			const obj = {
+				level: '1',
+				nested: {
+					level: '2'
+				}
+			};
+
+			expect( stringify( obj ) ).to.equal( '{level:"1",nested:{}}' );
 		} );
 	} );
 
