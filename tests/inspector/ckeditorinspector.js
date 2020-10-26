@@ -81,7 +81,7 @@ describe( 'CKEditorInspector', () => {
 
 			expect( wrapper.tagName.toLowerCase() ).to.equal( 'div' );
 			expect( wrapper.parentNode ).to.equal( document.body );
-			expect( wrapper.childNodes.length ).to.equal( 2 );
+			expect( wrapper.childNodes.length ).to.equal( 1 );
 			expect( wrapper.firstChild.classList.contains( 'ck-inspector' ) ).to.be.true;
 		} );
 

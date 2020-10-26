@@ -3,6 +3,8 @@
  * For licensing, see LICENSE.md.
  */
 
+import { stringify as javascriptStringify } from 'javascript-stringify';
+
 export function stringify( value, quotesAroundText = true ) {
 	if ( value === undefined ) {
 		return 'undefined';
@@ -12,7 +14,9 @@ export function stringify( value, quotesAroundText = true ) {
 		return 'function() {…}';
 	}
 
-	const stringified = JSON.stringify( value );
+	const stringified = javascriptStringify( value, stringifySingleToDoubleQuotesReplacer, null, {
+		maxDepth: 1
+	} );
 
 	// Note: Remove leading and trailing quotes (") from the output. By default it is:
 	//
@@ -56,4 +60,14 @@ export function truncateString( string, length ) {
 	}
 
 	return string;
+}
+
+// Unlike JSON.stringify(), javascript-stringify returns single quotes around text.
+// Retain the JSON.stringify() formatting instead of fixing 100 tests across the project :)
+function stringifySingleToDoubleQuotesReplacer( value, indent, stringify ) {
+	if ( typeof value === 'string' ) {
+		return `"${ value.replace( '\'', '"' ) }"`;
+	}
+
+	return stringify( value );
 }
