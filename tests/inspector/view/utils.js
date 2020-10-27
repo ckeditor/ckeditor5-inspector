@@ -11,8 +11,16 @@ import { nodeToString } from '../../../src/view/utils';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import BoldEditing from '@ckeditor/ckeditor5-basic-styles/src/bold/boldediting';
 
+import {
+	getEditorViewNodeDefinition,
+	getEditorViewRanges,
+	getEditorViewTreeDefinition
+} from '../../../src/view/data/utils';
+
+import { assertTreeItems } from '../../../tests/utils/utils';
+
 describe( 'View utils', () => {
-	let editor, element;
+	let editor, root, element;
 
 	const container = document.createElement( 'div' );
 	document.body.appendChild( container );
@@ -25,6 +33,8 @@ describe( 'View utils', () => {
 			plugins: [ Paragraph, BoldEditing ]
 		} ).then( newEditor => {
 			editor = newEditor;
+
+			root = editor.editing.view.document.getRoot();
 		} );
 	} );
 
@@ -32,6 +42,92 @@ describe( 'View utils', () => {
 		element.remove();
 
 		return editor.destroy();
+	} );
+
+	describe( 'getEditorViewTreeDefinition()', () => {
+		it( 'should sort node attributes by name', () => {
+			editor.setData( '<p>a</p>' );
+
+			const paragraph = root.getChild( 0 );
+
+			// <p>a[]</p>
+			editor.editing.view.change( writer => {
+				writer.setSelection( paragraph, 1 );
+				writer.setAttribute( 'b', 'b-value', paragraph );
+				writer.setAttribute( 'a', 'a-value', paragraph );
+				writer.setAttribute( 'd', 'd-value', paragraph );
+				writer.setAttribute( 'c', 'c-value', paragraph );
+			} );
+
+			const ranges = getEditorViewRanges( editor, 'main' );
+			const definition = getEditorViewTreeDefinition( {
+				currentRootName: 'main',
+				currentEditor: editor,
+				ranges
+			} );
+
+			assertTreeItems( definition, [
+				{
+					type: 'element',
+					name: 'div',
+					node: root,
+					attributes: [
+						[ 'aria-label', 'Rich Text Editor, main' ],
+						[ 'class', 'ck-blurred ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline' ],
+						[ 'contenteditable', 'true' ],
+						[ 'dir', 'ltr' ],
+						[ 'lang', 'en' ],
+						[ 'role', 'textbox' ]
+					],
+					children: [
+						{
+							type: 'element',
+							name: 'p',
+							node: root.getChild( 0 ),
+							attributes: [
+								[ 'a', 'a-value' ],
+								[ 'b', 'b-value' ],
+								[ 'c', 'c-value' ],
+								[ 'd', 'd-value' ]
+							],
+							positions: [],
+							children: [
+								{
+									type: 'text',
+									node: root.getChild( 0 ).getChild( 0 ),
+									positionsAfter: [
+										{ offset: 1, isEnd: false, presentation: null, type: 'selection', name: null },
+										{ offset: 1, isEnd: true, presentation: null, type: 'selection', name: null }
+									],
+									text: 'a'
+								}
+							]
+						}
+					]
+				}
+			] );
+		} );
+	} );
+
+	describe( 'getEditorViewNodeDefinition()', () => {
+		it( 'should sort node attributes by name', () => {
+			editor.setData( '<p>a</p>' );
+
+			const paragraph = root.getChild( 0 );
+
+			// <p>a[]</p>
+			editor.editing.view.change( writer => {
+				writer.setSelection( paragraph, 1 );
+				writer.setAttribute( 'b', 'b-value', paragraph );
+				writer.setAttribute( 'a', 'a-value', paragraph );
+				writer.setAttribute( 'd', 'd-value', paragraph );
+				writer.setAttribute( 'c', 'c-value', paragraph );
+			} );
+
+			const definition = getEditorViewNodeDefinition( paragraph );
+
+			expect( Object.keys( definition.attributes ) ).to.have.ordered.members( [ 'a', 'b', 'c', 'd' ] );
+		} );
 	} );
 
 	describe( 'nodeToString()', () => {

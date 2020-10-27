@@ -162,9 +162,10 @@ export function getEditorModelNodeDefinition( currentEditor, node ) {
 
 	definition.properties.path = { value: getNodePathString( node ) };
 
-	for ( const [ name, value ] of node.getAttributes() ) {
-		definition.attributes[ name ] = { value };
-	}
+	getSortedNodeAttributes( node )
+		.forEach( ( [ name, value ] ) => {
+			definition.attributes[ name ] = { value };
+		} );
 
 	definition.properties = stringifyPropertyList( definition.properties );
 	definition.attributes = stringifyPropertyList( definition.attributes );
@@ -222,7 +223,7 @@ function fillElementDefinition( elementDefinition, ranges ) {
 
 	fillElementPositions( elementDefinition, ranges );
 
-	elementDefinition.attributes = getNodeAttributes( element );
+	elementDefinition.attributes = getNodeAttributesForDefinition( element );
 }
 
 function fillElementPositions( elementDefinition, ranges ) {
@@ -322,15 +323,21 @@ function fillTextNodeDefinition( textNodeDefinition ) {
 		}
 	} );
 
-	textNodeDefinition.attributes = getNodeAttributes( textNode );
+	textNodeDefinition.attributes = getNodeAttributesForDefinition( textNode );
 }
 
-function getNodeAttributes( node ) {
-	const attrs = [ ...node.getAttributes() ].map( ( [ name, value ] ) => {
-		return [ name, stringify( value, false ) ];
-	} );
+function getNodeAttributesForDefinition( node ) {
+	const attrs = getSortedNodeAttributes( node )
+		.map( ( [ name, value ] ) => {
+			return [ name, stringify( value, false ) ];
+		} );
 
 	return new Map( attrs );
+}
+
+function getSortedNodeAttributes( node ) {
+	return [ ...node.getAttributes() ]
+		.sort( ( [ nameA ], [ nameB ] ) => nameA < nameB ? -1 : 1 );
 }
 
 function getRangePositionsInElement( node, range ) {

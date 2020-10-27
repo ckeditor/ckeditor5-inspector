@@ -8,7 +8,8 @@
 import {
 	getEditorModelTreeDefinition,
 	getEditorModelMarkers,
-	getEditorModelRanges
+	getEditorModelRanges,
+	getEditorModelNodeDefinition
 } from '../../../../src/model/data/utils';
 
 import TestEditor from '../../../utils/testeditor';
@@ -18,26 +19,26 @@ import BoldEditing from '@ckeditor/ckeditor5-basic-styles/src/bold/boldediting';
 import { assertTreeItems } from '../../../../tests/utils/utils';
 
 describe( 'model data utils', () => {
+	let editor, element, root;
+
+	beforeEach( () => {
+		element = document.createElement( 'div' );
+		document.body.appendChild( element );
+
+		return TestEditor.create( element, {
+			plugins: [ Paragraph, BoldEditing ]
+		} ).then( newEditor => {
+			editor = newEditor;
+
+			root = editor.model.document.getRoot();
+		} );
+	} );
+
+	afterEach( () => {
+		return editor.destroy();
+	} );
+
 	describe( 'getEditorModelTreeDefinition()', () => {
-		let editor, element, root;
-
-		beforeEach( () => {
-			element = document.createElement( 'div' );
-			document.body.appendChild( element );
-
-			return TestEditor.create( element, {
-				plugins: [ Paragraph, BoldEditing ]
-			} ).then( newEditor => {
-				editor = newEditor;
-
-				root = editor.model.document.getRoot();
-			} );
-		} );
-
-		afterEach( () => {
-			return editor.destroy();
-		} );
-
 		it( 'renders a tree #1', () => {
 			// <paragraph>[]</paragraph>
 			editor.setData( '<p></p>' );
@@ -376,6 +377,88 @@ describe( 'model data utils', () => {
 					]
 				}
 			] );
+		} );
+
+		it( 'should sort node attributes by name', () => {
+			editor.setData( '<p>a</p>' );
+
+			const paragraph = root.getChild( 0 );
+
+			// <paragraph>a[]</paragraph>
+			editor.model.change( writer => {
+				writer.setSelection( paragraph, 1 );
+				writer.setAttribute( 'b', 'b-value', paragraph );
+				writer.setAttribute( 'a', 'a-value', paragraph );
+				writer.setAttribute( 'd', 'd-value', paragraph );
+				writer.setAttribute( 'c', 'c-value', paragraph );
+			} );
+
+			const ranges = getEditorModelRanges( editor, 'main' );
+			const markers = getEditorModelMarkers( editor, 'main' );
+			const definition = getEditorModelTreeDefinition( {
+				currentEditor: editor,
+				currentRootName: 'main',
+				ranges,
+				markers
+			} );
+
+			assertTreeItems( definition, [
+				{
+					type: 'element',
+					name: '$root',
+					node: root,
+					attributes: [],
+					children: [
+						{
+							type: 'element',
+							name: 'paragraph',
+							node: root.getChild( 0 ),
+							attributes: [
+								[ 'a', 'a-value' ],
+								[ 'b', 'b-value' ],
+								[ 'c', 'c-value' ],
+								[ 'd', 'd-value' ]
+							],
+							positions: [],
+							children: [
+								{
+									type: 'text',
+									node: root.getChild( 0 ).getChild( 0 ),
+									presentation: {
+										dontRenderAttributeValue: true
+									},
+									positionsAfter: [
+										{ offset: 1, isEnd: false, presentation: null, type: 'selection', name: null },
+										{ offset: 1, isEnd: true, presentation: null, type: 'selection', name: null }
+									],
+									text: 'a'
+								}
+							]
+						}
+					]
+				}
+			] );
+		} );
+	} );
+
+	describe( 'getEditorModelNodeDefinition()', () => {
+		it( 'should sort node attributes by name', () => {
+			editor.setData( '<p>a</p>' );
+
+			const paragraph = root.getChild( 0 );
+
+			// <paragraph>a[]</paragraph>
+			editor.model.change( writer => {
+				writer.setSelection( paragraph, 1 );
+				writer.setAttribute( 'b', 'b-value', paragraph );
+				writer.setAttribute( 'a', 'a-value', paragraph );
+				writer.setAttribute( 'd', 'd-value', paragraph );
+				writer.setAttribute( 'c', 'c-value', paragraph );
+			} );
+
+			const definition = getEditorModelNodeDefinition( editor, paragraph );
+
+			expect( Object.keys( definition.attributes ) ).to.have.ordered.members( [ 'a', 'b', 'c', 'd' ] );
 		} );
 	} );
 } );

@@ -114,9 +114,10 @@ export function getEditorViewNodeDefinition( node ) {
 			}
 		}
 
-		for ( const [ name, value ] of node.getAttributes() ) {
-			info.attributes[ name ] = { value };
-		}
+		getSortedNodeAttributes( node )
+			.forEach( ( [ name, value ] ) => {
+				info.attributes[ name ] = { value };
+			} );
 
 		info.properties = {
 			index: {
@@ -225,7 +226,7 @@ function fillElementDefinition( elementDefinition, ranges ) {
 
 	fillViewElementDefinitionPositions( elementDefinition, ranges );
 
-	elementDefinition.attributes = getNodeAttrs( element );
+	elementDefinition.attributes = getNodeAttributesForDefinition( element );
 }
 
 function fillViewTextNodeDefinition( textNodeDefinition, ranges ) {
@@ -344,10 +345,16 @@ function isPathPrefixingAnother( pathA, pathB ) {
 	return false;
 }
 
-function getNodeAttrs( node ) {
-	const attrs = [ ...node.getAttributes() ].map( ( [ name, value ] ) => {
-		return [ name, stringify( value, false ) ];
-	} );
+function getNodeAttributesForDefinition( node ) {
+	const attrs = getSortedNodeAttributes( node )
+		.map( ( [ name, value ] ) => {
+			return [ name, stringify( value, false ) ];
+		} );
 
 	return new Map( attrs );
+}
+
+function getSortedNodeAttributes( node ) {
+	return [ ...node.getAttributes() ]
+		.sort( ( [ nameA ], [ nameB ] ) => nameA.toUpperCase() < nameB.toUpperCase() ? -1 : 1 );
 }
