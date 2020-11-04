@@ -5,7 +5,7 @@ Changelog
 
 ### Bug fixes
 
-* Node attributes should be sorted in trees and node inspectors (model&view). Closes [#97](https://github.com/ckeditor/ckeditor5-inspector/issues/97). ([commit](https://github.com/ckeditor/ckeditor5-inspector/commit/d8c109dc4d23ec34f7209cc7d196dcfcb3a821dd))
+* Node attributes should be sorted in trees and node inspectors (both for the model and the view). Closes [#97](https://github.com/ckeditor/ckeditor5-inspector/issues/97). ([commit](https://github.com/ckeditor/ckeditor5-inspector/commit/d8c109dc4d23ec34f7209cc7d196dcfcb3a821dd))
 * The inspector should not throw when attributes are objects with circular references. Closes [#98](https://github.com/ckeditor/ckeditor5-inspector/issues/98). ([commit](https://github.com/ckeditor/ckeditor5-inspector/commit/36bf877d6395af1ec22151b01034eda8e585e135))
 
 
