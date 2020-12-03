@@ -36,7 +36,14 @@ module.exports = ( env, argv ) => {
 				{
 					test: /\.css$/,
 					loaders: [
-						'style-loader',
+						{
+							loader: 'style-loader',
+							options: {
+								attributes: {
+									'data-cke-inspector': true
+								}
+							}
+						},
 						{
 							loader: 'css-loader',
 							options: {
