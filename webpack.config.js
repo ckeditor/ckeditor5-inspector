@@ -39,6 +39,7 @@ module.exports = ( env, argv ) => {
 						{
 							loader: 'style-loader',
 							options: {
+								injectType: devMode ? 'styleTag' : 'singletonStyleTag',
 								attributes: {
 									'data-cke-inspector': true
 								}
