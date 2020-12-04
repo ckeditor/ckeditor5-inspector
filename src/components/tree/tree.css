@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md.
  */
 
-:root {
+.ck-inspector {
 	--ck-inspector-color-tree-node-hover: #EAF2FB;
 	--ck-inspector-color-tree-node-name: #882680;
 	--ck-inspector-color-tree-node-attribute-name: #8a8a8a;

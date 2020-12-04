@@ -36,7 +36,15 @@ module.exports = ( env, argv ) => {
 				{
 					test: /\.css$/,
 					loaders: [
-						'style-loader',
+						{
+							loader: 'style-loader',
+							options: {
+								injectType: devMode ? 'styleTag' : 'singletonStyleTag',
+								attributes: {
+									'data-cke-inspector': true
+								}
+							}
+						},
 						{
 							loader: 'css-loader',
 							options: {

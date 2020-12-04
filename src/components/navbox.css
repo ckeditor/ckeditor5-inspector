@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md.
  */
 
-:root {
+.ck-inspector {
 	--ck-inspector-navbox-empty-background: #fafafa;
 }
 
@@ -30,6 +30,6 @@
 		display: flex;
 		flex-direction: row;
 		height: 100%;
-		overflow: hidden;		
+		overflow: hidden;
 	}
 }

@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md.
  */
 
-:root {
+.ck-inspector {
 	--ck-inspector-color-property-list-property-name: #D0363F;
 	--ck-inspector-color-property-list-property-value-true: green;
 	--ck-inspector-color-property-list-property-value-false: red;

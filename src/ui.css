@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md.
  */
 
-:root {
+.ck-inspector {
 	--ck-inspector-color-white: #fff;
 	--ck-inspector-color-black: #000;
 	--ck-inspector-color-background: #F3F3F3;
