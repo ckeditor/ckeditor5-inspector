@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md.
  */
 
-:root {
+.ck-inspector {
 	--ck-inspector-color-tab-background-hover: rgba(0,0,0,.07);
 	--ck-inspector-color-tab-active-border: #0DACEF
 }
