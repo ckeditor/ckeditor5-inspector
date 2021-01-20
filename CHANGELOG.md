@@ -1,6 +1,17 @@
 Changelog
 =========
 
+## [2.2.2](https://github.com/ckeditor/ckeditor5-inspector/compare/v2.2.1...v2.2.2) (2021-01-20)
+
+### Other changes
+
+* Added the `data-cke-inspector=true` attribute to all `<style>` tags injected by the application. Closes [#106](https://github.com/ckeditor/ckeditor5-inspector/issues/106). ([commit](https://github.com/ckeditor/ckeditor5-inspector/commit/ee9cb3f3ce14523a7e5cc472f328b11aafc16b7a))
+
+  Also:
+  * Reduced the number of `<style>` tags injected by the application.
+  * Used the `.ck-inspector` namespace for CSS custom properties used by the inspector to clean up the developer tools and improve DX.
+
+
 ## [2.2.1](https://github.com/ckeditor/ckeditor5-inspector/compare/v2.2.0...v2.2.1) (2020-11-04)
 
 ### Bug fixes
