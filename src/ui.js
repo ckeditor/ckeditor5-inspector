@@ -40,6 +40,7 @@ class InspectorUI extends Component {
 		super( props );
 
 		updateBodyHeight( this.props.height );
+		document.body.style.setProperty( '--ck-inspector-collapsed-height', `${ INSPECTOR_COLLAPSED_HEIGHT }px` );
 
 		this.handleInspectorResize = this.handleInspectorResize.bind( this );
 	}
