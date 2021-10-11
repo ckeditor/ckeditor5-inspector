@@ -118,14 +118,14 @@ describe( '<InspectorUI />', () => {
 			expect( document.body.classList.contains( 'ck-inspector-body-collapsed' ) ).to.be.true;
 		} );
 
-		it( 'body element should have the correct bottom margin the when expanded', () => {
+		it( 'should define the margin-bottom on the `body` element with the height of the inspector container (non-collapsed)', () => {
 			expect( document.body.classList.contains( 'ck-inspector-body-expanded' ) ).to.be.true;
 			expect( document.body.classList.contains( 'ck-inspector-body-collapsed' ) ).to.be.false;
 
 			expect( window.getComputedStyle( document.body ).marginBottom ).to.equal( '123px' );
 		} );
 
-		it( 'body element should have the correct bottom margin the when collapsed', () => {
+		it( 'should define the margin-bottom on the `body` element with the height of the inspector container (collapsed)', () => {
 			store.dispatch( {
 				type: 'testAction',
 				state: {
