@@ -7,6 +7,10 @@ html body.ck-inspector-body-expanded {
 	margin-bottom: var(--ck-inspector-height);
 }
 
+html body.ck-inspector-body-collapsed {
+	margin-bottom: var(--ck-inspector-collapsed-height);
+}
+
 .ck-inspector-wrapper * {
 	box-sizing: border-box;
 }

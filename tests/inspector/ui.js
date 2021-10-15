@@ -118,6 +118,29 @@ describe( '<InspectorUI />', () => {
 			expect( document.body.classList.contains( 'ck-inspector-body-collapsed' ) ).to.be.true;
 		} );
 
+		it( 'should define the margin-bottom on the `body` element with the height of the inspector container (non-collapsed)', () => {
+			expect( document.body.classList.contains( 'ck-inspector-body-expanded' ) ).to.be.true;
+			expect( document.body.classList.contains( 'ck-inspector-body-collapsed' ) ).to.be.false;
+
+			expect( window.getComputedStyle( document.body ).marginBottom ).to.equal( '123px' );
+		} );
+
+		it( 'should define the margin-bottom on the `body` element with the height of the inspector container (collapsed)', () => {
+			store.dispatch( {
+				type: 'testAction',
+				state: {
+					ui: {
+						isCollapsed: true
+					}
+				}
+			} );
+
+			expect( document.body.classList.contains( 'ck-inspector-body-expanded' ) ).to.be.false;
+			expect( document.body.classList.contains( 'ck-inspector-body-collapsed' ) ).to.be.true;
+
+			expect( window.getComputedStyle( document.body ).marginBottom ).to.equal( '30px' );
+		} );
+
 		describe( 'resizable container', () => {
 			it( 'should be rendered', () => {
 				expect( wrapper.find( Rnd ).first() ).to.have.lengthOf( 1 );
