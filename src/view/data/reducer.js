@@ -25,6 +25,7 @@ import {
 } from './utils';
 
 import { isViewRoot } from '../utils';
+import { getCurrentEditor } from '../../data/utils';
 
 import LocalStorageManager from '../../localstoragemanager';
 
@@ -183,8 +184,4 @@ function getEssentialState( globalState, viewState, viewStateOverrides ) {
 		currentNodeDefinition,
 		ranges
 	};
-}
-
-function getCurrentEditor( globalState ) {
-	return globalState.editors.get( globalState.currentEditorName );
 }

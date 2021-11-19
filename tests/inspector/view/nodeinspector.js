@@ -96,7 +96,7 @@ describe( '<ViewNodeInspector />', () => {
 
 			const wrapper = mount( <Provider store={store}><ViewNodeInspector /></Provider> );
 
-			expect( wrapper.childAt( 0 ).find( 'h2 span' ).text() ).to.equal( 'RootEditableElement:main' );
+			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'RootEditableElement:main' );
 			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
 
 			const inspector = wrapper.find( ObjectInspector );
@@ -147,7 +147,7 @@ describe( '<ViewNodeInspector />', () => {
 
 			const wrapper = mount( <Provider store={store}><ViewNodeInspector /></Provider> );
 
-			expect( wrapper.childAt( 0 ).find( 'h2 span' ).text() ).to.equal( 'ContainerElement:p' );
+			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'ContainerElement:p' );
 			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
 
 			const inspector = wrapper.find( ObjectInspector );
@@ -189,7 +189,7 @@ describe( '<ViewNodeInspector />', () => {
 
 			const wrapper = mount( <Provider store={store}><ViewNodeInspector /></Provider> );
 
-			expect( wrapper.childAt( 0 ).find( 'h2 span' ).text() ).to.equal( 'AttributeElement:strong' );
+			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'AttributeElement:strong' );
 			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
 
 			const inspector = wrapper.find( ObjectInspector );
@@ -233,7 +233,7 @@ describe( '<ViewNodeInspector />', () => {
 
 			const wrapper = mount( <Provider store={store}><ViewNodeInspector /></Provider> );
 
-			expect( wrapper.childAt( 0 ).find( 'h2 span' ).text() ).to.equal( 'EmptyElement:foo' );
+			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'EmptyElement:foo' );
 			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
 
 			const inspector = wrapper.find( ObjectInspector );
@@ -277,7 +277,7 @@ describe( '<ViewNodeInspector />', () => {
 
 			const wrapper = mount( <Provider store={store}><ViewNodeInspector /></Provider> );
 
-			expect( wrapper.childAt( 0 ).find( 'h2 span' ).text() ).to.equal( 'UIElement:foo' );
+			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'UIElement:foo' );
 			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
 
 			const inspector = wrapper.find( ObjectInspector );
@@ -326,7 +326,7 @@ describe( '<ViewNodeInspector />', () => {
 
 			const wrapper = mount( <Provider store={store}><ViewNodeInspector /></Provider> );
 
-			expect( wrapper.childAt( 0 ).find( 'h2 span' ).text() ).to.equal( 'RawElement:foo' );
+			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'RawElement:foo' );
 			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
 
 			const inspector = wrapper.find( ObjectInspector );
@@ -372,7 +372,7 @@ describe( '<ViewNodeInspector />', () => {
 
 			const wrapper = mount( <Provider store={store}><ViewNodeInspector /></Provider> );
 
-			expect( wrapper.childAt( 0 ).find( 'h2 span' ).text() ).to.equal( 'EditableElement:p' );
+			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'EditableElement:p' );
 			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
 
 			const inspector = wrapper.find( ObjectInspector );
@@ -411,7 +411,7 @@ describe( '<ViewNodeInspector />', () => {
 
 			const wrapper = mount( <Provider store={store}><ViewNodeInspector /></Provider> );
 
-			expect( wrapper.childAt( 0 ).find( 'h2 span' ).text() ).to.equal( 'Text:foo' );
+			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'Text:foo' );
 			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
 
 			const inspector = wrapper.find( ObjectInspector );

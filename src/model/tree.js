@@ -58,6 +58,7 @@ class ModelTree extends Component {
 						onChange={this.handleRootChange}
 					/>
 				</div>,
+				<span className="ck-inspector-separator" key="separator"></span>,
 				<div className="ck-inspector-tree__config" key="text-cfg">
 					<Checkbox
 						label="Compact text"

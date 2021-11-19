@@ -13,10 +13,12 @@ import {
 	SET_SIDE_PANE_WIDTH,
 	SET_EDITORS,
 	SET_CURRENT_EDITOR_NAME,
+	UPDATE_CURRENT_EDITOR_IS_READ_ONLY,
 	SET_ACTIVE_INSPECTOR_TAB
 } from './actions';
 
 import { getFirstEditorName } from '../utils';
+import { getCurrentEditor } from './utils';
 
 import LocalStorageManager from '../localstoragemanager';
 
@@ -28,6 +30,7 @@ export const LOCAL_STORAGE_SIDE_PANE_WIDTH = 'side-pane-width';
 export function reducer( state, action ) {
 	const newState = appReducer( state, action );
 
+	newState.currentEditorGlobals = currentEditorGlobalsReducer( newState, newState.currentEditorGlobals, action );
 	newState.ui = appUIReducer( newState.ui, action );
 	newState.model = modelReducer( newState, newState.model, action );
 	newState.view = viewReducer( newState, newState.view, action );
@@ -47,6 +50,18 @@ function appReducer( state, action ) {
 			return getNewCurrentEditorNameState( state, action );
 		default:
 			return state;
+	}
+}
+
+function currentEditorGlobalsReducer( state, globalsState, action ) {
+	switch ( action.type ) {
+		case SET_EDITORS:
+		case SET_CURRENT_EDITOR_NAME:
+			return getCurrentEditorGlobalState( state );
+		case UPDATE_CURRENT_EDITOR_IS_READ_ONLY:
+			return getNewCurrentEditorIsReadOnlyState( state, globalsState );
+		default:
+			return globalsState;
 	}
 }
 
@@ -93,6 +108,24 @@ function getNewCurrentEditorNameState( appState, action ) {
 		...appState,
 
 		currentEditorName: action.editorName
+	};
+}
+
+function getCurrentEditorGlobalState( appState ) {
+	const isReadOnlyState = getNewCurrentEditorIsReadOnlyState( appState, {} );
+
+	return {
+		...isReadOnlyState
+	};
+}
+
+function getNewCurrentEditorIsReadOnlyState( appState, globalsState ) {
+	const editor = getCurrentEditor( appState );
+
+	return {
+		...globalsState,
+
+		isReadOnly: editor ? editor.isReadOnly : false
 	};
 }
 

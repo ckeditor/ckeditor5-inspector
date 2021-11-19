@@ -13,6 +13,8 @@ import { stringifyPropertyList } from '../components/utils';
 
 import Logger from '../logger';
 
+import ConsoleIcon from '../assets/img/console.svg';
+
 const API_DOCS_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_markercollection-Marker.html';
 
 class ModelMarkerInspector extends Component {
@@ -37,7 +39,7 @@ class ModelMarkerInspector extends Component {
 				</span>,
 				<Button
 					key="log"
-					type="log"
+					icon={<ConsoleIcon />}
 					text="Log in console"
 					onClick={() => Logger.log( [ ...currentEditor.model.markers ] )}
 				/>

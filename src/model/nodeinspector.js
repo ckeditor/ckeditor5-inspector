@@ -12,6 +12,8 @@ import ObjectInspector from '../components/objectinspector';
 
 import Logger from '../logger';
 
+import ConsoleIcon from '../assets/img/console.svg';
+
 class ModelNodeInspector extends Component {
 	constructor( props ) {
 		super( props );
@@ -42,7 +44,7 @@ class ModelNodeInspector extends Component {
 				</span>,
 				<Button
 					key="log"
-					type="log"
+					icon={<ConsoleIcon />}
 					text="Log in console"
 					onClick={this.handleNodeLogButtonClick}
 				/>

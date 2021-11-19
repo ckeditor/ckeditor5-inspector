@@ -89,7 +89,7 @@ describe( '<ModelNodeInspector />', () => {
 
 			const wrapper = mount( <Provider store={store}><ModelNodeInspector /></Provider> );
 
-			expect( wrapper.childAt( 0 ).find( 'h2 span' ).text() ).to.equal( 'RootElement:main' );
+			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'RootElement:main' );
 			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
 
 			const inspector = wrapper.find( ObjectInspector );
@@ -111,7 +111,7 @@ describe( '<ModelNodeInspector />', () => {
 		} );
 
 		it( 'should render for an <Element>', () => {
-			expect( wrapper.childAt( 0 ).find( 'h2 span' ).text() ).to.equal( 'Element:paragraph' );
+			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'Element:paragraph' );
 			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
 
 			const inspector = wrapper.find( ObjectInspector );
@@ -141,7 +141,7 @@ describe( '<ModelNodeInspector />', () => {
 
 			const wrapper = mount( <Provider store={store}><ModelNodeInspector /></Provider> );
 
-			expect( wrapper.childAt( 0 ).find( 'h2 span' ).text() ).to.equal( 'Text:f' );
+			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'Text:f' );
 			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
 
 			const inspector = wrapper.find( ObjectInspector );

@@ -42,18 +42,6 @@
 			}
 
 			& .ck-inspector-tree__config {
-				& + .ck-inspector-tree__config {
-					&::before {
-						content: "";
-						border-right: 1px solid var(--ck-inspector-color-border);
-						display: inline-block;
-						width: 0px;
-						height: 20px;
-						margin: 0 1em;
-						vertical-align: middle;
-					}
-				}
-
 				& label {
 					margin: 0 .5em;
 				}

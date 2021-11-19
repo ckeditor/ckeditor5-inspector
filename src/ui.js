@@ -18,10 +18,14 @@ import {
 
 import Tabs from './components/tabs';
 import Select from './components/select';
+import Button from './components/button';
 
 import ModelPane from './model/pane';
 import ViewPane from './view/pane';
 import CommandsPane from './commands/pane';
+
+import EditorQuickActions from './editorquickactions';
+import ArrowDownIcon from './assets/img/arrow-down.svg';
 
 import './ui.css';
 
@@ -84,6 +88,9 @@ class InspectorUI extends Component {
 				activeTab={this.props.activeTab}
 				contentAfter={[
 					<EditorInstanceSelector key="selector" />,
+					<span className="ck-inspector-separator" key="separator-a"></span>,
+					<EditorQuickActions key="quick-actions" />,
+					<span className="ck-inspector-separator" key="separator-b"></span>,
 					<ToggleButton key="inspector-toggle" />
 				]}
 			>
@@ -126,16 +133,16 @@ class ToggleButtonVisual extends Component {
 	}
 
 	render() {
-		return <button
-			type="button"
+		return <Button
+			text="Toggle inspector"
+			icon={<ArrowDownIcon />}
 			onClick={this.props.toggleIsCollapsed}
 			title="Toggle inspector (Alt+F12)"
 			className={[
 				'ck-inspector-navbox__navigation__toggle',
 				this.props.isCollapsed ? ' ck-inspector-navbox__navigation__toggle_up' : ''
-			].join( ' ' )}>
-				Toggle inspector
-		</button>;
+			].join( ' ' )}
+		/>;
 	}
 
 	componentDidMount() {
@@ -162,7 +169,7 @@ export class EditorInstanceSelectorVisual extends Component {
 		return <div className="ck-inspector-editor-selector" key="editor-selector">
 			{this.props.currentEditorName ? <Select
 				id="inspector-editor-selector"
-				label="Editor instance"
+				label="Instance"
 				value={this.props.currentEditorName}
 				options={[ ...this.props.editors ].map( ( [ editorName ] ) => editorName ) }
 				onChange={evt => this.props.setCurrentEditorName( evt.target.value )}

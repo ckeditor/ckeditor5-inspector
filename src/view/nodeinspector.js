@@ -13,6 +13,8 @@ import Pane from '../components/pane';
 import { DOCS_URL_PREFIX } from './data/utils';
 import Logger from '../logger';
 
+import ConsoleIcon from '../assets/img/console.svg';
+
 class ViewNodeInspector extends Component {
 	constructor( props ) {
 		super( props );
@@ -43,7 +45,7 @@ class ViewNodeInspector extends Component {
 				</span>,
 				<Button
 					key="log"
-					type="log"
+					icon={<ConsoleIcon />}
 					text="Log in console"
 					onClick={this.handleNodeLogButtonClick}
 				/>

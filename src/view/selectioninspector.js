@@ -15,6 +15,9 @@ import { stringifyPropertyList } from '../components/utils';
 import Logger from '../logger';
 import { getViewPositionDefinition } from './utils';
 
+import ConsoleIcon from '../assets/img/console.svg';
+import EyeIcon from '../assets/img/eye.svg';
+
 const API_DOCS_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_view_selection-Selection.html';
 
 class ViewSelectionInspector extends Component {
@@ -59,13 +62,13 @@ class ViewSelectionInspector extends Component {
 				</span>,
 				<Button
 					key="log"
-					type="log"
+					icon={<ConsoleIcon />}
 					text="Log in console"
 					onClick={this.handleSelectionLogButtonClick}
 				/>,
 				<Button
 					key="scroll"
-					type="scroll"
+					icon={<EyeIcon />}
 					text="Scroll to selection"
 					onClick={this.handleScrollToSelectionButtonClick}
 				/>

@@ -27,6 +27,7 @@ import {
 } from './utils';
 
 import { isModelRoot } from '../utils';
+import { getCurrentEditor } from '../../data/utils';
 
 import LocalStorageManager from '../../localstoragemanager';
 
@@ -212,8 +213,4 @@ function getEssentialState( globalState, modelState, modelStateOverrides ) {
 		ranges,
 		markers
 	};
-}
-
-function getCurrentEditor( globalState ) {
-	return globalState.editors.get( globalState.currentEditorName );
 }

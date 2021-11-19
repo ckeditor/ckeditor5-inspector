@@ -9,6 +9,7 @@ import {
 	setSidePaneWidth,
 	setEditors,
 	setCurrentEditorName,
+	updateCurrentEditorIsReadOnly,
 	setActiveTab,
 
 	TOGGLE_IS_COLLAPSED,
@@ -16,7 +17,8 @@ import {
 	SET_SIDE_PANE_WIDTH,
 	SET_EDITORS,
 	SET_CURRENT_EDITOR_NAME,
-	SET_ACTIVE_INSPECTOR_TAB
+	SET_ACTIVE_INSPECTOR_TAB,
+	UPDATE_CURRENT_EDITOR_IS_READ_ONLY
 } from '../../../src/data/actions';
 
 describe( 'global data store actions', () => {
@@ -58,6 +60,12 @@ describe( 'global data store actions', () => {
 		expect( setActiveTab( 'foo' ) ).to.deep.equal( {
 			type: SET_ACTIVE_INSPECTOR_TAB,
 			tabName: 'foo'
+		} );
+	} );
+
+	it( 'should export updateCurrentEditorIsReadOnly()', () => {
+		expect( updateCurrentEditorIsReadOnly() ).to.deep.equal( {
+			type: UPDATE_CURRENT_EDITOR_IS_READ_ONLY
 		} );
 	} );
 } );

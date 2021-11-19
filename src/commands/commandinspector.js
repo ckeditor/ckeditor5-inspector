@@ -12,6 +12,9 @@ import ObjectInspector from '../components/objectinspector';
 
 import Logger from '../logger';
 
+import ConsoleIcon from '../assets/img/console.svg';
+import PlayIcon from '../assets/img/play.svg';
+
 class CommandInspector extends Component {
 	constructor( props ) {
 		super( props );
@@ -47,14 +50,14 @@ class CommandInspector extends Component {
 				</span>,
 				<Button
 					key="exec"
-					type="exec"
+					icon={<PlayIcon />}
 					text="Execute command"
 					onClick={this.handleCommandExecuteButtonClick}
 				/>,
 				<Button
 					key="log"
-					type="log"
 					text="Log in console"
+					icon={<ConsoleIcon />}
 					onClick={this.handleCommandLogButtonClick}
 				/>
 			]}
