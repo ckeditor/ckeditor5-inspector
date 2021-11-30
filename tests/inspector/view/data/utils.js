@@ -142,14 +142,22 @@ describe( 'view data utils', () => {
 								},
 								{
 									type: 'element',
-									name: 'bar',
-									elementType: 'ui',
-									node: uiElement,
-									attributes: [],
+									name: 'strong',
+									elementType: 'attribute',
+									node: root.getChild( 0 ).getChild( 1 ),
 									children: [
 										{
-											type: 'comment',
-											text: /The View UI element content has been skipped/
+											type: 'element',
+											name: 'bar',
+											elementType: 'ui',
+											node: uiElement,
+											attributes: [],
+											children: [
+												{
+													type: 'comment',
+													text: /The View UI element content has been skipped/
+												}
+											]
 										}
 									]
 								},
@@ -171,6 +179,7 @@ describe( 'view data utils', () => {
 									name: 'strong',
 									elementType: 'attribute',
 									node: root.getChild( 0 ).getChild( 3 ),
+									attributes: [],
 									children: [
 										{
 											type: 'text',
