@@ -56,8 +56,8 @@ class CommandInspector extends Component {
 				/>,
 				<Button
 					key="log"
-					text="Log in console"
 					icon={<ConsoleIcon />}
+					text="Log in console"
 					onClick={this.handleCommandLogButtonClick}
 				/>
 			]}
