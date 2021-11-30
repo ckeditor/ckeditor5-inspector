@@ -1,0 +1,17 @@
+/**
+ * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md.
+ */
+
+.ck-inspector .ck-inspector-editor-quick-actions {
+	display: flex;
+	align-content: center;
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
+	flex-wrap: nowrap;
+
+	& > .ck-inspector-button  {
+		margin-left: .3em;
+	}
+}

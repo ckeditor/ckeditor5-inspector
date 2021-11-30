@@ -52,6 +52,7 @@ describe( '<InspectorUI />', () => {
 			store = createStore( ( state, action ) => ( { ...state, ...action.state } ), {
 				editors,
 				currentEditorName: 'first',
+				currentEditorGlobals: {},
 				ui: {
 					activeTab: 'Model',
 					height: '123px',

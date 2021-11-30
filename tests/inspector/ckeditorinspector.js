@@ -16,11 +16,14 @@ import {
 
 import {
 	SET_EDITORS,
+	UPDATE_CURRENT_EDITOR_IS_READ_ONLY,
 	setCurrentEditorName,
 	toggleIsCollapsed
 } from '../../src/data/actions';
 
-import { LOCAL_STORAGE_IS_COLLAPSED } from '../../src/data/reducer';
+import {
+	LOCAL_STORAGE_IS_COLLAPSED
+} from '../../src/data/reducer';
 
 import { UPDATE_MODEL_STATE } from '../../src/model/data/actions';
 import { UPDATE_VIEW_STATE } from '../../src/view/data/actions';
@@ -117,68 +120,70 @@ describe( 'CKEditorInspector', () => {
 		} );
 
 		describe( '#_editorListener', () => {
-			it( 'should start listening to the editor events', () => {
-				CKEditorInspector.attach( { foo: editor } );
+			describe( 'document#change and view#render events', () => {
+				it( 'should start listening to the document#change and view#render events', () => {
+					CKEditorInspector.attach( { foo: editor } );
 
-				const spy = sinon.stub( CKEditorInspector._store, 'dispatch' );
+					const spy = sinon.stub( CKEditorInspector._store, 'dispatch' );
 
-				editor.model.document.fire( 'change' );
+					editor.model.document.fire( 'change' );
 
-				sinon.assert.calledThrice( spy );
-				sinon.assert.calledWithExactly( spy.firstCall, { type: UPDATE_MODEL_STATE } );
-				sinon.assert.calledWithExactly( spy.secondCall, { type: UPDATE_COMMANDS_STATE } );
+					sinon.assert.calledThrice( spy );
+					sinon.assert.calledWithExactly( spy.firstCall, { type: UPDATE_MODEL_STATE } );
+					sinon.assert.calledWithExactly( spy.secondCall, { type: UPDATE_COMMANDS_STATE } );
 
-				// After model->view conversion.
-				sinon.assert.calledWithExactly( spy.thirdCall, { type: UPDATE_VIEW_STATE } );
+					// After model->view conversion.
+					sinon.assert.calledWithExactly( spy.thirdCall, { type: UPDATE_VIEW_STATE } );
 
-				editor.editing.view.fire( 'render' );
-				sinon.assert.callCount( spy, 4 );
-				sinon.assert.calledWithExactly( spy.getCall( 3 ), { type: UPDATE_VIEW_STATE } );
+					editor.editing.view.fire( 'render' );
+					sinon.assert.callCount( spy, 4 );
+					sinon.assert.calledWithExactly( spy.getCall( 3 ), { type: UPDATE_VIEW_STATE } );
 
-				spy.restore();
-			} );
+					spy.restore();
+				} );
 
-			// https://github.com/ckeditor/ckeditor5-inspector/issues/80
-			it( 'should not respond to editor events when the inspector UI is collapsed', () => {
-				CKEditorInspector.attach( { foo: editor } );
-				dispatchStoreAction( toggleIsCollapsed() );
+				// https://github.com/ckeditor/ckeditor5-inspector/issues/80
+				it( 'should not respond to the document#change and view#render events when the inspector UI is collapsed', () => {
+					CKEditorInspector.attach( { foo: editor } );
+					dispatchStoreAction( toggleIsCollapsed() );
 
-				const spy = sinon.stub( CKEditorInspector._store, 'dispatch' );
+					const spy = sinon.stub( CKEditorInspector._store, 'dispatch' );
 
-				editor.model.document.fire( 'change' );
-				sinon.assert.notCalled( spy );
+					editor.model.document.fire( 'change' );
+					sinon.assert.notCalled( spy );
 
-				spy.restore();
-			} );
+					spy.restore();
+				} );
 
-			it( 'should stop listening to editor events when the inspector is being detached', () => {
-				CKEditorInspector.attach( { foo: editor } );
+				it( 'should stop listening to the document#change and view#render events when the inspector is being detached', () => {
+					CKEditorInspector.attach( { foo: editor } );
 
-				const spy = sinon.spy( CKEditorInspector._store, 'dispatch' );
+					const spy = sinon.spy( CKEditorInspector._store, 'dispatch' );
 
-				editor.model.document.fire( 'change' );
-				sinon.assert.calledThrice( spy );
+					editor.model.document.fire( 'change' );
+					sinon.assert.calledThrice( spy );
 
-				CKEditorInspector.detach( 'foo' );
+					CKEditorInspector.detach( 'foo' );
 
-				editor.model.document.fire( 'change' );
+					editor.model.document.fire( 'change' );
 
-				sinon.assert.callCount( spy, 4 );
-				sinon.assert.calledWithExactly( spy.getCall( 3 ), { type: SET_EDITORS, editors: sinon.match.map } );
-			} );
+					sinon.assert.callCount( spy, 4 );
+					sinon.assert.calledWithExactly( spy.getCall( 3 ), { type: SET_EDITORS, editors: sinon.match.map } );
+				} );
 
-			it( 'should stop listening to editor events when the inspector is being destroyed', () => {
-				CKEditorInspector.attach( { foo: editor } );
+				it( 'should stop listening to the document#change and view#render events when the inspector is being destroyed', () => {
+					CKEditorInspector.attach( { foo: editor } );
 
-				const spy = sinon.spy( CKEditorInspector._store, 'dispatch' );
+					const spy = sinon.spy( CKEditorInspector._store, 'dispatch' );
 
-				editor.model.document.fire( 'change' );
-				sinon.assert.calledThrice( spy );
+					editor.model.document.fire( 'change' );
+					sinon.assert.calledThrice( spy );
 
-				CKEditorInspector.destroy();
+					CKEditorInspector.destroy();
 
-				editor.model.document.fire( 'change' );
-				sinon.assert.calledThrice( spy );
+					editor.model.document.fire( 'change' );
+					sinon.assert.calledThrice( spy );
+				} );
 			} );
 
 			it( 'should stop listening to the previous one and start listening to the one when switching editors', () => {
@@ -225,6 +230,73 @@ describe( 'CKEditorInspector', () => {
 
 						return anotherEditor.destroy();
 					} );
+			} );
+
+			describe( 'change:isReadOnly event', () => {
+				it( 'should start listening to the editor#change:isReadOnly event', () => {
+					CKEditorInspector.attach( { foo: editor } );
+
+					const spy = sinon.stub( CKEditorInspector._store, 'dispatch' );
+
+					editor.isReadOnly = true;
+
+					// FYI: Changing read only triggers view#render in the editor.
+					sinon.assert.callCount( spy, 2 );
+					sinon.assert.calledWithExactly( spy.firstCall, { type: UPDATE_VIEW_STATE } );
+					sinon.assert.calledWithExactly( spy.secondCall, { type: UPDATE_CURRENT_EDITOR_IS_READ_ONLY } );
+
+					editor.isReadOnly = false;
+
+					sinon.assert.callCount( spy, 4 );
+					sinon.assert.calledWithExactly( spy.thirdCall, { type: UPDATE_VIEW_STATE } );
+					sinon.assert.calledWithExactly( spy.getCall( 3 ), { type: UPDATE_CURRENT_EDITOR_IS_READ_ONLY } );
+
+					spy.restore();
+				} );
+
+				it( 'should continue listening to the editor#change:isReadOnly event when the inspector is collapsed', () => {
+					CKEditorInspector.attach( { foo: editor } );
+					dispatchStoreAction( toggleIsCollapsed() );
+
+					const spy = sinon.stub( CKEditorInspector._store, 'dispatch' );
+
+					editor.isReadOnly = true;
+					sinon.assert.calledOnce( spy );
+					// FYI: UPDATE_VIEW_STATE will not happen when the inspector is collapsed.
+					sinon.assert.calledWithExactly( spy.firstCall, { type: UPDATE_CURRENT_EDITOR_IS_READ_ONLY } );
+
+					spy.restore();
+				} );
+
+				it( 'should stop listening to the editor#change:isReadOnly event when the inspector is being detached', () => {
+					CKEditorInspector.attach( { foo: editor } );
+
+					const spy = sinon.spy( CKEditorInspector._store, 'dispatch' );
+
+					editor.isReadOnly = true;
+					sinon.assert.calledTwice( spy );
+
+					CKEditorInspector.detach( 'foo' );
+
+					editor.isReadOnly = false;
+
+					sinon.assert.callCount( spy, 3 );
+					sinon.assert.calledWithExactly( spy.getCall( 2 ), { type: SET_EDITORS, editors: sinon.match.map } );
+				} );
+
+				it( 'should stop listening to the editor#change:isReadOnly event when the inspector is being destroyed', () => {
+					CKEditorInspector.attach( { foo: editor } );
+
+					const spy = sinon.spy( CKEditorInspector._store, 'dispatch' );
+
+					editor.isReadOnly = true;
+					sinon.assert.calledTwice( spy );
+
+					CKEditorInspector.destroy();
+
+					editor.isReadOnly = false;
+					sinon.assert.calledTwice( spy );
+				} );
 			} );
 		} );
 

@@ -64,6 +64,30 @@ module.exports = ( env, argv ) => {
 							}
 						}
 					]
+				},
+				{
+					test: /\.svg$/,
+					loaders: [
+						{
+							loader: 'babel-loader',
+							query: {
+								presets: [
+									[
+										'@babel/react',
+										{
+											development: devMode
+										}
+									]
+								]
+							}
+						},
+						{
+							loader: 'react-svg-loader',
+							options: {
+								jsx: true
+							}
+						}
+					]
 				}
 			]
 		},

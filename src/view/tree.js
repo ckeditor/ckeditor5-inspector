@@ -57,6 +57,7 @@ class ViewTree extends Component {
 						onChange={this.handleRootChange}
 					/>
 				</div>,
+				<span className="ck-inspector-separator" key="separator"></span>,
 				<div className="ck-inspector-tree__config" key="types-cfg">
 					<Checkbox
 						label="Show element types"

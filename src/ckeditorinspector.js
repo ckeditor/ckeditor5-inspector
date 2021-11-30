@@ -11,7 +11,10 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
 import { reducer } from './data/reducer';
-import { setEditors } from './data/actions';
+import {
+	setEditors,
+	updateCurrentEditorIsReadOnly
+} from './data/actions';
 import { updateModelState } from './model/data/actions';
 import { updateViewState } from './view/data/actions';
 import { updateCommandsState } from './commands/data/actions';
@@ -214,6 +217,9 @@ export default class CKEditorInspector {
 				}
 
 				store.dispatch( updateViewState() );
+			},
+			onReadOnlyChange() {
+				CKEditorInspector._store.dispatch( updateCurrentEditorIsReadOnly() );
 			}
 		} );
 
@@ -222,6 +228,7 @@ export default class CKEditorInspector {
 		CKEditorInspector._store = createStore( reducer, {
 			editors: CKEditorInspector._editors,
 			currentEditorName: getFirstEditorName( CKEditorInspector._editors ),
+			currentEditorGlobals: {},
 			ui: {
 				isCollapsed: options.isCollapsed
 			}

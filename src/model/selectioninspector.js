@@ -15,6 +15,9 @@ import { stringifyPropertyList } from '../components/utils';
 import Logger from '../logger';
 import { getModelPositionDefinition } from './utils';
 
+import ConsoleIcon from '../assets/img/console.svg';
+import EyeIcon from '../assets/img/eye.svg';
+
 const API_DOCS_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_selection-Selection.html';
 
 class ModelSelectionInspector extends Component {
@@ -59,13 +62,13 @@ class ModelSelectionInspector extends Component {
 				</span>,
 				<Button
 					key="log"
-					type="log"
+					icon={<ConsoleIcon />}
 					text="Log in console"
 					onClick={this.handleSelectionLogButtonClick}
 				/>,
 				<Button
 					key="scroll"
-					type="scroll"
+					icon={<EyeIcon />}
 					text="Scroll to selection"
 					onClick={this.handleScrollToSelectionButtonClick}
 				/>
@@ -86,7 +89,7 @@ class ModelSelectionInspector extends Component {
 					url: `${ API_DOCS_PREFIX }#member-anchor`,
 					buttons: [
 						{
-							type: 'log',
+							icon: <ConsoleIcon />,
 							text: 'Log in console',
 							onClick: () => Logger.log( editor.model.document.selection.anchor )
 						}
@@ -98,7 +101,7 @@ class ModelSelectionInspector extends Component {
 					url: `${ API_DOCS_PREFIX }#member-focus`,
 					buttons: [
 						{
-							type: 'log',
+							icon: <ConsoleIcon />,
 							text: 'Log in console',
 							onClick: () => Logger.log( editor.model.document.selection.focus )
 						}
@@ -110,7 +113,7 @@ class ModelSelectionInspector extends Component {
 					url: `${ API_DOCS_PREFIX }#function-getRanges`,
 					buttons: [
 						{
-							type: 'log',
+							icon: <ConsoleIcon />,
 							text: 'Log in console',
 							onClick: () => Logger.log( ...editor.model.document.selection.getRanges() )
 						}

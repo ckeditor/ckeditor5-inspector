@@ -69,7 +69,7 @@ describe( '<ModelMarkerInspector />', () => {
 			const logSpy = sinon.stub( Logger, 'log' ).callsFake( () => {} );
 
 			expect( wrapper.find( ObjectInspector ) ).to.have.length( 1 );
-			expect( wrapper.childAt( 0 ).find( 'h2 span' ).text() ).to.equal( 'Markers' );
+			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'Markers' );
 
 			logMarkersButton.simulate( 'click' );
 			sinon.assert.calledOnce( logSpy );

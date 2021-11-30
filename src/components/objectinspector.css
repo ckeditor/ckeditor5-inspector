@@ -16,16 +16,22 @@
 	}
 
 	& h2 {
+		display: flex;
+		align-items: center;
 		padding: 1em;
 		overflow: hidden;
 		text-overflow: ellipsis;
 
-		& span {
+		& > span {
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			display: block;
-			margin-right: 1em;
+			margin-right: auto;
+		}
+
+		& > .ck-inspector-button {
+			margin-left: .5em;
 		}
 
 		& a {
@@ -40,20 +46,23 @@
 	}
 
 	& h3 {
+		display: flex;
+		align-items: center;
 		font-size: 12px;
 		padding: .4em .7em;
 
 		& a {
 			color: inherit;
 			font-weight: bold;
+			margin-right: auto;
 		}
 
 		& .ck-inspector-button {
-			display: none;
+			visibility: hidden;
 		}
 
 		&:hover .ck-inspector-button  {
-			display: block
+			visibility: visible;
 		}
 	}
 

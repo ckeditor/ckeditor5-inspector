@@ -55,8 +55,7 @@
 	display: none;
 }
 
-.ck-inspector .ck-inspector-navbox__navigation__logo,
-.ck-inspector .ck-inspector-navbox__navigation__toggle {
+.ck-inspector .ck-inspector-navbox__navigation__logo {
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -76,14 +75,7 @@
 }
 
 .ck-inspector .ck-inspector-navbox__navigation__toggle {
-	background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTIgNS41bDUuMjkzIDUuMjkzYTEgMSAwIDAgMCAxLjQxNCAwTDE0IDUuNSIgZmlsbC1ydWxlPSJub256ZXJvIiBzdHJva2U9IiM3NDc0NzQiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9zdmc+);
-	width: 1.6em;
-	height: 1.6em;
-	opacity: .7;
-}
-
-.ck-inspector .ck-inspector-navbox__navigation__toggle:hover {
-	opacity: 1;
+	margin-right: 1em;
 }
 
 .ck-inspector .ck-inspector-navbox__navigation__toggle.ck-inspector-navbox__navigation__toggle_up {
@@ -92,7 +84,7 @@
 
 .ck-inspector .ck-inspector-editor-selector {
 	margin-left: auto;
-	margin-right: 1em;
+	margin-right: .3em;
 
 	& select {
 		margin-left: .5em;
@@ -120,4 +112,13 @@
 
 .ck-inspector button {
 	outline: 0;
+}
+
+.ck-inspector .ck-inspector-separator {
+	border-right: 1px solid var(--ck-inspector-color-border);
+	display: inline-block;
+	width: 0px;
+	height: 20px;
+	margin: 0 .5em;
+	vertical-align: middle;
 }

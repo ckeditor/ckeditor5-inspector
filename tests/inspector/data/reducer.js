@@ -19,6 +19,7 @@ import {
 import {
 	setEditors,
 	setCurrentEditorName,
+	updateCurrentEditorIsReadOnly,
 	setHeight,
 	toggleIsCollapsed,
 	setSidePaneWidth,
@@ -50,7 +51,10 @@ describe( 'global data store reducer', () => {
 						[ 'a', editorA ],
 						[ 'b', editorB ]
 					] ),
-					ui: {}
+					ui: {},
+					currentEditorGlobals: {
+						isReadOnly: false
+					}
 				}, {} );
 			} );
 		} );
@@ -64,6 +68,8 @@ describe( 'global data store reducer', () => {
 		expect( state ).to.have.property( 'model' );
 		expect( state ).to.have.property( 'view' );
 		expect( state ).to.have.property( 'commands' );
+		expect( state ).to.have.property( 'currentEditorGlobals' );
+		expect( state ).to.have.property( 'ui' );
 	} );
 
 	describe( 'application state', () => {
@@ -99,6 +105,66 @@ describe( 'global data store reducer', () => {
 				state = reducer( state, setCurrentEditorName( 'b' ) );
 
 				expect( state.currentEditorName ).to.equal( 'b' );
+			} );
+		} );
+	} );
+
+	describe( 'current editor global properties state', () => {
+		it( 'should be created with defaults', () => {
+			expect( state.currentEditorGlobals ).to.deep.equal( {
+				isReadOnly: false
+			} );
+		} );
+
+		it( 'should be recreated on the setEditors() action', () => {
+			// A dummy state to prove this gets overridden as a whole.
+			state.currentEditorGlobals = {
+				foo: 'bar'
+			};
+
+			editorA.isReadOnly = true;
+
+			state = reducer( state, setEditors( new Map( [ [ 'a', editorA ] ] ) ) );
+
+			expect( state.currentEditorGlobals ).to.deep.equal( {
+				isReadOnly: true
+			} );
+		} );
+
+		it( 'should be recreated on the setCurrentEditor() action', () => {
+			// A dummy state to prove this gets overridden as a whole.
+			state.currentEditorGlobals = {
+				foo: 'bar'
+			};
+
+			state = reducer( state, setCurrentEditorName( 'b' ) );
+
+			expect( state.currentEditorGlobals ).to.deep.equal( {
+				isReadOnly: false
+			} );
+		} );
+
+		describe( '#isReadOnly', () => {
+			it( 'should be updated on updateCurrentEditorIsReadOnly() action', () => {
+				// A dummy state to prove this gets overridden as a whole.
+				state.currentEditorGlobals.isReadOnly = 'foo';
+
+				state = reducer( state, updateCurrentEditorIsReadOnly() );
+
+				expect( state.currentEditorGlobals.isReadOnly ).to.be.false;
+			} );
+
+			it( 'should be false when there are no editors in the inspector (e.g. all were destroyed)', () => {
+				// A dummy state to prove this gets overridden as a whole.
+				state.currentEditorGlobals = {
+					foo: 'bar'
+				};
+
+				state = reducer( state, setEditors( new Map() ) );
+
+				expect( state.currentEditorGlobals ).to.deep.equal( {
+					isReadOnly: false
+				} );
 			} );
 		} );
 	} );

@@ -130,7 +130,7 @@ describe( '<ModelSelectionInspector />', () => {
 
 			it( 'should contain the object inspector', () => {
 				expect( wrapper.find( ObjectInspector ) ).to.have.length( 1 );
-				expect( wrapper.childAt( 0 ).find( 'h2 span' ).text() ).to.equal( 'Selection' );
+				expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'Selection' );
 			} );
 		} );
 
