@@ -1,6 +1,17 @@
 Changelog
 =========
 
+## [2.3.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v2.2.2...v2.3.0) (2021-11-30)
+
+### Features
+
+* Introduced editor quick actions toolbar (see [#38](https://github.com/ckeditor/ckeditor5-inspector/issues/38)) to log editor data, toggle editor read-only, and destroy editor. Closes [#121](https://github.com/ckeditor/ckeditor5-inspector/issues/121), [#104](https://github.com/ckeditor/ckeditor5-inspector/issues/104). ([commit](https://github.com/ckeditor/ckeditor5-inspector/commit/9417d9301e56b884a0db1353e091a3070b5175fa))
+
+### Other changes
+
+* Added the `margin-bottom` style to the `<body>` element when the inspector is collapsed to avoid covering the footer. Closes [#126](https://github.com/ckeditor/ckeditor5-inspector/issues/126). ([commit](https://github.com/ckeditor/ckeditor5-inspector/commit/0324c24c8c9a54fe4e9c5ce9cb5f57fc72de61b2))
+
+
 ## [2.2.2](https://github.com/ckeditor/ckeditor5-inspector/compare/v2.2.1...v2.2.2) (2021-01-20)
 
 ### Other changes
