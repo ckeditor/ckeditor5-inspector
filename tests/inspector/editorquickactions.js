@@ -13,8 +13,8 @@ import { Provider } from 'react-redux';
 import EditorQuickActions from '../../src/editorquickactions';
 
 import SourceIcon from '../../src/assets/img/source.svg';
-import ClipboardIcon from '../../src/assets/img/clipboard.svg';
-import TickIcon from '../../src/assets/img/tick.svg';
+import CopyToClipboardIcon from '../../src/assets/img/copy-to-clipboard.svg';
+import CheckmarkIcon from '../../src/assets/img/checkmark.svg';
 
 describe( '<EditorQuickActions />', () => {
 	let editor, store, wrapper, element;
@@ -116,7 +116,7 @@ describe( '<EditorQuickActions />', () => {
 				} );
 
 				logButton = wrapper.find( 'Button' ).at( 1 );
-				expect( logButton.props().icon.type ).to.equal( ClipboardIcon );
+				expect( logButton.props().icon.type ).to.equal( CopyToClipboardIcon );
 				expect( logButton.props().text ).to.equal( 'Log editor data (press with Alt/⌥ to copy)' );
 			} );
 
@@ -148,10 +148,10 @@ describe( '<EditorQuickActions />', () => {
 				} );
 
 				logButton = wrapper.find( 'Button' ).at( 1 );
-				expect( logButton.props().icon.type ).to.equal( TickIcon );
+				expect( logButton.props().icon.type ).to.equal( CheckmarkIcon );
 				expect( logButton.props().text ).to.equal( 'Data copied to clipboard.' );
 
-				// Make sure the tick icon + text stay for 3000ms.
+				// Make sure the checkmark icon + text stay for 3000ms.
 				clock.tick( 2500 );
 				wrapper.update();
 
@@ -161,10 +161,10 @@ describe( '<EditorQuickActions />', () => {
 				} );
 
 				logButton = wrapper.find( 'Button' ).at( 1 );
-				expect( logButton.props().icon.type ).to.equal( TickIcon );
+				expect( logButton.props().icon.type ).to.equal( CheckmarkIcon );
 				expect( logButton.props().text ).to.equal( 'Data copied to clipboard.' );
 
-				// Wait for the tick icon + text to disappear.
+				// Wait for the checkmark icon + text to disappear.
 				clock.tick( 1000 );
 				wrapper.update();
 
@@ -174,7 +174,7 @@ describe( '<EditorQuickActions />', () => {
 				} );
 
 				logButton = wrapper.find( 'Button' ).at( 1 );
-				expect( logButton.props().icon.type ).to.equal( ClipboardIcon );
+				expect( logButton.props().icon.type ).to.equal( CopyToClipboardIcon );
 				expect( logButton.props().text ).to.equal( 'Log editor data (press with Alt/⌥ to copy)' );
 
 				// Release the Alt key.

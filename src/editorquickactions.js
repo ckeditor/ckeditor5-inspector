@@ -15,8 +15,8 @@ import SourceIcon from './assets/img/source.svg';
 import ConsoleIcon from './assets/img/console.svg';
 import ReadOnlyIcon from './assets/img/read-only.svg';
 import TrashIcon from './assets/img/trash.svg';
-import ClipboardIcon from './assets/img/clipboard.svg';
-import TickIcon from './assets/img/tick.svg';
+import CopyToClipboardIcon from './assets/img/copy-to-clipboard.svg';
+import CheckmarkIcon from './assets/img/checkmark.svg';
 
 import './editorquickactions.css';
 
@@ -80,7 +80,7 @@ class EditorQuickActions extends Component {
 			icon = <TickIcon />;
 			text = 'Data copied to clipboard.';
 		} else {
-			icon = this.state.isAltKeyPressed ? <ClipboardIcon /> : <SourceIcon />;
+			icon = this.state.isAltKeyPressed ? <CopyToClipboardIcon /> : <SourceIcon />;
 			text = 'Log editor data (press with Alt/⌥ to copy)';
 		}
 

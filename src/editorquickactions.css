@@ -14,7 +14,7 @@
 	& > .ck-inspector-button  {
 		margin-left: .3em;
 
-		/* The tick icon shows up when the content was copied to clipboard */
+		/* The checkmark icon shows up when the content was copied to clipboard */
 		&.ck-inspector-button_data-copied {
 			animation-duration: .5s;
 			animation-name: ck-inspector-bounce-in;
