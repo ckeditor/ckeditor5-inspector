@@ -77,7 +77,7 @@ class EditorQuickActions extends Component {
 		let icon, text;
 
 		if ( this.state.wasEditorDataJustCopied ) {
-			icon = <TickIcon />;
+			icon = <CheckmarkIcon />;
 			text = 'Data copied to clipboard.';
 		} else {
 			icon = this.state.isAltKeyPressed ? <CopyToClipboardIcon /> : <SourceIcon />;
