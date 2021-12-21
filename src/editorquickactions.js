@@ -25,7 +25,7 @@ class EditorQuickActions extends Component {
 		super( props );
 
 		this.state = {
-			isAltKeyPressed: false,
+			isShiftKeyPressed: false,
 			wasEditorDataJustCopied: false
 		};
 
@@ -65,7 +65,7 @@ class EditorQuickActions extends Component {
 	}
 
 	componentWillUnmount() {
-		// Stop reacting to Alt key press/release after the inspector was destroyed.
+		// Stop reacting to Shift key press/release after the inspector was destroyed.
 		document.removeEventListener( 'keydown', this._keyDownHandler );
 		document.removeEventListener( 'keyup', this._keyUpHandler );
 
@@ -80,8 +80,8 @@ class EditorQuickActions extends Component {
 			icon = <CheckmarkIcon />;
 			text = 'Data copied to clipboard.';
 		} else {
-			icon = this.state.isAltKeyPressed ? <CopyToClipboardIcon /> : <SourceIcon />;
-			text = 'Log editor data (press with Alt/⌥ to copy)';
+			icon = this.state.isShiftKeyPressed ? <CopyToClipboardIcon /> : <SourceIcon />;
+			text = 'Log editor data (press with Shift to copy)';
 		}
 
 		return <Button
@@ -93,8 +93,8 @@ class EditorQuickActions extends Component {
 		/>;
 	}
 
-	_handleLogEditorDataClick( { altKey } ) {
-		if ( altKey ) {
+	_handleLogEditorDataClick( { shiftKey } ) {
+		if ( shiftKey ) {
 			copy( this.props.editor.getData() );
 
 			this.setState( {
@@ -115,13 +115,13 @@ class EditorQuickActions extends Component {
 
 	_handleKeyDown( { key } ) {
 		this.setState( {
-			isAltKeyPressed: key === 'Alt'
+			isShiftKeyPressed: key === 'Shift'
 		} );
 	}
 
 	_handleKeyUp() {
 		this.setState( {
-			isAltKeyPressed: false
+			isShiftKeyPressed: false
 		} );
 	}
 }

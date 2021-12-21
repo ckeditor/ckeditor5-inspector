@@ -95,55 +95,55 @@ describe( '<EditorQuickActions />', () => {
 				logSpy.restore();
 			} );
 
-			it( 'should react to the Alt being pressed and turn into "copy to clipboard" button', () => {
+			it( 'should react to the Shift being pressed and turn into "copy to clipboard" button', () => {
 				const quickActions = wrapper.find( 'EditorQuickActions' );
 				let logButton = wrapper.find( 'Button' ).at( 1 );
 
 				expect( logButton.props().icon.type ).to.equal( SourceIcon );
-				expect( logButton.props().text ).to.equal( 'Log editor data (press with Alt/⌥ to copy)' );
+				expect( logButton.props().text ).to.equal( 'Log editor data (press with Shift to copy)' );
 
 				expect( quickActions.state() ).to.deep.equal( {
-					isAltKeyPressed: false,
+					isShiftKeyPressed: false,
 					wasEditorDataJustCopied: false
 				} );
 
-				document.dispatchEvent( new KeyboardEvent( 'keydown', { key: 'Alt' } ) );
+				document.dispatchEvent( new KeyboardEvent( 'keydown', { key: 'Shift' } ) );
 				wrapper.update();
 
 				expect( quickActions.state() ).to.deep.equal( {
-					isAltKeyPressed: true,
+					isShiftKeyPressed: true,
 					wasEditorDataJustCopied: false
 				} );
 
 				logButton = wrapper.find( 'Button' ).at( 1 );
 				expect( logButton.props().icon.type ).to.equal( CopyToClipboardIcon );
-				expect( logButton.props().text ).to.equal( 'Log editor data (press with Alt/⌥ to copy)' );
+				expect( logButton.props().text ).to.equal( 'Log editor data (press with Shift to copy)' );
 			} );
 
 			// Note: Due to limitations of the copy-to-clipboard library, this test is unable to check if the
 			// actual editor data is copied to clipboard :( It falls back to window.prompt().
-			it( 'should copy the content of the editor to the clipboard if clicked with alt key', done => {
+			it( 'should copy the content of the editor to the clipboard if clicked with Shift key', done => {
 				const clock = sinon.useFakeTimers();
 				const promptStub = sinon.stub( window, 'prompt' ).returns( '<p>foo</p>' );
 				const quickActions = wrapper.find( 'EditorQuickActions' );
 				let logButton = wrapper.find( 'Button' ).at( 1 );
 
 				expect( logButton.props().icon.type ).to.equal( SourceIcon );
-				expect( logButton.props().text ).to.equal( 'Log editor data (press with Alt/⌥ to copy)' );
+				expect( logButton.props().text ).to.equal( 'Log editor data (press with Shift to copy)' );
 
 				expect( quickActions.state() ).to.deep.equal( {
-					isAltKeyPressed: false,
+					isShiftKeyPressed: false,
 					wasEditorDataJustCopied: false
 				} );
 
-				// Press the Alt key. The buttons should start copying to clipboard instead of logging.
-				document.dispatchEvent( new KeyboardEvent( 'keydown', { key: 'Alt' } ) );
-				logButton.simulate( 'click', { altKey: true } );
+				// Press the Shift key. The buttons should start copying to clipboard instead of logging.
+				document.dispatchEvent( new KeyboardEvent( 'keydown', { key: 'Shift' } ) );
+				logButton.simulate( 'click', { shiftKey: true } );
 
 				wrapper.update();
 
 				expect( quickActions.state() ).to.deep.equal( {
-					isAltKeyPressed: true,
+					isShiftKeyPressed: true,
 					wasEditorDataJustCopied: true
 				} );
 
@@ -156,7 +156,7 @@ describe( '<EditorQuickActions />', () => {
 				wrapper.update();
 
 				expect( quickActions.state() ).to.deep.equal( {
-					isAltKeyPressed: true,
+					isShiftKeyPressed: true,
 					wasEditorDataJustCopied: true
 				} );
 
@@ -169,20 +169,20 @@ describe( '<EditorQuickActions />', () => {
 				wrapper.update();
 
 				expect( quickActions.state() ).to.deep.equal( {
-					isAltKeyPressed: true,
+					isShiftKeyPressed: true,
 					wasEditorDataJustCopied: false
 				} );
 
 				logButton = wrapper.find( 'Button' ).at( 1 );
 				expect( logButton.props().icon.type ).to.equal( CopyToClipboardIcon );
-				expect( logButton.props().text ).to.equal( 'Log editor data (press with Alt/⌥ to copy)' );
+				expect( logButton.props().text ).to.equal( 'Log editor data (press with Shift to copy)' );
 
-				// Release the Alt key.
+				// Release the Shift key.
 				document.dispatchEvent( new KeyboardEvent( 'keyup' ) );
 				wrapper.update();
 
 				expect( quickActions.state() ).to.deep.equal( {
-					isAltKeyPressed: false,
+					isShiftKeyPressed: false,
 					wasEditorDataJustCopied: false
 				} );
 
@@ -201,18 +201,18 @@ describe( '<EditorQuickActions />', () => {
 				const logButton = wrapper.find( 'Button' ).at( 1 );
 
 				expect( quickActions.state() ).to.deep.equal( {
-					isAltKeyPressed: false,
+					isShiftKeyPressed: false,
 					wasEditorDataJustCopied: false
 				} );
 
-				// Press the Alt key. The buttons should start copying to clipboard instead of logging.
-				document.dispatchEvent( new KeyboardEvent( 'keydown', { key: 'Alt' } ) );
-				logButton.simulate( 'click', { altKey: true } );
+				// Press the Shift key. The button should start copying to clipboard instead of logging.
+				document.dispatchEvent( new KeyboardEvent( 'keydown', { key: 'Shift' } ) );
+				logButton.simulate( 'click', { shiftKey: true } );
 
 				wrapper.update();
 
 				expect( quickActions.state() ).to.deep.equal( {
-					isAltKeyPressed: true,
+					isShiftKeyPressed: true,
 					wasEditorDataJustCopied: true
 				} );
 
@@ -228,22 +228,22 @@ describe( '<EditorQuickActions />', () => {
 			} );
 
 			// This one tests document.removeEventListener in componentWillUnmount().
-			it( 'should not throw if Alt key was pressed or released after the inspector was destroyed', done => {
+			it( 'should not throw if Shift key was pressed or released after the inspector was destroyed', done => {
 				const clock = sinon.useFakeTimers();
 				const errorSpy = sinon.stub( console, 'error' );
 				const quickActions = wrapper.find( 'EditorQuickActions' );
 
 				expect( quickActions.state() ).to.deep.equal( {
-					isAltKeyPressed: false,
+					isShiftKeyPressed: false,
 					wasEditorDataJustCopied: false
 				} );
 
-				// Press the Alt key. The buttons should start copying to clipboard instead of logging.
-				document.dispatchEvent( new KeyboardEvent( 'keydown', { key: 'Alt' } ) );
+				// Press the Shift key. The buttons should start copying to clipboard instead of logging.
+				document.dispatchEvent( new KeyboardEvent( 'keydown', { key: 'Shift' } ) );
 				wrapper.update();
 
 				expect( quickActions.state() ).to.deep.equal( {
-					isAltKeyPressed: true,
+					isShiftKeyPressed: true,
 					wasEditorDataJustCopied: false
 				} );
 
@@ -251,7 +251,7 @@ describe( '<EditorQuickActions />', () => {
 				clock.tick( 5000 );
 
 				document.dispatchEvent( new KeyboardEvent( 'keyup' ) );
-				document.dispatchEvent( new KeyboardEvent( 'keydown', { key: 'Alt' } ) );
+				document.dispatchEvent( new KeyboardEvent( 'keydown', { key: 'Shift' } ) );
 
 				sinon.assert.notCalled( errorSpy );
 
