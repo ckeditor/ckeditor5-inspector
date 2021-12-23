@@ -9,6 +9,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import copy from 'copy-to-clipboard';
 
+import SetEditorDataButton from './seteditordatabutton';
 import Button from './components/button';
 
 import SourceIcon from './assets/img/source.svg';
@@ -43,6 +44,7 @@ class EditorQuickActions extends Component {
 				onClick={() => console.log( this.props.editor )}
 			/>
 			{ this._getLogButton() }
+			<SetEditorDataButton editor={this.props.editor} />
 			<Button
 				text="Toggle read only"
 				icon={<ReadOnlyIcon />}

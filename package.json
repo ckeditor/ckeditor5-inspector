@@ -74,6 +74,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
+    "react-modal": "^3.14.4",
     "react-redux": "^7.2.6",
     "react-rnd": "~10.2.4",
     "react-svg-loader": "^3.0.3",

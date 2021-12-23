@@ -1,0 +1,114 @@
+/**
+ * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md.
+ */
+
+.ck-inspector-modal {
+	--ck-inspector-set-data-modal-overlay: rgba(0, 0, 0, 0.5);
+	--ck-inspector-set-data-modal-shadow: rgba(0,0,0,0.06);
+	--ck-inspector-set-data-modal-button-background: #eee;
+	--ck-inspector-set-data-modal-button-background-hover: #ddd;
+	--ck-inspector-set-data-modal-save-button-background: #1976d2;
+	--ck-inspector-set-data-modal-save-button-background-hover: #0b60b5;
+}
+
+/* Modal overlay */
+.ck-inspector-modal.ck-inspector-quick-actions__set-data-modal {
+	z-index: 999999;
+	position: fixed;
+	inset: 0px;
+	background-color: var(--ck-inspector-set-data-modal-overlay);
+
+	/* Modal content */
+	& .ck-inspector-quick-actions__set-data-modal__content {
+		position: absolute;
+		border: 1px solid var(--ck-inspector-color-border);
+		background: var(--ck-inspector-color-white);
+		overflow: auto;
+		border-radius: 2px;
+		outline: none;
+		box-shadow: 0 1px 1px var(--ck-inspector-set-data-modal-shadow),
+			0 2px 2px var(--ck-inspector-set-data-modal-shadow),
+			0 4px 4px var(--ck-inspector-set-data-modal-shadow),
+			0 8px 8px var(--ck-inspector-set-data-modal-shadow),
+			0 16px 16px var(--ck-inspector-set-data-modal-shadow);
+
+		max-height: calc(100vh - 160px);
+		max-width: calc(100vw - 160px);
+		width: 100%;
+		height: 100%;
+
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+
+		/* Modal title */
+		& h2 {
+			font-size: 14px;
+			font-weight: bold;
+			margin: 0;
+			padding: 12px 20px;
+			background: var(--ck-inspector-color-background);
+			border-bottom: 1px solid var(--ck-inspector-color-border);
+		}
+
+		& textarea {
+			flex-grow: 1;
+			margin: 20px;
+			border: 1px solid var(--ck-inspector-color-border);
+			border-radius: 2px;
+			resize: none;
+			padding: 10px;
+			font-family: monospace;
+		}
+
+		& button {
+			padding: 10px 20px;
+			border-radius: 2px;
+			font-size: 14px;
+			white-space: nowrap;
+			/* background: var(--ck-inspector-set-data-modal-button-background); */
+			border: 1px solid var(--ck-inspector-color-border);
+
+			&:hover {
+				background: var(--ck-inspector-set-data-modal-button-background-hover);
+			}
+		}
+
+		& .ck-inspector-quick-actions__set-data-modal__buttons {
+			margin: 0 20px 20px;
+			display: flex;
+			justify-content: center;
+
+			& button {
+				& + button {
+					margin-left: 20px;
+				}
+
+				&:first-child {
+					margin-right: auto;
+				}
+
+				&:not(:first-child) {
+					flex-basis: 20%;
+				}
+
+				/* Save button */
+				&:last-child {
+					background: var(--ck-inspector-set-data-modal-save-button-background);
+					border-color: var(--ck-inspector-set-data-modal-save-button-background);
+					color: #fff;
+					font-weight: bold;
+
+					&:hover {
+						background: var(--ck-inspector-set-data-modal-save-button-background-hover);
+					}
+				}
+			}
+		}
+	}
+}
