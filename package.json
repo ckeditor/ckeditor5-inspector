@@ -36,7 +36,7 @@
     "@ckeditor/ckeditor5-basic-styles": "^31.0.0",
     "@ckeditor/ckeditor5-build-decoupled-document": "^31.0.0",
     "@ckeditor/ckeditor5-core": "^31.0.0",
-    "@ckeditor/ckeditor5-dev-env": "^26.1.0",
+    "@ckeditor/ckeditor5-dev-env": "^27.4.0",
     "@ckeditor/ckeditor5-paragraph": "^31.0.0",
     "@ckeditor/ckeditor5-ui": "^31.0.0",
     "@ckeditor/ckeditor5-utils": "^31.0.0",
