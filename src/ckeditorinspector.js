@@ -27,10 +27,10 @@ import {
 	getFirstEditorName
 } from './utils';
 import './ckeditorinspector.css';
+import MiniCKEditorInspector from './miniinspector.js';
 
 // From changelog -> webpack.
 window.CKEDITOR_INSPECTOR_VERSION = CKEDITOR_INSPECTOR_VERSION;
-
 export default class CKEditorInspector {
 	constructor() {
 		Logger.warn(
@@ -293,6 +293,8 @@ export default class CKEditorInspector {
 
 CKEditorInspector._editors = new Map();
 CKEditorInspector._wrapper = null;
+
+export { MiniCKEditorInspector };
 
 /**
  * The configuration options of the inspector.
