@@ -16,10 +16,10 @@ import {
 	getEditorViewTreeDefinition
 } from './view/data/utils';
 
-import './ui.css';
-import './miniinspectorui.css';
+import './ckeditorinspectorui.css';
+import './minickeditorinspectorui.css';
 
-export default class MiniInspectorUI extends Component {
+export default class MiniCKEditorInspectorUI extends Component {
 	constructor( props ) {
 		super( props );
 
