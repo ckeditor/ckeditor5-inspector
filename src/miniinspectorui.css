@@ -39,5 +39,9 @@
 	& .ck-inspector-tree {
 		padding: 0 10px 20px;
 		border: 1px solid #ccc;
+
+		&:last-child {
+			border-left: 0;
+		}
 	}
 }
