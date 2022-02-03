@@ -10,14 +10,19 @@ const TerserPlugin = require( 'terser-webpack-plugin' );
 const webpack = require( 'webpack' );
 const path = require( 'path' );
 
+const LIBRARY_TO_FILE_NAMES = {
+	CKEditorInspector: 'inspector.js',
+	MiniCKEditorInspector: 'miniinspector.js'
+};
+
 module.exports = ( env, argv ) => {
 	const devMode = argv.mode === 'development';
 
 	return {
 		mode: argv.mode || 'production',
 		entry: {
-			inspector: path.resolve( __dirname, 'src', 'ckeditorinspector.js' ),
-			miniinspector: path.resolve( __dirname, 'src', 'miniinspector.js' )
+			CKEditorInspector: path.resolve( __dirname, 'src', 'ckeditorinspector.js' ),
+			MiniCKEditorInspector: path.resolve( __dirname, 'src', 'miniinspector.js' )
 		},
 		module: {
 			rules: [
@@ -100,8 +105,8 @@ module.exports = ( env, argv ) => {
 		},
 		output: {
 			path: path.resolve( __dirname, 'build' ),
-			library: 'CKEditorInspector',
-			filename: '[name].js',
+			library: '[name]',
+			filename: data => LIBRARY_TO_FILE_NAMES[ data.chunk.name ],
 			libraryTarget: 'umd',
 			libraryExport: 'default'
 		},
