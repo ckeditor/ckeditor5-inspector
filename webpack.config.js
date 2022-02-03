@@ -15,7 +15,10 @@ module.exports = ( env, argv ) => {
 
 	return {
 		mode: argv.mode || 'production',
-		entry: path.resolve( __dirname, 'src', 'ckeditorinspector.js' ),
+		entry: {
+			inspector: path.resolve( __dirname, 'src', 'ckeditorinspector.js' ),
+			miniinspector: path.resolve( __dirname, 'src', 'miniinspector.js' )
+		},
 		module: {
 			rules: [
 				{
@@ -98,7 +101,7 @@ module.exports = ( env, argv ) => {
 		output: {
 			path: path.resolve( __dirname, 'build' ),
 			library: 'CKEditorInspector',
-			filename: 'inspector.js',
+			filename: '[name].js',
 			libraryTarget: 'umd',
 			libraryExport: 'default'
 		},
