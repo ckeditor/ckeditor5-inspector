@@ -32,6 +32,12 @@ describe( 'MiniCKEditorInspector', () => {
 		return editor.destroy();
 	} );
 
+	describe( 'CKEDITOR_MINI_INSPECTOR_VERSION', () => {
+		it( 'should be set', () => {
+			expect( window.CKEDITOR_MINI_INSPECTOR_VERSION ).to.be.a( 'string' );
+		} );
+	} );
+
 	describe( '#attach()', () => {
 		it( 'should not throw', () => {
 			expect( () => {

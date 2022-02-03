@@ -3,10 +3,15 @@
  * For licensing, see LICENSE.md.
  */
 
+/* global window, CKEDITOR_INSPECTOR_VERSION */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import MiniInspectorUI from './miniinspectorui';
+
+// From changelog -> webpack.
+window.CKEDITOR_MINI_INSPECTOR_VERSION = CKEDITOR_INSPECTOR_VERSION;
 
 export default class MiniCKEditorInspector {
 	/**
