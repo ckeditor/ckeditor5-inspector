@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+	<head>
+			<meta charset="utf-8">
+			<title>Inspector sample</title>
+			<script src="../node_modules/@ckeditor/ckeditor5-build-decoupled-document/build/ckeditor.js"></script>
+			<script src="../build/miniinspector.js"></script>
+	</head>
+	<body>
+		<div id="editor-content">
+			<h2>The three greatest things you learn from traveling</h2>
+			<p>Like <a href="https://ckeditor.com">all the <b>great things on earth</b> traveling teaches</a> us by example. Here are some <br>of the most precious lessons I’ve
+				learned over the years of traveling.</p>
+			<figure class="table">
+				<table>
+					<tbody>
+						<tr>
+							<td>a</td>
+							<td>b</td>
+						</tr>
+						<tr>
+							<td>d</td>
+							<td>e</td>
+						</tr>
+					</tbody>
+				</table>
+			</figure>
+		</div>
+
+		<div id="inspector-container"></div>
+
+		<script>
+			class DummyUploadAdapter {
+				constructor( loader ) {
+					this.loader = loader;
+				}
+
+				upload() {
+					return this.loader.file
+						.then( file => {
+							return {
+								default: 'umbrellas.jpg',
+								160: 'umbrellas.jpg',
+								500: 'umbrellas.jpg',
+							};
+						} );
+				}
+
+				abort() {
+				}
+			}
+
+			function UploadAdapter( editor ) {
+				editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
+					return new DummyUploadAdapter( loader );
+				};
+			}
+
+			function MarkerDemoPlugin( editor ) {
+				const model = editor.model;
+				const markerNames = [];
+
+				editor.conversion.for( 'editingDowncast' ).markerToHighlight( {
+					model: 'highlight',
+					view: data => {
+						const color = data.markerName.split( ':' )[ 1 ];
+
+						return {
+							classes: 'h-' + color,
+							priority: 1
+						};
+					}
+				} );
+
+				editor.conversion.for( 'dataDowncast' ).markerToHighlight( {
+					model: 'highlight',
+					view: data => {
+						const color = data.markerName.split( ':' )[ 1 ];
+
+						return {
+							classes: 'h-' + color,
+							priority: 1
+						};
+					}
+				} );
+
+				editor.on( 'ready', () => {
+					model.change( writer => {
+						const root = model.document.getRoot();
+
+						const nameA = 'highlight:yellow:123';
+						const rangeA = model.createRange( model.createPositionFromPath( root, [ 0, 10 ] ), model.createPositionFromPath( root, [ 0, 16 ] ) );
+
+						const nameB = 'highlight:blue:456';
+						const rangeB = model.createRange( model.createPositionFromPath( root, [ 0, 12 ] ), model.createPositionFromPath( root, [ 0, 22 ] ) );
+
+						markerNames.push( nameA, nameB );
+						writer.addMarker( nameA, { range: rangeA, usingOperation: false, affectsData: true } );
+						writer.addMarker( nameB, { range: rangeB, usingOperation: false, affectsData: true } );
+					} );
+				} );
+			}
+
+			DecoupledEditor
+				.create( document.querySelector( '#editor-content' ), {
+					extraPlugins: [ UploadAdapter, MarkerDemoPlugin ]
+				} )
+				.then( editor => {
+					window.firstEditor = editor;
+					document.body.insertBefore( editor.ui.view.toolbar.element, editor.ui.getEditableElement() );
+
+					MiniCKEditorInspector.attach( editor, document.querySelector( '#inspector-container' ) );
+				} )
+				.catch( error => {
+					console.error( error );
+				} );
+		</script>
+	</body>
+	<style>
+		body {
+			padding: 2em;
+		}
+
+		.ck.ck-editor__editable {
+			border: 1px solid rgba(0, 0, 0, 0.15);
+		}
+
+		.ck-content .h-yellow {
+			background: rgba(251, 255, 0, 0.534);
+		}
+
+		.ck-content .h-blue {
+			background: rgba(0, 197, 247, 0.568);
+		}
+
+		#inspector-container {
+			margin-top: 50px;
+		}
+	</style>
+</html>
