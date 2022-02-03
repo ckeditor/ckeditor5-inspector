@@ -9,39 +9,52 @@
 	flex-wrap: nowrap;
 	align-items: stretch;
 	border-top: 0;
+	box-shadow:
+		0.1px 0.1px 0.2px -2px rgba(0, 0, 0, 0.037),
+		0.3px 0.3px 0.4px -2px rgba(0, 0, 0, 0.053),
+		0.5px 0.5px 0.8px -2px rgba(0, 0, 0, 0.065),
+		0.9px 0.9px 1.3px -2px rgba(0, 0, 0, 0.077),
+		1.7px 1.7px 2.5px -2px rgba(0, 0, 0, 0.093),
+		4px 4px 6px -2px rgba(0, 0, 0, 0.13);
 
 	& > * {
 		height: auto;
 		background: white;
 
 		&:first-child::before {
-			content: "Model";
+			content: "Document model";
 		}
 
 		&:last-child::before {
-			content: "View";
+			content: "Editing view";
 		}
 
 		&:first-child::before,
 		&:last-child::before {
 			position: relative;
-			left: -10px;
-			width: calc(100% + 20px);
+			left: -15px;
+			width: calc(100% + 30px);
 			background: #eee;
-			font-size: 18px;
+			font-size: 13px;
 			font-weight: bold;
 			display: block;
 			padding: 6px 10px;
 			margin-bottom: 20px;
+			border-bottom: 1px solid #ddd;
 		}
 	}
 
 	& .ck-inspector-tree {
-		padding: 0 10px 20px;
+		padding: 0 15px 20px;
 		border: 1px solid #ccc;
+
+		&:first-child {
+			border-radius: 2px 0 0 2px;
+		}
 
 		&:last-child {
 			border-left: 0;
+			border-radius: 0 2px 2px 0;
 		}
 	}
 }
