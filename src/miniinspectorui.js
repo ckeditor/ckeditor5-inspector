@@ -27,6 +27,7 @@ export default class MiniInspectorUI extends Component {
 			...getTreeDefinitions( this.props.editor )
 		};
 	}
+
 	render() {
 		return <div className="ck-inspector ck-mini-inspector">
 			<Tree
