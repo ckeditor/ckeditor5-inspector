@@ -26,9 +26,7 @@ export default class MiniCKEditorInspector {
 	 *				console.error( error );
 	 *			} );
 	 *
-	 * @param {Editor|Object} editorOrEditors If an editor instance is passed, the inspect will attach to the editor
-	 * with an auto–generated name. It is possible to pass an object with `name: instance` pairs to attach to
-	 * multiple editors at a time with unique names.
+	 * @param {Editor} editor CKEditor 5 instance the mini inspector will attach to.
 	 * @param {Element} container HTML element in which the mini inspector will be rendered in.
 	 */
 	static attach( editor, container ) {
