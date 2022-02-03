@@ -22,7 +22,7 @@ module.exports = ( env, argv ) => {
 		mode: argv.mode || 'production',
 		entry: {
 			CKEditorInspector: path.resolve( __dirname, 'src', 'ckeditorinspector.js' ),
-			MiniCKEditorInspector: path.resolve( __dirname, 'src', 'miniinspector.js' )
+			MiniCKEditorInspector: path.resolve( __dirname, 'src', 'minickeditorinspector.js' )
 		},
 		module: {
 			rules: [

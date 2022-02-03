@@ -6,7 +6,7 @@
 /* global document, window */
 
 import TestEditor from '../utils/testeditor';
-import MiniCKEditorInspector from '../../src/miniinspector';
+import MiniCKEditorInspector from '../../src/minickeditorinspector';
 
 describe( 'MiniCKEditorInspector', () => {
 	let editor, element, container;
