@@ -48,11 +48,19 @@ export default class MiniInspectorUI extends Component {
 	}
 
 	componentDidMount() {
-		this.props.editor.model.document.on( 'change', () => {
+		const updateTreeDefinitions = () => {
 			this.setState( {
 				...getTreeDefinitions( this.props.editor )
 			} );
-		}, { priority: 'lowest' } );
+		};
+
+		this.props.editor.model.document.on( 'change', updateTreeDefinitions, {
+			priority: 'lowest'
+		} );
+
+		this.props.editor.editing.view.on( 'render', updateTreeDefinitions, {
+			priority: 'lowest'
+		} );
 	}
 }
 
