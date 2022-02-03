@@ -131,7 +131,7 @@ Start the webpack file watcher:
 yarn dev
 ```
 
-and open `http://path/to/ckeditor5-inspector/sample` in your web browser.
+and open `http://path/to/ckeditor5-inspector/sample/inspector.html` in your web browser.
 
 ### Building
 

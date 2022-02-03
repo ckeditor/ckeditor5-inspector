@@ -1,0 +1,47 @@
+/**
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md.
+ */
+
+.ck-inspector.ck-mini-inspector {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items: stretch;
+	border-top: 0;
+
+	& > * {
+		height: auto;
+		background: white;
+
+		&:first-child::before {
+			content: "Model";
+		}
+
+		&:last-child::before {
+			content: "View";
+		}
+
+		&:first-child::before,
+		&:last-child::before {
+			position: relative;
+			left: -10px;
+			width: calc(100% + 20px);
+			background: #eee;
+			font-size: 18px;
+			font-weight: bold;
+			display: block;
+			padding: 6px 10px;
+			margin-bottom: 20px;
+		}
+	}
+
+	& .ck-inspector-tree {
+		padding: 0 10px 20px;
+		border: 1px solid #ccc;
+
+		&:last-child {
+			border-left: 0;
+		}
+	}
+}
