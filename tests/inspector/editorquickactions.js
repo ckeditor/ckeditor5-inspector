@@ -15,6 +15,7 @@ import EditorQuickActions from '../../src/editorquickactions';
 import SourceIcon from '../../src/assets/img/source.svg';
 import CopyToClipboardIcon from '../../src/assets/img/copy-to-clipboard.svg';
 import CheckmarkIcon from '../../src/assets/img/checkmark.svg';
+import LoadDataIcon from '../../src/assets/img/load-data.svg';
 
 describe( '<EditorQuickActions />', () => {
 	let editor, store, wrapper, element;
@@ -258,6 +259,45 @@ describe( '<EditorQuickActions />', () => {
 				errorSpy.restore();
 				clock.restore();
 				done();
+			} );
+		} );
+
+		describe( 'set editor data button', () => {
+			let inspectorWrapper;
+
+			beforeEach( () => {
+				// <Modal> needs this. It will warn otherwise.
+				inspectorWrapper = document.createElement( 'div' );
+				inspectorWrapper.classList.add( 'ck-inspector-wrapper' );
+				document.body.appendChild( inspectorWrapper );
+			} );
+
+			afterEach( () => {
+				inspectorWrapper.remove();
+			} );
+
+			it( 'should be rendered', () => {
+				const setDataButton = wrapper.find( 'SetEditorDataButton' );
+
+				expect( setDataButton.childAt( 0 ).props().text ).to.equal( 'Set editor data' );
+				expect( setDataButton.childAt( 0 ).props().icon.type ).to.equal( LoadDataIcon );
+			} );
+
+			it( 'should open a model when clicked', () => {
+				const setDataButton = wrapper.find( 'SetEditorDataButton' );
+
+				expect( setDataButton.state() ).to.deep.equal( {
+					isSetDataModalOpen: false,
+					setDataModalValue: ''
+				}, 'before click' );
+
+				setDataButton.simulate( 'click' );
+				wrapper.update();
+
+				expect( setDataButton.state() ).to.deep.equal( {
+					isSetDataModalOpen: true,
+					setDataModalValue: ''
+				}, 'after click' );
 			} );
 		} );
 

@@ -13,6 +13,7 @@ import LoadDataIcon from './assets/img/load-data.svg';
 
 import './seteditordatabutton.css';
 
+// TODO: Let's move this button to components maybe?
 export default class SetEditorDataButton extends Component {
 	constructor( props ) {
 		super( props );
@@ -31,17 +32,19 @@ export default class SetEditorDataButton extends Component {
 				text="Set editor data"
 				icon={<LoadDataIcon />}
 				isEnabled={!!this.props.editor}
-				onClick={() => this.setState( { isSetDataModalOpen: true } )}
+				onClick={() => this.setState( {
+					isSetDataModalOpen: true
+				} )}
 				key="button"
 			/>,
 			<Modal
 				isOpen={this.state.isSetDataModalOpen}
 				appElement={document.querySelector( '.ck-inspector-wrapper' )}
-				onAfterOpen={() => this.setState( { setDataModalValue: '' } )}
+				onAfterOpen={this._handleModalAfterOpen.bind( this )}
 				overlayClassName='ck-inspector-modal ck-inspector-quick-actions__set-data-modal'
 				className='ck-inspector-quick-actions__set-data-modal__content'
 				onRequestClose={this._closeModal.bind( this )}
-				portalClassName="ck-inspector-portal"
+				portalClassName='ck-inspector-portal'
 				shouldCloseOnEsc={true}
 				shouldCloseOnOverlayClick={true}
 				key="modal"
@@ -69,19 +72,22 @@ export default class SetEditorDataButton extends Component {
 							} );
 
 							this.textarea.current.focus();
-						}}>
-						Load current editor data
+						}}
+					>
+						Load data
 					</button>
 					<button
 						type="button"
 						title="Cancel (Esc)"
-						onClick={() => this._closeModal()}>
+						onClick={() => this._closeModal()}
+					>
 						Cancel
 					</button>
 					<button
 						type="button"
 						title="Set editor data (⇧+Enter)"
-						onClick={() => this._setEditorData()}>
+						onClick={() => this._setEditorData()}
+					>
 						Set data
 					</button>
 				</div>
@@ -105,5 +111,13 @@ export default class SetEditorDataButton extends Component {
 		this.setState( {
 			setDataModalValue: evt.target.value
 		} );
+	}
+
+	_handleModalAfterOpen() {
+		this.setState( {
+			setDataModalValue: this.props.editor.getData()
+		} );
+
+		this.textarea.current.select();
 	}
 }
