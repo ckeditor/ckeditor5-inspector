@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md.
  */
 
@@ -10,7 +10,7 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
 import { Rnd } from 'react-rnd';
-import InspectorUI, { DocsButton } from '../../src/ui';
+import CKEditorInspectorUI, { DocsButton } from '../../src/ckeditorinspectorui';
 import Tabs from '../../src/components/tabs';
 import TestEditor from '../utils/testeditor';
 
@@ -20,7 +20,7 @@ import {
 	TOGGLE_IS_COLLAPSED
 } from '../../src/data/actions';
 
-describe( '<InspectorUI />', () => {
+describe( '<CKEditorInspectorUI />', () => {
 	let editors, wrapper, store, editor1Element, editor2Element, dispatchSpy;
 
 	const origAddEventListener = window.addEventListener;
@@ -74,7 +74,7 @@ describe( '<InspectorUI />', () => {
 
 			dispatchSpy = sinon.spy( store, 'dispatch' );
 
-			wrapper = mount( <Provider store={store}><InspectorUI /></Provider> );
+			wrapper = mount( <Provider store={store}><CKEditorInspectorUI /></Provider> );
 		} );
 	} );
 
@@ -98,7 +98,7 @@ describe( '<InspectorUI />', () => {
 		const tabs = wrapper.find( 'Tabs' ).first();
 
 		expect( tabs.props().activeTab ).to.equal( 'Model' );
-		expect( tabs.props().onTabChange ).to.equal( wrapper.find( 'InspectorUI' ).props().setActiveTab );
+		expect( tabs.props().onTabChange ).to.equal( wrapper.find( 'CKEditorInspectorUI' ).props().setActiveTab );
 	} );
 
 	describe( 'render()', () => {
@@ -256,7 +256,7 @@ describe( '<InspectorUI />', () => {
 
 				it( 'should have #onResizeStop', () => {
 					const rnd = wrapper.find( Rnd ).first();
-					const instance = wrapper.find( 'InspectorUI' ).instance();
+					const instance = wrapper.find( 'CKEditorInspectorUI' ).instance();
 
 					expect( rnd.props().onResizeStop ).to.equal( instance.handleInspectorResize );
 
@@ -280,7 +280,7 @@ describe( '<InspectorUI />', () => {
 				it( 'should have a #onTabChange', () => {
 					const panes = getPanes();
 
-					expect( panes.props().onTabChange ).to.equal( wrapper.find( 'InspectorUI' ).props().setActiveTab );
+					expect( panes.props().onTabChange ).to.equal( wrapper.find( 'CKEditorInspectorUI' ).props().setActiveTab );
 				} );
 
 				it( 'should have a #contentBefore', () => {

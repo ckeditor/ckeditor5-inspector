@@ -1,6 +1,22 @@
 Changelog
 =========
 
+## [3.0.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v2.3.0...v3.0.0) (2022-02-03)
+
+### BREAKING CHANGES
+
+* Upgraded the minimal versions of Node.js to `14.0.0` due to the end of LTS.
+
+### Features
+
+* Implemented the mini inspector (`MiniCKEditorInspector`) in a separate build. Closes [#143](https://github.com/ckeditor/ckeditor5-inspector/issues/143). ([commit](https://github.com/ckeditor/ckeditor5-inspector/commit/d81e841b8fa1096640e1efe402a5fb98820959c1))
+* The "Log editor data" button should copy to the clipboard if clicked with the Shift key. Closes [#136](https://github.com/ckeditor/ckeditor5-inspector/issues/136). ([commit](https://github.com/ckeditor/ckeditor5-inspector/commit/1252b78e7d82944dd7828ca177c09af8878a48a2))
+
+### Other changes
+
+* Updated the required version of Node.js to 14. See [ckeditor/ckeditor5#10972](https://github.com/ckeditor/ckeditor5/issues/10972). ([commit](https://github.com/ckeditor/ckeditor5-inspector/commit/bb65d8830bc59c6474a4efcd2f404304cd586386))
+
+
 ## [2.3.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v2.2.2...v2.3.0) (2021-11-30)
 
 ### Features

@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md.
  */
 
@@ -20,7 +20,7 @@ import { updateViewState } from './view/data/actions';
 import { updateCommandsState } from './commands/data/actions';
 import EditorListener from './data/utils';
 
-import InspectorUI from './ui';
+import CKEditorInspectorUI from './ckeditorinspectorui';
 import Logger from './logger';
 import {
 	normalizeArguments,
@@ -280,7 +280,7 @@ export default class CKEditorInspector {
 
 		ReactDOM.render(
 			<Provider store={CKEditorInspector._store}>
-				<InspectorUI />
+				<CKEditorInspectorUI />
 			</Provider>,
 			container
 		);

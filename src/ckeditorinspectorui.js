@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md.
  */
 
@@ -27,7 +27,7 @@ import CommandsPane from './commands/pane';
 import EditorQuickActions from './editorquickactions';
 import ArrowDownIcon from './assets/img/arrow-down.svg';
 
-import './ui.css';
+import './ckeditorinspectorui.css';
 
 const INSPECTOR_MIN_HEIGHT = '100';
 const INSPECTOR_COLLAPSED_HEIGHT = 30;
@@ -39,7 +39,7 @@ const INSPECTOR_STYLES = {
 	top: 'auto'
 };
 
-class InspectorUI extends Component {
+class CKEditorInspectorUI extends Component {
 	constructor( props ) {
 		super( props );
 
@@ -113,7 +113,7 @@ const mapStateToProps = ( { editors, currentEditorName, ui: { isCollapsed, heigh
 
 const mapDispatchToProps = { toggleIsCollapsed, setHeight, setEditors, setCurrentEditorName, setActiveTab };
 
-export default connect( mapStateToProps, mapDispatchToProps )( InspectorUI );
+export default connect( mapStateToProps, mapDispatchToProps )( CKEditorInspectorUI );
 
 export class DocsButton extends Component {
 	render() {

@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md.
  */
 
@@ -10,12 +10,20 @@ const TerserPlugin = require( 'terser-webpack-plugin' );
 const webpack = require( 'webpack' );
 const path = require( 'path' );
 
+const LIBRARY_TO_FILE_NAMES = {
+	CKEditorInspector: 'inspector.js',
+	MiniCKEditorInspector: 'miniinspector.js'
+};
+
 module.exports = ( env, argv ) => {
 	const devMode = argv.mode === 'development';
 
 	return {
 		mode: argv.mode || 'production',
-		entry: path.resolve( __dirname, 'src', 'ckeditorinspector.js' ),
+		entry: {
+			CKEditorInspector: path.resolve( __dirname, 'src', 'ckeditorinspector.js' ),
+			MiniCKEditorInspector: path.resolve( __dirname, 'src', 'minickeditorinspector.js' )
+		},
 		module: {
 			rules: [
 				{
@@ -97,8 +105,8 @@ module.exports = ( env, argv ) => {
 		},
 		output: {
 			path: path.resolve( __dirname, 'build' ),
-			library: 'CKEditorInspector',
-			filename: 'inspector.js',
+			library: '[name]',
+			filename: data => LIBRARY_TO_FILE_NAMES[ data.chunk.name ],
 			libraryTarget: 'umd',
 			libraryExport: 'default'
 		},
