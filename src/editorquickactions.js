@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import copy from 'copy-to-clipboard';
 
-import SetEditorDataButton from './seteditordatabutton';
+import SetEditorDataButton from './components/seteditordatabutton';
 import Button from './components/button';
 
 import SourceIcon from './assets/img/source.svg';

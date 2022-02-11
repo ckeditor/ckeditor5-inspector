@@ -6,14 +6,13 @@
 /* global document, window */
 
 import React from 'react';
-import TestEditor from '../utils/testeditor';
+import TestEditor from '../../utils/testeditor';
 
-import SetEditorDataButton from '../../src/seteditordatabutton';
+import SetEditorDataButton from '../../../src/components/seteditordatabutton';
 
-import LoadDataIcon from '../../src/assets/img/load-data.svg';
+import LoadDataIcon from '../../../src/assets/img/load-data.svg';
 
-// TODO: Let's move this button to components maybe?
-describe( '<EditorQuickActions />', () => {
+describe( '<SetEditorDataButton />', () => {
 	let editor, wrapper, element, inspectorWrapperDomElement;
 
 	beforeEach( () => {

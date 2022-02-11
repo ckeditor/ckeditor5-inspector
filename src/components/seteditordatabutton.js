@@ -8,12 +8,11 @@
 import React, { Component } from 'react';
 import Modal from 'react-modal';
 
-import Button from './components/button';
-import LoadDataIcon from './assets/img/load-data.svg';
+import Button from './button';
+import LoadDataIcon from '../assets/img/load-data.svg';
 
 import './seteditordatabutton.css';
 
-// TODO: Let's move this button to components maybe?
 export default class SetEditorDataButton extends Component {
 	constructor( props ) {
 		super( props );
