@@ -221,6 +221,22 @@ describe( '<SetEditorDataButton />', () => {
 							editorDataValue: '<p>foo</p>'
 						} );
 					} );
+
+					it( 'should do nothing special on Enter ', () => {
+						const setDataSpy = sinon.spy( editor, 'setData' );
+						const evt = {
+							key: 'Enter'
+						};
+
+						textarea.simulate( 'keyPress', evt );
+
+						sinon.assert.notCalled( setDataSpy );
+
+						expect( wrapper.state() ).to.deep.equal( {
+							isModalOpen: true,
+							editorDataValue: '<p>foo</p>'
+						} );
+					} );
 				} );
 
 				describe( 'load data button', () => {
