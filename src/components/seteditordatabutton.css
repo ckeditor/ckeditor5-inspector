@@ -64,6 +64,7 @@
 			resize: none;
 			padding: 10px;
 			font-family: monospace;
+			font-size: 14px;
 		}
 
 		& button {
