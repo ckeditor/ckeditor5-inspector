@@ -19,8 +19,8 @@ export default class SetEditorDataButton extends Component {
 		super( props );
 
 		this.state = {
-			isSetDataModalOpen: false,
-			setDataModalValue: ''
+			isModalOpen: false,
+			editorDataValue: ''
 		};
 
 		this.textarea = React.createRef();
@@ -33,17 +33,21 @@ export default class SetEditorDataButton extends Component {
 				icon={<LoadDataIcon />}
 				isEnabled={!!this.props.editor}
 				onClick={() => this.setState( {
-					isSetDataModalOpen: true
+					isModalOpen: true
 				} )}
 				key="button"
 			/>,
 			<Modal
-				isOpen={this.state.isSetDataModalOpen}
+				isOpen={this.state.isModalOpen}
 				appElement={document.querySelector( '.ck-inspector-wrapper' )}
-				onAfterOpen={this._handleModalAfterOpen.bind( this )}
+				onAfterOpen={
+					this._handleModalAfterOpen.bind( this )
+				}
 				overlayClassName='ck-inspector-modal ck-inspector-quick-actions__set-data-modal'
 				className='ck-inspector-quick-actions__set-data-modal__content'
-				onRequestClose={this._closeModal.bind( this )}
+				onRequestClose={
+					this._closeModal.bind( this )
+				}
 				portalClassName='ck-inspector-portal'
 				shouldCloseOnEsc={true}
 				shouldCloseOnOverlayClick={true}
@@ -52,13 +56,15 @@ export default class SetEditorDataButton extends Component {
 				<h2>Set editor data</h2>
 				<textarea
 					autoFocus
-					ref={this.textarea}
-					value={ this.state.setDataModalValue }
+					ref={ this.textarea }
+					value={ this.state.editorDataValue }
 					placeholder="Paste HTML here..."
-					onChange={ this._handleSetDataModalValueChange.bind( this ) }
+					onChange={
+						this._handlDataChange.bind( this )
+					}
 					onKeyPress={ event => {
 						if ( event.key == 'Enter' && event.shiftKey ) {
-							this._setEditorData();
+							this._setEditorDataAndCloseModal();
 						}
 					}}
 				>
@@ -68,7 +74,7 @@ export default class SetEditorDataButton extends Component {
 						type="button"
 						onClick={() => {
 							this.setState( {
-								setDataModalValue: this.props.editor.getData()
+								editorDataValue: this.props.editor.getData()
 							} );
 
 							this.textarea.current.focus();
@@ -79,14 +85,18 @@ export default class SetEditorDataButton extends Component {
 					<button
 						type="button"
 						title="Cancel (Esc)"
-						onClick={() => this._closeModal()}
+						onClick={
+							this._closeModal.bind( this )
+						}
 					>
 						Cancel
 					</button>
 					<button
 						type="button"
 						title="Set editor data (⇧+Enter)"
-						onClick={() => this._setEditorData()}
+						onClick={
+							this._setEditorDataAndCloseModal.bind( this )
+						}
 					>
 						Set data
 					</button>
@@ -95,27 +105,27 @@ export default class SetEditorDataButton extends Component {
 		];
 	}
 
-	_setEditorData() {
-		this.props.editor.setData( this.state.setDataModalValue );
+	_setEditorDataAndCloseModal() {
+		this.props.editor.setData( this.state.editorDataValue );
 
 		this._closeModal();
 	}
 
 	_closeModal() {
 		this.setState( {
-			isSetDataModalOpen: false
+			isModalOpen: false
 		} );
 	}
 
-	_handleSetDataModalValueChange( evt ) {
+	_handlDataChange( evt ) {
 		this.setState( {
-			setDataModalValue: evt.target.value
+			editorDataValue: evt.target.value
 		} );
 	}
 
 	_handleModalAfterOpen() {
 		this.setState( {
-			setDataModalValue: this.props.editor.getData()
+			editorDataValue: this.props.editor.getData()
 		} );
 
 		this.textarea.current.select();

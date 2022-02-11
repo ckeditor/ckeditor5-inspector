@@ -287,23 +287,23 @@ describe( '<EditorQuickActions />', () => {
 				const setDataButton = wrapper.find( 'SetEditorDataButton' );
 
 				expect( setDataButton.state() ).to.deep.equal( {
-					isSetDataModalOpen: false,
-					setDataModalValue: ''
+					isModalOpen: false,
+					editorDataValue: ''
 				}, 'before click' );
 
 				setDataButton.simulate( 'click' );
 				wrapper.update();
 
 				expect( setDataButton.state() ).to.deep.equal( {
-					isSetDataModalOpen: true,
-					setDataModalValue: ''
+					isModalOpen: true,
+					editorDataValue: ''
 				}, 'after click' );
 			} );
 		} );
 
 		describe( 'toggle read only button', () => {
 			it( 'should be rendered and toggle the editor read only state', () => {
-				const toggleReadOnlyButton = wrapper.find( 'Button' ).at( 2 );
+				const toggleReadOnlyButton = wrapper.find( 'Button' ).at( 3 );
 
 				toggleReadOnlyButton.simulate( 'click' );
 				expect( editor.isReadOnly ).to.be.true;
@@ -315,7 +315,7 @@ describe( '<EditorQuickActions />', () => {
 
 		describe( 'destroy editor button', () => {
 			it( 'should be rendered and destory the editor', () => {
-				const destroyButton = wrapper.find( 'Button' ).at( 3 );
+				const destroyButton = wrapper.find( 'Button' ).at( 4 );
 				const spy = sinon.spy( editor, 'destroy' );
 
 				destroyButton.simulate( 'click' );

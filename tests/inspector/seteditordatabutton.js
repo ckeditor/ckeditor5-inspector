@@ -47,8 +47,8 @@ describe( '<EditorQuickActions />', () => {
 	describe( 'constructor()', () => {
 		it( 'should have initial state', () => {
 			expect( wrapper.state() ).to.deep.equal( {
-				isSetDataModalOpen: false,
-				setDataModalValue: ''
+				isModalOpen: false,
+				editorDataValue: ''
 			} );
 		} );
 	} );
@@ -66,8 +66,8 @@ describe( '<EditorQuickActions />', () => {
 				wrapper.update();
 
 				expect( wrapper.state() ).to.deep.equal( {
-					isSetDataModalOpen: true,
-					setDataModalValue: ''
+					isModalOpen: true,
+					editorDataValue: ''
 				} );
 			} );
 		} );
@@ -89,55 +89,201 @@ describe( '<EditorQuickActions />', () => {
 				expect( modal.props().shouldCloseOnOverlayClick ).to.be.true;
 			} );
 
-			it( 'should open upon #isSetDataModalOpen change ', () => {
+			it( 'should open upon #isModalOpen change', () => {
+				expect( modal.props().isOpen ).to.be.false;
 
+				wrapper.instance().setState( {
+					isModalOpen: true
+				} );
+
+				wrapper.update();
+				modal = wrapper.childAt( 1 );
+
+				expect( modal.props().isOpen ).to.be.true;
 			} );
 
-			it( 'should set #setDataModalValue after being open', () => {
+			it( 'should set #editorDataValue after being open', () => {
+				// React modal uses this internally.
+				const rafStub = sinon.stub( window, 'requestAnimationFrame' ).callsFake( callback => {
+					callback();
+				} );
 
+				const getDataStub = sinon.stub( editor, 'getData' ).returns( '<p>foo</p>' );
+
+				wrapper.instance().setState( {
+					isModalOpen: true
+				} );
+
+				expect( wrapper.state() ).to.deep.equal( {
+					isModalOpen: true,
+					editorDataValue: '<p>foo</p>'
+				} );
+
+				rafStub.restore();
+				getDataStub.restore();
 			} );
 
-			it( 'should update #isSetDataModalOpen when close is requested (e.g. via click or Esc)', () => {
+			it( 'should update #isModalOpen when close is requested (e.g. via click or Esc)', () => {
+				// React modal uses this internally.
+				const rafStub = sinon.stub( window, 'requestAnimationFrame' ).callsFake( callback => {
+					callback();
+				} );
 
+				const getDataStub = sinon.stub( editor, 'getData' ).returns( '<p>foo</p>' );
+
+				wrapper.instance().setState( {
+					isModalOpen: true
+				} );
+
+				expect( wrapper.state() ).to.deep.equal( {
+					isModalOpen: true,
+					editorDataValue: '<p>foo</p>'
+				} );
+
+				modal = wrapper.childAt( 1 );
+
+				modal.props().onRequestClose();
+
+				expect( wrapper.state() ).to.deep.equal( {
+					isModalOpen: false,
+					editorDataValue: '<p>foo</p>'
+				} );
+
+				rafStub.restore();
+				getDataStub.restore();
 			} );
 
-			describe( 'textarea', () => {
-				it( 'should have value bound to #setDataModalValue', () => {
+			describe( 'modal content', () => {
+				let textarea, rafStub, getDataStub, loadDataButton, cancelButton, saveButton;
 
+				beforeEach( () => {
+					// React modal uses this internally.
+					rafStub = sinon.stub( window, 'requestAnimationFrame' ).callsFake( callback => {
+						callback();
+					} );
+
+					getDataStub = sinon.stub( editor, 'getData' ).returns( '<p>foo</p>' );
+
+					wrapper.instance().setState( {
+						isModalOpen: true
+					} );
+
+					wrapper.update();
+					modal = wrapper.childAt( 1 );
+
+					textarea = wrapper.find( 'textarea' );
+					loadDataButton = modal.find( 'button' ).first();
+					cancelButton = modal.find( 'button' ).at( 1 );
+					saveButton = modal.find( 'button' ).at( 2 );
 				} );
 
-				it( 'should have a placeholder', () => {
-
+				afterEach( () => {
+					rafStub.restore();
+					getDataStub.restore();
 				} );
 
-				it( 'should update #setDataModalValue on change', () => {
+				describe( 'textarea', () => {
+					it( 'should have value bound to #editorDataValue', () => {
+						expect( textarea.props().value ).to.equal( '<p>foo</p>' );
+					} );
 
+					it( 'should have a placeholder', () => {
+						expect( textarea.props().placeholder ).to.equal( 'Paste HTML here...' );
+					} );
+
+					it( 'should update #editorDataValue on change', () => {
+						const evt = {
+							target: {
+								value: '<b>bar</b>'
+							}
+						};
+
+						textarea.simulate( 'change', evt );
+
+						expect( wrapper.state() ).to.deep.equal( {
+							isModalOpen: true,
+							editorDataValue: '<b>bar</b>'
+						} );
+					} );
+
+					it( 'should set editor data and close the modal on Shift+Enter ', () => {
+						const setDataSpy = sinon.spy( editor, 'setData' );
+						const evt = {
+							key: 'Enter',
+							shiftKey: true
+						};
+
+						textarea.simulate( 'keyPress', evt );
+
+						sinon.assert.calledOnce( setDataSpy );
+
+						expect( wrapper.state() ).to.deep.equal( {
+							isModalOpen: false,
+							editorDataValue: '<p>foo</p>'
+						} );
+					} );
 				} );
 
-				it( 'should set editor data and close the modal on Shift+Enter ', () => {
+				describe( 'load data button', () => {
+					it( 'should update #editorDataValue and focus textarea', () => {
+						const focusSpy = sinon.spy( wrapper.find( 'textarea' ).getDOMNode(), 'focus' );
 
+						getDataStub.returns( 'abcd' );
+
+						loadDataButton.simulate( 'click' );
+						wrapper.update();
+
+						expect( wrapper.state() ).to.deep.equal( {
+							isModalOpen: true,
+							editorDataValue: 'abcd'
+						} );
+
+						sinon.assert.calledOnce( focusSpy );
+					} );
+
+					it( 'should have a text label', () => {
+						expect( loadDataButton.text() ).to.equal( 'Load data' );
+					} );
 				} );
-			} );
 
-			describe( 'load data button', () => {
-				it( 'should update #setDataModalValue and focus textarea', () => {
+				describe( 'Cancel button', () => {
+					it( 'should not set editor data and close the modal', () => {
+						const setDataSpy = sinon.spy( editor, 'setData' );
 
+						cancelButton.simulate( 'click' );
+
+						wrapper.update();
+						expect( wrapper.state() ).to.deep.equal( {
+							isModalOpen: false,
+							editorDataValue: '<p>foo</p>'
+						} );
+
+						sinon.assert.notCalled( setDataSpy );
+					} );
+
+					it( 'should have a text label', () => {
+						expect( cancelButton.text() ).to.equal( 'Cancel' );
+					} );
 				} );
 
-				it( 'should have a text label', () => {
+				describe( 'Set data button', () => {
+					it( 'should set editor data and close the modal', () => {
+						const setDataSpy = sinon.spy( editor, 'setData' );
 
-				} );
-			} );
+						saveButton.simulate( 'click' );
 
-			describe( 'Cancel button', () => {
-				it( 'should not set editor data and close the modal', () => {
+						wrapper.update();
+						expect( wrapper.state() ).to.deep.equal( {
+							isModalOpen: false,
+							editorDataValue: '<p>foo</p>'
+						} );
 
-				} );
-			} );
+						sinon.assert.calledOnce( setDataSpy );
+					} );
 
-			describe( 'Set data button', () => {
-				it( 'should set editor data and close the modal', () => {
-
+					it( 'should have a text label', () => {
+						expect( saveButton.text() ).to.equal( 'Set data' );
+					} );
 				} );
 			} );
 		} );
