@@ -3,7 +3,8 @@
  * For licensing, see LICENSE.md.
  */
 
-.ck-inspector {
+.ck-inspector,
+.ck-inspector-portal {
 	--ck-inspector-color-white: #fff;
 	--ck-inspector-color-black: #000;
 	--ck-inspector-color-background: #F3F3F3;
@@ -15,7 +16,9 @@
 
 /* Reset first */
 .ck-inspector,
-.ck-inspector *:not(select) {
+.ck-inspector *:not(select),
+.ck-inspector-portal,
+.ck-inspector-portal *:not(select) {
 	box-sizing: border-box;
 	width: auto;
 	height: auto;

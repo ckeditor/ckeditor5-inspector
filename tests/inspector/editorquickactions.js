@@ -15,6 +15,7 @@ import EditorQuickActions from '../../src/editorquickactions';
 import SourceIcon from '../../src/assets/img/source.svg';
 import CopyToClipboardIcon from '../../src/assets/img/copy-to-clipboard.svg';
 import CheckmarkIcon from '../../src/assets/img/checkmark.svg';
+import LoadDataIcon from '../../src/assets/img/load-data.svg';
 
 describe( '<EditorQuickActions />', () => {
 	let editor, store, wrapper, element;
@@ -261,9 +262,48 @@ describe( '<EditorQuickActions />', () => {
 			} );
 		} );
 
+		describe( 'set editor data button', () => {
+			let inspectorWrapper;
+
+			beforeEach( () => {
+				// <Modal> needs this. It will warn otherwise.
+				inspectorWrapper = document.createElement( 'div' );
+				inspectorWrapper.classList.add( 'ck-inspector-wrapper' );
+				document.body.appendChild( inspectorWrapper );
+			} );
+
+			afterEach( () => {
+				inspectorWrapper.remove();
+			} );
+
+			it( 'should be rendered', () => {
+				const setDataButton = wrapper.find( 'SetEditorDataButton' );
+
+				expect( setDataButton.childAt( 0 ).props().text ).to.equal( 'Set editor data' );
+				expect( setDataButton.childAt( 0 ).props().icon.type ).to.equal( LoadDataIcon );
+			} );
+
+			it( 'should open a model when clicked', () => {
+				const setDataButton = wrapper.find( 'SetEditorDataButton' );
+
+				expect( setDataButton.state() ).to.deep.equal( {
+					isModalOpen: false,
+					editorDataValue: ''
+				}, 'before click' );
+
+				setDataButton.simulate( 'click' );
+				wrapper.update();
+
+				expect( setDataButton.state() ).to.deep.equal( {
+					isModalOpen: true,
+					editorDataValue: ''
+				}, 'after click' );
+			} );
+		} );
+
 		describe( 'toggle read only button', () => {
 			it( 'should be rendered and toggle the editor read only state', () => {
-				const toggleReadOnlyButton = wrapper.find( 'Button' ).at( 2 );
+				const toggleReadOnlyButton = wrapper.find( 'Button' ).at( 3 );
 
 				toggleReadOnlyButton.simulate( 'click' );
 				expect( editor.isReadOnly ).to.be.true;
@@ -275,7 +315,7 @@ describe( '<EditorQuickActions />', () => {
 
 		describe( 'destroy editor button', () => {
 			it( 'should be rendered and destory the editor', () => {
-				const destroyButton = wrapper.find( 'Button' ).at( 3 );
+				const destroyButton = wrapper.find( 'Button' ).at( 4 );
 				const spy = sinon.spy( editor, 'destroy' );
 
 				destroyButton.simulate( 'click' );
