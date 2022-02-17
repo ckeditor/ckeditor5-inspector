@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## [3.1.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v3.0.0...v3.1.0) (2022-02-17)
+
+### Features
+
+* Made it possible to set editor data using the UI. Closes [#138](https://github.com/ckeditor/ckeditor5-inspector/issues/138). ([commit](https://github.com/ckeditor/ckeditor5-inspector/commit/b5ea7c52a37477f11f4624499d1054604f0d95d8))
+
+
 ## [3.0.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v2.3.0...v3.0.0) (2022-02-03)
 
 ### BREAKING CHANGES
