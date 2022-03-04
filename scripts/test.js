@@ -8,10 +8,9 @@
 /* eslint-env node */
 
 const getKarmaConfig = require( './utils/getkarmaconfig' );
-const { Server: KarmaServer } = require( 'karma' );
+const { Server, config } = require( 'karma' );
 
-const config = getKarmaConfig();
-
-const server = new KarmaServer( config );
+const parsedConfig = config.parseConfig( null, getKarmaConfig() );
+const server = new Server( parsedConfig );
 
 server.start();
