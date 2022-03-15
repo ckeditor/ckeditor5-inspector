@@ -3,8 +3,6 @@
  * For licensing, see LICENSE.md.
  */
 
-/* global console */
-
 import Logger from '../../src/logger';
 
 describe( 'Logger', () => {
