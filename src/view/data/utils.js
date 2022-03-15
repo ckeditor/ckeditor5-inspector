@@ -221,7 +221,7 @@ function fillElementDefinition( elementDefinition, ranges ) {
 	}
 
 	for ( const child of element.getChildren() ) {
-		elementDefinition.children.push( getViewNodeDefinition( child, ranges, ) );
+		elementDefinition.children.push( getViewNodeDefinition( child, ranges ) );
 	}
 
 	fillViewElementDefinitionPositions( elementDefinition, ranges );

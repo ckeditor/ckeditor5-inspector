@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md.
  */
 
-/* global require, window */
+/* global window */
 
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
