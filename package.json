@@ -18,7 +18,8 @@
     "changelog": "node ./scripts/changelog.js",
     "release:bump-version": "node ./scripts/bump-version.js",
     "release:publish": "node ./scripts/publish.js",
-    "test": "node ./scripts/test.js"
+    "test": "node ./scripts/test.js",
+    "lint": "eslint --quiet \"**/*.js\""
   },
   "repository": {
     "type": "git",
@@ -59,7 +60,7 @@
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
     "eslint": "^7.32.0",
-    "eslint-config-ckeditor5": "^3.1.1",
+    "eslint-config-ckeditor5": "^4.0.0",
     "eslint-plugin-react": "^7.27.1",
     "husky": "^4.2.5",
     "istanbul-instrumenter-loader": "^3.0.1",

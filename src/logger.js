@@ -3,8 +3,6 @@
  * For licensing, see LICENSE.md.
  */
 
-/* global console */
-
 export default class Logger {
 	static group( ...args ) {
 		console.group( ...args );

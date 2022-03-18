@@ -10,6 +10,11 @@
 		"ckeditor5",
 		"plugin:react/recommended"
 	],
+	"settings":{
+		"react": {
+			"version": "detect"
+		}
+	},
 	"globals": {
 		"expect": true,
 		"sinon": true,
@@ -23,6 +28,14 @@
 			"error",
 			140
 		],
-		"no-trailing-spaces": "error"
+		"no-trailing-spaces": "error",
+		"ckeditor5-rules/license-header": [ "error", {
+			"headerLines": [
+				"/**",
+				" * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.",
+				" * For licensing, see LICENSE.md.",
+				" */"
+			]
+		} ]
 	}
 }
