@@ -39,15 +39,18 @@ describe( 'Utils', () => {
 			} ).to.not.throw();
 		} );
 
-		it( 'should process only the very first level of objects', () => {
+		it( 'should process only two first level of objects', () => {
 			const obj = {
 				level: '1',
 				nested: {
-					level: '2'
+					level: '2',
+					subNested: {
+						level: '3'
+					}
 				}
 			};
 
-			expect( stringify( obj ) ).to.equal( '{level:"1",nested:{}}' );
+			expect( stringify( obj ) ).to.equal( '{level:"1",nested:{level:"2",subNested:{}}}' );
 		} );
 	} );
 
