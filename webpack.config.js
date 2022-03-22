@@ -64,7 +64,7 @@ module.exports = ( env, argv ) => {
 							loader: 'postcss-loader',
 							options: {
 								sourceMap: devMode,
-								config: {
+								postcssOptions: {
 									ctx: {
 										cssnano: !devMode
 									}
