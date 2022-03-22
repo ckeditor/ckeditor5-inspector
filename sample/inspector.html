@@ -3,14 +3,30 @@
 	<head>
 			<meta charset="utf-8">
 			<title>Inspector sample</title>
-			<script src="../node_modules/@ckeditor/ckeditor5-build-decoupled-document/build/ckeditor.js"></script>
+
+			<script src="../node_modules/ckeditor5/build/ckeditor5-dll.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-editor-decoupled/build/editor-decoupled.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-autoformat/build/autoformat.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-basic-styles/build/basic-styles.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-block-quote/build/block-quote.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-essentials/build/essentials.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-heading/build/heading.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-html-support/build/html-support.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-image/build/image.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-indent/build/indent.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-link/build/link.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-list/build/list.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-media-embed/build/media-embed.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-paste-from-office/build/paste-from-office.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-table/build/table.js"></script>
+
 			<script src="../build/inspector.js"></script>
 	</head>
 	<body>
 		<h2>First editor</h2>
 		<div id="first-editor-content">
 			<h2>The three greatest things you learn from traveling</h2>
-			<p>Like <a href="https://ckeditor.com">all the <b>great things on earth</b> traveling teaches</a> us by example. Here are some <br>of the most precious lessons I’ve
+			<p class="foo bar" foo="true" style="color: green;">Like <a href="https://ckeditor.com">all the <b>great things on earth</b> traveling teaches</a> us by example. Here are some <br>of the most precious lessons I’ve
 				learned over the years of traveling.</p>
 			<figure class="table">
 				<table>
@@ -163,8 +179,84 @@
 				editorNames = [];
 			} );
 
-			DecoupledEditor
+			const config = {
+				plugins: [
+					CKEditor5.autoformat.Autoformat,
+					CKEditor5.basicStyles.Bold,
+					CKEditor5.basicStyles.Italic,
+					CKEditor5.blockQuote.BlockQuote,
+					CKEditor5.essentials.Essentials,
+					CKEditor5.heading.Heading,
+					CKEditor5.htmlSupport.GeneralHtmlSupport,
+					CKEditor5.image.Image,
+					CKEditor5.image.ImageCaption,
+					CKEditor5.image.ImageStyle,
+					CKEditor5.image.ImageToolbar,
+					CKEditor5.image.ImageUpload,
+					CKEditor5.indent.Indent,
+					CKEditor5.link.Link,
+					CKEditor5.list.List,
+					CKEditor5.mediaEmbed.MediaEmbed,
+					CKEditor5.paragraph.Paragraph,
+					CKEditor5.pasteFromOffice.PasteFromOffice,
+					CKEditor5.table.Table,
+					CKEditor5.table.TableToolbar
+				],
+				htmlSupport: {
+					allow: [
+						{
+							name: 'p',
+							classes: [ 'foo', 'bar' ],
+							attributes: {
+								foo: 'true',
+							},
+							styles: { 'color': true }
+						}
+					],
+				},
+				toolbar: {
+					items: [
+						'heading',
+						'|',
+						'bold',
+						'italic',
+						'link',
+						'bulletedList',
+						'numberedList',
+						'|',
+						'outdent',
+						'indent',
+						'|',
+						'uploadImage',
+						'blockQuote',
+						'insertTable',
+						'mediaEmbed',
+						'undo',
+						'redo'
+					]
+				},
+				image: {
+					toolbar: [
+						'imageStyle:inline',
+						'imageStyle:block',
+						'imageStyle:side',
+						'|',
+						'toggleImageCaption',
+						'imageTextAlternative'
+					]
+				},
+				table: {
+					contentToolbar: [
+						'tableColumn',
+						'tableRow',
+						'mergeTableCells'
+					]
+				}
+			};
+
+			CKEditor5.editorDecoupled.DecoupledEditor
 				.create( document.querySelector( '#first-editor-content' ), {
+					...config,
 					extraPlugins: [ UploadAdapter, MarkerDemoPlugin ]
 				} )
 				.then( editor => {
@@ -177,8 +269,9 @@
 					console.error( error );
 				} );
 
-			DecoupledEditor
+			CKEditor5.editorDecoupled.DecoupledEditor
 				.create( document.querySelector( '#second-editor-content' ), {
+					...config,
 					extraPlugins: [ UploadAdapter ]
 				} )
 				.then( editor => {
@@ -191,8 +284,9 @@
 					console.error( error );
 				} );
 
-			DecoupledEditor
+			CKEditor5.editorDecoupled.DecoupledEditor
 				.create( document.querySelector( '#rtl-editor-content' ), {
+					...config,
 					extraPlugins: [ UploadAdapter ],
 					language: 'ar'
 				} )

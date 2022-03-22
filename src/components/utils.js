@@ -15,7 +15,9 @@ export function stringify( value, quotesAroundText = true ) {
 	}
 
 	const stringified = javascriptStringify( value, stringifySingleToDoubleQuotesReplacer, null, {
-		maxDepth: 1
+		// https://github.com/ckeditor/ckeditor5-inspector/issues/98
+		// https://github.com/ckeditor/ckeditor5-inspector/issues/129
+		maxDepth: 2
 	} );
 
 	// Note: Remove leading and trailing quotes (") from the output. By default it is:
