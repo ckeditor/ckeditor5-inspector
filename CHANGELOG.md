@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## [3.1.1](https://github.com/ckeditor/ckeditor5-inspector/compare/v3.1.0...v3.1.1) (2022-03-29)
+
+### Bug fixes
+
+* Improved rendering of GHS attributes in the inspector. Closes [#129](https://github.com/ckeditor/ckeditor5-inspector/issues/129). ([commit](https://github.com/ckeditor/ckeditor5-inspector/commit/5874d2a971628b69000120519a82ba3dccb7651f))
+
+
 ## [3.1.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v3.0.0...v3.1.0) (2022-02-17)
 
 ### Features
