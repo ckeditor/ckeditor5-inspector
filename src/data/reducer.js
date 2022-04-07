@@ -6,6 +6,7 @@
 import { modelReducer } from '../model/data/reducer';
 import { viewReducer } from '../view/data/reducer';
 import commandsReducer from '../commands/data/reducer';
+import schemaReducer from '../schema/data/reducer';
 
 import {
 	TOGGLE_IS_COLLAPSED,
@@ -35,6 +36,7 @@ export function reducer( state, action ) {
 	newState.model = modelReducer( newState, newState.model, action );
 	newState.view = viewReducer( newState, newState.view, action );
 	newState.commands = commandsReducer( newState, newState.commands, action );
+	newState.schema = schemaReducer( newState, newState.schema, action );
 
 	return {
 		...state,
