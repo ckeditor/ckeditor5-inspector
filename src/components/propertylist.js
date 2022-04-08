@@ -28,7 +28,9 @@ export default class PropertyList extends Component {
 					listUid={this.props.name}
 					canCollapse={hasSubProperties}
 					colorBox={presentation.colorBox}
+					isClickable={presentation.isClickable}
 					expandCollapsibles={expandCollapsibles}
+					onClick={this.props.onLabelClick}
 				/>,
 				<dd key={`${ this.props.name }-${ name }-value`}>
 					<input
@@ -95,10 +97,17 @@ class PropertyTitle extends PureComponent {
 			colorBox = <span className="ck-inspector-property-list__title__color-box" style={{ background: this.props.colorBox }}></span>;
 		}
 
+		if ( this.props.onClick ) {
+			classNames.push( 'ck-inspector-property-list__title_clickable' );
+		}
+
 		return <dt className={classNames.join( ' ' ).trim()}>
 			{collapseButton}
 			{colorBox}
-			<label htmlFor={`${ this.props.listUid }-${ this.props.name }-value-input`}>
+			<label
+				htmlFor={`${ this.props.listUid }-${ this.props.name }-value-input`}
+				onClick={this.props.onClick ? () => this.props.onClick( this.props.name ) : null}
+			>
 				{this.props.name}
 			</label>:
 		</dt>;
