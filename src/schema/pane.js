@@ -5,7 +5,6 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { updateSchemaState } from './data/actions';
 
 import Pane from '../components/pane';
 import Tabs from '../components/tabs';
@@ -37,4 +36,4 @@ const mapStateToProps = ( { currentEditorName } ) => {
 	return { currentEditorName };
 };
 
-export default connect( mapStateToProps, { updateSchemaState } )( SchemaPane );
+export default connect( mapStateToProps )( SchemaPane );

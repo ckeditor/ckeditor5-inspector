@@ -4,8 +4,7 @@
  */
 
 import {
-	SET_SCHEMA_CURRENT_DEFINITION_NAME,
-	UPDATE_SCHEMA_STATE
+	SET_SCHEMA_CURRENT_DEFINITION_NAME
 } from './actions';
 
 import {
@@ -42,7 +41,6 @@ export default function schemaReducer( globalState, schemaState, action ) {
 		// if we're back in the commands tab.
 		// * UPDATE_MODEL_STATE – An action called by the editorEventObserver for the model document change.
 		case SET_ACTIVE_INSPECTOR_TAB:
-		case UPDATE_SCHEMA_STATE:
 			return {
 				...schemaState,
 
