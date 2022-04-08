@@ -75,9 +75,9 @@ export function getSchemaDefinition( { editors, currentEditorName }, currentSche
 
 	return {
 		currentSchemaDefinitionName,
-		type: 'SchemaItemDefinition',
+		type: 'SchemaCompiledItemDefinition',
 		urls: {
-			general: DOCS_PREFIX_URL + 'module_engine_model_schema-SchemaItemDefinition.html',
+			general: DOCS_PREFIX_URL + 'module_engine_model_schema-SchemaCompiledItemDefinition.html',
 			allowAttributes: DOCS_PREFIX_URL + 'module_engine_model_schema-SchemaItemDefinition.html#member-allowAttributes',
 			allowChildren: DOCS_PREFIX_URL + 'module_engine_model_schema-SchemaItemDefinition.html#member-allowChildren',
 			allowIn: DOCS_PREFIX_URL + 'module_engine_model_schema-SchemaItemDefinition.html#member-allowIn'

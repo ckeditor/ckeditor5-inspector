@@ -6,6 +6,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import {
+	setSchemaCurrentDefinitionName
+} from './data/actions';
+
 import Pane from '../components/pane';
 import ObjectInspector from '../components/objectinspector';
 
@@ -24,8 +28,7 @@ class SchemaDefinitionInspector extends Component {
 				<span key="link">
 					<a href={definition.urls.general} target="_blank" rel="noopener noreferrer">
 						<b>{definition.type}</b>
-					</a>
-					:{this.props.currentSchemaDefinitionName}
+					</a>:{this.props.currentSchemaDefinitionName}
 				</span>
 			]}
 			lists={[
@@ -42,12 +45,18 @@ class SchemaDefinitionInspector extends Component {
 				{
 					name: 'Allowed children',
 					url: definition.urls.allowChildren,
-					itemDefinitions: definition.allowChildren
+					itemDefinitions: definition.allowChildren,
+					onLabelClick: name => {
+						this.props.setSchemaCurrentDefinitionName( name );
+					}
 				},
 				{
 					name: 'Allowed in',
 					url: definition.urls.allowIn,
-					itemDefinitions: definition.allowIn
+					itemDefinitions: definition.allowIn,
+					onLabelClick: name => {
+						this.props.setSchemaCurrentDefinitionName( name );
+					}
 				}
 			]}
 		/>;
@@ -58,4 +67,8 @@ const mapStateToProps = ( { editors, currentEditorName, schema: { currentSchemaD
 	return { editors, currentEditorName, currentSchemaDefinitionName, currentSchemaDefinition };
 };
 
-export default connect( mapStateToProps, {} )( SchemaDefinitionInspector );
+const mapDispatchToProps = {
+	setSchemaCurrentDefinitionName
+};
+
+export default connect( mapStateToProps, mapDispatchToProps )( SchemaDefinitionInspector );
