@@ -122,4 +122,45 @@ describe( '<PropertyList />', () => {
 		expect( dd3.find( 'input' ).props().value ).to.have.lengthOf.below( 2100 );
 		expect( dd3.find( 'input' ).props().value ).to.match( /characters left]$/ );
 	} );
+
+	describe( 'property title click handling', () => {
+		it( 'does nothing if props.onPropertyTitleClick was not specified', () => {
+			const definitions = {
+				foo: {
+					value: 'bar'
+				}
+			};
+
+			wrapper = mount( <PropertyList itemDefinitions={definitions} /> );
+
+			const dt = wrapper.children().childAt( 0 );
+			const label = dt.find( 'label' );
+
+			expect( dt ).to.not.have.className( 'ck-inspector-property-list__title_clickable' );
+
+			expect( () => {
+				label.simulate( 'click' );
+			} ).to.not.throw();
+		} );
+
+		it( 'uses props.onPropertyTitleClick when a property title was clicked and passes property name to the callback', () => {
+			const onClickSpy = sinon.spy();
+
+			const definitions = {
+				foo: {
+					value: 'bar'
+				}
+			};
+
+			wrapper = mount( <PropertyList itemDefinitions={definitions} onPropertyTitleClick={onClickSpy} /> );
+
+			const dt = wrapper.children().childAt( 0 );
+			const label = dt.find( 'label' );
+
+			label.simulate( 'click' );
+			sinon.assert.calledOnceWithExactly( onClickSpy, 'foo' );
+
+			expect( dt ).to.have.className( 'ck-inspector-property-list__title_clickable' );
+		} );
+	} );
 } );

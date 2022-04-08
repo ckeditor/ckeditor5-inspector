@@ -46,7 +46,7 @@ class SchemaDefinitionInspector extends Component {
 					name: 'Allowed children',
 					url: definition.urls.allowChildren,
 					itemDefinitions: definition.allowChildren,
-					onLabelClick: name => {
+					onPropertyTitleClick: name => {
 						this.props.setSchemaCurrentDefinitionName( name );
 					}
 				},
@@ -54,7 +54,7 @@ class SchemaDefinitionInspector extends Component {
 					name: 'Allowed in',
 					url: definition.urls.allowIn,
 					itemDefinitions: definition.allowIn,
-					onLabelClick: name => {
+					onPropertyTitleClick: name => {
 						this.props.setSchemaCurrentDefinitionName( name );
 					}
 				}

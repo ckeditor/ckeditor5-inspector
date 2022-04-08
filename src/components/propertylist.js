@@ -28,9 +28,8 @@ export default class PropertyList extends Component {
 					listUid={this.props.name}
 					canCollapse={hasSubProperties}
 					colorBox={presentation.colorBox}
-					isClickable={presentation.isClickable}
 					expandCollapsibles={expandCollapsibles}
-					onClick={this.props.onLabelClick}
+					onClick={this.props.onPropertyTitleClick}
 				/>,
 				<dd key={`${ this.props.name }-${ name }-value`}>
 					<input
