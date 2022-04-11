@@ -21,6 +21,8 @@ import CheckmarkIcon from './assets/img/checkmark.svg';
 
 import './editorquickactions.css';
 
+const INSPECTOR_READ_ONLY_LOCK_ID = 'Lock from Inspector (@ckeditor/ckeditor5-inspector)';
+
 class EditorQuickActions extends Component {
 	constructor( props ) {
 		super( props );
@@ -32,6 +34,7 @@ class EditorQuickActions extends Component {
 
 		this._keyDownHandler = this._handleKeyDown.bind( this );
 		this._keyUpHandler = this._handleKeyUp.bind( this );
+		this._readOnlyHandler = this._handleReadOnly.bind( this );
 		this._editorDataJustCopiedTimeout = null;
 	}
 
@@ -50,7 +53,7 @@ class EditorQuickActions extends Component {
 				icon={<ReadOnlyIcon />}
 				isOn={this.props.isReadOnly}
 				isEnabled={!!this.props.editor}
-				onClick={() => { this.props.editor.isReadOnly = !this.props.editor.isReadOnly; }}
+				onClick={this._readOnlyHandler}
 			/>
 			<Button
 				text="Destroy editor"
@@ -125,6 +128,14 @@ class EditorQuickActions extends Component {
 		this.setState( {
 			isShiftKeyPressed: false
 		} );
+	}
+
+	_handleReadOnly() {
+		if ( this.props.editor.isReadOnly ) {
+			this.props.editor.disableReadOnlyMode( INSPECTOR_READ_ONLY_LOCK_ID );
+		} else {
+			this.props.editor.enableReadOnlyMode( INSPECTOR_READ_ONLY_LOCK_ID );
+		}
 	}
 }
 
