@@ -280,14 +280,14 @@ describe( 'CKEditorInspector', () => {
 
 					const spy = sinon.stub( CKEditorInspector._store, 'dispatch' );
 
-					editor.isReadOnly = true;
+					editor.enableReadOnlyMode( 'Custom Lock' );
 
 					// FYI: Changing read only triggers view#render in the editor.
 					sinon.assert.callCount( spy, 2 );
 					sinon.assert.calledWithExactly( spy.firstCall, { type: UPDATE_VIEW_STATE } );
 					sinon.assert.calledWithExactly( spy.secondCall, { type: UPDATE_CURRENT_EDITOR_IS_READ_ONLY } );
 
-					editor.isReadOnly = false;
+					editor.disableReadOnlyMode( 'Custom Lock' );
 
 					sinon.assert.callCount( spy, 4 );
 					sinon.assert.calledWithExactly( spy.thirdCall, { type: UPDATE_VIEW_STATE } );
@@ -302,7 +302,7 @@ describe( 'CKEditorInspector', () => {
 
 					const spy = sinon.stub( CKEditorInspector._store, 'dispatch' );
 
-					editor.isReadOnly = true;
+					editor.enableReadOnlyMode( 'Custom Lock' );
 					sinon.assert.calledOnce( spy );
 					// FYI: UPDATE_VIEW_STATE will not happen when the inspector is collapsed.
 					sinon.assert.calledWithExactly( spy.firstCall, { type: UPDATE_CURRENT_EDITOR_IS_READ_ONLY } );
@@ -315,12 +315,12 @@ describe( 'CKEditorInspector', () => {
 
 					const spy = sinon.spy( CKEditorInspector._store, 'dispatch' );
 
-					editor.isReadOnly = true;
+					editor.enableReadOnlyMode( 'Custom Lock' );
 					sinon.assert.calledTwice( spy );
 
 					CKEditorInspector.detach( 'foo' );
 
-					editor.isReadOnly = false;
+					editor.disableReadOnlyMode( 'Custom Lock' );
 
 					sinon.assert.callCount( spy, 3 );
 					sinon.assert.calledWithExactly( spy.getCall( 2 ), { type: SET_EDITORS, editors: sinon.match.map } );
@@ -331,12 +331,12 @@ describe( 'CKEditorInspector', () => {
 
 					const spy = sinon.spy( CKEditorInspector._store, 'dispatch' );
 
-					editor.isReadOnly = true;
+					editor.enableReadOnlyMode( 'Custom Lock' );
 					sinon.assert.calledTwice( spy );
 
 					CKEditorInspector.destroy();
 
-					editor.isReadOnly = false;
+					editor.disableReadOnlyMode( 'Custom Lock' );
 					sinon.assert.calledTwice( spy );
 				} );
 			} );
