@@ -67,11 +67,53 @@ describe( 'CKEditorInspector', () => {
 		// eslint-disable-next-line no-unused-vars
 		const inspector = new CKEditorInspector();
 
-		sinon.assert.calledOnce( warnStub );
-		sinon.assert.calledWithMatch( warnStub, /^\[CKEditorInspector\]/ );
+		sinon.assert.calledWithMatch(
+			warnStub,
+			/\[CKEditorInspector\] Whoops! Looks like you tried to create an instance of the CKEditorInspector class\./
+		);
 	} );
 
 	describe( '#attach()', () => {
+		let CKEDITOR_VERSION;
+
+		beforeEach( () => {
+			CKEDITOR_VERSION = window.CKEDITOR_VERSION;
+		} );
+
+		afterEach( () => {
+			window.CKEDITOR_VERSION = CKEDITOR_VERSION;
+		} );
+
+		it( 'should warn if using CKEditor 5 in lower versions than 34', () => {
+			window.CKEDITOR_VERSION = '33.0.0';
+
+			CKEditorInspector.attach( { foo: editor } );
+
+			sinon.assert.calledWithMatch(
+				warnStub,
+				/^\[CKEditorInspector\] The inspector requires using CKEditor 5 in version 34 or higher\./
+			);
+		} );
+
+		it( 'should not warn if using CKEditor 5 in version 34', () => {
+			window.CKEDITOR_VERSION = '34.0.0';
+
+			CKEditorInspector.attach( { foo: editor } );
+
+			expect( warnStub.called ).to.equal( false );
+		} );
+
+		it( 'should warn if cannot determine a version of CKEditor 5', () => {
+			delete window.CKEDITOR_VERSION;
+
+			CKEditorInspector.attach( { foo: editor } );
+
+			sinon.assert.calledWithMatch(
+				warnStub,
+				/^\[CKEditorInspector\] Could not determine a version of CKEditor 5. Some of the functionalities may not work as expected\./
+			);
+		} );
+
 		it( 'should add the inspector to DOM', () => {
 			expect( document.querySelector( '.ck-inspector-wrapper' ) ).to.be.null;
 			expect( CKEditorInspector._wrapper ).to.be.null;
@@ -238,14 +280,14 @@ describe( 'CKEditorInspector', () => {
 
 					const spy = sinon.stub( CKEditorInspector._store, 'dispatch' );
 
-					editor.isReadOnly = true;
+					editor.enableReadOnlyMode( 'Custom Lock' );
 
 					// FYI: Changing read only triggers view#render in the editor.
 					sinon.assert.callCount( spy, 2 );
 					sinon.assert.calledWithExactly( spy.firstCall, { type: UPDATE_VIEW_STATE } );
 					sinon.assert.calledWithExactly( spy.secondCall, { type: UPDATE_CURRENT_EDITOR_IS_READ_ONLY } );
 
-					editor.isReadOnly = false;
+					editor.disableReadOnlyMode( 'Custom Lock' );
 
 					sinon.assert.callCount( spy, 4 );
 					sinon.assert.calledWithExactly( spy.thirdCall, { type: UPDATE_VIEW_STATE } );
@@ -260,7 +302,7 @@ describe( 'CKEditorInspector', () => {
 
 					const spy = sinon.stub( CKEditorInspector._store, 'dispatch' );
 
-					editor.isReadOnly = true;
+					editor.enableReadOnlyMode( 'Custom Lock' );
 					sinon.assert.calledOnce( spy );
 					// FYI: UPDATE_VIEW_STATE will not happen when the inspector is collapsed.
 					sinon.assert.calledWithExactly( spy.firstCall, { type: UPDATE_CURRENT_EDITOR_IS_READ_ONLY } );
@@ -273,12 +315,12 @@ describe( 'CKEditorInspector', () => {
 
 					const spy = sinon.spy( CKEditorInspector._store, 'dispatch' );
 
-					editor.isReadOnly = true;
+					editor.enableReadOnlyMode( 'Custom Lock' );
 					sinon.assert.calledTwice( spy );
 
 					CKEditorInspector.detach( 'foo' );
 
-					editor.isReadOnly = false;
+					editor.disableReadOnlyMode( 'Custom Lock' );
 
 					sinon.assert.callCount( spy, 3 );
 					sinon.assert.calledWithExactly( spy.getCall( 2 ), { type: SET_EDITORS, editors: sinon.match.map } );
@@ -289,12 +331,12 @@ describe( 'CKEditorInspector', () => {
 
 					const spy = sinon.spy( CKEditorInspector._store, 'dispatch' );
 
-					editor.isReadOnly = true;
+					editor.enableReadOnlyMode( 'Custom Lock' );
 					sinon.assert.calledTwice( spy );
 
 					CKEditorInspector.destroy();
 
-					editor.isReadOnly = false;
+					editor.disableReadOnlyMode( 'Custom Lock' );
 					sinon.assert.calledTwice( spy );
 				} );
 			} );
@@ -377,8 +419,7 @@ describe( 'CKEditorInspector', () => {
 			const editors = getStoreState().editors;
 
 			expect( editors.get( 'foo' ) ).to.equal( editor );
-			sinon.assert.calledOnce( warnStub );
-			sinon.assert.calledWithMatch( warnStub, /^\[CKEditorInspector\]/ );
+			sinon.assert.calledWithMatch( warnStub, /^\[CKEditorInspector\] The CKEditorInspector\.attach/ );
 		} );
 
 		it( 'should detach when the editor is destroyed', () => {
