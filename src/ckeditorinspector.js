@@ -77,6 +77,23 @@ export default class CKEditorInspector {
 	 * with generated editor names.
 	 */
 	static attach( ...args ) {
+		const { CKEDITOR_VERSION } = window;
+
+		if ( CKEDITOR_VERSION ) {
+			const [ major ] = CKEDITOR_VERSION.split( '.' ).map( Number );
+
+			if ( major < 34 ) {
+				Logger.warn(
+					'[CKEditorInspector] The inspector requires using CKEditor 5 in version 34 or higher. ' +
+					'If you cannot update CKEditor 5, consider downgrading the major version of the inspector to version 3.'
+				);
+			}
+		} else {
+			Logger.warn(
+				'[CKEditorInspector] Could not determine a version of CKEditor 5. Some of the functionalities may not work as expected.'
+			);
+		}
+
 		const { editors, options } = normalizeArguments( args );
 
 		for ( const editorName in editors ) {

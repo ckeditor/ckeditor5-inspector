@@ -123,7 +123,7 @@ describe( 'global data store reducer', () => {
 				foo: 'bar'
 			};
 
-			editorA.isReadOnly = true;
+			editorA.enableReadOnlyMode( 'Custom Lock' );
 
 			state = reducer( state, setEditors( new Map( [ [ 'a', editorA ] ] ) ) );
 
