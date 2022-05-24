@@ -38,6 +38,10 @@
 		& a {
 			font-weight: bold;
 			color: var(--ck-inspector-color-tree-node-name);
+
+			&, & > * {
+				cursor: pointer;
+			}
 		}
 
 		& em::before,

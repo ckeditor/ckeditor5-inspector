@@ -123,6 +123,21 @@ describe( '<PropertyList />', () => {
 		expect( dd3.find( 'input' ).props().value ).to.match( /characters left]$/ );
 	} );
 
+	it( 'renders the title HTML attribute when specified', () => {
+		const definitions = {
+			foo: { value: 'foo', title: 'Foo title' },
+			bar: { value: 'bar' }
+		};
+
+		wrapper = mount( <PropertyList itemDefinitions={definitions} /> );
+
+		const dt1 = wrapper.children().childAt( 0 );
+		const dt2 = wrapper.children().childAt( 2 );
+
+		expect( dt1.find( 'label' ).props().title ).to.equal( 'Foo title' );
+		expect( dt2.find( 'label' ).props().title ).to.be.undefined;
+	} );
+
 	describe( 'property title click handling', () => {
 		it( 'does nothing if props.onPropertyTitleClick was not specified', () => {
 			const definitions = {
