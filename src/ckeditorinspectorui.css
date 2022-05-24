@@ -89,6 +89,12 @@
 	margin-left: auto;
 	margin-right: .3em;
 
+	@media screen and (max-width: 680px) {
+		& label {
+			display: none;
+		}
+	}
+
 	& select {
 		margin-left: .5em;
 	}
