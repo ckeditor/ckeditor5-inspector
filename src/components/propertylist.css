@@ -61,6 +61,10 @@
 			border-radius: 2px;
 			border: 1px solid black;
 		}
+
+		&.ck-inspector-property-list__title_clickable label:hover {
+			text-decoration: underline;
+		}
 	}
 
 	& dt label {

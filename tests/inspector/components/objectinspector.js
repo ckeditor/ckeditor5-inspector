@@ -70,5 +70,53 @@ describe( '<ObjectInspector />', () => {
 				qux: { value: 'baz' }
 			} );
 		} );
+
+		it( 'passes a "onPropertyTitleClick" handler to <PropertyList />', () => {
+			const onClickMock = sinon.spy();
+
+			wrapper = mount( <ObjectInspector lists={[
+				{
+					name: 'foo',
+					url: 'http://bar',
+					buttons: [
+						{
+							type: 'log',
+							label: 'ABC'
+						}
+					],
+					itemDefinitions: {
+						foo: { value: 'bar' },
+						qux: { value: 'baz' }
+					},
+					onPropertyTitleClick: onClickMock
+				}
+			]} /> );
+
+			expect( wrapper.find( PropertyList ).props().onPropertyTitleClick ).to.equal( onClickMock );
+		} );
+
+		it( 'passes a "presentation" data to <PropertyList />', () => {
+			const presentationMock = {};
+
+			wrapper = mount( <ObjectInspector lists={[
+				{
+					name: 'foo',
+					url: 'http://bar',
+					buttons: [
+						{
+							type: 'log',
+							label: 'ABC'
+						}
+					],
+					itemDefinitions: {
+						foo: { value: 'bar' },
+						qux: { value: 'baz' }
+					},
+					presentation: presentationMock
+				}
+			]} /> );
+
+			expect( wrapper.find( PropertyList ).props().presentation ).to.equal( presentationMock );
+		} );
 	} );
 } );

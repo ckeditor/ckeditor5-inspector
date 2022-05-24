@@ -23,6 +23,7 @@ import Button from './components/button';
 import ModelPane from './model/pane';
 import ViewPane from './view/pane';
 import CommandsPane from './commands/pane';
+import SchemaPane from './schema/pane';
 
 import EditorQuickActions from './editorquickactions';
 import ArrowDownIcon from './assets/img/arrow-down.svg';
@@ -97,6 +98,7 @@ class CKEditorInspectorUI extends Component {
 				<ModelPane label="Model" />
 				<ViewPane label="View" />
 				<CommandsPane label="Commands" />
+				<SchemaPane label="Schema" />
 			</Tabs>
 		</Rnd>;
 	}

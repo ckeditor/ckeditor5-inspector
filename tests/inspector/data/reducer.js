@@ -68,6 +68,7 @@ describe( 'global data store reducer', () => {
 		expect( state ).to.have.property( 'model' );
 		expect( state ).to.have.property( 'view' );
 		expect( state ).to.have.property( 'commands' );
+		expect( state ).to.have.property( 'schema' );
 		expect( state ).to.have.property( 'currentEditorGlobals' );
 		expect( state ).to.have.property( 'ui' );
 	} );

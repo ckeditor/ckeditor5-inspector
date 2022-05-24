@@ -435,6 +435,20 @@ describe( '<CKEditorInspectorUI />', () => {
 
 					expect( getPanes().find( 'CommandsPane' ) ).to.have.length( 1 );
 				} );
+
+				it( 'should have a schema pane', () => {
+					store.dispatch( {
+						type: 'testAction',
+						state: {
+							ui: {
+								activeTab: 'Schema'
+							},
+							schema: {}
+						}
+					} );
+
+					expect( getPanes().find( 'SchemaPane' ) ).to.have.length( 1 );
+				} );
 			} );
 		} );
 	} );

@@ -30,6 +30,7 @@ export default class ObjectInspector extends PureComponent {
 					name={list.name}
 					itemDefinitions={list.itemDefinitions}
 					presentation={list.presentation}
+					onPropertyTitleClick={list.onPropertyTitleClick}
 				/>
 			);
 		}

@@ -10,6 +10,7 @@ import TestEditor from '../../utils/testeditor';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
+import { reducer } from '../../../src/data/reducer';
 import { getEditorModelNodeDefinition } from '../../../src/model/data/utils';
 
 import Button from '../../../src/components/button';
@@ -35,7 +36,12 @@ describe( '<ModelNodeInspector />', () => {
 
 			root = editor.model.document.getRoot();
 
-			store = createStore( state => state, {
+			store = createStore( reducer, {
+				editors: new Map( [ [ 'test-editor', editor ] ] ),
+				currentEditorName: 'test-editor',
+				ui: {
+					activeTab: 'Model'
+				},
 				model: {
 					currentNodeDefinition: getEditorModelNodeDefinition( editor, root.getChild( 0 ) )
 				}
@@ -78,6 +84,15 @@ describe( '<ModelNodeInspector />', () => {
 
 			logNodeButton.simulate( 'click' );
 			sinon.assert.calledOnce( logSpy );
+		} );
+
+		it( 'should render the show in schema button in the header', () => {
+			const showInSchema = wrapper.find( Button ).last();
+
+			showInSchema.simulate( 'click' );
+
+			expect( store.getState().ui.activeTab ).to.equal( 'Schema' );
+			expect( store.getState().schema.currentSchemaDefinitionName ).to.equal( 'paragraph' );
 		} );
 
 		it( 'should render for a <RootElement>', () => {
