@@ -56,8 +56,8 @@ class ModelNodeInspector extends Component {
 			header={[
 				<span key="link">
 					<a href={definition.url} target="_blank" rel="noopener noreferrer">
-						<b>{definition.type}</b>:
-					</a>
+						<b>{definition.type}</b>
+					</a>:
 					{ definition.type === 'Text' ? <em>{definition.name}</em> : definition.name }
 				</span>,
 				<Button

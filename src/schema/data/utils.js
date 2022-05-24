@@ -42,13 +42,15 @@ export function getSchemaDefinition( { editors, currentEditorName }, currentSche
 
 	for ( const childName of definition.allowChildren.sort() ) {
 		allowChildren[ childName ] = {
-			value: true
+			value: true,
+			title: `Click to see the definition of ${ childName }`
 		};
 	}
 
 	for ( const parentName of definition.allowIn.sort() ) {
 		allowIn[ parentName ] = {
-			value: true
+			value: true,
+			title: `Click to see the definition of ${ parentName }`
 		};
 	}
 

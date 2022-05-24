@@ -30,6 +30,7 @@ export default class PropertyList extends Component {
 					colorBox={presentation.colorBox}
 					expandCollapsibles={expandCollapsibles}
 					onClick={this.props.onPropertyTitleClick}
+					title={definition.title}
 				/>,
 				<dd key={`${ this.props.name }-${ name }-value`}>
 					<input
@@ -106,6 +107,7 @@ class PropertyTitle extends PureComponent {
 			<label
 				htmlFor={`${ this.props.listUid }-${ this.props.name }-value-input`}
 				onClick={this.props.onClick ? () => this.props.onClick( this.props.name ) : null}
+				title={this.props.title}
 			>
 				{this.props.name}
 			</label>:
