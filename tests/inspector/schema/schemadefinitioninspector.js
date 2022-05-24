@@ -132,7 +132,7 @@ describe( '<SchemaDefinitionInspector />', () => {
 
 				expect( lists[ 2 ].name ).to.equal( 'Allowed children' );
 				expect( lists[ 2 ].url ).to.match( /^https:\/\/ckeditor.com\/docs\// );
-				expect( lists[ 2 ].itemDefinitions ).to.deep.equal( {
+				expect( lists[ 2 ].itemDefinitions ).to.deep.include( {
 					$text: { value: 'true' }
 				} );
 			} );
@@ -145,7 +145,7 @@ describe( '<SchemaDefinitionInspector />', () => {
 
 				expect( lists[ 3 ].name ).to.equal( 'Allowed in' );
 				expect( lists[ 3 ].url ).to.match( /^https:\/\/ckeditor.com\/docs\// );
-				expect( lists[ 3 ].itemDefinitions ).to.deep.equal( {
+				expect( lists[ 3 ].itemDefinitions ).to.deep.include( {
 					$clipboardHolder: { value: 'true' },
 					$documentFragment: { value: 'true' },
 					$root: { value: 'true' }
