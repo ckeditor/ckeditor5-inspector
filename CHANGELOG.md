@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## [4.1.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v4.0.0...v4.1.0) (2022-05-26)
+
+### Features
+
+* Introduced the schema tab. Closes [#41](https://github.com/ckeditor/ckeditor5-inspector/issues/41). ([commit](https://github.com/ckeditor/ckeditor5-inspector/commit/4d82ee7eeacb8af9a9a3bfb732806a11de92c557))
+
+
 ## [4.0.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v3.1.1...v4.0.0) (2022-04-12)
 
 ### BREAKING CHANGES
