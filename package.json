@@ -95,6 +95,9 @@
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12"
   },
+  "resolutions": {
+    "glob-parent": "^5"
+  },
   "lint-staged": {
     "**/*.js": [
       "eslint --quiet"
