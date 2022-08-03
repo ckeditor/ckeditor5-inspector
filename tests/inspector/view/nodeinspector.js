@@ -104,7 +104,7 @@ describe( '<ViewNodeInspector />', () => {
 
 			expect( lists[ 0 ].name ).to.equal( 'Attributes' );
 			expect( lists[ 0 ].itemDefinitions ).to.deep.equal( {
-				'aria-label': { value: '"Rich Text Editor, main"' },
+				'aria-label': { value: '"Editor editing area: main"' },
 				class: { value: '"ck-blurred ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline"' },
 				contenteditable: { value: '"true"' },
 				dir: { value: '"ltr"' },
