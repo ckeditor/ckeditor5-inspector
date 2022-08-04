@@ -18,12 +18,13 @@ module.exports = function getKarmaConfig() {
 		mode: 'development'
 	} );
 
+	delete webpackConfig.entry;
 	delete webpackConfig.output;
 
 	const karmaConfig = {
 		basePath,
 
-		frameworks: [ 'mocha', 'sinon' ],
+		frameworks: [ 'mocha', 'sinon', 'webpack' ],
 
 		files: [
 			'tests/index.js'
@@ -80,10 +81,6 @@ module.exports = function getKarmaConfig() {
 	if ( options.coverage ) {
 		karmaConfig.reporters.push( 'coverage' );
 
-		if ( process.env.TRAVIS ) {
-			karmaConfig.reporters.push( 'coveralls' );
-		}
-
 		karmaConfig.coverageReporter = {
 			reporters: [
 				// Prints a table after tests result.
@@ -92,28 +89,30 @@ module.exports = function getKarmaConfig() {
 				},
 				// Generates HTML tables with the results.
 				{
+					type: 'html',
 					dir: coverageDir,
-					type: 'html'
+					subdir: '.'
 				},
 				// Generates "lcov.info" file. It's used by external code coverage services.
 				{
 					type: 'lcovonly',
-					dir: coverageDir
+					dir: coverageDir,
+					subdir: '.'
 				}
 			]
 		};
 
-		webpackConfig.module.rules.push( {
-			test: /\.jsx?$/,
-			loader: 'istanbul-instrumenter-loader',
-			include: /src/,
-			exclude: [
-				/node_modules/
-			],
-			query: {
-				esModules: true
+		const jsRule = webpackConfig.module.rules.find( ( { test } ) => test.test( '.js' ) );
+		jsRule.options.plugins.push( [
+			'babel-plugin-istanbul', {
+				include: [
+					'src'
+				],
+				exclude: [
+					'node_modules'
+				]
 			}
-		} );
+		] );
 	}
 
 	if ( options.sourceMap ) {

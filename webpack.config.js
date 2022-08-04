@@ -30,7 +30,7 @@ module.exports = ( env, argv ) => {
 					test: /\.js$/,
 					exclude: /node_modules/,
 					loader: 'babel-loader',
-					query: {
+					options: {
 						presets: [
 							[
 								'@babel/react',
@@ -38,12 +38,13 @@ module.exports = ( env, argv ) => {
 									development: devMode
 								}
 							]
-						]
+						],
+						plugins: []
 					}
 				},
 				{
 					test: /\.css$/,
-					loaders: [
+					use: [
 						{
 							loader: 'style-loader',
 							options: {
@@ -75,10 +76,10 @@ module.exports = ( env, argv ) => {
 				},
 				{
 					test: /\.svg$/,
-					loaders: [
+					use: [
 						{
 							loader: 'babel-loader',
-							query: {
+							options: {
 								presets: [
 									[
 										'@babel/react',

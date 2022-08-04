@@ -72,7 +72,7 @@ describe( 'View utils', () => {
 					name: 'div',
 					node: root,
 					attributes: [
-						[ 'aria-label', 'Rich Text Editor, main' ],
+						[ 'aria-label', 'Editor editing area: main' ],
 						[ 'class', 'ck-blurred ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline' ],
 						[ 'contenteditable', 'true' ],
 						[ 'dir', 'ltr' ],
