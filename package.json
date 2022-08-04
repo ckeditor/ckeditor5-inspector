@@ -51,6 +51,8 @@
     "@ckeditor/ckeditor5-table": "^35.0.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.3",
+    "babel-plugin-istanbul": "^6.1.0",
+    "coveralls": "^3.1.1",
     "chai": "^4.3.4",
     "chai-enzyme": "^1.0.0-beta.1",
     "ckeditor5": "^35.0.0",
@@ -63,7 +65,6 @@
     "eslint-config-ckeditor5": "^4.0.0",
     "eslint-plugin-react": "^7.27.1",
     "husky": "^4.2.5",
-    "istanbul-instrumenter-loader": "^3.0.1",
     "javascript-stringify": "^2.1.0",
     "karma": "^6.3.17",
     "karma-chai": "^0.1.0",
@@ -95,7 +96,6 @@
     "webpack-cli": "^4.10.0"
   },
   "resolutions": {
-    "istanbul-instrumenter-loader/**/ajv": "^6.12.3",
     "cheerio": "1.0.0-rc.10",
     "react-svg-loader/**/nth-check": "^2.0.1"
   },

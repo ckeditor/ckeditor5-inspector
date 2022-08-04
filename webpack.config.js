@@ -38,7 +38,8 @@ module.exports = ( env, argv ) => {
 									development: devMode
 								}
 							]
-						]
+						],
+						plugins: []
 					}
 				},
 				{

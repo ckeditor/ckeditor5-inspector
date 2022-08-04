@@ -102,17 +102,17 @@ module.exports = function getKarmaConfig() {
 			]
 		};
 
-		webpackConfig.module.rules.push( {
-			test: /\.jsx?$/,
-			loader: 'istanbul-instrumenter-loader',
-			include: /src/,
-			exclude: [
-				/node_modules/
-			],
-			options: {
-				esModules: true
+		const jsRule = webpackConfig.module.rules.find( ( { test } ) => test.test( '.js' ) );
+		jsRule.options.plugins.push( [
+			'babel-plugin-istanbul', {
+				include: [
+					'src'
+				],
+				exclude: [
+					'node_modules'
+				]
 			}
-		} );
+		] );
 	}
 
 	if ( options.sourceMap ) {
