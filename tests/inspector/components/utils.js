@@ -66,7 +66,7 @@ describe( 'Utils', () => {
 				foo: { value: 'bar' },
 				baz: { value: 'qux' },
 				[ Symbol( '42' ) ]: { value: 'abc' }
-			} ) ).to.deep.equal( {
+			} ) ).to.deep.include( {
 				foo: { value: '"bar"' },
 				baz: { value: '"qux"' },
 				[ Symbol( '42' ) ]: { value: '"abc"' }
