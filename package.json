@@ -12,6 +12,7 @@
     "npm": ">=5.7.1"
   },
   "scripts": {
+    "postinstall": "node ./scripts/postinstall.js",
     "build": "webpack --mode production",
     "dev": "webpack --mode development --watch",
     "preversion": "npm run build",
@@ -64,7 +65,7 @@
     "eslint": "^7.32.0",
     "eslint-config-ckeditor5": "^4.0.0",
     "eslint-plugin-react": "^7.27.1",
-    "husky": "^4.2.5",
+    "husky": "^8.0.2",
     "javascript-stringify": "^2.1.0",
     "karma": "^6.3.17",
     "karma-chai": "^0.1.0",
@@ -107,10 +108,5 @@
   "eslintIgnore": [
     "build/**",
     "coverage/**"
-  ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  }
+  ]
 }
