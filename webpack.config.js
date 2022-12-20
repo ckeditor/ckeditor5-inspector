@@ -5,7 +5,7 @@
 
 /* eslint-env node */
 
-const versionUtils = require( '@ckeditor/ckeditor5-dev-env/lib/release-tools/utils/versions' );
+const { getLastFromChangelog } = require( '@ckeditor/ckeditor5-dev-release-tools' );
 const TerserPlugin = require( 'terser-webpack-plugin' );
 const webpack = require( 'webpack' );
 const path = require( 'path' );
@@ -113,7 +113,7 @@ module.exports = ( env, argv ) => {
 		},
 		plugins: [
 			new webpack.DefinePlugin( {
-				CKEDITOR_INSPECTOR_VERSION: JSON.stringify( versionUtils.getLastFromChangelog() )
+				CKEDITOR_INSPECTOR_VERSION: JSON.stringify( getLastFromChangelog() )
 			} )
 		]
 	};
