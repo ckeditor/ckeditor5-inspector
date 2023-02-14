@@ -58,7 +58,7 @@
     "coveralls": "^3.1.1",
     "chai": "^4.3.4",
     "chai-enzyme": "^1.0.0-beta.1",
-    "ckeditor5": "^35.0.0",
+    "ckeditor5": "^36.0.0",
     "copy-to-clipboard": "^3.3.1",
     "css-loader": "^5.2.7",
     "cssnano": "^5.1.12",
