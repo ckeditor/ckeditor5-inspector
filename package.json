@@ -8,7 +8,7 @@
   "license": "GPL-2.0-or-later",
   "version": "4.1.0",
   "engines": {
-    "node": ">=14.0.0",
+    "node": ">=16.0.0",
     "npm": ">=5.7.1"
   },
   "scripts": {
