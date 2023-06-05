@@ -4,7 +4,8 @@
   "files": [
     "build",
     "README.md",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "LICENSE.md"
   ],
   "description": "The official CKEditor 5 instance inspector.",
   "license": "GPL-2.0-or-later",
@@ -54,6 +55,7 @@
     "@ckeditor/ckeditor5-media-embed": "^35.0.0",
     "@ckeditor/ckeditor5-paste-from-office": "^35.0.0",
     "@ckeditor/ckeditor5-table": "^35.0.0",
+    "@ckeditor/ckeditor5-dev-utils": "^37.0.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.3",
     "babel-plugin-istanbul": "^6.1.0",

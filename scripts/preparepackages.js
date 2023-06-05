@@ -11,6 +11,7 @@
 
 const { Listr } = require( 'listr2' );
 const releaseTools = require( '@ckeditor/ckeditor5-dev-release-tools' );
+const { tools } = require( '@ckeditor/ckeditor5-dev-utils' );
 
 const latestVersion = releaseTools.getLastFromChangelog();
 const versionChangelog = releaseTools.getChangesForVersion( latestVersion );
@@ -30,6 +31,12 @@ const tasks = new Listr( [
 			}
 
 			return Promise.reject( 'Aborted due to errors.\n' + errors.map( message => `* ${ message }` ).join( '\n' ) );
+		}
+	},
+	{
+		title: 'Running build command.',
+		task: () => {
+			return tools.shExec( 'yarn run build', { async: true, verbosity: 'silent' } );
 		}
 	},
 	{
