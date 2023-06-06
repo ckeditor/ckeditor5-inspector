@@ -162,30 +162,20 @@ yarn changelog
 When the changelog is ready, you should bump the version:
 
 ```console
-yarn release:bump-version
+yarn release:prepare-packages
 ```
-
-**Note**: You can use the `--dry-run` option to see what this task does.
 
 ### Building for production
 
 When the changelog is ready and the version was bumped, build the inspector for production:
-
-```console
-yarn build
-```
-
-**Note**: Run the sample and make sure global `CKEDITOR_INSPECTOR_VERSION` is correct.
 
 ### Publishing the npm package
 
 Finally, make the changes public:
 
 ```console
-npm run release:publish
+npm run release:publish-packages
 ```
-
-**Note**: You can use the `--dry-run` option to see what this task does.
 
 ## License
 
