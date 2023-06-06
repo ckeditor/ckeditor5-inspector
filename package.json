@@ -18,7 +18,6 @@
     "postinstall": "node ./scripts/postinstall.js",
     "build": "webpack --mode production",
     "dev": "webpack --mode development --watch",
-    "preversion": "npm run build",
     "changelog": "node ./scripts/changelog.js",
     "release:prepare-packages": "node ./scripts/preparepackages.js",
     "release:publish-packages": "node ./scripts/publishpackages.js",
