@@ -47,7 +47,7 @@ class EditorQuickActions extends Component {
 				onClick={() => console.log( this.props.editor )}
 			/>
 			{ this._getLogButton() }
-			<SetEditorDataButton editor={this.props.editor} />
+			<SetEditorDataButton editor={this.props.editor} currentRootName={this.props.currentRootName} />
 			<Button
 				text="Toggle read only"
 				icon={<ReadOnlyIcon />}
@@ -100,7 +100,7 @@ class EditorQuickActions extends Component {
 
 	_handleLogEditorDataClick( { shiftKey } ) {
 		if ( shiftKey ) {
-			copy( this.props.editor.getData() );
+			copy( this.props.editor.getData( { rootName: this.props.currentRootName } ) );
 
 			this.setState( {
 				wasEditorDataJustCopied: true
@@ -114,7 +114,7 @@ class EditorQuickActions extends Component {
 				} );
 			}, 3000 );
 		} else {
-			console.log( this.props.editor.getData() );
+			console.log( this.props.editor.getData( { rootName: this.props.currentRootName } ) );
 		}
 	}
 
@@ -139,10 +139,10 @@ class EditorQuickActions extends Component {
 	}
 }
 
-const mapStateToProps = ( { editors, currentEditorName, currentEditorGlobals: { isReadOnly } } ) => {
+const mapStateToProps = ( { editors, currentEditorName, currentEditorGlobals: { isReadOnly }, model: { currentRootName } } ) => {
 	const editor = editors.get( currentEditorName );
 
-	return { editor, isReadOnly };
+	return { editor, isReadOnly, currentRootName };
 };
 
 export default connect( mapStateToProps, {} )( EditorQuickActions );

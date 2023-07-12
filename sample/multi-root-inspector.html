@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+	<head>
+			<meta charset="utf-8">
+			<title>Inspector sample</title>
+
+			<script src="../node_modules/ckeditor5/build/ckeditor5-dll.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-editor-multi-root/build/editor-multi-root.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-autoformat/build/autoformat.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-basic-styles/build/basic-styles.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-block-quote/build/block-quote.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-essentials/build/essentials.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-heading/build/heading.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-html-support/build/html-support.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-image/build/image.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-indent/build/indent.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-link/build/link.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-list/build/list.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-media-embed/build/media-embed.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-paste-from-office/build/paste-from-office.js"></script>
+			<script src="../node_modules/@ckeditor/ckeditor5-table/build/table.js"></script>
+
+			<script src="../build/inspector.js"></script>
+	</head>
+	<body>
+		<p>
+			<button id="destroyEditor">Destroy editor</button>
+			<button id="initEditor">Init editor</button>
+		</p>
+		<h2>The toolbar</h2>
+		<div class="toolbar-container"></div>
+		<h2>The editable</h2>
+		<div class="editable-container">
+			<div id="editor-intro">
+				<p><strong>Exciting</strong> intro text to an article.</p>
+			</div>
+			<div id="editor-content">
+				<h2>Exciting news!</h2>
+				<p>Lorem ipsum dolor sit amet.</p>
+			</div>
+			<div id="editor-outro">
+				<p>Closing text.</p>
+			</div>
+		</div>
+		<style>
+			.editable-container,
+			.toolbar-container {
+				position: relative;
+				border: 1px solid red;
+			}
+
+			.editable-container::after,
+			.toolbar-container::after {
+				content: attr(class);
+				position: absolute;
+				background: red;
+				color: #fff;
+				top: 0;
+				right: 0;
+				font: 10px/2 monospace;
+				padding: .1em .3em;
+			}
+
+			.toolbar-container {
+				padding: 1em;
+			}
+
+			.editable-container {
+				padding: 3em;
+				overflow-y: scroll;
+				max-height: 300px;
+			}
+
+			.editable-container .ck-editor__editable {
+				padding: 2em;
+				border: 1px #D3D3D3 solid;
+				border-radius: var(--ck-border-radius);
+				background: white;
+				box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+			}
+		</style>
+		<script>
+			class DummyUploadAdapter {
+				constructor(loader) {
+					this.loader = loader;
+				}
+				upload() {
+					return this.loader.file
+						.then(file => {
+							return {
+								default: 'umbrellas.jpg',
+								160: 'umbrellas.jpg',
+								500: 'umbrellas.jpg',
+							};
+						});
+				}
+				abort() {
+				}
+			}
+			function UploadAdapter(editor) {
+				editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+					return new DummyUploadAdapter(loader);
+				};
+			}
+			function MarkerDemoPlugin(editor) {
+				const model = editor.model;
+				const markerNames = [];
+				editor.conversion.for('editingDowncast').markerToHighlight({
+					model: 'highlight',
+					view: data => {
+						const color = data.markerName.split(':')[1];
+						return {
+							classes: 'h-' + color,
+							priority: 1
+						};
+					}
+				});
+				editor.conversion.for('dataDowncast').markerToHighlight({
+					model: 'highlight',
+					view: data => {
+						const color = data.markerName.split(':')[1];
+						return {
+							classes: 'h-' + color,
+							priority: 1
+						};
+					}
+				});
+				// editor.on('ready', () => {
+				// 	model.change(writer => {
+				// 		const root = model.document.getRoot();
+				// 		const nameA = 'highlight:yellow:123';
+				// 		const rangeA = model.createRange(model.createPositionFromPath(root, [0, 10]), model.createPositionFromPath(root, [0, 16]));
+				// 		const nameB = 'highlight:blue:456';
+				// 		const rangeB = model.createRange(model.createPositionFromPath(root, [0, 12]), model.createPositionFromPath(root, [0, 22]));
+				// 		markerNames.push(nameA, nameB);
+				// 		writer.addMarker(nameA, { range: rangeA, usingOperation: false, affectsData: true });
+				// 		writer.addMarker(nameB, { range: rangeB, usingOperation: false, affectsData: true });
+				// 	});
+				// });
+			}
+			const config = {
+				plugins: [
+					CKEditor5.autoformat.Autoformat,
+					CKEditor5.basicStyles.Bold,
+					CKEditor5.basicStyles.Italic,
+					CKEditor5.blockQuote.BlockQuote,
+					CKEditor5.essentials.Essentials,
+					CKEditor5.heading.Heading,
+					CKEditor5.htmlSupport.GeneralHtmlSupport,
+					CKEditor5.image.Image,
+					CKEditor5.image.ImageCaption,
+					CKEditor5.image.ImageStyle,
+					CKEditor5.image.ImageToolbar,
+					CKEditor5.image.ImageUpload,
+					CKEditor5.indent.Indent,
+					CKEditor5.link.Link,
+					CKEditor5.list.List,
+					CKEditor5.mediaEmbed.MediaEmbed,
+					CKEditor5.paragraph.Paragraph,
+					CKEditor5.pasteFromOffice.PasteFromOffice,
+					CKEditor5.table.Table,
+					CKEditor5.table.TableToolbar
+				],
+				htmlSupport: {
+					allow: [
+						{
+							name: 'p',
+							classes: ['foo', 'bar'],
+							attributes: {
+								foo: 'true',
+							},
+							styles: { 'color': true }
+						}
+					],
+				},
+				toolbar: {
+					items: [
+						'heading',
+						'|',
+						'bold',
+						'italic',
+						'link',
+						'bulletedList',
+						'numberedList',
+						'|',
+						'outdent',
+						'indent',
+						'|',
+						'uploadImage',
+						'blockQuote',
+						'insertTable',
+						'mediaEmbed',
+						'undo',
+						'redo'
+					]
+				},
+				image: {
+					toolbar: [
+						'imageStyle:inline',
+						'imageStyle:block',
+						'imageStyle:side',
+						'|',
+						'toggleImageCaption',
+						'imageTextAlternative'
+					]
+				},
+				table: {
+					contentToolbar: [
+						'tableColumn',
+						'tableRow',
+						'mergeTableCells'
+					]
+				}
+			};
+			const editorData = {
+				intro: document.querySelector('#editor-intro'),
+				content: document.querySelector('#editor-content'),
+				outro: document.querySelector('#editor-outro')
+			};
+			CKEditor5.editorMultiRoot.MultiRootEditor
+				.create(editorData, {
+					...config,
+					extraPlugins: [UploadAdapter, MarkerDemoPlugin]
+				})
+				.then(newEditor => {
+					document.querySelector('.toolbar-container').appendChild(newEditor.ui.view.toolbar.element);
+					window.editor = editor = newEditor;
+					CKEditorInspector.attach( newEditor );
+					window.editables = newEditor.ui.view.editables;
+				})
+				.catch(error => {
+					console.error(error);
+				});
+		</script>
+	</body>
+	<style>
+		body {
+			padding: 2em;
+		}
+
+		.ck.ck-editor__editable {
+			border: 1px solid rgba(0, 0, 0, 0.15);
+		}
+
+		.ck-content .h-yellow {
+			background: rgba(251, 255, 0, 0.534);
+		}
+
+		.ck-content .h-blue {
+			background: rgba(0, 197, 247, 0.568);
+		}
+	</style>
+</html>

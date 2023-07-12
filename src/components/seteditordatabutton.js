@@ -73,7 +73,7 @@ export default class SetEditorDataButton extends Component {
 						type="button"
 						onClick={() => {
 							this.setState( {
-								editorDataValue: this.props.editor.getData()
+								editorDataValue: this.props.editor.getData( { rootName: this.props.currentRootName } )
 							} );
 
 							this.textarea.current.focus();
@@ -105,7 +105,9 @@ export default class SetEditorDataButton extends Component {
 	}
 
 	_setEditorDataAndCloseModal() {
-		this.props.editor.setData( this.state.editorDataValue );
+		const data = {};
+		data[ this.props.currentRootName ] = this.state.editorDataValue;
+		this.props.editor.setData( data );
 
 		this._closeModal();
 	}
@@ -124,7 +126,7 @@ export default class SetEditorDataButton extends Component {
 
 	_handleModalAfterOpen() {
 		this.setState( {
-			editorDataValue: this.props.editor.getData()
+			editorDataValue: this.props.editor.getData( { rootName: this.props.currentRootName } )
 		} );
 
 		this.textarea.current.select();
