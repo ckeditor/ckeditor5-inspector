@@ -47,7 +47,7 @@ class EditorQuickActions extends Component {
 				onClick={() => console.log( this.props.editor )}
 			/>
 			{ this._getLogButton() }
-			<SetEditorDataButton editor={this.props.editor} currentRootName={this.props.currentRootName} />
+			<SetEditorDataButton editor={this.props.editor} />
 			<Button
 				text="Toggle read only"
 				icon={<ReadOnlyIcon />}
