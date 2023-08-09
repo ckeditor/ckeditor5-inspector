@@ -21,13 +21,13 @@ import {
 import {
 	getEditorModelRanges,
 	getEditorModelMarkers,
-	getEditorModelRoots,
 	getEditorModelTreeDefinition,
 	getEditorModelNodeDefinition
 } from './utils';
 
 import { isModelRoot } from '../utils';
 import { getCurrentEditor } from '../../data/utils';
+import { getEditorRoots } from '../../utils';
 
 import LocalStorageManager from '../../localstoragemanager';
 
@@ -161,7 +161,7 @@ function getBlankModelState( globalState, modelState = {} ) {
 		};
 	}
 
-	const currentRootName = getEditorModelRoots( currentEditor )[ 0 ].rootName;
+	const currentRootName = getEditorRoots( currentEditor )[ 0 ].rootName;
 
 	return {
 		...modelState,

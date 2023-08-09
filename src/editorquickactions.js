@@ -99,8 +99,12 @@ class EditorQuickActions extends Component {
 	}
 
 	_handleLogEditorDataClick( { shiftKey } ) {
+		const editor = this.props.editor;
+		const isMultiRoot = !!editor.getFullData;
+		const logData = isMultiRoot ? editor.getFullData() : editor.getData( { rootName: 'main' } );
+
 		if ( shiftKey ) {
-			copy( this.props.editor.getData( { rootName: this.props.currentRootName } ) );
+			copy( isMultiRoot ? JSON.stringify( logData ) : logData );
 
 			this.setState( {
 				wasEditorDataJustCopied: true
@@ -114,7 +118,7 @@ class EditorQuickActions extends Component {
 				} );
 			}, 3000 );
 		} else {
-			console.log( this.props.editor.getData( { rootName: this.props.currentRootName } ) );
+			console.log( logData );
 		}
 	}
 
@@ -139,10 +143,10 @@ class EditorQuickActions extends Component {
 	}
 }
 
-const mapStateToProps = ( { editors, currentEditorName, currentEditorGlobals: { isReadOnly }, model: { currentRootName } } ) => {
+const mapStateToProps = ( { editors, currentEditorName, currentEditorGlobals: { isReadOnly } } ) => {
 	const editor = editors.get( currentEditorName );
 
-	return { editor, isReadOnly, currentRootName };
+	return { editor, isReadOnly };
 };
 
 export default connect( mapStateToProps, {} )( EditorQuickActions );

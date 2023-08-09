@@ -38,7 +38,8 @@ export function getEditorViewRoots( editor ) {
 		return [];
 	}
 
-	return [ ...editor.editing.view.document.roots ];
+	const modelDocument = editor.model.document;
+	return modelDocument.getRoots ? modelDocument.getRoots( false ) : [ ...modelDocument.roots ];
 }
 
 export function getEditorViewRanges( editor, currentRootName ) {

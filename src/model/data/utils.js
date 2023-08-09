@@ -24,19 +24,6 @@ const MARKER_COLORS = [
 	'#f4511e', '#673ab7', '#ffb300'
 ];
 
-export function getEditorModelRoots( editor ) {
-	if ( !editor ) {
-		return [];
-	}
-
-	const roots = [ ...editor.model.document.roots ];
-
-	// Put $graveyard at the end.
-	return roots
-		.filter( ( { rootName } ) => rootName !== '$graveyard' )
-		.concat( roots.filter( ( { rootName } ) => rootName === '$graveyard' ) );
-}
-
 export function getEditorModelRanges( editor, currentRootName ) {
 	if ( !editor ) {
 		return [];

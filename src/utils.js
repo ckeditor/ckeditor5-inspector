@@ -81,3 +81,25 @@ export function compareArrays( a, b ) {
 		return 'extension';
 	}
 }
+
+export function getEditorRoots( editor, { includeGraveyard } = { includeGraveyard: false } ) {
+	if ( !editor ) {
+		return [];
+	}
+
+	const modelDocument = editor.model.document;
+	const roots = modelDocument.getRoots ? modelDocument.getRoots( false ) : [ ...modelDocument.roots ];
+	// Note that graveyard will not be returned with the new modelDocument.getRoots() API.
+	const graveyardRoot = roots.find( rootName => rootName === '$graveyard' );
+
+	// Remove $graveyard if needed and put it at the end (if needed).
+	if ( graveyardRoot ) {
+		roots.splice( roots.indexOf( graveyardRoot ), 1 );
+	}
+
+	if ( includeGraveyard ) {
+		roots.push( editor.model.document.getRoot( '$graveyard' ) );
+	}
+
+	return roots;
+}

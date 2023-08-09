@@ -13,7 +13,7 @@ import LoadDataIcon from '../assets/img/load-data.svg';
 
 import './seteditordatabutton.css';
 import Select from './select';
-import { getEditorModelRoots } from '../model/data/utils';
+import { getEditorRoots } from '../utils';
 
 export default class SetEditorDataButton extends Component {
 	constructor( props ) {
@@ -135,7 +135,9 @@ export default class SetEditorDataButton extends Component {
 	}
 
 	_initEditorModalState() {
-		const rootNames = getEditorModelRoots( this.props.editor ).map( root => root.rootName ).slice( 0, -1 );
+		const rootNames = getEditorRoots( this.props.editor )
+			.map( root => root.rootName )
+			.filter( rootName => rootName !== '$graveyard' );
 		const editorRootValues = rootNames.reduce( ( acc, rootName ) => {
 			acc[ rootName ] = {
 				initialValue: null,

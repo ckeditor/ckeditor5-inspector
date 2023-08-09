@@ -13,7 +13,7 @@ import {
 	setModelActiveTab
 } from './data/actions';
 
-import { getEditorModelRoots } from './data/utils';
+import { getEditorRoots } from '../utils';
 
 import Tree from '../components/tree/tree';
 import NavBox from '../components/navbox';
@@ -54,7 +54,7 @@ class ModelTree extends Component {
 						id="view-root-select"
 						label="Root"
 						value={this.props.currentRootName}
-						options={getEditorModelRoots( currentEditor ).map( root => root.rootName )}
+						options={getEditorRoots( currentEditor, { includeGraveyard: true } ).map( root => root.rootName )}
 						onChange={this.handleRootChange}
 					/>
 				</div>,

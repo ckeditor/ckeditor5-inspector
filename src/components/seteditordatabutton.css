@@ -10,6 +10,7 @@
 	--ck-inspector-set-data-modal-button-background-hover: #ddd;
 	--ck-inspector-set-data-modal-save-button-background: #1976d2;
 	--ck-inspector-set-data-modal-save-button-background-hover: #0b60b5;
+	--ck-inspector-set-data-modal-inputs-padding: 10px;
 }
 
 /* Modal overlay */
@@ -62,13 +63,13 @@
 			border: 1px solid var(--ck-inspector-color-border);
 			border-radius: 2px;
 			resize: none;
-			padding: 10px;
+			padding: var(--ck-inspector-set-data-modal-inputs-padding);
 			font-family: monospace;
 			font-size: 14px;
 		}
 
 		& button {
-			padding: 10px 20px;
+			padding: var(--ck-inspector-set-data-modal-inputs-padding) calc(var(--ck-inspector-set-data-modal-inputs-padding) * 2);
 			border-radius: 2px;
 			font-size: 14px;
 			white-space: nowrap;
@@ -80,11 +81,15 @@
 			}
 		}
 
-		.root-selector {
+		& .root-selector {
 			margin: 20px 20px 0;
 
 			& label {
 				margin: 0 .5em 0 0;
+			}
+
+			& select {
+				padding: var(--ck-inspector-set-data-modal-inputs-padding);
 			}
 		}
 

@@ -30,6 +30,7 @@
 		<h2>The toolbar</h2>
 		<div class="toolbar-container"></div>
 		<h2>The editable</h2>
+		<button id="add-root" type="button">Add root</button>
 		<div class="editable-container">
 			<div id="editor-intro">
 				<p><strong>Exciting</strong> intro text to an article.</p>
@@ -101,6 +102,38 @@
 				editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
 					return new DummyUploadAdapter(loader);
 				};
+			}
+			function initializeDynamicRootHandling( editor ) {
+				let i = 0;
+				document.getElementById( 'add-root' ).addEventListener( 'click', () => {
+					i++;
+
+					editor.addRoot( 'editor-dynamic-content-' + i, { data: '<p>Dynamically added content ' + i + '</p>' } );
+				} );
+
+				editor.on( 'addRoot', ( evt, root ) => {
+					const editable = editor.createEditable( root );
+					const rootName = root.rootName;
+
+					document.querySelector( '.editable-container' ).appendChild( editable );
+
+					const removeButton = document.createElement( 'button' );
+					removeButton.innerHTML = `Remove ${ rootName } root 👆`;
+
+					editor.on( 'detachRoot', ( evt, root ) => {
+						if ( root.rootName === rootName ) {
+							const editableElement = editor.detachEditable( root );
+							removeButton.remove();
+							editableElement.remove();
+						}
+					} );
+
+					removeButton.addEventListener( 'click', () => {
+						editor.detachRoot( rootName );
+					} );
+
+					document.querySelector( '.editable-container' ).appendChild( removeButton );
+				} );
 			}
 			function MarkerDemoPlugin(editor) {
 				const model = editor.model;
@@ -227,6 +260,7 @@
 					window.editor = editor = newEditor;
 					CKEditorInspector.attach( newEditor );
 					window.editables = newEditor.ui.view.editables;
+					initializeDynamicRootHandling( newEditor );
 				})
 				.catch(error => {
 					console.error(error);
