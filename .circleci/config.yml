@@ -1,0 +1,19 @@
+version: 2.1
+
+jobs:
+  test_job:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Check coverage
+          command: yarn run test --coverage
+      - run:
+          name: Run tests on Firefox
+          command: yarn run test --browsers=Firefox
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - test_job
