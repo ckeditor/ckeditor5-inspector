@@ -6,6 +6,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install dependencies
+          command: yarn install
+      - run:
           name: Check coverage
           command: yarn run test --coverage
       - run:
