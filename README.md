@@ -2,9 +2,8 @@ CKEditor 5 inspector
 =====================================
 
 [![npm version](https://badge.fury.io/js/%40ckeditor%2Fckeditor5-inspector.svg)](https://www.npmjs.com/package/@ckeditor/ckeditor5-inspector)
-[![Build Status](https://travis-ci.org/ckeditor/ckeditor5-inspector.svg?branch=master)](https://travis-ci.org/ckeditor/ckeditor5-inspector)
+[![CircleCI](https://circleci.com/gh/ckeditor/ckeditor5-inspector.svg?style=shield)](https://app.circleci.com/pipelines/github/ckeditor/ckeditor5-inspector?branch=master)
 [![Coverage Status](https://coveralls.io/repos/github/ckeditor/ckeditor5-inspector/badge.svg?branch=master)](https://coveralls.io/github/ckeditor/ckeditor5-inspector?branch=master)
-![Dependency Status](https://img.shields.io/librariesio/release/npm/@ckeditor/ckeditor5-inspector)
 
 The official [CKEditor 5](https://ckeditor.com/ckeditor-5) rich text editor instance inspector for developers.
 
