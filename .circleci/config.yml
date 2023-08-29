@@ -12,7 +12,7 @@ commands:
       # CircleCI does not use the latest Chrome. Hence, we must install it manually.
       - run:
           name: Install the latest Chrome
-          command: yarn ckeditor5-dev-ci-install-latest-chrome
+          command: ckeditor5-dev-ci-install-latest-chrome
 
   bootstrap_repository_command:
     description: "Bootstrap the repository"
