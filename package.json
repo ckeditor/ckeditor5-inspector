@@ -40,7 +40,7 @@
     "@ckeditor/ckeditor5-basic-styles": "^35.0.0",
     "@ckeditor/ckeditor5-block-quote": "^35.0.0",
     "@ckeditor/ckeditor5-dev-bump-year": "^38.0.0",
-    "@ckeditor/ckeditor5-dev-ci": "^38.0.0",
+    "@ckeditor/ckeditor5-dev-ci": "^38.4.0",
     "@ckeditor/ckeditor5-dev-release-tools": "^38.0.0",
     "@ckeditor/ckeditor5-dev-utils": "^38.0.0",
     "@ckeditor/ckeditor5-editor-decoupled": "^35.0.0",
