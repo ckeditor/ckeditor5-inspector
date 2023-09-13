@@ -11,7 +11,7 @@
   "license": "GPL-2.0-or-later",
   "version": "4.1.0",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "scripts": {
     "postinstall": "node ./scripts/postinstall.js",
