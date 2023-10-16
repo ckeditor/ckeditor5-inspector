@@ -86,7 +86,7 @@
     "lodash.isequal": "^4.5.0",
     "mocha": "^10.1.0",
     "postcss-loader": "^4.3.0",
-    "postcss-nesting": "^7.0.1",
+    "postcss-nesting": "^10.2.0",
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
