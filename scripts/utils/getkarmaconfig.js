@@ -10,11 +10,11 @@
 const path = require( 'path' );
 const options = parseArguments( process.argv.slice( 2 ) );
 
-module.exports = function getKarmaConfig() {
+module.exports = async function getKarmaConfig() {
 	const basePath = process.cwd();
 	const coverageDir = path.join( basePath, 'coverage' );
 
-	const webpackConfig = require( '../../webpack.config.js' )( {}, {
+	const webpackConfig = ( await import( '../../webpack.config.mjs' ) ).default( {}, {
 		mode: 'development'
 	} );
 
