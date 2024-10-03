@@ -10,7 +10,10 @@
 const getKarmaConfig = require( './utils/getkarmaconfig' );
 const { Server, config } = require( 'karma' );
 
-const parsedConfig = config.parseConfig( null, getKarmaConfig() );
-const server = new Server( parsedConfig );
+( async () => {
+	const parsedConfig = config.parseConfig( null, await getKarmaConfig() );
+	const server = new Server( parsedConfig );
 
-server.start();
+	server.start();
+} )();
+

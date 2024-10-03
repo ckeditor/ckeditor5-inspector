@@ -5,17 +5,21 @@
 
 /* eslint-env node */
 
-const { getLastFromChangelog } = require( '@ckeditor/ckeditor5-dev-release-tools' );
-const TerserPlugin = require( 'terser-webpack-plugin' );
-const webpack = require( 'webpack' );
-const path = require( 'path' );
+import path from 'path';
+import webpack from 'webpack';
+import { fileURLToPath } from 'url';
+import TerserPlugin from 'terser-webpack-plugin';
+import { getLastFromChangelog } from '@ckeditor/ckeditor5-dev-release-tools';
+
+const __filename = fileURLToPath( import.meta.url );
+const __dirname = path.dirname( __filename );
 
 const LIBRARY_TO_FILE_NAMES = {
 	CKEditorInspector: 'inspector.js',
 	MiniCKEditorInspector: 'miniinspector.js'
 };
 
-module.exports = ( env, argv ) => {
+export default ( env, argv ) => {
 	const devMode = argv.mode === 'development';
 
 	return {
