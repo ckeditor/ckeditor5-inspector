@@ -21,6 +21,10 @@ describe( 'Utils', () => {
 			expect( stringify( () => 'foo' ) ).to.equal( 'function() {…}' );
 		} );
 
+		it( 'serializes quotes properly', () => {
+			expect( stringify( '\'foo\'' ) ).to.equal( '"\\"foo\\""' );
+		} );
+
 		it( 'stringifies values (no quotes around text)', () => {
 			expect( stringify( undefined ) ).to.equal( 'undefined' );
 			expect( stringify( true ) ).to.equal( 'true' );
