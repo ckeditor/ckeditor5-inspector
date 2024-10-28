@@ -68,7 +68,7 @@ export function truncateString( string, length ) {
 // Retain the JSON.stringify() formatting instead of fixing 100 tests across the project :)
 function stringifySingleToDoubleQuotesReplacer( value, indent, stringify ) {
 	if ( typeof value === 'string' ) {
-		return `"${ value.replace( '\'', '"' ) }"`;
+		return `"${ value.replaceAll( '\'', '\\"' ) }"`;
 	}
 
 	return stringify( value );
