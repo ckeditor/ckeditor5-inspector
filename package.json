@@ -8,7 +8,7 @@
     "LICENSE.md"
   ],
   "description": "The official CKEditor 5 instance inspector.",
-  "license": "GPL-2.0-or-later",
+  "license": "SEE LICENSE IN LICENSE.md",
   "version": "4.1.0",
   "engines": {
     "node": ">=18.0.0"
