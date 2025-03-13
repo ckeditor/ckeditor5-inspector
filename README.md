@@ -146,35 +146,24 @@ To run tests, execute:
 yarn test
 ```
 
-## Releasing
+## Releasing the package
 
-### Changelog
+CircleCI automates the release process and can release both channels: stable (`X.Y.Z`) and pre-releases (`X.Y.Z-alpha.X`, etc.).
 
-Before starting the release process, you need to generate the changelog:
+Before you start, you need to prepare the changelog entries.
 
-```console
-yarn changelog
-```
+1. Make sure the `#master` branch is up-to-date: `git fetch && git checkout master && git pull`.
+1. Prepare a release branch: `git checkout -b release-[YYYYMMDD]` where `YYYYMMDD` is the current day.
+1. Generate the changelog entries: `yarn run changelog --branch release-[YYYYMMDD] [--from [GIT_TAG]]`.
+	* By default, the changelog generator uses the latest published tag as a starting point for collecting commits to process.
 
-### Updating the version
+	  The `--from` modifier option allows overriding the default behavior. It is required when preparing the changelog entries for the next stable release while the previous one was marked as a prerelease, e.g., `@alpha`.
 
-When the changelog is ready, you should bump the version:
-
-```console
-yarn release:prepare-packages
-```
-
-### Building for production
-
-When the changelog is ready and the version was bumped, build the inspector for production:
-
-### Publishing the npm package
-
-Finally, make the changes public:
-
-```console
-npm run release:publish-packages
-```
+	  **Example**: Let's assume that the `v5.0.0-alpha.0` tag is our latest and that we want to release it on a stable channel. The `--from` modifier should be equal to `--from v4.0.0`.
+	* This task checks what changed in each package and bumps the version accordingly. It won't create a new changelog entry if nothing changes at all. If changes were irrelevant (e.g., only dependencies), it would make an "_internal changes_" entry.
+	* Scan the logs printed by the tool to search for errors (incorrect changelog entries). Incorrect entries (e.g., ones without the type) should be addressed. You may need to create entries for them manually. This is done directly in CHANGELOG.md (in the root directory). Make sure to verify the proposed version after you modify the changelog.
+1. Commit all changes and prepare a new pull request targeting the `#master` branch.
+1. Ping the `@ckeditor/ckeditor-5-devops` team to review the pull request and trigger the release process.
 
 ## License
 
