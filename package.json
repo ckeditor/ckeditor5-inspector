@@ -116,8 +116,5 @@
   "eslintIgnore": [
     "build/**",
     "coverage/**"
-  ],
-  "dependencies": {
-    "semver": "^7.0.0"
-  }
+  ]
 }
