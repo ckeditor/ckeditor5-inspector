@@ -3,8 +3,6 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
-/* global document */
-
 import TestEditor from '../../utils/testeditor';
 import { nodeToString } from '../../../src/view/utils';
 

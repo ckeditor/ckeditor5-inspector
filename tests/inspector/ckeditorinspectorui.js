@@ -3,8 +3,6 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
-/* global document, window */
-
 import React from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';

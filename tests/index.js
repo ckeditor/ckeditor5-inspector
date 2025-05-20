@@ -3,8 +3,6 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
-/* global window */
-
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Chai from 'chai';

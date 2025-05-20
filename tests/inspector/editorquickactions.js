@@ -3,8 +3,6 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
-/* global document, window, KeyboardEvent */
-
 import React from 'react';
 import TestEditor from '../utils/testeditor';
 import { createStore } from 'redux';
