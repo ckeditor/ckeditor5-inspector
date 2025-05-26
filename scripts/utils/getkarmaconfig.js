@@ -5,8 +5,6 @@
 
 'use strict';
 
-/* eslint-env node */
-
 const path = require( 'path' );
 const options = parseArguments( process.argv.slice( 2 ) );
 

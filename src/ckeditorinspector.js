@@ -3,8 +3,6 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
-/* global document, window, CKEDITOR_INSPECTOR_VERSION */
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore } from 'redux';

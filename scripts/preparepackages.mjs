@@ -5,8 +5,6 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
-/* eslint-env node */
-
 import fs from 'fs-extra';
 import { Listr } from 'listr2';
 import { ListrInquirerPromptAdapter } from '@listr2/prompt-adapter-inquirer';
@@ -16,6 +14,7 @@ import * as devUtils from '@ckeditor/ckeditor5-dev-utils';
 import parseArguments from './utils/parsearguments.mjs';
 import getListrOptions from './utils/getlistroptions.mjs';
 import { RELEASE_DIRECTORY } from './utils/constants.mjs';
+import { preparePackageJson } from './utils/preparepackagejson.mjs';
 
 const cliArguments = parseArguments( process.argv.slice( 2 ) );
 const latestVersion = releaseTools.getLastFromChangelog();
@@ -106,7 +105,7 @@ const tasks = new Listr( [
 			return releaseTools.prepareRepository( {
 				outputDirectory: RELEASE_DIRECTORY,
 				// `cwd` points to the repository root directory.
-				rootPackageJson: await fs.readJson( './package.json' )
+				rootPackageJson: preparePackageJson()
 			} );
 		}
 	},

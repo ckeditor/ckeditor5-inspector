@@ -3,8 +3,6 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
-/* global document, window */
-
 import TestEditor from '../../utils/testeditor';
 import LocalStorageManager from '../../../src/localstoragemanager';
 

@@ -3,8 +3,6 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
-/* global window */
-
 export default class LocalStorageManager {
 	static set( name, value ) {
 		window.localStorage.setItem( 'ck5-inspector-' + name, value );
