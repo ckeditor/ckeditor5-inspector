@@ -39,10 +39,10 @@
     "@ckeditor/ckeditor5-autoformat": "^35.0.0",
     "@ckeditor/ckeditor5-basic-styles": "^35.0.0",
     "@ckeditor/ckeditor5-block-quote": "^35.0.0",
-    "@ckeditor/ckeditor5-dev-bump-year": "^47.0.0",
-    "@ckeditor/ckeditor5-dev-ci": "^47.0.0",
-    "@ckeditor/ckeditor5-dev-release-tools": "^47.0.0",
-    "@ckeditor/ckeditor5-dev-utils": "^47.0.0",
+    "@ckeditor/ckeditor5-dev-bump-year": "^49.0.0",
+    "@ckeditor/ckeditor5-dev-ci": "^49.0.0",
+    "@ckeditor/ckeditor5-dev-release-tools": "^49.0.0",
+    "@ckeditor/ckeditor5-dev-utils": "^49.0.0",
     "@ckeditor/ckeditor5-editor-decoupled": "^35.0.0",
     "@ckeditor/ckeditor5-essentials": "^35.0.0",
     "@ckeditor/ckeditor5-heading": "^35.0.0",
@@ -68,8 +68,8 @@
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
     "eslint": "^9.26.0",
-    "eslint-config-ckeditor5": "^10.0.0-alpha.0",
-    "eslint-plugin-ckeditor5-rules": "^10.0.0-alpha.0",
+    "eslint-config-ckeditor5": "^10.0.0",
+    "eslint-plugin-ckeditor5-rules": "^10.0.0",
     "eslint-plugin-react": "^7.37.5",
     "fs-extra": "^11.3.0",
     "globals": "^16.1.0",
@@ -115,7 +115,7 @@
   },
   "lint-staged": {
     "**/*": [
-      "eslint --quiet"
+      "eslint"
     ]
   }
 }
