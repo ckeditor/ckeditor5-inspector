@@ -5,12 +5,14 @@
 
 'use strict';
 
-const path = require( 'path' );
-const fs = require( 'fs' );
-const ROOT_DIRECTORY = path.join( __dirname, '..' );
+import path from 'upath';
+import fs from 'fs';
+import { ROOT_DIRECTORY } from './utils/constants.mjs';
 
 // When installing a repository as a dependency, the `.git` directory does not exist.
 // In such a case, husky should not attach its hooks as npm treats it as a package, not a git repository.
 if ( fs.existsSync( path.join( ROOT_DIRECTORY, '.git' ) ) ) {
-	require( 'husky' ).install();
+	const { default: husky } = await import( 'husky' );
+
+	husky();
 }
