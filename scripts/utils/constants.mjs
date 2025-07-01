@@ -3,4 +3,11 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { fileURLToPath } from 'url';
+import upath from 'upath';
+
+const __filename = fileURLToPath( import.meta.url );
+const __dirname = upath.dirname( __filename );
+
 export const RELEASE_DIRECTORY = 'release';
+export const ROOT_DIRECTORY = upath.join( __dirname, '..', '..' );
