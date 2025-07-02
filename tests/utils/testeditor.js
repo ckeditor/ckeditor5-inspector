@@ -3,23 +3,26 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
-import Editor from '@ckeditor/ckeditor5-core/src/editor/editor';
-import EditorUI from '@ckeditor/ckeditor5-core/src/editor/editorui';
-import HtmlDataProcessor from '@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor';
-import BoxedEditorUIView from '@ckeditor/ckeditor5-ui/src/editorui/boxed/boxededitoruiview';
-import ElementReplacer from '@ckeditor/ckeditor5-utils/src/elementreplacer';
-import InlineEditableUIView from '@ckeditor/ckeditor5-ui/src/editableui/inline/inlineeditableuiview';
-import getDataFromElement from '@ckeditor/ckeditor5-utils/src/dom/getdatafromelement';
-import Command from '@ckeditor/ckeditor5-core/src/command';
-import DataApiMixin from '@ckeditor/ckeditor5-core/src/editor/utils/dataapimixin';
-import mix from '@ckeditor/ckeditor5-utils/src/mix';
+import {
+	Editor,
+	EditorUI,
+	Command,
+	HtmlDataProcessor,
+	BoxedEditorUIView,
+	InlineEditableUIView,
+	ElementReplacer,
+	getDataFromElement
+} from 'ckeditor5';
 
 export default class TestEditor extends Editor {
 	/**
 	 * @inheritDoc
 	 */
 	constructor( element, config ) {
-		super( config );
+		super( {
+			...config,
+			licenseKey: 'GPL'
+		} );
 
 		this.element = element;
 		this.data.processor = new HtmlDataProcessor( this.data.viewDocument );
@@ -96,5 +99,3 @@ export class FooCommand extends Command {
 		this.isEnabled = true;
 	}
 }
-
-mix( TestEditor, DataApiMixin );

@@ -3,6 +3,8 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { Paragraph, BoldEditing } from 'ckeditor5';
+
 import {
 	getEditorModelTreeDefinition,
 	getEditorModelMarkers,
@@ -11,8 +13,6 @@ import {
 } from '../../../../src/model/data/utils';
 
 import TestEditor from '../../../utils/testeditor';
-import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
-import BoldEditing from '@ckeditor/ckeditor5-basic-styles/src/bold/boldediting';
 
 import { assertTreeItems } from '../../../../tests/utils/utils';
 

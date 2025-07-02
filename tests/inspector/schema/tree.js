@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { Paragraph } from 'ckeditor5';
 import TestEditor from '../../utils/testeditor';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
@@ -13,8 +14,6 @@ import { getSchemaTreeDefinition } from '../../../src/schema/data/utils';
 import { reducer } from '../../../src/data/reducer';
 import Tree from '../../../src/components/tree/tree.js';
 import SchemaTree from '../../../src/schema/tree';
-
-import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 
 describe( '<SchemaTree />', () => {
 	let editor, wrapper, element, store;

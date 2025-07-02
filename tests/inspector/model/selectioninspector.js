@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { Paragraph, BoldEditing } from 'ckeditor5';
 import TestEditor from '../../utils/testeditor';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
@@ -14,9 +15,6 @@ import Button from '../../../src/components/button';
 import ObjectInspector from '../../../src/components/objectinspector';
 import Logger from '../../../src/logger';
 import ModelSelectionInspector from '../../../src/model/selectioninspector';
-
-import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
-import BoldEditing from '@ckeditor/ckeditor5-basic-styles/src/bold/boldediting';
 
 describe( '<ModelSelectionInspector />', () => {
 	let editor, wrapper, element, store;

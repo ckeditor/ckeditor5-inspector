@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { Paragraph, BoldEditing } from 'ckeditor5';
 import TestEditor from '../../utils/testeditor';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
@@ -19,9 +20,6 @@ import Tree from '../../../src/components/tree/tree.js';
 import Select from '../../../src/components/select';
 import Checkbox from '../../../src/components/checkbox';
 import ModelTree from '../../../src/model/tree';
-
-import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
-import BoldEditing from '@ckeditor/ckeditor5-basic-styles/src/bold/boldediting';
 
 describe( '<ModelTree />', () => {
 	let editor, wrapper, element, store, dispatchSpy;
