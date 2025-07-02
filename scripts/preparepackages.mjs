@@ -104,8 +104,7 @@ const tasks = new Listr( [
 		task: async () => {
 			return releaseTools.prepareRepository( {
 				outputDirectory: RELEASE_DIRECTORY,
-				// `cwd` points to the repository root directory.
-				rootPackageJson: preparePackageJson()
+				rootPackageJson: await preparePackageJson()
 			} );
 		}
 	},
