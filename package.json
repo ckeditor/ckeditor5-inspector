@@ -41,7 +41,7 @@
     "@ckeditor/ckeditor5-dev-ci": "^50.0.0",
     "@ckeditor/ckeditor5-dev-release-tools": "^50.0.0",
     "@ckeditor/ckeditor5-dev-utils": "^50.0.0",
-    "ckeditor5": "^46.0.0-alpha.0",
+    "ckeditor5": "^46.0.0",
     "@inquirer/prompts": "^6.0.0",
     "@listr2/prompt-adapter-inquirer": "^2.0.16",
     "babel-loader": "^8.2.3",
