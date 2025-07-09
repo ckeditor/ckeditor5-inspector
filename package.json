@@ -9,7 +9,7 @@
   ],
   "description": "The official CKEditor 5 instance inspector.",
   "license": "SEE LICENSE IN LICENSE.md",
-  "version": "4.1.0",
+  "version": "5.0.0",
   "engines": {
     "node": ">=22.0.0"
   },
