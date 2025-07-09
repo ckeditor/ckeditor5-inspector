@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { Paragraph } from 'ckeditor5';
 import TestEditor from '../../utils/testeditor';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
@@ -13,8 +14,6 @@ import { getSchemaDefinition } from '../../../src/schema/data/utils';
 import { reducer } from '../../../src/data/reducer';
 import ObjectInspector from '../../../src/components/objectinspector';
 import SchemaDefinitionInspector from '../../../src/schema/schemadefinitioninspector';
-
-import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 
 describe( '<SchemaDefinitionInspector />', () => {
 	let editor, wrapper, element, store;

@@ -3,11 +3,10 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { Paragraph, BoldEditing } from 'ckeditor5';
+
 import TestEditor from '../../utils/testeditor';
 import { nodeToString } from '../../../src/view/utils';
-
-import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
-import BoldEditing from '@ckeditor/ckeditor5-basic-styles/src/bold/boldediting';
 
 import {
 	getEditorViewNodeDefinition,
@@ -70,7 +69,7 @@ describe( 'View utils', () => {
 					name: 'div',
 					node: root,
 					attributes: [
-						[ 'aria-label', 'Editor editing area: main' ],
+						[ 'aria-label', 'Rich Text Editor. Editing area: main' ],
 						[ 'class', 'ck-blurred ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline' ],
 						[ 'contenteditable', 'true' ],
 						[ 'dir', 'ltr' ],

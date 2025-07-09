@@ -3,6 +3,8 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { Paragraph } from 'ckeditor5';
+
 import TestEditor from '../../../utils/testeditor';
 import commandsReducer from '../../../../src/commands/data/reducer';
 
@@ -16,8 +18,6 @@ import {
 	setEditors,
 	setCurrentEditorName
 } from '../../../../src/data/actions';
-
-import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 
 describe( 'commands data store reducer', () => {
 	let editorA, editorB;

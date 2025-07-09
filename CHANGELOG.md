@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## [5.0.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v4.1.0...v5.0.0) (July 9, 2025)
+
+### BREAKING CHANGES
+
+* Due to changes in type definitions and package structure in CKEditor 5 v46.0.0, the inspector now requires this version or newer. Earlier versions are no longer compatible. See [ckeditor/ckeditor5#18583](https://github.com/ckeditor/ckeditor5/issues/18583).
+
+
 ## [4.1.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v4.0.0...v4.1.0) (2022-05-26)
 
 ### Features

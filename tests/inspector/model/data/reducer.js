@@ -3,6 +3,8 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { Paragraph } from 'ckeditor5';
+
 import TestEditor from '../../../utils/testeditor';
 import LocalStorageManager from '../../../../src/localstoragemanager';
 
@@ -29,8 +31,6 @@ import {
 	setEditors,
 	setCurrentEditorName
 } from '../../../../src/data/actions';
-
-import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 
 describe( 'model data store reducer', () => {
 	let editorA, editorB;
