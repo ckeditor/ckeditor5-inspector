@@ -72,6 +72,7 @@ module.exports = async function getKarmaConfig() {
 
 		plugins: [
 			'karma-chrome-launcher',
+			'karma-coverage',
 			'karma-mocha-reporter',
 			'karma-mocha',
 			'karma-sinon',
