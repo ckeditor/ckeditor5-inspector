@@ -68,7 +68,15 @@ module.exports = async function getKarmaConfig() {
 
 		mochaReporter: {
 			showDiff: true
-		}
+		},
+
+		plugins: [
+			'karma-chrome-launcher',
+			'karma-mocha-reporter',
+			'karma-mocha',
+			'karma-sinon',
+			'karma-webpack'
+		]
 	};
 
 	if ( options.watch ) {

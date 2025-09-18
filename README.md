@@ -112,12 +112,15 @@ CKEditorInspector.attach( { 'editor-name': editor }, {
 
 ## Development
 
+> [!NOTE]
+> This project requires **pnpm v10** or higher. You can check your version with `pnpm --version` and update if needed with `npm install -g pnpm@latest`.
+
 To configure the environment:
 
 ```console
 git clone git@github.com:ckeditor/ckeditor5-inspector.git
 cd ckeditor5-inspector
-yarn install
+pnpm install
 ```
 
 ### Working with the code
@@ -125,7 +128,7 @@ yarn install
 Start the webpack file watcher:
 
 ```console
-yarn dev
+pnpm run dev
 ```
 
 and open `http://path/to/ckeditor5-inspector/sample/inspector.html` in your web browser.
@@ -135,7 +138,7 @@ and open `http://path/to/ckeditor5-inspector/sample/inspector.html` in your web 
 To build the production version of the inspector, run:
 
 ```console
-yarn build
+pnpm run build
 ```
 
 ### Testing
@@ -143,7 +146,7 @@ yarn build
 To run tests, execute:
 
 ```console
-yarn test
+pnpm run test
 ```
 
 ## Releasing the package
