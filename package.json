@@ -11,7 +11,7 @@
   "license": "SEE LICENSE IN LICENSE.md",
   "version": "5.0.0",
   "engines": {
-    "node": ">=22.0.0",
+    "node": ">=24.11.0",
     "pnpm": ">=10.14.0",
     "yarn": "\n\n┌─────────────────────────┐\n│  Hey, we use pnpm now!  │\n└─────────────────────────┘\n\n"
   },
@@ -40,6 +40,7 @@
     "@babel/core": "^7.16.0",
     "@babel/preset-react": "^7.16.0",
     "@ckeditor/ckeditor5-dev-bump-year": "^53.0.0",
+    "@ckeditor/ckeditor5-dev-changelog": "^53.0.0",
     "@ckeditor/ckeditor5-dev-ci": "^53.0.0",
     "@ckeditor/ckeditor5-dev-release-tools": "^53.0.0",
     "@ckeditor/ckeditor5-dev-utils": "^53.0.0",

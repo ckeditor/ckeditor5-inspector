@@ -23,6 +23,9 @@ importers:
       '@ckeditor/ckeditor5-dev-bump-year':
         specifier: ^53.0.0
         version: 53.2.0
+      '@ckeditor/ckeditor5-dev-changelog':
+        specifier: ^53.0.0
+        version: 53.4.0(@babel/core@7.28.4)(@types/node@24.5.2)(typescript@5.9.2)(webpack@5.101.3)
       '@ckeditor/ckeditor5-dev-ci':
         specifier: ^53.0.0
         version: 53.2.0
@@ -353,6 +356,11 @@ packages:
     resolution: {integrity: sha512-hWnNgrm0D536cK7poUgMdMJ1yTW4UMNQbIgfrXdNssut9zcc77cAJ18N7u7lDbTOJtsNX/GYbV1UPX6LEjromA==}
     engines: {node: '>=22.0.0', npm: '>=5.7.1'}
 
+  '@ckeditor/ckeditor5-dev-changelog@53.4.0':
+    resolution: {integrity: sha512-jMVBQGTjA+TWeX/p787VyIjNzn15OtcyTu6Nss9tEao5/VOlmV+s9teauFa9x9hiOdujFDdZlMYplu13oHCEwA==}
+    engines: {node: '>=22.0.0', npm: '>=5.7.1'}
+    hasBin: true
+
   '@ckeditor/ckeditor5-dev-ci@53.2.0':
     resolution: {integrity: sha512-VYUvsa2+T0zlaeTEmRY5eAP6i6yf12uN+4v1j2yfhMmPONRScJTEUgZ+t8RIpK/fk16572wBZVQy4soIqUE0Dg==}
     engines: {node: '>=22.0.0', npm: '>=5.7.1'}
@@ -366,8 +374,16 @@ packages:
     resolution: {integrity: sha512-FauIaK1TUTklU50wdNrBG6PxPH0ccErlTC5h6z49PhAl3O9/BHtNImpGTk5FwGB0b8Yi2SMoibsQbqwfBdNabg==}
     engines: {node: '>=22.0.0', npm: '>=5.7.1'}
 
+  '@ckeditor/ckeditor5-dev-translations@53.4.0':
+    resolution: {integrity: sha512-e76aPDJkbJen3W18QiddkklsM0V6NdBXL3pLDmnSKPqIDbknOh49Ov/ciDwxWqMIKDqf9n5PnTaRXIDONUO0TA==}
+    engines: {node: '>=22.0.0', npm: '>=5.7.1'}
+
   '@ckeditor/ckeditor5-dev-utils@53.2.0':
     resolution: {integrity: sha512-zdQoHiYPwJ82FFg6GvTJc5p/dJGl2P8xK5w9Aj3Fbt5ELDeGHwYqPmFklv2jzitkO3z8rMNc3gea/ct241bb8w==}
+    engines: {node: '>=22.0.0', npm: '>=5.7.1'}
+
+  '@ckeditor/ckeditor5-dev-utils@53.4.0':
+    resolution: {integrity: sha512-Ppd7MsgpeVWO5xJ9x1qcYN+ar7Cb41w8WSiJFE2VvsY7wDCxIa3FffK3adB01qFa8+criH3lzhy93PiUfm0h7w==}
     engines: {node: '>=22.0.0', npm: '>=5.7.1'}
 
   '@ckeditor/ckeditor5-easy-image@46.1.1':
@@ -1487,6 +1503,13 @@ packages:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
 
+  babel-loader@10.0.0:
+    resolution: {integrity: sha512-z8jt+EdS61AMw22nSfoNJAZ0vrtmhPRVi6ghL3rCeRZI8cdNYFiV5xeV3HbE7rlZZNmGH8BVccwWt8/ED0QOHA==}
+    engines: {node: ^18.20.0 || ^20.10.0 || >=22.0.0}
+    peerDependencies:
+      '@babel/core': ^7.12.0
+      webpack: '>=5.61.0'
+
   babel-loader@8.4.1:
     resolution: {integrity: sha512-nXzRChX+Z1GoE6yWavBQg6jDslyFF3SDjl2paADuoQtQW10JqShJt62R6eJQ5m/pjJFDT8xgKIWSP85OY8eXeA==}
     engines: {node: '>= 8.9'}
@@ -1969,6 +1992,9 @@ packages:
     resolution: {integrity: sha512-BS8PfmtDGnrgYdOonGZQdLZslWIeCGFP9tpan0hi1Co2Zr2NKADsvGYA8XxuG/4UWgJ6Cjtv+YJnB6MM69QGlQ==}
     engines: {node: '>= 0.4'}
 
+  date-fns@4.1.0:
+    resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
+
   date-format@4.0.14:
     resolution: {integrity: sha512-39BOQLs9ZjKh0/patS9nrT8wc3ioX3/eA/zgbKNopnF2wCqJEoxywwwElATYvRsXdnOxA/OQeQoFZ3rFjVajhg==}
     engines: {node: '>=4.0'}
@@ -2365,6 +2391,10 @@ packages:
   exponential-backoff@3.1.2:
     resolution: {integrity: sha512-8QxYTVXUkuy7fIIoitQkPwGonB8F3Zj8eEO8Sqg9Zv/bkI7RJAzowee4gr81Hak/dUTpA2Z7VfQgoijjPNlUZA==}
 
+  extend-shallow@2.0.1:
+    resolution: {integrity: sha512-zCnTtlxNoAiDc3gqY2aYAWFx7XWWiasuF2K8Me5WbN8otHKTUKBwjPtNpRs/rbUZm7KxWAaNj7P1a/p52GbVug==}
+    engines: {node: '>=0.10.0'}
+
   extend@3.0.2:
     resolution: {integrity: sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==}
 
@@ -2597,6 +2627,10 @@ packages:
 
   graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
+
+  gray-matter@4.0.3:
+    resolution: {integrity: sha512-5v6yZd4JK3eMI3FqqCouswVqwugaA9r4dNZB1wwcmrD02QkV5H0y7XBQW8QwQqEaZY1pM9aqORSORhJRdNK44Q==}
+    engines: {node: '>=6.0'}
 
   has-bigints@1.1.0:
     resolution: {integrity: sha512-R3pbpkcIqv2Pm3dUwgjclDRVmWpTJW2DcMzcIhEXEx1oh/CEMObMm3KLmRJOdvhM7o4uQBnwr8pzRK2sJWIqfg==}
@@ -2859,6 +2893,10 @@ packages:
     resolution: {integrity: sha512-F+i2BKsFrH66iaUFc0woD8sLy8getkwTwtOBjvs56Cx4CgJDeKQeqfz8wAYiSb8JOprWhHH5p77PbmYCvvUuXQ==}
     engines: {node: '>=8'}
     hasBin: true
+
+  is-extendable@0.1.1:
+    resolution: {integrity: sha512-5BMULNob1vgFX6EjQw5izWDxrecWK9AM72rugNr0TFldMOi0fj6Jk+zeKIt0xGj4cEfQIJth4w3OKWOJ4f+AFw==}
+    engines: {node: '>=0.10.0'}
 
   is-extglob@2.1.1:
     resolution: {integrity: sha512-SbKbANkN603Vi4jEZv49LeVJMn4yGwsbzZworEoyEiutsN3nJYdbO36zfhGJ6QEDpOZIFkDtnq5JRxmvl3jsoQ==}
@@ -4631,6 +4669,10 @@ packages:
     resolution: {integrity: sha512-Gn/JaSk/Mt9gYubxTtSn/QCV4em9mpAPiR1rqy/Ocu19u/G9J5WWdNoUT4SiV6mFC3y6cxyFcFwdzPM3FgxGAQ==}
     engines: {node: '>= 10.13.0'}
 
+  section-matter@1.0.0:
+    resolution: {integrity: sha512-vfD3pmTzGpufjScBh50YHKzEu2lxBWhVEHsNGoEXmCmn2hKGfeNLYMzCJpe8cD7gqX7TJluOVpBkAequ6dgMmA==}
+    engines: {node: '>=4'}
+
   semver-compare@1.0.0:
     resolution: {integrity: sha512-YM3/ITh2MJ5MtzaM429anh+x2jiLVjqILF4m4oyQB18W7Ggea7BfqdH/wGMK7dDiMghv/6WG7znWMwUDzJiXow==}
 
@@ -4887,6 +4929,10 @@ packages:
   strip-ansi@7.1.2:
     resolution: {integrity: sha512-gmBGslpoQJtgnMAvOVqGZpEz9dyoKTCzy2nfz/n8aIFhN/jCE/rCmcxabB6jOOHV+0WNnylOxaxBQPSvcWklhA==}
     engines: {node: '>=12'}
+
+  strip-bom-string@1.0.0:
+    resolution: {integrity: sha512-uCC2VHvQRYu+lMh4My/sFNmF2klFymLX1wHJeXnbEJERpV/ZsVuonzerjfrGpIGF7LBVa1O7i9kjiWvJiFck8g==}
+    engines: {node: '>=0.10.0'}
 
   strip-final-newline@2.0.0:
     resolution: {integrity: sha512-BrpvfNAE3dcvq7ll3xVumzjKjZQ5tI1sEUIKr3Uoks0XUl45St3FlatVqef9prk4jRDzhW6WZg+3bk93y6pLjA==}
@@ -5716,6 +5762,28 @@ snapshots:
       chalk: 5.6.2
       glob: 11.0.3
 
+  '@ckeditor/ckeditor5-dev-changelog@53.4.0(@babel/core@7.28.4)(@types/node@24.5.2)(typescript@5.9.2)(webpack@5.101.3)':
+    dependencies:
+      '@ckeditor/ckeditor5-dev-utils': 53.4.0(@babel/core@7.28.4)(typescript@5.9.2)(webpack@5.101.3)
+      chalk: 5.6.2
+      date-fns: 4.1.0
+      fs-extra: 11.3.2
+      glob: 11.0.3
+      gray-matter: 4.0.3
+      inquirer: 12.9.6(@types/node@24.5.2)
+      semver: 7.7.2
+      upath: 2.0.1
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@rspack/core'
+      - '@swc/core'
+      - '@types/node'
+      - esbuild
+      - supports-color
+      - typescript
+      - uglify-js
+      - webpack
+
   '@ckeditor/ckeditor5-dev-ci@53.2.0':
     dependencies:
       '@octokit/rest': 22.0.0
@@ -5767,6 +5835,29 @@ snapshots:
       - uglify-js
       - webpack
 
+  '@ckeditor/ckeditor5-dev-translations@53.4.0(@babel/core@7.28.4)(typescript@5.9.2)(webpack@5.101.3)':
+    dependencies:
+      '@babel/parser': 7.28.4
+      '@babel/traverse': 7.28.4
+      '@ckeditor/ckeditor5-dev-utils': 53.4.0(@babel/core@7.28.4)(typescript@5.9.2)(webpack@5.101.3)
+      chalk: 5.6.2
+      fs-extra: 11.3.2
+      glob: 11.0.3
+      plural-forms: 0.5.5
+      pofile: 1.1.4
+      rimraf: 6.0.1
+      upath: 2.0.1
+      webpack-sources: 3.3.3
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@rspack/core'
+      - '@swc/core'
+      - esbuild
+      - supports-color
+      - typescript
+      - uglify-js
+      - webpack
+
   '@ckeditor/ckeditor5-dev-utils@53.2.0(typescript@5.9.2)(webpack@5.101.3)':
     dependencies:
       '@ckeditor/ckeditor5-dev-translations': 53.2.0(typescript@5.9.2)(webpack@5.101.3)
@@ -5797,6 +5888,46 @@ snapshots:
       through2: 4.0.2
       upath: 2.0.1
     transitivePeerDependencies:
+      - '@rspack/core'
+      - '@swc/core'
+      - esbuild
+      - supports-color
+      - typescript
+      - uglify-js
+      - webpack
+
+  '@ckeditor/ckeditor5-dev-utils@53.4.0(@babel/core@7.28.4)(typescript@5.9.2)(webpack@5.101.3)':
+    dependencies:
+      '@ckeditor/ckeditor5-dev-translations': 53.4.0(@babel/core@7.28.4)(typescript@5.9.2)(webpack@5.101.3)
+      '@types/postcss-import': 14.0.3
+      '@types/through2': 2.0.41
+      babel-loader: 10.0.0(@babel/core@7.28.4)(webpack@5.101.3)
+      chalk: 5.6.2
+      cli-cursor: 5.0.0
+      cli-spinners: 3.2.1
+      css-loader: 7.1.2(webpack@5.101.3)
+      cssnano: 7.1.1(postcss@8.5.6)
+      esbuild-loader: 4.3.0(webpack@5.101.3)
+      fs-extra: 11.3.2
+      glob: 11.0.3
+      is-interactive: 2.0.0
+      mini-css-extract-plugin: 2.9.4(webpack@5.101.3)
+      mocha: 11.7.2
+      pacote: 21.0.3
+      postcss: 8.5.6
+      postcss-import: 16.1.1(postcss@8.5.6)
+      postcss-loader: 8.2.0(postcss@8.5.6)(typescript@5.9.2)(webpack@5.101.3)
+      postcss-mixins: 11.0.3(postcss@8.5.6)
+      postcss-nesting: 13.0.2(postcss@8.5.6)
+      raw-loader: 4.0.2(webpack@5.101.3)
+      shelljs: 0.10.0
+      simple-git: 3.28.0
+      style-loader: 4.0.0(webpack@5.101.3)
+      terser-webpack-plugin: 5.3.14(webpack@5.101.3)
+      through2: 4.0.2
+      upath: 2.0.1
+    transitivePeerDependencies:
+      - '@babel/core'
       - '@rspack/core'
       - '@swc/core'
       - esbuild
@@ -7344,6 +7475,12 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.1.0
 
+  babel-loader@10.0.0(@babel/core@7.28.4)(webpack@5.101.3):
+    dependencies:
+      '@babel/core': 7.28.4
+      find-up: 5.0.0
+      webpack: 5.101.3(webpack-cli@4.10.0)
+
   babel-loader@8.4.1(@babel/core@7.28.4)(webpack@5.101.3):
     dependencies:
       '@babel/core': 7.28.4
@@ -8024,6 +8161,8 @@ snapshots:
       es-errors: 1.3.0
       is-data-view: 1.0.2
 
+  date-fns@4.1.0: {}
+
   date-format@4.0.14: {}
 
   debug@2.6.9:
@@ -8597,6 +8736,10 @@ snapshots:
 
   exponential-backoff@3.1.2: {}
 
+  extend-shallow@2.0.1:
+    dependencies:
+      is-extendable: 0.1.1
+
   extend@3.0.2: {}
 
   fast-content-type-parse@3.0.0: {}
@@ -8834,6 +8977,13 @@ snapshots:
   graceful-fs@4.2.11: {}
 
   graphemer@1.4.0: {}
+
+  gray-matter@4.0.3:
+    dependencies:
+      js-yaml: 3.14.1
+      kind-of: 6.0.3
+      section-matter: 1.0.0
+      strip-bom-string: 1.0.0
 
   has-bigints@1.1.0: {}
 
@@ -9147,6 +9297,8 @@ snapshots:
       has-tostringtag: 1.0.2
 
   is-docker@2.2.1: {}
+
+  is-extendable@0.1.1: {}
 
   is-extglob@2.1.1: {}
 
@@ -11257,6 +11409,11 @@ snapshots:
       ajv-formats: 2.1.1(ajv@8.17.1)
       ajv-keywords: 5.1.0(ajv@8.17.1)
 
+  section-matter@1.0.0:
+    dependencies:
+      extend-shallow: 2.0.1
+      kind-of: 6.0.3
+
   semver-compare@1.0.0: {}
 
   semver@5.7.2: {}
@@ -11596,6 +11753,8 @@ snapshots:
   strip-ansi@7.1.2:
     dependencies:
       ansi-regex: 6.2.2
+
+  strip-bom-string@1.0.0: {}
 
   strip-final-newline@2.0.0: {}
 
