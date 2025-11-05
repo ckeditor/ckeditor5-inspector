@@ -5,8 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  form-data: ^4.0.4
-  nth-check: ^2.1.1
+  nth-check@<2.0.1: ^2.1.1
 
 importers:
 
