@@ -109,6 +109,9 @@ jobs:
           name: Execute ESLint
           command: pnpm run lint
       - run:
+          name: Execute tests for internal scripts
+          command: pnpm run test:scripts
+      - run:
           name: Check coverage
           command: pnpm run test --coverage
       - run:
