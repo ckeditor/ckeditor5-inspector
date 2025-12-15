@@ -18,6 +18,11 @@ export default defineConfig( [
 		]
 	},
 	{
+		files: [
+			'src/**/*.{js,mjs}',
+			'tests/**/*.{js,mjs}'
+		],
+
 		extends: [
 			eslintPluginReact.configs.flat.recommended,
 			ckeditor5Config
@@ -25,7 +30,11 @@ export default defineConfig( [
 
 		languageOptions: {
 			ecmaVersion: 'latest',
-			sourceType: 'module'
+			sourceType: 'module',
+			globals: {
+				...globals.browser,
+				CKEDITOR_INSPECTOR_VERSION: true
+			}
 		},
 
 		linterOptions: {
@@ -47,8 +56,6 @@ export default defineConfig( [
 		rules: {
 			'react/prop-types': 'off',
 			'no-console': 'off',
-			'@stylistic/max-len': [ 'error', 140 ],
-			'@stylistic/no-trailing-spaces': 'error',
 			'ckeditor5-rules/license-header': [ 'error', {
 				'headerLines': [
 					'/**',
@@ -57,19 +64,6 @@ export default defineConfig( [
 					' */'
 				]
 			} ]
-		}
-	},
-	{
-		files: [
-			'src/**/*.{js,mjs}',
-			'tests/**/*.{js,mjs}'
-		],
-
-		languageOptions: {
-			globals: {
-				...globals.browser,
-				CKEDITOR_INSPECTOR_VERSION: true
-			}
 		}
 	},
 	{
