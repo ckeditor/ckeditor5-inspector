@@ -3,6 +3,7 @@ onlyBuiltDependencies:
 
 overrides:
   'nth-check@<2.0.1': ^2.1.1
+  'qs@^6.0.0': '^6.14.1'
 
 minimumReleaseAge: 4320 # 3 days
 minimumReleaseAgeExclude:
