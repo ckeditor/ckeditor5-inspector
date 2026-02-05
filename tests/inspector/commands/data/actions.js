@@ -13,14 +13,14 @@ import {
 
 describe( 'commands data store actions', () => {
 	it( 'should export setCommandsCurrentCommandName()', () => {
-		expect( setCommandsCurrentCommandName( 'foo' ) ).to.deep.equal( {
+		expect( setCommandsCurrentCommandName( 'foo' ) ).toEqual( {
 			type: SET_COMMANDS_CURRENT_COMMAND_NAME,
 			currentCommandName: 'foo'
 		} );
 	} );
 
 	it( 'should export updateCommandsState()', () => {
-		expect( updateCommandsState() ).to.deep.equal( {
+		expect( updateCommandsState() ).toEqual( {
 			type: UPDATE_COMMANDS_STATE
 		} );
 	} );

@@ -7,42 +7,37 @@ import React from 'react';
 import TestEditor from '../../utils/testeditor';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-
+import { render, screen } from '@testing-library/react';
 import CommandsPane from '../../../src/commands/pane';
-import CommandTree from '../../../src/commands/tree';
-import CommandInspector from '../../../src/commands/commandinspector';
 
 describe( '<CommandsPane />', () => {
-	let editor, wrapper, element, store;
+	let editor, renderResult, element, store;
 
-	beforeEach( () => {
+	beforeEach( async () => {
 		window.localStorage.clear();
 
 		element = document.createElement( 'div' );
 		document.body.appendChild( element );
 
-		return TestEditor.create( element ).then( newEditor => {
-			editor = newEditor;
+		editor = await TestEditor.create( element );
 
-			store = createStore( state => state, {
-				editors: new Map( [ [ 'test-editor', editor ] ] ),
-				currentEditorName: 'test-editor',
-				ui: {
-					activeTab: 'Commands'
-				},
-				commands: {
-				}
-			} );
-
-			wrapper = mount( <Provider store={store}><CommandsPane /></Provider> );
+		store = createStore( state => state, {
+			editors: new Map( [ [ 'test-editor', editor ] ] ),
+			currentEditorName: 'test-editor',
+			ui: {
+				activeTab: 'Commands'
+			},
+			commands: {
+			}
 		} );
+
+		renderResult = render( <Provider store={store}><CommandsPane /></Provider> );
 	} );
 
-	afterEach( () => {
-		wrapper.unmount();
+	afterEach( async () => {
+		renderResult.unmount();
 		element.remove();
-
-		return editor.destroy();
+		await editor.destroy();
 	} );
 
 	describe( 'render()', () => {
@@ -54,26 +49,23 @@ describe( '<CommandsPane />', () => {
 				}
 			} );
 
-			const wrapper = mount( <Provider store={store}><CommandsPane /></Provider> );
-
-			expect( wrapper.text() ).to.match( /^Nothing to show/ );
-
-			wrapper.unmount();
+			const { unmount } = render( <Provider store={store}><CommandsPane /></Provider> );
+			expect( screen.getByText( 'Nothing to show. Attach another editor instance to start inspecting.' ) )
+				.toBeInTheDocument();
+			unmount();
 		} );
 
 		it( 'should render <Tabs>', () => {
-			const tabs = wrapper.find( 'Tabs' );
-
-			expect( tabs ).to.have.length( 1 );
-			expect( tabs.props().activeTab ).to.equal( 'Inspect' );
+			const activeTab = document.querySelector( '.ck-inspector-horizontal-nav__item_active' );
+			expect( activeTab ).toHaveTextContent( 'Inspect' );
 		} );
 
 		it( 'should render a <CommandTree/>', () => {
-			expect( wrapper.find( CommandTree ) ).to.have.length( 1 );
+			expect( document.querySelector( '.ck-inspector-tree' ) ).toBeTruthy();
 		} );
 
 		it( 'should render a <CommandInspector/>', () => {
-			expect( wrapper.find( CommandInspector ) ).to.have.length( 1 );
+			expect( screen.getByText( 'Select a command to inspect' ) ).toBeInTheDocument();
 		} );
 	} );
 } );

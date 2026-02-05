@@ -8,176 +8,139 @@ import { Paragraph, BoldEditing } from 'ckeditor5';
 import TestEditor from '../../utils/testeditor';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import { reducer } from '../../../src/data/reducer';
 import { getEditorModelNodeDefinition } from '../../../src/model/data/utils';
 
-import Button from '../../../src/components/button';
-import ObjectInspector from '../../../src/components/objectinspector';
 import Logger from '../../../src/logger';
 import ModelNodeInspector from '../../../src/model/nodeinspector';
 
 describe( '<ModelNodeInspector />', () => {
-	let editor, wrapper, element, root, store;
+	let editor, renderResult, element, root, store;
 
-	beforeEach( () => {
+	const renderWithStore = localStore => render( <Provider store={localStore}><ModelNodeInspector /></Provider> );
+
+	const expectHeader = text => {
+		const header = screen.getByRole( 'heading', { level: 2 } );
+		expect( header ).toHaveTextContent( text );
+		const link = header.querySelector( 'a' );
+		expect( link ).toHaveAttribute( 'href', expect.stringMatching( /^https:\/\/ckeditor.com\/docs/ ) );
+	};
+
+	const expectPropertyValue = ( name, value ) => {
+		const input = screen.getByLabelText( name );
+		expect( input ).toHaveValue( value );
+	};
+
+	beforeEach( async () => {
 		element = document.createElement( 'div' );
 		document.body.appendChild( element );
 
-		return TestEditor.create( element, {
+		editor = await TestEditor.create( element, {
 			plugins: [ Paragraph, BoldEditing ],
 			initialData: '<p>foo</p>'
-		} ).then( newEditor => {
-			editor = newEditor;
-
-			root = editor.model.document.getRoot();
-
-			store = createStore( reducer, {
-				editors: new Map( [ [ 'test-editor', editor ] ] ),
-				currentEditorName: 'test-editor',
-				ui: {
-					activeTab: 'Model'
-				},
-				model: {
-					currentNodeDefinition: getEditorModelNodeDefinition( editor, root.getChild( 0 ) )
-				}
-			} );
-
-			wrapper = mount( <Provider store={store}><ModelNodeInspector /></Provider> );
 		} );
+
+		root = editor.model.document.getRoot();
+
+		store = createStore( reducer, {
+			editors: new Map( [ [ 'test-editor', editor ] ] ),
+			currentEditorName: 'test-editor',
+			ui: {
+				activeTab: 'Model'
+			},
+			model: {
+				currentNodeDefinition: getEditorModelNodeDefinition( editor, root.getChild( 0 ) )
+			}
+		} );
+
+		renderResult = renderWithStore( store );
 	} );
 
-	afterEach( () => {
-		wrapper.unmount();
+	afterEach( async () => {
+		renderResult.unmount();
 		element.remove();
-		sinon.restore();
-
-		return editor.destroy();
+		vi.restoreAllMocks();
+		await editor.destroy();
 	} );
 
 	describe( 'render()', () => {
 		it( 'should render a placeholder when no props#currentNodeDefinition', () => {
-			const store = createStore( state => state, {
+			const localStore = createStore( state => state, {
 				model: {
 					currentNodeDefinition: null
 				}
 			} );
 
-			const wrapper = mount( <Provider store={store}><ModelNodeInspector /></Provider> );
-
-			expect( wrapper.text() ).to.match( /^Select a node / );
-
-			wrapper.unmount();
+			const { unmount } = renderWithStore( localStore );
+			expect( screen.getByText( /^Select a node / ) ).toBeInTheDocument();
+			unmount();
 		} );
 
 		it( 'should render an object inspector when there is props#currentNodeDefinition', () => {
-			expect( wrapper.find( ObjectInspector ) ).to.have.length( 1 );
+			expect( screen.getByRole( 'heading', { level: 2 } ) ).toBeInTheDocument();
 		} );
 
 		it( 'should render the log button in the header', () => {
-			const logNodeButton = wrapper.find( Button ).first();
-			const logSpy = sinon.stub( Logger, 'log' ).callsFake( () => {} );
+			const logSpy = vi.spyOn( Logger, 'log' ).mockImplementation( () => {} );
 
-			logNodeButton.simulate( 'click' );
-			sinon.assert.calledOnce( logSpy );
+			fireEvent.click( screen.getByRole( 'button', { name: 'Log in console' } ) );
+			expect( logSpy ).toHaveBeenCalledTimes( 1 );
 		} );
 
 		it( 'should render the show in schema button in the header', () => {
-			const showInSchema = wrapper.find( Button ).last();
+			fireEvent.click( screen.getByRole( 'button', { name: 'Show in schema' } ) );
 
-			showInSchema.simulate( 'click' );
-
-			expect( store.getState().ui.activeTab ).to.equal( 'Schema' );
-			expect( store.getState().schema.currentSchemaDefinitionName ).to.equal( 'paragraph' );
+			expect( store.getState().ui.activeTab ).toBe( 'Schema' );
+			expect( store.getState().schema.currentSchemaDefinitionName ).toBe( 'paragraph' );
 		} );
 
 		it( 'should render for a <RootElement>', () => {
-			const store = createStore( state => state, {
+			const localStore = createStore( state => state, {
 				model: {
 					currentNodeDefinition: getEditorModelNodeDefinition( editor, root )
 				}
 			} );
 
-			const wrapper = mount( <Provider store={store}><ModelNodeInspector /></Provider> );
-
-			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'RootElement:main' );
-			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
-
-			const inspector = wrapper.find( ObjectInspector );
-			const lists = inspector.props().lists;
-
-			expect( lists[ 0 ].name ).to.equal( 'Attributes' );
-			expect( lists[ 0 ].itemDefinitions ).to.deep.equal( {} );
-
-			expect( lists[ 1 ].name ).to.equal( 'Properties' );
-			expect( lists[ 1 ].itemDefinitions ).to.deep.equal( {
-				childCount: { value: '1' },
-				startOffset: { value: 'null' },
-				endOffset: { value: 'null' },
-				maxOffset: { value: '1' },
-				path: { value: '[]' }
-			} );
-
-			wrapper.unmount();
+			renderResult.unmount();
+			renderResult = renderWithStore( localStore );
+			expectHeader( 'RootElement:main' );
+			expectPropertyValue( 'childCount', '1' );
+			expectPropertyValue( 'startOffset', 'null' );
+			expectPropertyValue( 'endOffset', 'null' );
+			expectPropertyValue( 'maxOffset', '1' );
+			expectPropertyValue( 'path', '[]' );
 		} );
 
 		it( 'should render for an <Element>', () => {
-			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'Element:paragraph' );
-			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
-
-			const inspector = wrapper.find( ObjectInspector );
-			const lists = inspector.props().lists;
-
-			expect( lists[ 0 ].name ).to.equal( 'Attributes' );
-			expect( lists[ 0 ].itemDefinitions ).to.deep.equal( {} );
-
-			expect( lists[ 1 ].name ).to.equal( 'Properties' );
-			expect( lists[ 1 ].itemDefinitions ).to.deep.equal( {
-				childCount: { value: '1' },
-				startOffset: { value: '0' },
-				endOffset: { value: '1' },
-				maxOffset: { value: '3' },
-				path: { value: '[0]' }
-			} );
+			expectHeader( 'Element:paragraph' );
+			expectPropertyValue( 'childCount', '1' );
+			expectPropertyValue( 'startOffset', '0' );
+			expectPropertyValue( 'endOffset', '1' );
+			expectPropertyValue( 'maxOffset', '3' );
+			expectPropertyValue( 'path', '[0]' );
 		} );
 
 		it( 'should render for a <Text>', () => {
 			editor.setData( '<p><b>f</b>oo</p>' );
 
-			const store = createStore( state => state, {
+			const localStore = createStore( state => state, {
 				model: {
 					currentNodeDefinition: getEditorModelNodeDefinition( editor, root.getChild( 0 ).getChild( 0 ) )
 				}
 			} );
 
-			const wrapper = mount( <Provider store={store}><ModelNodeInspector /></Provider> );
-
-			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'Text:f' );
-			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
-
-			const inspector = wrapper.find( ObjectInspector );
-			const lists = inspector.props().lists;
-
-			expect( lists[ 0 ].name ).to.equal( 'Attributes' );
-			expect( lists[ 0 ].itemDefinitions ).to.deep.equal( {
-				bold: {
-					value: 'true',
-					subProperties: {
-						isFormatting: { value: 'true' },
-						copyOnEnter: { value: 'true' }
-					}
-				}
-			} );
-
-			expect( lists[ 1 ].name ).to.equal( 'Properties' );
-			expect( lists[ 1 ].itemDefinitions ).to.deep.equal( {
-				startOffset: { value: '0' },
-				endOffset: { value: '1' },
-				offsetSize: { value: '1' },
-				path: { value: '[0,0]' }
-			} );
-
-			wrapper.unmount();
+			renderResult.unmount();
+			renderResult = renderWithStore( localStore );
+			expectHeader( 'Text:f' );
+			expectPropertyValue( 'bold', 'true' );
+			expectPropertyValue( 'isFormatting', 'true' );
+			expectPropertyValue( 'copyOnEnter', 'true' );
+			expectPropertyValue( 'startOffset', '0' );
+			expectPropertyValue( 'endOffset', '1' );
+			expectPropertyValue( 'offsetSize', '1' );
+			expectPropertyValue( 'path', '[0,0]' );
 		} );
 	} );
 } );

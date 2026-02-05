@@ -7,96 +7,56 @@ import React from 'react';
 import TestEditor from '../../utils/testeditor';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-
+import { render } from '@testing-library/react';
 import { getCommandsTreeDefinition } from '../../../src/commands/data/utils';
-
-import Tree from '../../../src/components/tree/tree.js';
 import CommandTree from '../../../src/commands/tree';
 
 describe( '<CommandTree />', () => {
-	let editor, wrapper, element, store;
+	let editor, renderResult, element, store;
 
-	beforeEach( () => {
+	beforeEach( async () => {
 		element = document.createElement( 'div' );
 		document.body.appendChild( element );
 
-		return TestEditor.create( element ).then( newEditor => {
-			editor = newEditor;
+		editor = await TestEditor.create( element );
 
-			const editors = new Map( [ [ 'test-editor', editor ] ] );
-			const currentEditorName = 'test-editor';
+		const editors = new Map( [ [ 'test-editor', editor ] ] );
+		const currentEditorName = 'test-editor';
 
-			store = createStore( state => state, {
-				editors,
-				currentEditorName,
-				ui: {
-					activeTab: 'Commands'
-				},
-				commands: {
-					currentCommandName: 'foo',
-					treeDefinition: getCommandsTreeDefinition( { editors, currentEditorName } )
-				}
-			} );
-
-			wrapper = mount( <Provider store={store}><CommandTree /></Provider> );
+		store = createStore( state => state, {
+			editors,
+			currentEditorName,
+			ui: {
+				activeTab: 'Commands'
+			},
+			commands: {
+				currentCommandName: 'foo',
+				treeDefinition: getCommandsTreeDefinition( { editors, currentEditorName } )
+			}
 		} );
+
+		renderResult = render( <Provider store={store}><CommandTree /></Provider> );
 	} );
 
-	afterEach( () => {
-		wrapper.unmount();
+	afterEach( async () => {
+		renderResult.unmount();
 		element.remove();
-
-		return editor.destroy();
+		await editor.destroy();
 	} );
 
 	describe( 'render()', () => {
 		it( 'should use a <Tree> component', () => {
-			const tree = wrapper.find( Tree );
-			const commandsTree = wrapper.find( 'CommandTree' );
-
-			expect( tree.props().definition ).to.equal( commandsTree.props().treeDefinition );
-			expect( tree.props().onClick ).to.equal( commandsTree.instance().handleTreeClick );
-			expect( tree.props().activeNode ).to.equal( 'foo' );
+			const active = document.querySelector( '.ck-inspector-tree-node_active' );
+			expect( active ).toBeTruthy();
+			expect( active.querySelector( '.ck-inspector-tree-node__name' ) ).toHaveTextContent( 'foo' );
 		} );
 
 		it( 'should render a <Tree> with commands in alphabetical order', () => {
-			const tree = wrapper.find( Tree );
+			const names = Array.from(
+				document.querySelectorAll( '.ck-inspector-tree-node__name:not(.ck-inspector-tree-node__name_close)' )
+			).map( node => node.textContent );
 
-			expect( tree.props().definition ).to.deep.equal( [
-				{
-					attributes: [],
-					children: [],
-					name: 'bar',
-					node: 'bar',
-					presentation: {
-						cssClass: 'ck-inspector-tree-node_tagless ',
-						isEmpty: true
-					},
-					type: 'element'
-				},
-				{
-					attributes: [],
-					children: [],
-					name: 'foo',
-					node: 'foo',
-					presentation: {
-						cssClass: 'ck-inspector-tree-node_tagless ',
-						isEmpty: true
-					},
-					type: 'element'
-				},
-				{
-					attributes: [],
-					children: [],
-					name: 'qux',
-					node: 'qux',
-					presentation: {
-						cssClass: 'ck-inspector-tree-node_tagless ',
-						isEmpty: true
-					},
-					type: 'element'
-				}
-			] );
+			expect( names ).toEqual( [ 'bar', 'foo', 'qux' ] );
 		} );
 	} );
 } );

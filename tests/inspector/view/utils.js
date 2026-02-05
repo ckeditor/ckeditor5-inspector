@@ -123,7 +123,7 @@ describe( 'View utils', () => {
 
 			const definition = getEditorViewNodeDefinition( paragraph );
 
-			expect( Object.keys( definition.attributes ) ).to.have.ordered.members( [ 'a', 'b', 'c', 'd' ] );
+			expect( Object.keys( definition.attributes ) ).toEqual( [ 'a', 'b', 'c', 'd' ] );
 		} );
 	} );
 
@@ -132,13 +132,13 @@ describe( 'View utils', () => {
 			editor.editing.view.change( writer => {
 				const node = writer.createAttributeElement( 'foo', { bar: true } );
 
-				expect( nodeToString( node ) ).to.equal( 'attribute:foo' );
+				expect( nodeToString( node ) ).toBe( 'attribute:foo' );
 			} );
 		} );
 
 		it( 'works for RootElement', () => {
 			editor.editing.view.change( () => {
-				expect( nodeToString( editor.editing.view.document.getRoot() ) ).to.equal( 'root:div' );
+				expect( nodeToString( editor.editing.view.document.getRoot() ) ).toBe( 'root:div' );
 			} );
 		} );
 
@@ -146,7 +146,7 @@ describe( 'View utils', () => {
 			editor.editing.view.change( writer => {
 				const node = writer.createContainerElement( 'foo' );
 
-				expect( nodeToString( node ) ).to.equal( 'container:foo' );
+				expect( nodeToString( node ) ).toBe( 'container:foo' );
 			} );
 		} );
 
@@ -154,7 +154,7 @@ describe( 'View utils', () => {
 			editor.editing.view.change( writer => {
 				const node = writer.createText( 'foo' );
 
-				expect( nodeToString( node ) ).to.equal( 'foo' );
+				expect( nodeToString( node ) ).toBe( 'foo' );
 			} );
 		} );
 	} );

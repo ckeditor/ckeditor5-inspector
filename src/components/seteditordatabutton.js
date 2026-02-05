@@ -59,7 +59,7 @@ export default class SetEditorDataButton extends Component {
 					onChange={
 						this._handlDataChange.bind( this )
 					}
-					onKeyPress={ event => {
+					onKeyDown={ event => {
 						if ( event.key == 'Enter' && event.shiftKey ) {
 							this._setEditorDataAndCloseModal();
 						}

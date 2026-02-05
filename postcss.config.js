@@ -3,11 +3,13 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
-module.exports = ( { options } ) => {
+module.exports = ( { options } = {} ) => {
+	const cssnano = options?.cssnano ?? false;
+
 	return {
 		plugins: {
 			'postcss-nesting': true,
-			'cssnano': options.cssnano
+			'cssnano': cssnano
 		},
 		sourceMap: 'inline'
 	};

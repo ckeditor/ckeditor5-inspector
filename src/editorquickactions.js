@@ -5,7 +5,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import copy from 'copy-to-clipboard';
+import copyToClipboard from 'copy-to-clipboard';
 
 import SetEditorDataButton from './components/seteditordatabutton';
 import Button from './components/button';
@@ -20,6 +20,7 @@ import CheckmarkIcon from './assets/img/checkmark.svg';
 import './editorquickactions.css';
 
 const INSPECTOR_READ_ONLY_LOCK_ID = 'Lock from Inspector (@ckeditor/ckeditor5-inspector)';
+const copy = typeof copyToClipboard === 'function' ? copyToClipboard : copyToClipboard.default;
 
 class EditorQuickActions extends Component {
 	constructor( props ) {

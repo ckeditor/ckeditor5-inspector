@@ -4,47 +4,40 @@
  */
 
 import React from 'react';
+import { render } from '@testing-library/react';
 import TreeNodeAttribute from '../../../../src/components/tree/treenodeattribute';
 
 describe( '<TreeNodeAttribute />', () => {
-	let wrapper;
-
-	afterEach( () => {
-		wrapper.unmount();
-	} );
-
 	it( 'is rendered', () => {
-		wrapper = mount( <TreeNodeAttribute name="foo" value="bar" /> );
+		const { container } = render( <TreeNodeAttribute name="foo" value="bar" /> );
+		const attribute = container.firstChild;
 
-		expect( wrapper ).to.have.className( 'ck-inspector-tree-node__attribute' );
-		expect( wrapper.children().children() ).to.have.length( 2 );
+		expect( attribute ).toHaveClass( 'ck-inspector-tree-node__attribute' );
+		expect( attribute.children ).toHaveLength( 2 );
 	} );
 
 	describe( 'name', () => {
 		it( 'is rendered', () => {
-			wrapper = mount( <TreeNodeAttribute name="foo" value="bar" /> );
+			const { container } = render( <TreeNodeAttribute name="foo" value="bar" /> );
+			const name = container.querySelector( '.ck-inspector-tree-node__attribute__name' );
 
-			const name = wrapper.children().childAt( 0 );
-
-			expect( name ).to.have.className( 'ck-inspector-tree-node__attribute__name' );
-			expect( name ).to.have.attr( 'title', 'bar' );
+			expect( name ).toHaveClass( 'ck-inspector-tree-node__attribute__name' );
+			expect( name ).toHaveAttribute( 'title', 'bar' );
 		} );
 	} );
 
 	describe( 'value', () => {
 		it( 'is rendered', () => {
-			wrapper = mount( <TreeNodeAttribute name="foo" value="bar" /> );
+			const { container } = render( <TreeNodeAttribute name="foo" value="bar" /> );
+			const value = container.querySelector( '.ck-inspector-tree-node__attribute__value' );
 
-			const value = wrapper.children().childAt( 1 );
-
-			expect( value ).to.have.className( 'ck-inspector-tree-node__attribute__value' );
-			expect( value.text() ).to.equal( 'bar' );
+			expect( value ).toHaveClass( 'ck-inspector-tree-node__attribute__value' );
+			expect( value ).toHaveTextContent( 'bar' );
 		} );
 
 		it( 'is not rendered when props#dontRenderValue is true', () => {
-			wrapper = mount( <TreeNodeAttribute name="foo" value="bar" dontRenderValue="true" /> );
-
-			expect( wrapper.children() ).to.have.length( 1 );
+			const { container } = render( <TreeNodeAttribute name="foo" value="bar" dontRenderValue="true" /> );
+			expect( container.firstChild.children ).toHaveLength( 1 );
 		} );
 	} );
 } );

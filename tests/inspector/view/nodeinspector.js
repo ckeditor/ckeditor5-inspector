@@ -5,50 +5,47 @@
 
 import React from 'react';
 import { Paragraph, BoldEditing } from 'ckeditor5';
-
-import TestEditor from '../../utils/testeditor';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-
+import { fireEvent, render, screen } from '@testing-library/react';
+import TestEditor from '../../utils/testeditor';
 import { getEditorViewNodeDefinition } from '../../../src/view/data/utils';
-
-import Button from '../../../src/components/button';
-import ObjectInspector from '../../../src/components/objectinspector';
 import Logger from '../../../src/logger';
 import ViewNodeInspector from '../../../src/view/nodeinspector';
 
 describe( '<ViewNodeInspector />', () => {
-	let editor, wrapper, element, root, store;
+	let editor, element, root;
 
-	beforeEach( () => {
+	const renderWithStore = store => render( <Provider store={store}><ViewNodeInspector /></Provider> );
+
+	const expectHeader = text => {
+		const header = screen.getByRole( 'heading', { level: 2 } );
+		expect( header ).toHaveTextContent( text );
+		const link = header.querySelector( 'a' );
+		expect( link ).toHaveAttribute( 'href', expect.stringMatching( /^https:\/\/ckeditor.com\/docs/ ) );
+	};
+
+	const expectPropertyValue = ( name, value ) => {
+		const input = screen.getByLabelText( name );
+		expect( input ).toHaveValue( value );
+	};
+
+	beforeEach( async () => {
 		element = document.createElement( 'div' );
 		document.body.appendChild( element );
 
-		return TestEditor.create( element, {
+		editor = await TestEditor.create( element, {
 			plugins: [ Paragraph, BoldEditing ],
 			initialData: '<p>foo</p>'
-		} ).then( newEditor => {
-			editor = newEditor;
-
-			root = editor.editing.view.document.getRoot();
-
-			store = createStore( state => state, {
-				view: {
-					currentNode: root.getChild( 0 ),
-					currentNodeDefinition: getEditorViewNodeDefinition( root.getChild( 0 ) )
-				}
-			} );
-
-			wrapper = mount( <Provider store={store}><ViewNodeInspector /></Provider> );
 		} );
+
+		root = editor.editing.view.document.getRoot();
 	} );
 
-	afterEach( () => {
-		wrapper.unmount();
+	afterEach( async () => {
 		element.remove();
-		sinon.restore();
-
-		return editor.destroy();
+		vi.restoreAllMocks();
+		await editor.destroy();
 	} );
 
 	describe( 'render()', () => {
@@ -60,23 +57,34 @@ describe( '<ViewNodeInspector />', () => {
 				}
 			} );
 
-			const wrapper = mount( <Provider store={store}><ViewNodeInspector /></Provider> );
-
-			expect( wrapper.text() ).to.match( /^Select a node / );
-
-			wrapper.unmount();
+			renderWithStore( store );
+			expect( screen.getByText( /^Select a node / ) ).toBeInTheDocument();
 		} );
 
 		it( 'should render an object inspector when there is props#currentNodeDefinition', () => {
-			expect( wrapper.find( ObjectInspector ) ).to.have.length( 1 );
+			const store = createStore( state => state, {
+				view: {
+					currentNode: root.getChild( 0 ),
+					currentNodeDefinition: getEditorViewNodeDefinition( root.getChild( 0 ) )
+				}
+			} );
+
+			renderWithStore( store );
+			expect( screen.getByRole( 'heading', { level: 2 } ) ).toBeInTheDocument();
 		} );
 
 		it( 'should render the log button in the header', () => {
-			const logNodeButton = wrapper.find( Button ).first();
-			const logSpy = sinon.stub( Logger, 'log' ).callsFake( () => {} );
+			const store = createStore( state => state, {
+				view: {
+					currentNode: root.getChild( 0 ),
+					currentNodeDefinition: getEditorViewNodeDefinition( root.getChild( 0 ) )
+				}
+			} );
+			const logSpy = vi.spyOn( Logger, 'log' ).mockImplementation( () => {} );
 
-			logNodeButton.simulate( 'click' );
-			sinon.assert.calledOnce( logSpy );
+			renderWithStore( store );
+			fireEvent.click( screen.getByRole( 'button', { name: 'Log in console' } ) );
+			expect( logSpy ).toHaveBeenCalledTimes( 1 );
 		} );
 
 		it( 'should render for a <RootElement>', () => {
@@ -91,41 +99,22 @@ describe( '<ViewNodeInspector />', () => {
 				}
 			} );
 
-			const wrapper = mount( <Provider store={store}><ViewNodeInspector /></Provider> );
+			renderWithStore( store );
+			expectHeader( 'RootEditableElement:main' );
 
-			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'RootEditableElement:main' );
-			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
+			expectPropertyValue( 'aria-label', '"Rich Text Editor. Editing area: main"' );
+			expectPropertyValue( 'class', '"ck-blurred ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline"' );
+			expectPropertyValue( 'contenteditable', '"true"' );
+			expectPropertyValue( 'dir', '"ltr"' );
+			expectPropertyValue( 'lang', '"en"' );
+			expectPropertyValue( 'role', '"textbox"' );
 
-			const inspector = wrapper.find( ObjectInspector );
-			const lists = inspector.props().lists;
+			expectPropertyValue( 'index', 'null' );
+			expectPropertyValue( 'isEmpty', 'false' );
+			expectPropertyValue( 'childCount', '1' );
 
-			expect( lists[ 0 ].name ).to.equal( 'Attributes' );
-			expect( lists[ 0 ].itemDefinitions ).to.deep.equal( {
-				'aria-label': { value: '"Rich Text Editor. Editing area: main"' },
-				class: { value: '"ck-blurred ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline"' },
-				contenteditable: { value: '"true"' },
-				dir: { value: '"ltr"' },
-				lang: { value: '"en"' },
-				role: { value: '"textbox"' }
-			} );
-
-			expect( lists[ 1 ].name ).to.equal( 'Properties' );
-			expect( lists[ 1 ].itemDefinitions ).to.deep.equal( {
-				index: { value: 'null' },
-				isEmpty: { value: 'false' },
-				childCount: { value: '1' }
-			} );
-
-			expect( lists[ 2 ].name ).to.equal( 'Custom Properties' );
-
-			const items = lists[ 2 ].itemDefinitions;
-
-			expect( items ).to.deep.equal( {
-				'Symbol(rootName)': { value: '"main"' },
-				foo: { value: '"bar"' }
-			} );
-
-			wrapper.unmount();
+			expectPropertyValue( 'Symbol(rootName)', '"main"' );
+			expectPropertyValue( 'foo', '"bar"' );
 		} );
 
 		it( 'should render for a <ContainerElement>', () => {
@@ -142,30 +131,13 @@ describe( '<ViewNodeInspector />', () => {
 				}
 			} );
 
-			const wrapper = mount( <Provider store={store}><ViewNodeInspector /></Provider> );
+			renderWithStore( store );
+			expectHeader( 'ContainerElement:p' );
 
-			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'ContainerElement:p' );
-			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
-
-			const inspector = wrapper.find( ObjectInspector );
-			const lists = inspector.props().lists;
-
-			expect( lists[ 0 ].name ).to.equal( 'Attributes' );
-			expect( lists[ 0 ].itemDefinitions ).to.deep.equal( {} );
-
-			expect( lists[ 1 ].name ).to.equal( 'Properties' );
-			expect( lists[ 1 ].itemDefinitions ).to.deep.equal( {
-				index: { value: '0' },
-				isEmpty: { value: 'false' },
-				childCount: { value: '1' }
-			} );
-
-			expect( lists[ 2 ].name ).to.equal( 'Custom Properties' );
-			expect( lists[ 2 ].itemDefinitions ).to.deep.equal( {
-				foo: { value: '"bar"' }
-			} );
-
-			wrapper.unmount();
+			expectPropertyValue( 'index', '0' );
+			expectPropertyValue( 'isEmpty', 'false' );
+			expectPropertyValue( 'childCount', '1' );
+			expectPropertyValue( 'foo', '"bar"' );
 		} );
 
 		it( 'should render for an <AttributeElement>', () => {
@@ -184,30 +156,12 @@ describe( '<ViewNodeInspector />', () => {
 				}
 			} );
 
-			const wrapper = mount( <Provider store={store}><ViewNodeInspector /></Provider> );
-
-			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'AttributeElement:strong' );
-			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
-
-			const inspector = wrapper.find( ObjectInspector );
-			const lists = inspector.props().lists;
-
-			expect( lists[ 0 ].name ).to.equal( 'Attributes' );
-			expect( lists[ 0 ].itemDefinitions ).to.deep.equal( {} );
-
-			expect( lists[ 1 ].name ).to.equal( 'Properties' );
-			expect( lists[ 1 ].itemDefinitions ).to.deep.equal( {
-				index: { value: '0' },
-				isEmpty: { value: 'false' },
-				childCount: { value: '1' }
-			} );
-
-			expect( lists[ 2 ].name ).to.equal( 'Custom Properties' );
-			expect( lists[ 2 ].itemDefinitions ).to.deep.equal( {
-				foo: { value: '"bar"' }
-			} );
-
-			wrapper.unmount();
+			renderWithStore( store );
+			expectHeader( 'AttributeElement:strong' );
+			expectPropertyValue( 'index', '0' );
+			expectPropertyValue( 'isEmpty', 'false' );
+			expectPropertyValue( 'childCount', '1' );
+			expectPropertyValue( 'foo', '"bar"' );
 		} );
 
 		it( 'should render for an <EmptyElement>', () => {
@@ -220,7 +174,6 @@ describe( '<ViewNodeInspector />', () => {
 			} );
 
 			const element = editor.editing.view.document.getRoot().getChild( 0 ).getChild( 0 );
-
 			const store = createStore( state => state, {
 				view: {
 					currentNode: element,
@@ -228,30 +181,12 @@ describe( '<ViewNodeInspector />', () => {
 				}
 			} );
 
-			const wrapper = mount( <Provider store={store}><ViewNodeInspector /></Provider> );
-
-			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'EmptyElement:foo' );
-			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
-
-			const inspector = wrapper.find( ObjectInspector );
-			const lists = inspector.props().lists;
-
-			expect( lists[ 0 ].name ).to.equal( 'Attributes' );
-			expect( lists[ 0 ].itemDefinitions ).to.deep.equal( {} );
-
-			expect( lists[ 1 ].name ).to.equal( 'Properties' );
-			expect( lists[ 1 ].itemDefinitions ).to.deep.equal( {
-				index: { value: '0' },
-				isEmpty: { value: 'true' },
-				childCount: { value: '0' }
-			} );
-
-			expect( lists[ 2 ].name ).to.equal( 'Custom Properties' );
-			expect( lists[ 2 ].itemDefinitions ).to.deep.equal( {
-				foo: { value: '"bar"' }
-			} );
-
-			wrapper.unmount();
+			renderWithStore( store );
+			expectHeader( 'EmptyElement:foo' );
+			expectPropertyValue( 'index', '0' );
+			expectPropertyValue( 'isEmpty', 'true' );
+			expectPropertyValue( 'childCount', '0' );
+			expectPropertyValue( 'foo', '"bar"' );
 		} );
 
 		it( 'should render for an <UIElement>', () => {
@@ -264,7 +199,6 @@ describe( '<ViewNodeInspector />', () => {
 			} );
 
 			const element = editor.editing.view.document.getRoot().getChild( 0 ).getChild( 0 );
-
 			const store = createStore( state => state, {
 				view: {
 					currentNode: element,
@@ -272,30 +206,12 @@ describe( '<ViewNodeInspector />', () => {
 				}
 			} );
 
-			const wrapper = mount( <Provider store={store}><ViewNodeInspector /></Provider> );
-
-			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'UIElement:foo' );
-			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
-
-			const inspector = wrapper.find( ObjectInspector );
-			const lists = inspector.props().lists;
-
-			expect( lists[ 0 ].name ).to.equal( 'Attributes' );
-			expect( lists[ 0 ].itemDefinitions ).to.deep.equal( {} );
-
-			expect( lists[ 1 ].name ).to.equal( 'Properties' );
-			expect( lists[ 1 ].itemDefinitions ).to.deep.equal( {
-				index: { value: '0' },
-				isEmpty: { value: 'true' },
-				childCount: { value: '0' }
-			} );
-
-			expect( lists[ 2 ].name ).to.equal( 'Custom Properties' );
-			expect( lists[ 2 ].itemDefinitions ).to.deep.equal( {
-				foo: { value: '"bar"' }
-			} );
-
-			wrapper.unmount();
+			renderWithStore( store );
+			expectHeader( 'UIElement:foo' );
+			expectPropertyValue( 'index', '0' );
+			expectPropertyValue( 'isEmpty', 'true' );
+			expectPropertyValue( 'childCount', '0' );
+			expectPropertyValue( 'foo', '"bar"' );
 		} );
 
 		it( 'should render for a <RawElement>', () => {
@@ -313,7 +229,6 @@ describe( '<ViewNodeInspector />', () => {
 			} );
 
 			const element = editor.editing.view.document.getRoot().getChild( 0 ).getChild( 0 );
-
 			const store = createStore( state => state, {
 				view: {
 					currentNode: element,
@@ -321,32 +236,13 @@ describe( '<ViewNodeInspector />', () => {
 				}
 			} );
 
-			const wrapper = mount( <Provider store={store}><ViewNodeInspector /></Provider> );
-
-			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'RawElement:foo' );
-			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
-
-			const inspector = wrapper.find( ObjectInspector );
-			const lists = inspector.props().lists;
-
-			expect( lists[ 0 ].name ).to.equal( 'Attributes' );
-			expect( lists[ 0 ].itemDefinitions ).to.deep.equal( {
-				class: { value: '"bar"' }
-			} );
-
-			expect( lists[ 1 ].name ).to.equal( 'Properties' );
-			expect( lists[ 1 ].itemDefinitions ).to.deep.equal( {
-				index: { value: '0' },
-				isEmpty: { value: 'true' },
-				childCount: { value: '0' }
-			} );
-
-			expect( lists[ 2 ].name ).to.equal( 'Custom Properties' );
-			expect( lists[ 2 ].itemDefinitions ).to.deep.equal( {
-				foo: { value: '"bar"' }
-			} );
-
-			wrapper.unmount();
+			renderWithStore( store );
+			expectHeader( 'RawElement:foo' );
+			expectPropertyValue( 'class', '"bar"' );
+			expectPropertyValue( 'index', '0' );
+			expectPropertyValue( 'isEmpty', 'true' );
+			expectPropertyValue( 'childCount', '0' );
+			expectPropertyValue( 'foo', '"bar"' );
 		} );
 
 		it( 'should render for an <EditableElement>', () => {
@@ -359,7 +255,6 @@ describe( '<ViewNodeInspector />', () => {
 			} );
 
 			const element = editor.editing.view.document.getRoot().getChild( 0 ).getChild( 0 );
-
 			const store = createStore( state => state, {
 				view: {
 					currentNode: element,
@@ -367,38 +262,18 @@ describe( '<ViewNodeInspector />', () => {
 				}
 			} );
 
-			const wrapper = mount( <Provider store={store}><ViewNodeInspector /></Provider> );
-
-			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'EditableElement:p' );
-			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
-
-			const inspector = wrapper.find( ObjectInspector );
-			const lists = inspector.props().lists;
-
-			expect( lists[ 0 ].name ).to.equal( 'Attributes' );
-			expect( lists[ 0 ].itemDefinitions ).to.deep.equal( {} );
-
-			expect( lists[ 1 ].name ).to.equal( 'Properties' );
-			expect( lists[ 1 ].itemDefinitions ).to.deep.equal( {
-				index: { value: '0' },
-				isEmpty: { value: 'true' },
-				childCount: { value: '0' }
-			} );
-
-			const items = lists[ 2 ].itemDefinitions;
-
-			expect( items ).to.deep.equal( {
-				foo: { value: '"bar"' }
-			} );
-
-			wrapper.unmount();
+			renderWithStore( store );
+			expectHeader( 'EditableElement:p' );
+			expectPropertyValue( 'index', '0' );
+			expectPropertyValue( 'isEmpty', 'true' );
+			expectPropertyValue( 'childCount', '0' );
+			expectPropertyValue( 'foo', '"bar"' );
 		} );
 
 		it( 'renders for a Text', () => {
 			editor.setData( '<p>foo</p>' );
 
 			const element = editor.editing.view.document.getRoot().getChild( 0 ).getChild( 0 );
-
 			const store = createStore( state => state, {
 				view: {
 					currentNode: element,
@@ -406,23 +281,9 @@ describe( '<ViewNodeInspector />', () => {
 				}
 			} );
 
-			const wrapper = mount( <Provider store={store}><ViewNodeInspector /></Provider> );
-
-			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'Text:foo' );
-			expect( wrapper.childAt( 0 ).find( 'h2 a' ) ).to.have.attr( 'href' ).match( /^https:\/\/ckeditor.com\/docs/ );
-
-			const inspector = wrapper.find( ObjectInspector );
-			const lists = inspector.props().lists;
-
-			expect( lists[ 0 ].name ).to.equal( 'Attributes' );
-			expect( lists[ 0 ].itemDefinitions ).to.deep.equal( {} );
-
-			expect( lists[ 1 ].name ).to.equal( 'Properties' );
-			expect( lists[ 1 ].itemDefinitions ).to.deep.equal( {
-				index: { value: '0' }
-			} );
-
-			wrapper.unmount();
+			renderWithStore( store );
+			expectHeader( 'Text:foo' );
+			expectPropertyValue( 'index', '0' );
 		} );
 	} );
 } );

@@ -456,7 +456,7 @@ describe( 'model data utils', () => {
 
 			const definition = getEditorModelNodeDefinition( editor, paragraph );
 
-			expect( Object.keys( definition.attributes ) ).to.have.ordered.members( [ 'a', 'b', 'c', 'd' ] );
+			expect( Object.keys( definition.attributes ) ).toEqual( [ 'a', 'b', 'c', 'd' ] );
 		} );
 	} );
 } );

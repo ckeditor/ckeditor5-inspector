@@ -72,8 +72,13 @@ export default defineConfig( [
 		languageOptions: {
 			globals: {
 				...globals.node,
-				mount: true,
-				shallow: true
+				afterEach: true,
+				beforeEach: true,
+				describe: true,
+				expect: true,
+				it: true,
+				test: true,
+				vi: true
 			}
 		}
 	},

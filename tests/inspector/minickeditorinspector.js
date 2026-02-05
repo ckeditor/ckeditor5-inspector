@@ -23,7 +23,7 @@ describe( 'MiniCKEditorInspector', () => {
 	} );
 
 	afterEach( () => {
-		sinon.restore();
+		vi.restoreAllMocks();
 		element.remove();
 		container.remove();
 
@@ -32,7 +32,7 @@ describe( 'MiniCKEditorInspector', () => {
 
 	describe( 'CKEDITOR_MINI_INSPECTOR_VERSION', () => {
 		it( 'should be set', () => {
-			expect( window.CKEDITOR_MINI_INSPECTOR_VERSION ).to.be.a( 'string' );
+			expect( window.CKEDITOR_MINI_INSPECTOR_VERSION ).toEqual( expect.any( String ) );
 		} );
 	} );
 
@@ -40,7 +40,7 @@ describe( 'MiniCKEditorInspector', () => {
 		it( 'should not throw', () => {
 			expect( () => {
 				MiniCKEditorInspector.attach( editor, container );
-			} ).to.not.throw();
+			} ).not.toThrow();
 		} );
 	} );
 } );

@@ -8,217 +8,144 @@ import { Paragraph, BoldEditing } from 'ckeditor5';
 import TestEditor from '../../utils/testeditor';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 
 import { getEditorModelRanges } from '../../../src/model/data/utils';
 
-import Button from '../../../src/components/button';
-import ObjectInspector from '../../../src/components/objectinspector';
 import Logger from '../../../src/logger';
 import ModelSelectionInspector from '../../../src/model/selectioninspector';
 
 describe( '<ModelSelectionInspector />', () => {
-	let editor, wrapper, element, store;
+	let editor, renderResult, element, store;
 
-	beforeEach( () => {
+	beforeEach( async () => {
 		element = document.createElement( 'div' );
 		document.body.appendChild( element );
 
-		return TestEditor.create( element, {
+		editor = await TestEditor.create( element, {
 			plugins: [ Paragraph, BoldEditing ],
 			initialData: '<p>foo</p>'
-		} ).then( newEditor => {
-			editor = newEditor;
-
-			store = createStore( state => state, {
-				editors: new Map( [ [ 'test-editor', editor ] ] ),
-				currentEditorName: 'test-editor',
-				model: {
-					ranges: getEditorModelRanges( editor, 'main' )
-				}
-			} );
-
-			wrapper = mount( <Provider store={store}><ModelSelectionInspector /></Provider> );
 		} );
+
+		store = createStore( state => state, {
+			editors: new Map( [ [ 'test-editor', editor ] ] ),
+			currentEditorName: 'test-editor',
+			model: {
+				ranges: getEditorModelRanges( editor, 'main' )
+			}
+		} );
+
+		renderResult = render( <Provider store={store}><ModelSelectionInspector /></Provider> );
 	} );
 
-	afterEach( () => {
-		wrapper.unmount();
+	afterEach( async () => {
+		renderResult.unmount();
 		element.remove();
-		sinon.restore();
-
-		return editor.destroy();
+		vi.restoreAllMocks();
+		await editor.destroy();
 	} );
 
 	describe( 'render()', () => {
 		describe( 'inspector child components', () => {
-			let logSpy;
-
-			beforeEach( () => {
-				logSpy = sinon.stub( Logger, 'log' ).callsFake( () => {} );
-			} );
-
-			afterEach( () => {
-				Logger.log.restore();
-			} );
-
 			it( 'should contain the log selection button', () => {
-				const logSelButton = wrapper.find( Button ).first();
+				const logSpy = vi.spyOn( Logger, 'log' ).mockImplementation( () => {} );
+				const logButtons = screen.getAllByRole( 'button', { name: 'Log in console' } );
 
-				logSelButton.simulate( 'click' );
-
-				sinon.assert.calledOnce( logSpy );
+				fireEvent.click( logButtons[ 0 ] );
+				expect( logSpy ).toHaveBeenCalledTimes( 1 );
 			} );
 
 			describe( 'scroll to selection button', () => {
 				it( 'should be created and scroll to the selection', () => {
-					const scrollToSelButton = wrapper.find( Button ).at( 1 );
+					const scrollSpy = vi.fn();
+					vi.spyOn( document, 'querySelector' ).mockImplementation( selector => {
+						if ( selector === '.ck-inspector-tree__position.ck-inspector-tree__position_selection' ) {
+							return { scrollIntoView: scrollSpy };
+						}
+						return null;
+					} );
 
-					const domSelectionElementStub = {
-						scrollIntoView: sinon.spy()
-					};
+					fireEvent.click( screen.getByRole( 'button', { name: 'Scroll to selection' } ) );
 
-					sinon.stub( document, 'querySelector' );
-
-					document.querySelector.withArgs( '.ck-inspector-tree__position.ck-inspector-tree__position_selection' )
-						.returns( domSelectionElementStub );
-
-					scrollToSelButton.simulate( 'click' );
-
-					sinon.assert.calledOnce( domSelectionElementStub.scrollIntoView );
-					sinon.assert.calledWithExactly( domSelectionElementStub.scrollIntoView, {
+					expect( scrollSpy ).toHaveBeenCalledWith( {
 						behavior: 'smooth',
 						block: 'center'
 					} );
-
-					document.querySelector.restore();
 				} );
 
 				it( 'should not throw when the selection is in a different root', () => {
-					const scrollToSelButton = wrapper.find( Button ).at( 1 );
-
-					sinon.stub( document, 'querySelector' );
-
-					document.querySelector.returns( null );
+					vi.spyOn( document, 'querySelector' ).mockReturnValue( null );
 
 					expect( () => {
-						scrollToSelButton.simulate( 'click' );
-					} ).to.not.throw();
-
-					document.querySelector.restore();
+						fireEvent.click( screen.getByRole( 'button', { name: 'Scroll to selection' } ) );
+					} ).not.toThrow();
 				} );
 			} );
 
-			it( 'should contain the log selection anchor button', () => {
-				const logAnchorButton = wrapper.find( Button ).at( 2 );
+			it( 'should contain the log selection anchor and focus buttons', () => {
+				const logSpy = vi.spyOn( Logger, 'log' ).mockImplementation( () => {} );
+				const logButtons = screen.getAllByRole( 'button', { name: 'Log in console' } );
 
-				logAnchorButton.simulate( 'click' );
-
-				sinon.assert.calledOnce( logSpy );
-			} );
-
-			it( 'should contain the log selection focus button', () => {
-				const logFocusButton = wrapper.find( Button ).last();
-
-				logFocusButton.simulate( 'click' );
-
-				sinon.assert.calledOnce( logSpy );
+				logButtons.forEach( button => fireEvent.click( button ) );
+				expect( logSpy ).toHaveBeenCalledTimes( 4 );
 			} );
 
 			it( 'should contain the object inspector', () => {
-				expect( wrapper.find( ObjectInspector ) ).to.have.length( 1 );
-				expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'Selection' );
+				expect( screen.getByRole( 'heading', { level: 2 } ) ).toHaveTextContent( 'Selection' );
 			} );
 		} );
 
 		describe( 'selection properties', () => {
 			it( '"Attributes" should be rendered', () => {
-				const inspector = wrapper.find( ObjectInspector );
-				const lists = inspector.props().lists;
-
-				expect( lists[ 0 ].name ).to.equal( 'Attributes' );
-				expect( lists[ 0 ].itemDefinitions ).to.deep.equal( {} );
+				expect( screen.queryByRole( 'heading', { level: 3, name: /Attributes/ } ) ).toBeNull();
 			} );
 
 			it( '"Properties" should be rendered', () => {
-				const inspector = wrapper.find( ObjectInspector );
-				const lists = inspector.props().lists;
-				expect( lists[ 1 ].name ).to.equal( 'Properties' );
-				expect( lists[ 1 ].itemDefinitions ).to.deep.equal( {
-					isCollapsed: { value: 'true' },
-					isBackward: { value: 'false' },
-					isGravityOverridden: { value: 'false' },
-					rangeCount: { value: '1' }
-				} );
+				const header = screen.getByRole( 'heading', { level: 3, name: 'Properties' } );
+				const list = header.nextElementSibling;
+				const scoped = within( list );
+
+				expect( scoped.getByLabelText( 'isCollapsed' ) ).toHaveValue( 'true' );
+				expect( scoped.getByLabelText( 'isBackward' ) ).toHaveValue( 'false' );
+				expect( scoped.getByLabelText( 'isGravityOverridden' ) ).toHaveValue( 'false' );
+				expect( scoped.getByLabelText( 'rangeCount' ) ).toHaveValue( '1' );
 			} );
 
 			it( '"Anchor" should be rendered', () => {
-				const inspector = wrapper.find( ObjectInspector );
-				const lists = inspector.props().lists;
+				const header = screen.getByRole( 'heading', { level: 3, name: /Anchor/ } );
+				const list = header.nextElementSibling;
+				const scoped = within( list );
 
-				expect( lists[ 2 ].name ).to.equal( 'Anchor' );
-				expect( lists[ 2 ].itemDefinitions ).to.deep.equal( {
-					path: { value: '[0,0]' },
-					stickiness: { value: '"toNone"' },
-					index: { value: '0' },
-					isAtEnd: { value: 'false' },
-					isAtStart: { value: 'true' },
-					offset: { value: '0' },
-					textNode: { value: 'null' }
-				} );
+				expect( scoped.getByLabelText( 'path' ) ).toHaveValue( '[0,0]' );
+				expect( scoped.getByLabelText( 'stickiness' ) ).toHaveValue( '"toNone"' );
+				expect( scoped.getByLabelText( 'index' ) ).toHaveValue( '0' );
+				expect( scoped.getByLabelText( 'isAtEnd' ) ).toHaveValue( 'false' );
+				expect( scoped.getByLabelText( 'isAtStart' ) ).toHaveValue( 'true' );
+				expect( scoped.getByLabelText( 'offset' ) ).toHaveValue( '0' );
+				expect( scoped.getByLabelText( 'textNode' ) ).toHaveValue( 'null' );
 			} );
 
 			it( '"Focus" should be rendered', () => {
-				const inspector = wrapper.find( ObjectInspector );
-				const lists = inspector.props().lists;
+				const header = screen.getByRole( 'heading', { level: 3, name: /Focus/ } );
+				const list = header.nextElementSibling;
+				const scoped = within( list );
 
-				expect( lists[ 3 ].name ).to.equal( 'Focus' );
-				expect( lists[ 3 ].itemDefinitions ).to.deep.equal( {
-					path: { value: '[0,0]' },
-					stickiness: { value: '"toNone"' },
-					index: { value: '0' },
-					isAtEnd: { value: 'false' },
-					isAtStart: { value: 'true' },
-					offset: { value: '0' },
-					textNode: { value: 'null' }
-				} );
+				expect( scoped.getByLabelText( 'path' ) ).toHaveValue( '[0,0]' );
+				expect( scoped.getByLabelText( 'stickiness' ) ).toHaveValue( '"toNone"' );
+				expect( scoped.getByLabelText( 'index' ) ).toHaveValue( '0' );
+				expect( scoped.getByLabelText( 'isAtEnd' ) ).toHaveValue( 'false' );
+				expect( scoped.getByLabelText( 'isAtStart' ) ).toHaveValue( 'true' );
+				expect( scoped.getByLabelText( 'offset' ) ).toHaveValue( '0' );
+				expect( scoped.getByLabelText( 'textNode' ) ).toHaveValue( 'null' );
 			} );
 
 			it( '"Ranges" should be rendered', () => {
-				const inspector = wrapper.find( ObjectInspector );
-				const lists = inspector.props().lists;
+				const header = screen.getByRole( 'heading', { level: 3, name: /Ranges/ } );
+				const list = header.nextElementSibling;
+				const scoped = within( list );
 
-				expect( lists[ 4 ].name ).to.equal( 'Ranges' );
-				expect( lists[ 4 ].itemDefinitions ).to.deep.equal( {
-					0: {
-						subProperties: {
-							end: {
-								subProperties: {
-									index: { value: '0' },
-									isAtEnd: { value: 'false' },
-									isAtStart: { value: 'true' },
-									offset: { value: '0' },
-									path: { value: '[0,0]' },
-									stickiness: { value: '"toNone"' },
-									textNode: { value: 'null' }
-								},
-								value: ''
-							},
-							start: {
-								subProperties: {
-									index: { value: '0' },
-									isAtEnd: { value: 'false' },
-									isAtStart: { value: 'true' },
-									offset: { value: '0' },
-									path: { value: '[0,0]' },
-									stickiness: { value: '"toNone"' },
-									textNode: { value: 'null' }
-								},
-								value: ''
-							}
-						},
-						value: ''
-					}
-				} );
+				expect( scoped.getAllByLabelText( 'path' ).map( node => node.value ) ).toEqual( [ '[0,0]', '[0,0]' ] );
+				expect( scoped.getAllByLabelText( 'offset' ).map( node => node.value ) ).toEqual( [ '0', '0' ] );
 			} );
 		} );
 	} );

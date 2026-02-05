@@ -66,15 +66,15 @@ describe( 'commands data store reducer', () => {
 
 		commandsState = commandsReducer( globalState, null, {} );
 
-		expect( commandsState ).to.be.null;
+		expect( commandsState ).toBeNull();
 	} );
 
 	it( 'should create a default state if no model state was passed to the reducer', () => {
 		commandsState = commandsReducer( globalState, null, {} );
 
-		expect( commandsState ).to.have.property( 'treeDefinition' );
-		expect( commandsState ).to.have.property( 'currentCommandName' );
-		expect( commandsState ).to.have.property( 'currentCommandDefinition' );
+		expect( commandsState ).toHaveProperty( 'treeDefinition' );
+		expect( commandsState ).toHaveProperty( 'currentCommandName' );
+		expect( commandsState ).toHaveProperty( 'currentCommandDefinition' );
 	} );
 
 	describe( 'application state', () => {
@@ -83,21 +83,21 @@ describe( 'commands data store reducer', () => {
 				commandsState.currentCommandName = 'foo';
 				commandsState = commandsReducer( globalState, commandsState, setEditors( new Map( [ [ 'b', editorB ] ] ) ) );
 
-				expect( commandsState.currentCommandName ).to.be.null;
+				expect( commandsState.currentCommandName ).toBeNull();
 			} );
 
 			it( 'should be reset on setCurrentEditorName() action', () => {
 				commandsState.currentCommandName = null;
 				commandsState = commandsReducer( globalState, commandsState, setCurrentEditorName( 'b' ) );
 
-				expect( commandsState.currentCommandName ).to.be.null;
+				expect( commandsState.currentCommandName ).toBeNull();
 			} );
 
 			it( 'should be set on setCommandsCurrentCommandName() action', () => {
 				commandsState.currentCommandName = null;
 				commandsState = commandsReducer( globalState, commandsState, setCommandsCurrentCommandName( 'foo' ) );
 
-				expect( commandsState.currentCommandName ).to.equal( 'foo' );
+				expect( commandsState.currentCommandName ).toBe( 'foo' );
 			} );
 		} );
 
@@ -106,21 +106,21 @@ describe( 'commands data store reducer', () => {
 				commandsState.currentCommandDefinition = 'foo';
 				commandsState = commandsReducer( globalState, commandsState, setEditors( new Map( [ [ 'b', editorB ] ] ) ) );
 
-				expect( commandsState.currentCommandDefinition ).to.be.null;
+				expect( commandsState.currentCommandDefinition ).toBeNull();
 			} );
 
 			it( 'should be reset on setCurrentEditorName() action', () => {
 				commandsState.currentCommandDefinition = 'foo';
 				commandsState = commandsReducer( globalState, commandsState, setCurrentEditorName( 'b' ) );
 
-				expect( commandsState.currentCommandDefinition ).to.be.null;
+				expect( commandsState.currentCommandDefinition ).toBeNull();
 			} );
 
 			it( 'should be set on setCommandsCurrentCommandName() action', () => {
 				commandsState.currentCommandDefinition = null;
 				commandsState = commandsReducer( globalState, commandsState, setCommandsCurrentCommandName( 'foo' ) );
 
-				expect( commandsState.currentCommandDefinition ).to.be.an( 'object' );
+				expect( commandsState.currentCommandDefinition ).toEqual( expect.any( Object ) );
 			} );
 
 			it( 'should be set on updateCommandsState() action', () => {
@@ -128,7 +128,7 @@ describe( 'commands data store reducer', () => {
 				commandsState.currentCommandDefinition = null;
 				commandsState = commandsReducer( globalState, commandsState, updateCommandsState() );
 
-				expect( commandsState.currentCommandDefinition ).to.be.an( 'object' );
+				expect( commandsState.currentCommandDefinition ).toEqual( expect.any( Object ) );
 			} );
 
 			it( 'should be set on setActiveTab() action', () => {
@@ -136,7 +136,7 @@ describe( 'commands data store reducer', () => {
 				commandsState.currentCommandDefinition = null;
 				commandsState = commandsReducer( globalState, commandsState, setActiveTab( 'Commands' ) );
 
-				expect( commandsState.currentCommandDefinition ).to.be.an( 'object' );
+				expect( commandsState.currentCommandDefinition ).toEqual( expect.any( Object ) );
 			} );
 		} );
 
@@ -145,28 +145,28 @@ describe( 'commands data store reducer', () => {
 				commandsState.treeDefinition = 'foo';
 				commandsState = commandsReducer( globalState, commandsState, setEditors( new Map( [ [ 'b', editorB ] ] ) ) );
 
-				expect( commandsState.treeDefinition ).to.be.an( 'array' );
+				expect( commandsState.treeDefinition ).toEqual( expect.any( Array ) );
 			} );
 
 			it( 'should be set on setCurrentEditorName() action', () => {
 				commandsState.treeDefinition = 'foo';
 				commandsState = commandsReducer( globalState, commandsState, setCurrentEditorName( 'b' ) );
 
-				expect( commandsState.treeDefinition ).to.be.an( 'array' );
+				expect( commandsState.treeDefinition ).toEqual( expect.any( Array ) );
 			} );
 
 			it( 'should be set on updateCommandsState() action', () => {
 				commandsState.treeDefinition = 'foo';
 				commandsState = commandsReducer( globalState, commandsState, updateCommandsState() );
 
-				expect( commandsState.treeDefinition ).to.be.an( 'array' );
+				expect( commandsState.treeDefinition ).toEqual( expect.any( Array ) );
 			} );
 
 			it( 'should be set on setActiveTab() action', () => {
 				commandsState.treeDefinition = 'foo';
 				commandsState = commandsReducer( globalState, commandsState, setActiveTab( 'Commands' ) );
 
-				expect( commandsState.treeDefinition ).to.be.an( 'array' );
+				expect( commandsState.treeDefinition ).toEqual( expect.any( Array ) );
 			} );
 		} );
 	} );

@@ -19,34 +19,34 @@ import {
 
 describe( 'view data store actions', () => {
 	it( 'should export setViewCurrentRootName()', () => {
-		expect( setViewCurrentRootName( 'foo' ) ).to.deep.equal( {
+		expect( setViewCurrentRootName( 'foo' ) ).toEqual( {
 			type: SET_VIEW_CURRENT_ROOT_NAME,
 			currentRootName: 'foo'
 		} );
 	} );
 
 	it( 'should export setViewCurrentNode()', () => {
-		expect( setViewCurrentNode( 'foo' ) ).to.deep.equal( {
+		expect( setViewCurrentNode( 'foo' ) ).toEqual( {
 			type: SET_VIEW_CURRENT_NODE,
 			currentNode: 'foo'
 		} );
 	} );
 
 	it( 'should export setViewActiveTab()', () => {
-		expect( setViewActiveTab( 'foo' ) ).to.deep.equal( {
+		expect( setViewActiveTab( 'foo' ) ).toEqual( {
 			type: SET_VIEW_ACTIVE_TAB,
 			tabName: 'foo'
 		} );
 	} );
 
 	it( 'should export toggleViewShowElementTypes()', () => {
-		expect( toggleViewShowElementTypes() ).to.deep.equal( {
+		expect( toggleViewShowElementTypes() ).toEqual( {
 			type: TOGGLE_VIEW_SHOW_ELEMENT_TYPES
 		} );
 	} );
 
 	it( 'should export updateViewState()', () => {
-		expect( updateViewState() ).to.deep.equal( {
+		expect( updateViewState() ).toEqual( {
 			type: UPDATE_VIEW_STATE
 		} );
 	} );

@@ -10,7 +10,7 @@ import {
 
 describe( 'schema data store actions', () => {
 	it( 'should export setSchemaCurrentDefinitionName()', () => {
-		expect( setSchemaCurrentDefinitionName( 'foo' ) ).to.deep.equal( {
+		expect( setSchemaCurrentDefinitionName( 'foo' ) ).toEqual( {
 			type: SET_SCHEMA_CURRENT_DEFINITION_NAME,
 			currentSchemaDefinitionName: 'foo'
 		} );

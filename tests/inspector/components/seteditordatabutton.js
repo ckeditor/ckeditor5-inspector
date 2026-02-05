@@ -4,16 +4,19 @@
  */
 
 import React from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import TestEditor from '../../utils/testeditor';
-
 import SetEditorDataButton from '../../../src/components/seteditordatabutton';
 
-import LoadDataIcon from '../../../src/assets/img/load-data.svg';
-
 describe( '<SetEditorDataButton />', () => {
-	let editor, wrapper, element, inspectorWrapperDomElement;
+	let editor, element, inspectorWrapperDomElement, renderResult, getDataSpy;
 
-	beforeEach( () => {
+	const openModal = async () => {
+		fireEvent.click( screen.getByRole( 'button', { name: 'Set editor data' } ) );
+		return screen.findByRole( 'heading', { name: 'Set editor data' } );
+	};
+
+	beforeEach( async () => {
 		window.localStorage.clear();
 
 		element = document.createElement( 'div' );
@@ -24,281 +27,129 @@ describe( '<SetEditorDataButton />', () => {
 		inspectorWrapperDomElement.classList.add( 'ck-inspector-wrapper' );
 		document.body.appendChild( inspectorWrapperDomElement );
 
-		return TestEditor.create( element ).then( newEditor => {
-			editor = newEditor;
-
-			wrapper = mount( <SetEditorDataButton editor={editor} /> );
-		} );
+		editor = await TestEditor.create( element );
+		renderResult = render( <SetEditorDataButton editor={editor} /> );
 	} );
 
-	afterEach( () => {
-		wrapper.unmount();
-
+	afterEach( async () => {
+		renderResult.unmount();
 		element.remove();
-
 		inspectorWrapperDomElement.remove();
-
-		return editor.destroy();
+		await editor.destroy();
 	} );
 
-	describe( 'constructor()', () => {
-		it( 'should have initial state', () => {
-			expect( wrapper.state() ).to.deep.equal( {
-				isModalOpen: false,
-				editorDataValue: ''
-			} );
+	describe( '<Button>', () => {
+		it( 'should render a <Button>', () => {
+			const button = screen.getByRole( 'button', { name: 'Set editor data' } );
+
+			expect( button ).toHaveClass( 'ck-inspector-button' );
+			expect( button ).not.toHaveClass( 'ck-inspector-button_disabled' );
+			expect( button.querySelector( 'svg' ) ).toBeTruthy();
+		} );
+
+		it( 'should open the modal when the button is clicked', async () => {
+			await openModal();
+
+			expect( screen.getByRole( 'heading', { name: 'Set editor data' } ) ).toBeInTheDocument();
 		} );
 	} );
 
-	describe( 'render()', () => {
-		describe( '<Button>', () => {
-			it( 'should render a <Button>', () => {
-				expect( wrapper.childAt( 0 ).props().text ).to.equal( 'Set editor data' );
-				expect( wrapper.childAt( 0 ).props().icon.type ).to.equal( LoadDataIcon );
-				expect( wrapper.childAt( 0 ).props().isEnabled ).to.be.true;
-			} );
+	describe( '<Modal>', () => {
+		it( 'should render modal classes when opened', async () => {
+			await openModal();
 
-			it( 'should open the modal when the button is clicked', () => {
-				wrapper.childAt( 0 ).simulate( 'click' );
-				wrapper.update();
-
-				expect( wrapper.state() ).to.deep.equal( {
-					isModalOpen: true,
-					editorDataValue: ''
-				} );
-			} );
+			expect( document.querySelector( '.ck-inspector-portal' ) ).toBeTruthy();
+			expect( document.querySelector( '.ck-inspector-modal' ) ).toBeTruthy();
+			expect( document.querySelector( '.ck-inspector-quick-actions__set-data-modal__content' ) ).toBeTruthy();
 		} );
 
-		describe( '<Modal>', () => {
-			let modal;
-
-			beforeEach( () => {
-				modal = wrapper.childAt( 1 );
+		it( 'should set textarea value after being open', async () => {
+			vi.spyOn( window, 'requestAnimationFrame' ).mockImplementation( callback => {
+				callback();
+				return 0;
 			} );
+			vi.spyOn( editor, 'getData' ).mockReturnValue( '<p>foo</p>' );
 
-			it( 'should render a <Modal>', () => {
-				expect( modal.props().isOpen ).to.be.false;
-				expect( modal.props().appElement ).to.equal( inspectorWrapperDomElement );
-				expect( modal.props().overlayClassName ).to.equal( 'ck-inspector-modal ck-inspector-quick-actions__set-data-modal' );
-				expect( modal.props().className ).to.equal( 'ck-inspector-quick-actions__set-data-modal__content' );
-				expect( modal.props().portalClassName ).to.equal( 'ck-inspector-portal' );
-				expect( modal.props().shouldCloseOnEsc ).to.be.true;
-				expect( modal.props().shouldCloseOnOverlayClick ).to.be.true;
+			await openModal();
+
+			expect( screen.getByPlaceholderText( 'Paste HTML here...' ) ).toHaveValue( '<p>foo</p>' );
+		} );
+	} );
+
+	describe( 'modal content', () => {
+		beforeEach( () => {
+			vi.spyOn( window, 'requestAnimationFrame' ).mockImplementation( callback => {
+				callback();
+				return 0;
 			} );
+			getDataSpy = vi.spyOn( editor, 'getData' ).mockReturnValue( '<p>foo</p>' );
+		} );
 
-			it( 'should open upon #isModalOpen change', () => {
-				expect( modal.props().isOpen ).to.be.false;
+		it( 'should have a placeholder', async () => {
+			await openModal();
+			expect( screen.getByPlaceholderText( 'Paste HTML here...' ) ).toBeInTheDocument();
+		} );
 
-				wrapper.instance().setState( {
-					isModalOpen: true
-				} );
+		it( 'should update textarea value on change', async () => {
+			await openModal();
+			const textarea = screen.getByPlaceholderText( 'Paste HTML here...' );
 
-				wrapper.update();
-				modal = wrapper.childAt( 1 );
+			fireEvent.change( textarea, { target: { value: '<b>bar</b>' } } );
+			expect( textarea ).toHaveValue( '<b>bar</b>' );
+		} );
 
-				expect( modal.props().isOpen ).to.be.true;
-			} );
+		it( 'should set editor data and close the modal on Shift+Enter', async () => {
+			const setDataSpy = vi.spyOn( editor, 'setData' );
 
-			it( 'should set #editorDataValue after being open', () => {
-				// React modal uses this internally.
-				const rafStub = sinon.stub( window, 'requestAnimationFrame' ).callsFake( callback => {
-					callback();
-				} );
+			await openModal();
+			const textarea = screen.getByPlaceholderText( 'Paste HTML here...' );
 
-				const getDataStub = sinon.stub( editor, 'getData' ).returns( '<p>foo</p>' );
+			fireEvent.keyDown( textarea, { key: 'Enter', shiftKey: true } );
 
-				wrapper.instance().setState( {
-					isModalOpen: true
-				} );
+			expect( setDataSpy ).toHaveBeenCalledTimes( 1 );
+			expect( screen.queryByRole( 'heading', { name: 'Set editor data' } ) ).toBeNull();
+		} );
 
-				expect( wrapper.state() ).to.deep.equal( {
-					isModalOpen: true,
-					editorDataValue: '<p>foo</p>'
-				} );
+		it( 'should do nothing special on Enter', async () => {
+			const setDataSpy = vi.spyOn( editor, 'setData' );
 
-				rafStub.restore();
-				getDataStub.restore();
-			} );
+			await openModal();
+			const textarea = screen.getByPlaceholderText( 'Paste HTML here...' );
 
-			it( 'should update #isModalOpen when close is requested (e.g. via click or Esc)', () => {
-				// React modal uses this internally.
-				const rafStub = sinon.stub( window, 'requestAnimationFrame' ).callsFake( callback => {
-					callback();
-				} );
+			fireEvent.keyDown( textarea, { key: 'Enter' } );
 
-				const getDataStub = sinon.stub( editor, 'getData' ).returns( '<p>foo</p>' );
+			expect( setDataSpy ).not.toHaveBeenCalled();
+			expect( screen.getByRole( 'heading', { name: 'Set editor data' } ) ).toBeInTheDocument();
+		} );
 
-				wrapper.instance().setState( {
-					isModalOpen: true
-				} );
+		it( 'should update editor data and focus textarea when loading data', async () => {
+			const textarea = await openModal().then( () => screen.getByPlaceholderText( 'Paste HTML here...' ) );
+			getDataSpy.mockReturnValue( 'abcd' );
 
-				expect( wrapper.state() ).to.deep.equal( {
-					isModalOpen: true,
-					editorDataValue: '<p>foo</p>'
-				} );
+			fireEvent.click( screen.getByRole( 'button', { name: 'Load data' } ) );
 
-				modal = wrapper.childAt( 1 );
+			expect( textarea ).toHaveValue( 'abcd' );
+			expect( textarea ).toHaveFocus();
+		} );
 
-				modal.props().onRequestClose();
+		it( 'should not set editor data and close the modal on cancel', async () => {
+			const setDataSpy = vi.spyOn( editor, 'setData' );
 
-				expect( wrapper.state() ).to.deep.equal( {
-					isModalOpen: false,
-					editorDataValue: '<p>foo</p>'
-				} );
+			await openModal();
+			fireEvent.click( screen.getByRole( 'button', { name: 'Cancel' } ) );
 
-				rafStub.restore();
-				getDataStub.restore();
-			} );
+			expect( setDataSpy ).not.toHaveBeenCalled();
+			expect( screen.queryByRole( 'heading', { name: 'Set editor data' } ) ).toBeNull();
+		} );
 
-			describe( 'modal content', () => {
-				let textarea, rafStub, getDataStub, loadDataButton, cancelButton, saveButton;
+		it( 'should set editor data and close the modal', async () => {
+			const setDataSpy = vi.spyOn( editor, 'setData' );
 
-				beforeEach( () => {
-					// React modal uses this internally.
-					rafStub = sinon.stub( window, 'requestAnimationFrame' ).callsFake( callback => {
-						callback();
-					} );
+			await openModal();
+			fireEvent.click( screen.getByRole( 'button', { name: 'Set data' } ) );
 
-					getDataStub = sinon.stub( editor, 'getData' ).returns( '<p>foo</p>' );
-
-					wrapper.instance().setState( {
-						isModalOpen: true
-					} );
-
-					wrapper.update();
-					modal = wrapper.childAt( 1 );
-
-					textarea = wrapper.find( 'textarea' );
-					loadDataButton = modal.find( 'button' ).first();
-					cancelButton = modal.find( 'button' ).at( 1 );
-					saveButton = modal.find( 'button' ).at( 2 );
-				} );
-
-				afterEach( () => {
-					rafStub.restore();
-					getDataStub.restore();
-				} );
-
-				describe( 'textarea', () => {
-					it( 'should have value bound to #editorDataValue', () => {
-						expect( textarea.props().value ).to.equal( '<p>foo</p>' );
-					} );
-
-					it( 'should have a placeholder', () => {
-						expect( textarea.props().placeholder ).to.equal( 'Paste HTML here...' );
-					} );
-
-					it( 'should update #editorDataValue on change', () => {
-						const evt = {
-							target: {
-								value: '<b>bar</b>'
-							}
-						};
-
-						textarea.simulate( 'change', evt );
-
-						expect( wrapper.state() ).to.deep.equal( {
-							isModalOpen: true,
-							editorDataValue: '<b>bar</b>'
-						} );
-					} );
-
-					it( 'should set editor data and close the modal on Shift+Enter ', () => {
-						const setDataSpy = sinon.spy( editor, 'setData' );
-						const evt = {
-							key: 'Enter',
-							shiftKey: true
-						};
-
-						textarea.simulate( 'keyPress', evt );
-
-						sinon.assert.calledOnce( setDataSpy );
-
-						expect( wrapper.state() ).to.deep.equal( {
-							isModalOpen: false,
-							editorDataValue: '<p>foo</p>'
-						} );
-					} );
-
-					it( 'should do nothing special on Enter ', () => {
-						const setDataSpy = sinon.spy( editor, 'setData' );
-						const evt = {
-							key: 'Enter'
-						};
-
-						textarea.simulate( 'keyPress', evt );
-
-						sinon.assert.notCalled( setDataSpy );
-
-						expect( wrapper.state() ).to.deep.equal( {
-							isModalOpen: true,
-							editorDataValue: '<p>foo</p>'
-						} );
-					} );
-				} );
-
-				describe( 'load data button', () => {
-					it( 'should update #editorDataValue and focus textarea', () => {
-						const focusSpy = sinon.spy( wrapper.find( 'textarea' ).getDOMNode(), 'focus' );
-
-						getDataStub.returns( 'abcd' );
-
-						loadDataButton.simulate( 'click' );
-						wrapper.update();
-
-						expect( wrapper.state() ).to.deep.equal( {
-							isModalOpen: true,
-							editorDataValue: 'abcd'
-						} );
-
-						sinon.assert.calledOnce( focusSpy );
-					} );
-
-					it( 'should have a text label', () => {
-						expect( loadDataButton.text() ).to.equal( 'Load data' );
-					} );
-				} );
-
-				describe( 'Cancel button', () => {
-					it( 'should not set editor data and close the modal', () => {
-						const setDataSpy = sinon.spy( editor, 'setData' );
-
-						cancelButton.simulate( 'click' );
-
-						wrapper.update();
-						expect( wrapper.state() ).to.deep.equal( {
-							isModalOpen: false,
-							editorDataValue: '<p>foo</p>'
-						} );
-
-						sinon.assert.notCalled( setDataSpy );
-					} );
-
-					it( 'should have a text label', () => {
-						expect( cancelButton.text() ).to.equal( 'Cancel' );
-					} );
-				} );
-
-				describe( 'Set data button', () => {
-					it( 'should set editor data and close the modal', () => {
-						const setDataSpy = sinon.spy( editor, 'setData' );
-
-						saveButton.simulate( 'click' );
-
-						wrapper.update();
-						expect( wrapper.state() ).to.deep.equal( {
-							isModalOpen: false,
-							editorDataValue: '<p>foo</p>'
-						} );
-
-						sinon.assert.calledOnce( setDataSpy );
-					} );
-
-					it( 'should have a text label', () => {
-						expect( saveButton.text() ).to.equal( 'Set data' );
-					} );
-				} );
-			} );
+			expect( setDataSpy ).toHaveBeenCalledTimes( 1 );
+			expect( screen.queryByRole( 'heading', { name: 'Set editor data' } ) ).toBeNull();
 		} );
 	} );
 } );

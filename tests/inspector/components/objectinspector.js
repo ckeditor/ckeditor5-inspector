@@ -4,31 +4,25 @@
  */
 
 import React from 'react';
+import { fireEvent, render } from '@testing-library/react';
 import ObjectInspector from '../../../src/components/objectinspector';
-import PropertyList from '../../../src/components/propertylist';
 
 describe( '<ObjectInspector />', () => {
-	let wrapper;
-
-	afterEach( () => {
-		wrapper.unmount();
-	} );
-
 	it( 'renders', () => {
-		wrapper = mount( <ObjectInspector lists={[]} /> );
+		const { container } = render( <ObjectInspector lists={[]} /> );
 
-		expect( wrapper ).to.have.className( 'ck-inspector__object-inspector' );
+		expect( container.firstChild ).toHaveClass( 'ck-inspector__object-inspector' );
 	} );
 
 	it( 'renders props#header', () => {
-		wrapper = mount( <ObjectInspector lists={[]} header="foo" /> );
+		const { container } = render( <ObjectInspector lists={[]} header="foo" /> );
 
-		expect( wrapper.find( 'h2' ) ).to.have.className( 'ck-inspector-code' );
+		expect( container.querySelector( 'h2' ) ).toHaveClass( 'ck-inspector-code' );
 	} );
 
 	describe( 'props#lists', () => {
 		it( 'does not render when there are no items', () => {
-			wrapper = mount( <ObjectInspector lists={[
+			const { container } = render( <ObjectInspector lists={[
 				{
 					name: 'foo',
 					url: 'http://bar',
@@ -42,11 +36,11 @@ describe( '<ObjectInspector />', () => {
 				}
 			]} /> );
 
-			expect( wrapper.find( PropertyList ) ).to.have.length( 0 );
+			expect( container.querySelectorAll( '.ck-inspector-property-list' ) ).toHaveLength( 0 );
 		} );
 
 		it( 'renders a <PropertyList /> when there are items', () => {
-			wrapper = mount( <ObjectInspector lists={[
+			const { container } = render( <ObjectInspector lists={[
 				{
 					name: 'foo',
 					url: 'http://bar',
@@ -63,18 +57,14 @@ describe( '<ObjectInspector />', () => {
 				}
 			]} /> );
 
-			expect( wrapper.find( 'hr' ) ).to.have.length( 1 );
-			expect( wrapper.find( 'h3' ).text() ).to.equal( 'foo' );
-			expect( wrapper.find( PropertyList ).props().itemDefinitions ).to.deep.equal( {
-				foo: { value: 'bar' },
-				qux: { value: 'baz' }
-			} );
+			expect( container.querySelectorAll( 'hr' ) ).toHaveLength( 1 );
+			expect( container.querySelector( 'h3' ) ).toHaveTextContent( 'foo' );
+			expect( container.querySelectorAll( '.ck-inspector-property-list' ) ).toHaveLength( 1 );
 		} );
 
 		it( 'passes a "onPropertyTitleClick" handler to <PropertyList />', () => {
-			const onClickMock = sinon.spy();
-
-			wrapper = mount( <ObjectInspector lists={[
+			const onClickMock = vi.fn();
+			const { container } = render( <ObjectInspector lists={[
 				{
 					name: 'foo',
 					url: 'http://bar',
@@ -92,13 +82,13 @@ describe( '<ObjectInspector />', () => {
 				}
 			]} /> );
 
-			expect( wrapper.find( PropertyList ).props().onPropertyTitleClick ).to.equal( onClickMock );
+			const label = container.querySelector( 'label' );
+			fireEvent.click( label );
+			expect( onClickMock ).toHaveBeenCalledWith( 'foo' );
 		} );
 
 		it( 'passes a "presentation" data to <PropertyList />', () => {
-			const presentationMock = {};
-
-			wrapper = mount( <ObjectInspector lists={[
+			const { container } = render( <ObjectInspector lists={[
 				{
 					name: 'foo',
 					url: 'http://bar',
@@ -109,14 +99,21 @@ describe( '<ObjectInspector />', () => {
 						}
 					],
 					itemDefinitions: {
-						foo: { value: 'bar' },
-						qux: { value: 'baz' }
+						foo: {
+							value: 'bar',
+							subProperties: {
+								qux: { value: 'baz' }
+							}
+						}
 					},
-					presentation: presentationMock
+					presentation: {
+						expandCollapsibles: true
+					}
 				}
 			]} /> );
 
-			expect( wrapper.find( PropertyList ).props().presentation ).to.equal( presentationMock );
+			const title = container.querySelector( '.ck-inspector-property-list__title_collapsible' );
+			expect( title ).toHaveClass( 'ck-inspector-property-list__title_expanded' );
 		} );
 	} );
 } );

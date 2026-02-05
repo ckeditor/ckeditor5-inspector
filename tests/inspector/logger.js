@@ -7,46 +7,46 @@ import Logger from '../../src/logger';
 
 describe( 'Logger', () => {
 	afterEach( () => {
-		sinon.restore();
+		vi.restoreAllMocks();
 	} );
 
 	describe( '#group()', () => {
 		it( 'calls console.group', () => {
-			const stub = sinon.stub( console, 'group' );
+			const stub = vi.spyOn( console, 'group' ).mockImplementation( () => {} );
 
 			Logger.group( 'foo', 'bar' );
 
-			sinon.assert.calledWithExactly( stub.firstCall, 'foo', 'bar' );
+			expect( stub ).toHaveBeenCalledWith( 'foo', 'bar' );
 		} );
 	} );
 
 	describe( '#groupEnd()', () => {
 		it( 'calls console.groupEnd', () => {
-			const stub = sinon.stub( console, 'groupEnd' );
+			const stub = vi.spyOn( console, 'groupEnd' ).mockImplementation( () => {} );
 
 			Logger.groupEnd( 'foo', 'bar' );
 
-			sinon.assert.calledWithExactly( stub.firstCall, 'foo', 'bar' );
+			expect( stub ).toHaveBeenCalledWith( 'foo', 'bar' );
 		} );
 	} );
 
 	describe( '#log()', () => {
 		it( 'calls console.log', () => {
-			const stub = sinon.stub( console, 'log' );
+			const stub = vi.spyOn( console, 'log' ).mockImplementation( () => {} );
 
 			Logger.log( 'foo', 'bar' );
 
-			sinon.assert.calledWithExactly( stub.firstCall, 'foo', 'bar' );
+			expect( stub ).toHaveBeenCalledWith( 'foo', 'bar' );
 		} );
 	} );
 
 	describe( '#warn()', () => {
 		it( 'calls console.warn', () => {
-			const stub = sinon.stub( console, 'warn' );
+			const stub = vi.spyOn( console, 'warn' ).mockImplementation( () => {} );
 
 			Logger.warn( 'foo', 'bar' );
 
-			sinon.assert.calledWithExactly( stub.firstCall, 'foo', 'bar' );
+			expect( stub ).toHaveBeenCalledWith( 'foo', 'bar' );
 		} );
 	} );
 } );

@@ -8,107 +8,74 @@ import { Paragraph, BoldEditing } from 'ckeditor5';
 import TestEditor from '../../utils/testeditor';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import { getEditorModelMarkers } from '../../../src/model/data/utils';
 
-import Button from '../../../src/components/button';
-import ObjectInspector from '../../../src/components/objectinspector';
 import Logger from '../../../src/logger';
 import ModelMarkerInspector from '../../../src/model/markerinspector';
 
 describe( '<ModelMarkerInspector />', () => {
-	let editor, wrapper, element, store;
+	let editor, renderResult, element, store;
 
-	beforeEach( () => {
+	beforeEach( async () => {
 		element = document.createElement( 'div' );
 		document.body.appendChild( element );
 
-		return TestEditor.create( element, {
+		editor = await TestEditor.create( element, {
 			plugins: [ Paragraph, BoldEditing ],
 			initialData: '<p>foo</p>'
-		} ).then( newEditor => {
-			editor = newEditor;
-
-			editor.model.change( writer => {
-				const root = editor.model.document.getRoot();
-				const range = editor.model.createRange(
-					editor.model.createPositionFromPath( root, [ 0, 1 ] ),
-					editor.model.createPositionFromPath( root, [ 0, 3 ] )
-				);
-
-				writer.addMarker( 'foo:marker', { range, usingOperation: false, affectsData: true } );
-			} );
-
-			store = createStore( state => state, {
-				editors: new Map( [ [ 'foo', editor ] ] ),
-				currentEditorName: 'foo',
-				model: {
-					markers: getEditorModelMarkers( editor, 'main' )
-				}
-			} );
-
-			wrapper = mount( <Provider store={store}><ModelMarkerInspector /></Provider> );
 		} );
+
+		editor.model.change( writer => {
+			const root = editor.model.document.getRoot();
+			const range = editor.model.createRange(
+				editor.model.createPositionFromPath( root, [ 0, 1 ] ),
+				editor.model.createPositionFromPath( root, [ 0, 3 ] )
+			);
+
+			writer.addMarker( 'foo:marker', { range, usingOperation: false, affectsData: true } );
+		} );
+
+		store = createStore( state => state, {
+			editors: new Map( [ [ 'foo', editor ] ] ),
+			currentEditorName: 'foo',
+			model: {
+				markers: getEditorModelMarkers( editor, 'main' )
+			}
+		} );
+
+		renderResult = render( <Provider store={store}><ModelMarkerInspector /></Provider> );
 	} );
 
-	afterEach( () => {
-		wrapper.unmount();
+	afterEach( async () => {
+		renderResult.unmount();
 		element.remove();
-		sinon.restore();
-
-		return editor.destroy();
+		vi.restoreAllMocks();
+		await editor.destroy();
 	} );
 
 	describe( 'render()', () => {
 		it( 'should render the inspector', () => {
-			const logMarkersButton = wrapper.find( Button ).first();
-			const logSpy = sinon.stub( Logger, 'log' ).callsFake( () => {} );
+			const logSpy = vi.spyOn( Logger, 'log' ).mockImplementation( () => {} );
 
-			expect( wrapper.find( ObjectInspector ) ).to.have.length( 1 );
-			expect( wrapper.childAt( 0 ).find( 'h2 > span' ).text() ).to.equal( 'Markers' );
-
-			logMarkersButton.simulate( 'click' );
-			sinon.assert.calledOnce( logSpy );
+			expect( screen.getByRole( 'heading', { level: 2 } ) ).toHaveTextContent( 'Markers' );
+			fireEvent.click( screen.getByRole( 'button', { name: 'Log in console' } ) );
+			expect( logSpy ).toHaveBeenCalledTimes( 1 );
 		} );
 
 		it( 'should render markers tree', () => {
-			const inspector = wrapper.find( ObjectInspector );
-			const lists = inspector.props().lists;
+			expect( screen.getByRole( 'heading', { level: 3, name: 'Markers tree' } ) ).toBeInTheDocument();
+			expect( screen.getByLabelText( 'foo' ) ).toHaveValue( '1 marker' );
+			expect( screen.getByLabelText( 'name' ) ).toHaveValue( '"foo:marker"' );
+			expect( screen.getByLabelText( 'start' ) ).toHaveValue( '[0,1]' );
+			expect( screen.getByLabelText( 'end' ) ).toHaveValue( '[0,3]' );
+			expect( screen.getByLabelText( 'affectsData' ) ).toHaveValue( 'true' );
+			expect( screen.getByLabelText( 'managedUsingOperations' ) ).toHaveValue( 'false' );
 
-			expect( lists[ 0 ].name ).to.equal( 'Markers tree' );
-			expect( lists[ 0 ].itemDefinitions ).to.deep.equal( {
-				foo:
-				{
-					value: '1 marker',
-					subProperties:
-					{
-						marker:
-						{
-							value: '',
-							presentation: {
-								colorBox: '#03a9f4'
-							},
-							subProperties: {
-								name: {
-									value: '"foo:marker"'
-								},
-								start: {
-									value: '[0,1]'
-								},
-								end: {
-									value: '[0,3]'
-								},
-								affectsData: {
-									value: 'true'
-								},
-								managedUsingOperations: {
-									value: 'false'
-								}
-							}
-						}
-					}
-				}
-			} );
+			const colorBox = document.querySelector( '.ck-inspector-property-list__title__color-box' );
+			expect( colorBox ).toBeTruthy();
+			expect( colorBox.getAttribute( 'style' ) ).toMatch( /rgb\(3,\s*169,\s*244\)/ );
 		} );
 	} );
 } );

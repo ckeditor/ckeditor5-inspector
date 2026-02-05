@@ -8,15 +8,17 @@ import { Paragraph } from 'ckeditor5';
 import TestEditor from '../../utils/testeditor';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 
 import { getSchemaDefinition } from '../../../src/schema/data/utils';
 
 import { reducer } from '../../../src/data/reducer';
-import ObjectInspector from '../../../src/components/objectinspector';
 import SchemaDefinitionInspector from '../../../src/schema/schemadefinitioninspector';
 
 describe( '<SchemaDefinitionInspector />', () => {
-	let editor, wrapper, element, store;
+	let editor, renderResult, element, store;
+
+	const renderWithStore = localStore => render( <Provider store={localStore}><SchemaDefinitionInspector /></Provider> );
 
 	beforeEach( async () => {
 		element = document.createElement( 'div' );
@@ -30,7 +32,6 @@ describe( '<SchemaDefinitionInspector />', () => {
 						editor.model.schema.extend( 'paragraph', {
 							allowAttributes: [ 'foo' ]
 						} );
-
 						editor.model.schema.setAttributeProperties( 'foo', {
 							someProperty: 123
 						} );
@@ -55,20 +56,19 @@ describe( '<SchemaDefinitionInspector />', () => {
 			}
 		} );
 
-		wrapper = mount( <Provider store={store}><SchemaDefinitionInspector /></Provider> );
+		renderResult = renderWithStore( store );
 	} );
 
 	afterEach( async () => {
-		wrapper.unmount();
+		renderResult.unmount();
 		element.remove();
-		sinon.restore();
-
+		vi.restoreAllMocks();
 		await editor.destroy();
 	} );
 
 	describe( 'render()', () => {
 		it( 'should render a placeholder when no props#currentSchemaDefinition', () => {
-			const store = createStore( state => state, {
+			const localStore = createStore( state => state, {
 				editors: new Map( [ [ 'test-editor', editor ] ] ),
 				currentEditorName: 'test-editor',
 				schema: {
@@ -76,120 +76,64 @@ describe( '<SchemaDefinitionInspector />', () => {
 				}
 			} );
 
-			const wrapper = mount( <Provider store={store}><SchemaDefinitionInspector /></Provider> );
-
-			expect( wrapper.childAt( 0 ).text() ).to.match( /^Select a schema definition/ );
-
-			wrapper.unmount();
+			const { unmount } = renderWithStore( localStore );
+			expect( screen.getByText( /^Select a schema definition/ ) ).toBeInTheDocument();
+			unmount();
 		} );
 
 		it( 'should render an object inspector when there is props#currentSchemaDefinition', () => {
-			expect( wrapper.find( ObjectInspector ) ).to.have.length( 1 );
+			expect( screen.getByRole( 'heading', { level: 2 } ) ).toBeInTheDocument();
 		} );
 
 		describe( 'scheme definition info', () => {
 			it( 'should render schema definition properties', () => {
-				wrapper.setProps( { currentSchemaDefinitionName: 'paragraph' } );
+				const link = screen.getByRole( 'link', { name: 'Properties' } );
+				expect( link ).toHaveAttribute( 'href', expect.stringMatching( /^https:\/\/ckeditor.com\/docs\// ) );
 
-				const inspector = wrapper.find( ObjectInspector );
-				const lists = inspector.props().lists;
-
-				expect( lists[ 0 ].name ).to.equal( 'Properties' );
-				expect( lists[ 0 ].url ).to.match( /^https:\/\/ckeditor.com\/docs\// );
-				expect( lists[ 0 ].itemDefinitions ).to.deep.equal( {
-					isBlock: { value: 'true' }
-				} );
+				const header = screen.getByRole( 'heading', { level: 3, name: 'Properties' } );
+				const list = header.nextElementSibling;
+				expect( within( list ).getByLabelText( 'isBlock' ) ).toHaveValue( 'true' );
 			} );
 
 			it( 'should render schema definition allowed attributes', () => {
-				wrapper.setProps( { currentSchemaDefinitionName: 'paragraph' } );
+				const link = screen.getByRole( 'link', { name: 'Allowed attributes' } );
+				expect( link ).toHaveAttribute( 'href', expect.stringMatching( /^https:\/\/ckeditor.com\/docs\// ) );
 
-				const inspector = wrapper.find( ObjectInspector );
-				const lists = inspector.props().lists;
-
-				expect( lists[ 1 ].name ).to.equal( 'Allowed attributes' );
-				expect( lists[ 1 ].url ).to.match( /^https:\/\/ckeditor.com\/docs\// );
-				expect( lists[ 1 ].itemDefinitions ).to.deep.equal( {
-					foo: {
-						subProperties: {
-							someProperty: {
-								value: '123'
-							}
-						},
-						value: 'true'
-					}
-				} );
+				expect( screen.getByLabelText( 'foo' ) ).toHaveValue( 'true' );
+				expect( screen.getByLabelText( 'someProperty' ) ).toHaveValue( '123' );
 			} );
 
 			it( 'should render schema definition allowed children', () => {
-				wrapper.setProps( { currentSchemaDefinitionName: 'paragraph' } );
+				const link = screen.getByRole( 'link', { name: 'Allowed children' } );
+				expect( link ).toHaveAttribute( 'href', expect.stringMatching( /^https:\/\/ckeditor.com\/docs\// ) );
 
-				const inspector = wrapper.find( ObjectInspector );
-				const lists = inspector.props().lists;
-
-				expect( lists[ 2 ].name ).to.equal( 'Allowed children' );
-				expect( lists[ 2 ].url ).to.match( /^https:\/\/ckeditor.com\/docs\// );
-				expect( lists[ 2 ].itemDefinitions ).to.deep.include( {
-					$text: {
-						value: 'true',
-						title: 'Click to see the definition of $text'
-					}
-				} );
+				const label = screen.getByText( '$text', { selector: 'label' } );
+				expect( label ).toHaveAttribute( 'title', 'Click to see the definition of $text' );
+				expect( screen.getByLabelText( '$text' ) ).toHaveValue( 'true' );
 			} );
 
 			it( 'should render schema definition allowed in', () => {
-				wrapper.setProps( { currentSchemaDefinitionName: 'paragraph' } );
+				const link = screen.getByRole( 'link', { name: 'Allowed in' } );
+				expect( link ).toHaveAttribute( 'href', expect.stringMatching( /^https:\/\/ckeditor.com\/docs\// ) );
 
-				const inspector = wrapper.find( ObjectInspector );
-				const lists = inspector.props().lists;
-
-				expect( lists[ 3 ].name ).to.equal( 'Allowed in' );
-				expect( lists[ 3 ].url ).to.match( /^https:\/\/ckeditor.com\/docs\// );
-				expect( lists[ 3 ].itemDefinitions ).to.deep.include( {
-					$clipboardHolder: {
-						value: 'true',
-						title: 'Click to see the definition of $clipboardHolder'
-					},
-					$documentFragment: {
-						value: 'true',
-						title: 'Click to see the definition of $documentFragment'
-					},
-					$root: {
-						value: 'true',
-						title: 'Click to see the definition of $root'
-					}
-				} );
+				const rootLabel = screen.getByText( '$root', { selector: 'label' } );
+				expect( rootLabel ).toHaveAttribute( 'title', 'Click to see the definition of $root' );
+				expect( screen.getByLabelText( '$root' ) ).toHaveValue( 'true' );
 			} );
 		} );
 
 		it( 'should navigate to another definition upon clicking a name in "allowed children"', () => {
-			wrapper.setProps( { currentSchemaDefinitionName: 'paragraph' } );
+			const label = screen.getByText( '$text', { selector: 'label' } );
+			fireEvent.click( label );
 
-			const inspector = wrapper.find( ObjectInspector );
-			const propertyTitleLabel = inspector
-				.find( 'PropertyTitle' )
-				.filter( { name: '$text' } )
-				.first()
-				.find( 'label' );
-
-			propertyTitleLabel.simulate( 'click' );
-
-			expect( store.getState().schema.currentSchemaDefinitionName ).to.equal( '$text' );
+			expect( store.getState().schema.currentSchemaDefinitionName ).toBe( '$text' );
 		} );
 
 		it( 'should navigate to another definition upon clicking a name in "allowed in"', () => {
-			wrapper.setProps( { currentSchemaDefinitionName: 'paragraph' } );
+			const label = screen.getByText( '$root', { selector: 'label' } );
+			fireEvent.click( label );
 
-			const inspector = wrapper.find( ObjectInspector );
-			const propertyTitleLabel = inspector
-				.find( 'PropertyTitle' )
-				.filter( { name: '$root' } )
-				.first()
-				.find( 'label' );
-
-			propertyTitleLabel.simulate( 'click' );
-
-			expect( store.getState().schema.currentSchemaDefinitionName ).to.equal( '$root' );
+			expect( store.getState().schema.currentSchemaDefinitionName ).toBe( '$root' );
 		} );
 	} );
 } );

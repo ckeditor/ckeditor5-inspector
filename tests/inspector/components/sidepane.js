@@ -4,15 +4,23 @@
  */
 
 import React from 'react';
-import { Rnd } from 'react-rnd';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-
+import { render, waitFor } from '@testing-library/react';
 import SidePane from '../../../src/components/sidepane';
 import { SET_SIDE_PANE_WIDTH } from '../../../src/data/actions';
 
+let lastRndProps;
+
+vi.mock( 'react-rnd', () => ( {
+	Rnd: props => {
+		lastRndProps = props;
+		return <div data-testid="rnd">{props.children}</div>;
+	}
+} ) );
+
 describe( '<SidePane />', () => {
-	let wrapper, store, dispatchSpy;
+	let store, dispatchSpy;
 
 	beforeEach( () => {
 		window.localStorage.clear();
@@ -23,60 +31,49 @@ describe( '<SidePane />', () => {
 			}
 		} );
 
-		dispatchSpy = sinon.spy( store, 'dispatch' );
-
-		wrapper = mount( <Provider store={store}><SidePane>foo</SidePane></Provider> );
+		dispatchSpy = vi.spyOn( store, 'dispatch' );
+		render( <Provider store={store}><SidePane>foo</SidePane></Provider> );
 	} );
 
 	describe( 'state', () => {
 		it( 'restores the width from the store', () => {
-			expect( wrapper.find( SidePane ).find( Rnd ).props().size.width ).to.equal( '123px' );
+			expect( lastRndProps.size.width ).toBe( '123px' );
 		} );
 	} );
 
 	describe( 'resizable container', () => {
 		it( 'is rendered', () => {
-			expect( wrapper.find( Rnd ) ).to.have.lengthOf( 1 );
+			expect( lastRndProps ).toBeTruthy();
 		} );
 
 		it( 'renders children', () => {
-			expect( wrapper.text() ).to.equal( 'foo' );
+			expect( lastRndProps.children ).toBe( 'foo' );
 		} );
 
 		describe( 'props', () => {
 			it( 'has #enableResizing', () => {
-				const rnd = wrapper.find( Rnd );
-
-				expect( rnd.props().enableResizing ).to.deep.equal( { left: true } );
+				expect( lastRndProps.enableResizing ).toEqual( { left: true } );
 			} );
 
 			it( 'has #disableDragging', () => {
-				const rnd = wrapper.find( Rnd );
-
-				expect( rnd.props().disableDragging ).to.be.true;
+				expect( lastRndProps.disableDragging ).toBe( true );
 			} );
 
 			it( 'has #minWidth', () => {
-				const rnd = wrapper.find( Rnd );
-
-				expect( rnd.props().minWidth ).to.equal( 200 );
+				expect( lastRndProps.minWidth ).toBe( 200 );
 			} );
 
 			it( 'has #style', () => {
-				const rnd = wrapper.find( Rnd );
-
-				expect( rnd.props().style ).to.deep.equal( {
+				expect( lastRndProps.style ).toEqual( {
 					position: 'relative'
 				} );
 			} );
 
 			it( 'has #position', () => {
-				const rnd = wrapper.find( Rnd );
-
-				expect( rnd.props().position ).to.deep.equal( { x: '100%', y: '100%' } );
+				expect( lastRndProps.position ).toEqual( { x: '100%', y: '100%' } );
 			} );
 
-			it( 'has #size', () => {
+			it( 'has #size', async () => {
 				store.dispatch( {
 					type: 'testAction',
 					state: {
@@ -86,18 +83,18 @@ describe( '<SidePane />', () => {
 					}
 				} );
 
-				wrapper.update();
-
-				expect( wrapper.find( SidePane ).find( Rnd ).props().size ).to.deep.equal( {
-					width: '42px',
-					height: '100%'
+				await waitFor( () => {
+					expect( lastRndProps.size ).toEqual( {
+						width: '42px',
+						height: '100%'
+					} );
 				} );
 			} );
 
 			it( 'has #onResizeStop', () => {
-				wrapper.find( SidePane ).find( Rnd ).props().onResizeStop( {}, {}, { style: { width: '321px' } } );
+				lastRndProps.onResizeStop( {}, {}, { style: { width: '321px' } } );
 
-				sinon.assert.calledWithExactly( dispatchSpy, {
+				expect( dispatchSpy ).toHaveBeenCalledWith( {
 					newWidth: '321px',
 					type: SET_SIDE_PANE_WIDTH
 				} );
