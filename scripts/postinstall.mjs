@@ -3,10 +3,9 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
-'use strict';
-
 import path from 'upath';
 import fs from 'fs';
+import { execSync } from 'child_process';
 import { ROOT_DIRECTORY } from './utils/constants.mjs';
 
 // When installing a repository as a dependency, the `.git` directory does not exist.
@@ -16,3 +15,7 @@ if ( fs.existsSync( path.join( ROOT_DIRECTORY, '.git' ) ) ) {
 
 	husky();
 }
+
+execSync( 'pnpm exec playwright install', {
+	stdio: 'inherit'
+} );
