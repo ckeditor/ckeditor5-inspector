@@ -15,16 +15,13 @@ export default class Tree extends Component {
 		let treeContent;
 
 		if ( this.props.definition ) {
-			const globalTreeProps = {
-				onClick: this.props.onClick,
-				showCompactText: this.props.showCompactText,
-				showElementTypes: this.props.showElementTypes,
-				activeNode: this.props.activeNode,
-				renderTreeNodeFromDefinition
-			};
-
 			treeContent = this.props.definition.map( ( definition, index ) => {
-				return renderTreeNodeFromDefinition( definition, index, globalTreeProps );
+				return renderTreeNodeFromDefinition( definition, index, {
+					onClick: this.props.onClick,
+					showCompactText: this.props.showCompactText,
+					showElementTypes: this.props.showElementTypes,
+					activeNode: this.props.activeNode
+				} );
 			} );
 		} else {
 			treeContent = 'Nothing to show.';

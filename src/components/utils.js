@@ -48,7 +48,7 @@ export function uid() {
 export function stringifyPropertyList( list ) {
 	const stringified = {};
 
-	for ( const name of Reflect.ownKeys( list ) ) {
+	for ( const name in list ) {
 		stringified[ name ] = list[ name ];
 		stringified[ name ].value = stringify( stringified[ name ].value );
 	}

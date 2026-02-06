@@ -104,7 +104,12 @@ describe( '<SetEditorDataButton />', () => {
 			await openModal();
 			const textarea = screen.getByPlaceholderText( 'Paste HTML here...' );
 
-			fireEvent.keyDown( textarea, { key: 'Enter', shiftKey: true } );
+			fireEvent.keyPress( textarea, {
+				key: 'Enter',
+				keyCode: 13,
+				charCode: 13,
+				shiftKey: true
+			} );
 
 			expect( setDataSpy ).toHaveBeenCalledTimes( 1 );
 			expect( screen.queryByRole( 'heading', { name: 'Set editor data' } ) ).toBeNull();

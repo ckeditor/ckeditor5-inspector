@@ -13,6 +13,7 @@ import TestEditor from '../utils/testeditor';
 import EditorQuickActions from '../../src/editorquickactions';
 
 vi.mock( 'copy-to-clipboard', () => ( {
+	__esModule: true,
 	default: vi.fn( () => true )
 } ) );
 

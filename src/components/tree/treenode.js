@@ -4,6 +4,7 @@
  */
 
 import { Component } from 'react';
+import { renderTreeNodeFromDefinition } from './utils';
 import isEqual from 'lodash.isequal';
 
 /**
@@ -21,12 +22,6 @@ export default class TreeNode extends Component {
 	}
 
 	getChildren() {
-		const renderTreeNodeFromDefinition = this.globalTreeProps.renderTreeNodeFromDefinition;
-
-		if ( !renderTreeNodeFromDefinition ) {
-			return [];
-		}
-
 		return this.definition.children.map( ( childDefinition, index ) => {
 			return renderTreeNodeFromDefinition( childDefinition, index, this.props.globalTreeProps );
 		} );

@@ -75,7 +75,7 @@ describe( 'Utils', () => {
 
 			expect( result.foo ).toEqual( { value: '"bar"' } );
 			expect( result.baz ).toEqual( { value: '"qux"' } );
-			expect( result[ symbolKey ] ).toEqual( { value: '"abc"' } );
+			expect( result[ symbolKey ] ).toBeUndefined();
 		} );
 	} );
 

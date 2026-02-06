@@ -8,6 +8,16 @@ import { fireEvent, render } from '@testing-library/react';
 import TreeElement from '../../../../src/components/tree/treeelement';
 import { renderTreeNodeFromDefinition } from '../../../../src/components/tree/utils';
 
+vi.mock( '../../../../src/components/tree/utils', () => ( {
+	renderTreeNodeFromDefinition: definition => {
+		if ( definition.type === 'text' ) {
+			return `"${ definition.text }"`;
+		}
+
+		return null;
+	}
+} ) );
+
 describe( '<TreeElement />', () => {
 	let clickSpy;
 

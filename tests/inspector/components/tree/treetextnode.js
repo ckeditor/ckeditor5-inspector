@@ -7,6 +7,10 @@ import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import TreeTextNode from '../../../../src/components/tree/treetextnode';
 
+vi.mock( '../../../../src/components/tree/utils', () => ( {
+	renderTreeNodeFromDefinition: () => null
+} ) );
+
 describe( '<TreeTextNode />', () => {
 	let clickSpy;
 
