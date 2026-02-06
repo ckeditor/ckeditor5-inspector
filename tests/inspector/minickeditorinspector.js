@@ -23,7 +23,6 @@ describe( 'MiniCKEditorInspector', () => {
 	} );
 
 	afterEach( () => {
-		vi.restoreAllMocks();
 		element.remove();
 		container.remove();
 

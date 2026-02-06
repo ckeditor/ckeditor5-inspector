@@ -44,7 +44,6 @@ describe( '<ViewNodeInspector />', () => {
 
 	afterEach( async () => {
 		element.remove();
-		vi.restoreAllMocks();
 		await editor.destroy();
 	} );
 

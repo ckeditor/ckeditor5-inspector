@@ -6,10 +6,6 @@
 import Logger from '../../src/logger';
 
 describe( 'Logger', () => {
-	afterEach( () => {
-		vi.restoreAllMocks();
-	} );
-
 	describe( '#group()', () => {
 		it( 'calls console.group', () => {
 			const stub = vi.spyOn( console, 'group' ).mockImplementation( () => {} );

@@ -47,7 +47,6 @@ describe( 'CKEditorInspector', () => {
 	} );
 
 	afterEach( () => {
-		vi.restoreAllMocks();
 		element.remove();
 
 		CKEditorInspector.destroy();

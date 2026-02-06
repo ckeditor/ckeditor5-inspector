@@ -41,7 +41,6 @@ describe( '<ModelSelectionInspector />', () => {
 	afterEach( async () => {
 		renderResult.unmount();
 		element.remove();
-		vi.restoreAllMocks();
 		await editor.destroy();
 	} );
 
