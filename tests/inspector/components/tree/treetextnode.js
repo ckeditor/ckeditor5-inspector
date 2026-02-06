@@ -3,6 +3,7 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import TreeTextNode from '../../../../src/components/tree/treetextnode';

@@ -48,7 +48,6 @@ export default defineConfig( {
 				{ browser: 'chromium' }
 			]
 		},
-		globals: true,
 		include: [
 			'tests/**/*.js'
 		],

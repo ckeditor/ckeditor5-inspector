@@ -3,6 +3,7 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import React from 'react';
 import { Paragraph } from 'ckeditor5';
 import TestEditor from '../../utils/testeditor';

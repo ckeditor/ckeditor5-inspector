@@ -3,6 +3,8 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect, vi } from 'vitest';
+
 import LocalStorageManager from '../../src/localstoragemanager';
 
 describe( 'LocalStorageManager', () => {

@@ -3,6 +3,8 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { expect } from 'vitest';
+
 import CKEditorInspector from '../../src/ckeditorinspector';
 
 export function assertTreeItems( items, expected ) {
