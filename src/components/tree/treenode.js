@@ -5,7 +5,7 @@
 
 import { Component } from 'react';
 import { renderTreeNodeFromDefinition } from './utils';
-import isEqual from 'lodash.isequal';
+import { isEqual } from 'es-toolkit/compat';
 
 /**
  * A base class for nodes in the tree.

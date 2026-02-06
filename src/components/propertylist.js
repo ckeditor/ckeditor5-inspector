@@ -4,7 +4,7 @@
  */
 
 import React, { PureComponent, Component } from 'react';
-import isEqual from 'lodash.isequal';
+import { isEqual } from 'es-toolkit/compat';
 import { truncateString } from './utils';
 import './propertylist.css';
 
