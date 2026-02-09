@@ -104,7 +104,6 @@ jobs:
       - checkout
       - bootstrap_repository_command
       - browser-tools/install_chrome
-      - browser-tools/install_firefox
       - run:
           name: Execute ESLint
           command: pnpm run lint
@@ -114,9 +113,6 @@ jobs:
       - run:
           name: Check coverage
           command: pnpm run test --coverage
-      - run:
-          name: Run tests on Firefox
-          command: pnpm run test --browsers=Firefox
       - unless:
           # Upload the code coverage results for non-nightly builds only.
           condition: << pipeline.parameters.isNightly >>

@@ -3,6 +3,8 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect } from 'vitest';
+
 import {
 	setModelCurrentRootName,
 	setModelCurrentNode,
@@ -21,40 +23,40 @@ import {
 
 describe( 'model data store actions', () => {
 	it( 'should export setModelCurrentRootName()', () => {
-		expect( setModelCurrentRootName( 'foo' ) ).to.deep.equal( {
+		expect( setModelCurrentRootName( 'foo' ) ).toEqual( {
 			type: SET_MODEL_CURRENT_ROOT_NAME,
 			currentRootName: 'foo'
 		} );
 	} );
 
 	it( 'should export setModelCurrentNode()', () => {
-		expect( setModelCurrentNode( 'foo' ) ).to.deep.equal( {
+		expect( setModelCurrentNode( 'foo' ) ).toEqual( {
 			type: SET_MODEL_CURRENT_NODE,
 			currentNode: 'foo'
 		} );
 	} );
 
 	it( 'should export setModelActiveTab()', () => {
-		expect( setModelActiveTab( 'foo' ) ).to.deep.equal( {
+		expect( setModelActiveTab( 'foo' ) ).toEqual( {
 			type: SET_MODEL_ACTIVE_TAB,
 			tabName: 'foo'
 		} );
 	} );
 
 	it( 'should export toggleModelShowMarkers()', () => {
-		expect( toggleModelShowMarkers() ).to.deep.equal( {
+		expect( toggleModelShowMarkers() ).toEqual( {
 			type: TOGGLE_MODEL_SHOW_MARKERS
 		} );
 	} );
 
 	it( 'should export toggleModelShowCompactText()', () => {
-		expect( toggleModelShowCompactText() ).to.deep.equal( {
+		expect( toggleModelShowCompactText() ).toEqual( {
 			type: TOGGLE_MODEL_SHOW_COMPACT_TEXT
 		} );
 	} );
 
 	it( 'should export updateModelState()', () => {
-		expect( updateModelState() ).to.deep.equal( {
+		expect( updateModelState() ).toEqual( {
 			type: UPDATE_MODEL_STATE
 		} );
 	} );

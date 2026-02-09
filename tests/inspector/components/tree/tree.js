@@ -3,39 +3,33 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import React from 'react';
+import { fireEvent, render } from '@testing-library/react';
 import Tree from '../../../../src/components/tree/tree';
-import TreeTextNode from '../../../../src/components/tree/treetextnode';
-import TreeElement from '../../../../src/components/tree/treeelement';
-import TreeComment from '../../../../src/components/tree/treecomment';
-import TreeNodeAttribute from '../../../../src/components/tree/treenodeattribute';
 
 describe( '<Tree />', () => {
-	let wrapper, clickSpy;
+	let clickSpy;
 
 	beforeEach( () => {
-		clickSpy = sinon.spy();
+		clickSpy = vi.fn();
 	} );
 
 	it( 'should render a tree', () => {
-		wrapper = mount( <Tree /> );
+		const { container } = render( <Tree /> );
 
-		expect( wrapper ).to.have.className( 'ck-inspector-tree' );
-		expect( wrapper.text() ).to.equal( 'Nothing to show.' );
-
-		wrapper.unmount();
+		expect( container.firstChild ).toHaveClass( 'ck-inspector-tree' );
+		expect( container.textContent ).toBe( 'Nothing to show.' );
 	} );
 
 	it( 'supports text direction', () => {
-		wrapper = mount( <Tree textDirection="rtl" /> );
+		const { container } = render( <Tree textDirection="rtl" /> );
 
-		expect( wrapper ).to.have.className( 'ck-inspector-tree_text-direction_rtl' );
-
-		wrapper.unmount();
+		expect( container.firstChild ).toHaveClass( 'ck-inspector-tree_text-direction_rtl' );
 	} );
 
 	describe( 'elements', () => {
-		let wrapper, itemA, itemAA, itemB, activeNode;
+		let renderResult, itemA, itemAA, itemB, activeNode;
 
 		beforeEach( () => {
 			activeNode = 'aa-node';
@@ -69,7 +63,7 @@ describe( '<Tree />', () => {
 				children: []
 			};
 
-			wrapper = mount( <Tree
+			renderResult = render( <Tree
 				definition={[ itemA, itemB ]}
 				onClick={clickSpy}
 				showCompactText={false}
@@ -79,48 +73,35 @@ describe( '<Tree />', () => {
 		} );
 
 		afterEach( () => {
-			wrapper.unmount();
+			renderResult.unmount();
 		} );
 
 		it( 'should be rendered', () => {
-			expect( wrapper.find( TreeElement ).length ).to.equal( 3 );
+			const nodes = document.querySelectorAll( '.ck-inspector-tree-node' );
+			expect( nodes ).toHaveLength( 3 );
 
-			const childA = wrapper.children().childAt( 0 );
-			const childAA = wrapper.children().childAt( 0 ).children().find( TreeElement );
-			const childB = wrapper.children().childAt( 1 );
-
-			expect( childA.type() ).to.equal( TreeElement );
-			expect( childAA.type() ).to.equal( TreeElement );
-			expect( childB.type() ).to.equal( TreeElement );
-
-			expect( childA.props().definition ).to.equal( itemA );
-			expect( childAA.props().definition ).to.equal( itemAA );
-			expect( childB.props().definition ).to.equal( itemB );
+			const names = document.querySelectorAll( '.ck-inspector-tree-node__name:not(.ck-inspector-tree-node__name_close)' );
+			expect( names[ 0 ] ).toHaveTextContent( 'a' );
+			expect( names[ 1 ] ).toHaveTextContent( 'aa' );
+			expect( names[ 2 ] ).toHaveTextContent( 'b' );
 		} );
 
 		it( 'should share tree\'s props#onClick', () => {
-			const childA = wrapper.children().childAt( 0 );
-			const childAA = wrapper.children().childAt( 0 ).children().find( TreeElement );
+			const nodes = document.querySelectorAll( '.ck-inspector-tree-node' );
 
-			expect( childA.find( 'div' ).first().props().onClick ).to.equal( childA.instance().handleClick );
-			expect( childAA.find( 'div' ).first().props().onClick ).to.equal( childAA.instance().handleClick );
-
-			childA.instance().handleClick();
-
-			sinon.assert.calledOnce( clickSpy );
+			fireEvent.click( nodes[ 0 ] );
+			expect( clickSpy ).toHaveBeenCalled();
 		} );
 
 		it( 'should respond to tree\'s props#activeNode', () => {
-			const childA = wrapper.children().childAt( 0 );
-			const childAA = wrapper.children().childAt( 0 ).children().find( TreeElement );
-
-			expect( childA ).to.not.have.className( 'ck-inspector-tree-node_active' );
-			expect( childAA ).to.have.className( 'ck-inspector-tree-node_active' );
+			const nodes = document.querySelectorAll( '.ck-inspector-tree-node' );
+			expect( nodes[ 0 ] ).not.toHaveClass( 'ck-inspector-tree-node_active' );
+			expect( nodes[ 1 ] ).toHaveClass( 'ck-inspector-tree-node_active' );
 		} );
 	} );
 
 	describe( 'text nodes', () => {
-		let wrapper, itemA, itemAA, itemB, activeNode;
+		let renderResult, itemA, itemAA, itemB, activeNode;
 
 		beforeEach( () => {
 			activeNode = 'aa-node';
@@ -130,7 +111,8 @@ describe( '<Tree />', () => {
 				name: 'aa',
 				node: activeNode,
 				attributes: [],
-				children: []
+				children: [],
+				text: 'abc'
 			};
 
 			itemA = {
@@ -151,10 +133,11 @@ describe( '<Tree />', () => {
 				name: 'b',
 				node: 'b-node',
 				attributes: [],
-				children: []
+				children: [],
+				text: 'xyz'
 			};
 
-			wrapper = mount( <Tree
+			renderResult = render( <Tree
 				definition={[ itemA, itemB ]}
 				onClick={clickSpy}
 				showCompactText={false}
@@ -164,63 +147,57 @@ describe( '<Tree />', () => {
 		} );
 
 		afterEach( () => {
-			wrapper.unmount();
+			renderResult.unmount();
 		} );
 
 		it( 'should be rendered', () => {
-			expect( wrapper.find( TreeElement ).length ).to.equal( 1 );
-			expect( wrapper.find( TreeTextNode ).length ).to.equal( 2 );
+			const elementNodes = document.querySelectorAll( '.ck-inspector-tree-node' );
+			const textNodes = document.querySelectorAll( '.ck-inspector-tree-text' );
 
-			const childA = wrapper.children().childAt( 0 );
-			const childAA = wrapper.children().childAt( 0 ).children().find( TreeTextNode );
-			const childB = wrapper.children().childAt( 1 );
-
-			expect( childA.type() ).to.equal( TreeElement );
-			expect( childAA.type() ).to.equal( TreeTextNode );
-			expect( childB.type() ).to.equal( TreeTextNode );
-
-			expect( childA.props().definition ).to.equal( itemA );
-			expect( childAA.props().definition ).to.equal( itemAA );
-			expect( childB.props().definition ).to.equal( itemB );
+			expect( elementNodes ).toHaveLength( 1 );
+			expect( textNodes ).toHaveLength( 2 );
+			expect( elementNodes[ 0 ].querySelector( '.ck-inspector-tree-node__name' ) ).toHaveTextContent( 'a' );
+			expect( textNodes[ 0 ] ).toHaveTextContent( '"abc"' );
+			expect( textNodes[ 1 ] ).toHaveTextContent( '"xyz"' );
 		} );
 
 		it( 'should share tree\'s props#onClick', () => {
-			const childA = wrapper.children().childAt( 0 );
-			const childAA = wrapper.children().childAt( 0 ).children().find( TreeTextNode );
+			const elementNode = document.querySelector( '.ck-inspector-tree-node' );
+			const textNode = document.querySelector( '.ck-inspector-tree-text' );
 
-			childA.instance().handleClick();
-			childAA.instance().handleClick();
+			fireEvent.click( elementNode );
+			expect( clickSpy ).toHaveBeenCalled();
 
-			sinon.assert.calledTwice( clickSpy );
+			clickSpy.mockClear();
+			fireEvent.click( textNode );
+			expect( clickSpy ).toHaveBeenCalled();
 		} );
 
 		it( 'share tree\'s props#showCompactText', () => {
-			let childA = wrapper.children().childAt( 0 );
-			let childAA = wrapper.children().childAt( 0 ).children().find( TreeTextNode );
+			const textNode = document.querySelector( '.ck-inspector-tree-text' );
+			expect( textNode ).toHaveTextContent( /^"abc"$/ );
 
-			expect( childA.props().globalTreeProps.showCompactText ).to.be.false;
-			expect( childAA.props().globalTreeProps.showCompactText ).to.be.false;
+			renderResult.rerender( <Tree
+				definition={[ itemA, itemB ]}
+				onClick={clickSpy}
+				showCompactText={true}
+				showElementTypes={false}
+				activeNode={activeNode}
+			/> );
 
-			wrapper.setProps( { showCompactText: true } );
-
-			childA = wrapper.children().childAt( 0 );
-			childAA = wrapper.children().childAt( 0 ).children().find( TreeTextNode );
-
-			expect( childA.props().globalTreeProps.showCompactText ).to.be.true;
-			expect( childAA.props().globalTreeProps.showCompactText ).to.be.true;
+			expect( document.querySelector( '.ck-inspector-tree-text' ) ).toHaveTextContent( /^abc$/ );
 		} );
 
 		it( 'respond to tree\'s props#activeNode', () => {
-			const childA = wrapper.children().childAt( 0 );
-			const childAA = wrapper.children().childAt( 0 ).children().find( TreeTextNode );
-
-			expect( childA ).to.not.have.className( 'ck-inspector-tree-node_active' );
-			expect( childAA ).to.have.className( 'ck-inspector-tree-node_active' );
+			const elementNode = document.querySelector( '.ck-inspector-tree-node' );
+			const textNodes = document.querySelectorAll( '.ck-inspector-tree-text' );
+			expect( elementNode ).not.toHaveClass( 'ck-inspector-tree-node_active' );
+			expect( textNodes[ 0 ] ).toHaveClass( 'ck-inspector-tree-node_active' );
 		} );
 	} );
 
 	describe( 'plain text', () => {
-		let wrapper, itemA;
+		let renderResult, itemA;
 
 		beforeEach( () => {
 			itemA = {
@@ -234,23 +211,23 @@ describe( '<Tree />', () => {
 				text: 'foo'
 			};
 
-			wrapper = mount( <Tree
+			renderResult = render( <Tree
 				definition={[ itemA ]}
 				onClick={clickSpy}
 			/> );
 		} );
 
 		afterEach( () => {
-			wrapper.unmount();
+			renderResult.unmount();
 		} );
 
 		it( 'is rendered', () => {
-			expect( wrapper.find( TreeTextNode ).length ).to.equal( 1 );
+			expect( document.querySelectorAll( '.ck-inspector-tree-text' ) ).toHaveLength( 1 );
 		} );
 	} );
 
 	describe( 'comment', () => {
-		let wrapper, itemA, itemAA, itemAB;
+		let renderResult, itemA, itemAA, itemAB;
 
 		beforeEach( () => {
 			itemAA = {
@@ -272,36 +249,29 @@ describe( '<Tree />', () => {
 				]
 			};
 
-			wrapper = mount( <Tree definition={[ itemA ]} /> );
+			renderResult = render( <Tree definition={[ itemA ]} /> );
 		} );
 
 		afterEach( () => {
-			wrapper.unmount();
+			renderResult.unmount();
 		} );
 
 		it( 'is rendered', () => {
-			expect( wrapper.find( TreeComment ).length ).to.equal( 2 );
-
-			const childAA = wrapper.children().childAt( 0 ).children().find( TreeComment ).first();
-			const childAB = wrapper.children().childAt( 0 ).children().find( TreeComment ).last();
-
-			expect( childAA.type() ).to.equal( TreeComment );
-			expect( childAB.type() ).to.equal( TreeComment );
-
-			expect( childAA.props().definition ).to.equal( itemAA );
-			expect( childAB.props().definition ).to.equal( itemAB );
+			const comments = document.querySelectorAll( '.ck-inspector-tree-comment' );
+			expect( comments ).toHaveLength( 2 );
+			expect( comments[ 0 ] ).toHaveTextContent( 'foo' );
+			expect( comments[ 1 ] ).toHaveTextContent( 'bar' );
 		} );
 
 		it( 'is rendered with unsafe html', () => {
-			const childAB = wrapper.children().childAt( 0 ).children().find( TreeComment ).last();
-
-			expect( childAB.html() ).to.equal( '<span class="ck-inspector-tree-comment"><b>bar</b></span>' );
+			const comments = document.querySelectorAll( '.ck-inspector-tree-comment' );
+			expect( comments[ 1 ].innerHTML ).toBe( '<b>bar</b>' );
 		} );
 	} );
 
 	describe( 'attribute', () => {
 		it( 'truncates values above 500 characters', () => {
-			const wrapper = mount( <Tree
+			const { container } = render( <Tree
 				definition={[
 					{
 						type: 'text',
@@ -316,16 +286,11 @@ describe( '<Tree />', () => {
 				]}
 			/> );
 
-			const firstAttribute = wrapper.children().find( TreeNodeAttribute ).first();
-			const secondAttribute = wrapper.children().find( TreeNodeAttribute ).at( 1 );
-			const thirdAttribute = wrapper.children().find( TreeNodeAttribute ).last();
-
-			expect( firstAttribute.childAt( 0 ).childAt( 1 ).text() ).to.have.length( 499 );
-			expect( secondAttribute.childAt( 0 ).childAt( 1 ).text() ).to.have.length( 500 );
-			expect( thirdAttribute.childAt( 0 ).childAt( 1 ).text() ).to.have.lengthOf.below( 550 );
-			expect( thirdAttribute.childAt( 0 ).childAt( 1 ).text() ).to.match( /characters left]$/ );
-
-			wrapper.unmount();
+			const values = container.querySelectorAll( '.ck-inspector-tree-node__attribute__value' );
+			expect( values[ 0 ].textContent ).toHaveLength( 499 );
+			expect( values[ 1 ].textContent ).toHaveLength( 500 );
+			expect( values[ 2 ].textContent.length ).toBeLessThan( 550 );
+			expect( values[ 2 ].textContent ).toMatch( /characters left]$/ );
 		} );
 	} );
 } );

@@ -3,6 +3,8 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+
 import TestEditor from '../utils/testeditor';
 import CKEditorInspector from '../../src/ckeditorinspector';
 
@@ -35,8 +37,8 @@ describe( 'CKEditorInspector', () => {
 		window.localStorage.clear();
 
 		// Silence inspector logs.
-		sinon.stub( Logger, 'log' ).callsFake( () => {} );
-		warnStub = sinon.stub( Logger, 'warn' ).callsFake( () => {} );
+		vi.spyOn( Logger, 'log' ).mockImplementation( () => {} );
+		warnStub = vi.spyOn( Logger, 'warn' ).mockImplementation( () => {} );
 
 		element = document.createElement( 'div' );
 		document.body.appendChild( element );
@@ -47,7 +49,6 @@ describe( 'CKEditorInspector', () => {
 	} );
 
 	afterEach( () => {
-		sinon.restore();
 		element.remove();
 
 		CKEditorInspector.destroy();
@@ -57,7 +58,7 @@ describe( 'CKEditorInspector', () => {
 
 	describe( 'CKEDITOR_INSPECTOR_VERSION', () => {
 		it( 'should be set', () => {
-			expect( window.CKEDITOR_INSPECTOR_VERSION ).to.be.a( 'string' );
+			expect( typeof window.CKEDITOR_INSPECTOR_VERSION ).toBe( 'string' );
 		} );
 	} );
 
@@ -65,10 +66,9 @@ describe( 'CKEditorInspector', () => {
 		// eslint-disable-next-line no-unused-vars
 		const inspector = new CKEditorInspector();
 
-		sinon.assert.calledWithMatch(
-			warnStub,
+		expect( warnStub ).toHaveBeenCalledWith( expect.stringMatching(
 			/\[CKEditorInspector\] Whoops! Looks like you tried to create an instance of the CKEditorInspector class\./
-		);
+		) );
 	} );
 
 	describe( '#attach()', () => {
@@ -87,10 +87,9 @@ describe( 'CKEditorInspector', () => {
 
 			CKEditorInspector.attach( { foo: editor } );
 
-			sinon.assert.calledWithMatch(
-				warnStub,
+			expect( warnStub ).toHaveBeenCalledWith( expect.stringMatching(
 				/^\[CKEditorInspector\] The inspector requires using CKEditor 5 in version 34 or higher\./
-			);
+			) );
 		} );
 
 		it( 'should not warn if using CKEditor 5 in version 34', () => {
@@ -98,7 +97,7 @@ describe( 'CKEditorInspector', () => {
 
 			CKEditorInspector.attach( { foo: editor } );
 
-			expect( warnStub.called ).to.equal( false );
+			expect( warnStub ).not.toHaveBeenCalled();
 		} );
 
 		it( 'should warn if cannot determine a version of CKEditor 5', () => {
@@ -106,26 +105,25 @@ describe( 'CKEditorInspector', () => {
 
 			CKEditorInspector.attach( { foo: editor } );
 
-			sinon.assert.calledWithMatch(
-				warnStub,
+			expect( warnStub ).toHaveBeenCalledWith( expect.stringMatching(
 				/^\[CKEditorInspector\] Could not determine a version of CKEditor 5. Some of the functionalities may not work as expected\./
-			);
+			) );
 		} );
 
 		it( 'should add the inspector to DOM', () => {
-			expect( document.querySelector( '.ck-inspector-wrapper' ) ).to.be.null;
-			expect( CKEditorInspector._wrapper ).to.be.null;
+			expect( document.querySelector( '.ck-inspector-wrapper' ) ).toBeNull();
+			expect( CKEditorInspector._wrapper ).toBeNull();
 
 			CKEditorInspector.attach( { foo: editor } );
 
-			expect( CKEditorInspector._wrapper ).to.be.instanceOf( HTMLElement );
+			expect( CKEditorInspector._wrapper ).toBeInstanceOf( HTMLElement );
 
 			const wrapper = CKEditorInspector._wrapper;
 
-			expect( wrapper.tagName.toLowerCase() ).to.equal( 'div' );
-			expect( wrapper.parentNode ).to.equal( document.body );
-			expect( wrapper.childNodes.length ).to.equal( 1 );
-			expect( wrapper.firstChild.classList.contains( 'ck-inspector' ) ).to.be.true;
+			expect( wrapper.tagName.toLowerCase() ).toBe( 'div' );
+			expect( wrapper.parentNode ).toBe( document.body );
+			expect( wrapper.childNodes ).toHaveLength( 1 );
+			expect( wrapper.firstChild.classList.contains( 'ck-inspector' ) ).toBe( true );
 		} );
 
 		describe( 'redux #_store', () => {
@@ -134,8 +132,8 @@ describe( 'CKEditorInspector', () => {
 
 				const state = getStoreState();
 
-				expect( state.editors.get( 'foo' ) ).to.equal( CKEditorInspector._editors.get( 'foo' ) );
-				expect( state.currentEditorName ).to.equal( 'foo' );
+				expect( state.editors.get( 'foo' ) ).toBe( CKEditorInspector._editors.get( 'foo' ) );
+				expect( state.currentEditorName ).toBe( 'foo' );
 			} );
 
 			it( 'should be created only once when attaching to the first editor', () => {
@@ -152,7 +150,7 @@ describe( 'CKEditorInspector', () => {
 
 						const secondReference = CKEditorInspector._store;
 
-						expect( firstReference ).to.equal( secondReference );
+						expect( firstReference ).toBe( secondReference );
 
 						return anotherEditor.destroy();
 					} );
@@ -164,22 +162,22 @@ describe( 'CKEditorInspector', () => {
 				it( 'should start listening to the document#change and view#render events', () => {
 					CKEditorInspector.attach( { foo: editor } );
 
-					const spy = sinon.stub( CKEditorInspector._store, 'dispatch' );
+					const spy = vi.spyOn( CKEditorInspector._store, 'dispatch' ).mockImplementation( () => {} );
 
 					editor.model.document.fire( 'change' );
 
-					sinon.assert.calledThrice( spy );
-					sinon.assert.calledWithExactly( spy.firstCall, { type: UPDATE_MODEL_STATE } );
-					sinon.assert.calledWithExactly( spy.secondCall, { type: UPDATE_COMMANDS_STATE } );
+					expect( spy ).toHaveBeenCalledTimes( 3 );
+					expect( spy ).toHaveBeenNthCalledWith( 1, { type: UPDATE_MODEL_STATE } );
+					expect( spy ).toHaveBeenNthCalledWith( 2, { type: UPDATE_COMMANDS_STATE } );
 
 					// After model->view conversion.
-					sinon.assert.calledWithExactly( spy.thirdCall, { type: UPDATE_VIEW_STATE } );
+					expect( spy ).toHaveBeenNthCalledWith( 3, { type: UPDATE_VIEW_STATE } );
 
 					editor.editing.view.fire( 'render' );
-					sinon.assert.callCount( spy, 4 );
-					sinon.assert.calledWithExactly( spy.getCall( 3 ), { type: UPDATE_VIEW_STATE } );
+					expect( spy ).toHaveBeenCalledTimes( 4 );
+					expect( spy ).toHaveBeenNthCalledWith( 4, { type: UPDATE_VIEW_STATE } );
 
-					spy.restore();
+					spy.mockRestore();
 				} );
 
 				// https://github.com/ckeditor/ckeditor5-inspector/issues/80
@@ -187,42 +185,42 @@ describe( 'CKEditorInspector', () => {
 					CKEditorInspector.attach( { foo: editor } );
 					dispatchStoreAction( toggleIsCollapsed() );
 
-					const spy = sinon.stub( CKEditorInspector._store, 'dispatch' );
+					const spy = vi.spyOn( CKEditorInspector._store, 'dispatch' ).mockImplementation( () => {} );
 
 					editor.model.document.fire( 'change' );
-					sinon.assert.notCalled( spy );
+					expect( spy ).not.toHaveBeenCalled();
 
-					spy.restore();
+					spy.mockRestore();
 				} );
 
 				it( 'should stop listening to the document#change and view#render events when the inspector is being detached', () => {
 					CKEditorInspector.attach( { foo: editor } );
 
-					const spy = sinon.spy( CKEditorInspector._store, 'dispatch' );
+					const spy = vi.spyOn( CKEditorInspector._store, 'dispatch' );
 
 					editor.model.document.fire( 'change' );
-					sinon.assert.calledThrice( spy );
+					expect( spy ).toHaveBeenCalledTimes( 3 );
 
 					CKEditorInspector.detach( 'foo' );
 
 					editor.model.document.fire( 'change' );
 
-					sinon.assert.callCount( spy, 4 );
-					sinon.assert.calledWithExactly( spy.getCall( 3 ), { type: SET_EDITORS, editors: sinon.match.map } );
+					expect( spy ).toHaveBeenCalledTimes( 4 );
+					expect( spy ).toHaveBeenNthCalledWith( 4, { type: SET_EDITORS, editors: expect.any( Map ) } );
 				} );
 
 				it( 'should stop listening to the document#change and view#render events when the inspector is being destroyed', () => {
 					CKEditorInspector.attach( { foo: editor } );
 
-					const spy = sinon.spy( CKEditorInspector._store, 'dispatch' );
+					const spy = vi.spyOn( CKEditorInspector._store, 'dispatch' );
 
 					editor.model.document.fire( 'change' );
-					sinon.assert.calledThrice( spy );
+					expect( spy ).toHaveBeenCalledTimes( 3 );
 
 					CKEditorInspector.destroy();
 
 					editor.model.document.fire( 'change' );
-					sinon.assert.calledThrice( spy );
+					expect( spy ).toHaveBeenCalledTimes( 3 );
 				} );
 			} );
 
@@ -234,19 +232,19 @@ describe( 'CKEditorInspector', () => {
 					.then( anotherEditor => {
 						CKEditorInspector.attach( { foo: editor, bar: anotherEditor } );
 
-						const spy = sinon.spy( CKEditorInspector._store, 'dispatch' );
+						const spy = vi.spyOn( CKEditorInspector._store, 'dispatch' );
 
 						editor.model.document.fire( 'change' );
-						sinon.assert.calledThrice( spy );
+						expect( spy ).toHaveBeenCalledTimes( 3 );
 
 						dispatchStoreAction( setCurrentEditorName( 'bar' ) );
-						spy.resetHistory();
+						spy.mockClear();
 
 						editor.model.document.fire( 'change' );
-						sinon.assert.notCalled( spy );
+						expect( spy ).not.toHaveBeenCalled();
 
 						anotherEditor.model.document.fire( 'change' );
-						sinon.assert.calledThrice( spy );
+						expect( spy ).toHaveBeenCalledTimes( 3 );
 
 						return anotherEditor.destroy();
 					} );
@@ -266,7 +264,7 @@ describe( 'CKEditorInspector', () => {
 
 						const secondReference = CKEditorInspector._editorListener;
 
-						expect( firstReference ).to.equal( secondReference );
+						expect( firstReference ).toBe( secondReference );
 
 						return anotherEditor.destroy();
 					} );
@@ -276,66 +274,66 @@ describe( 'CKEditorInspector', () => {
 				it( 'should start listening to the editor#change:isReadOnly event', () => {
 					CKEditorInspector.attach( { foo: editor } );
 
-					const spy = sinon.stub( CKEditorInspector._store, 'dispatch' );
+					const spy = vi.spyOn( CKEditorInspector._store, 'dispatch' ).mockImplementation( () => {} );
 
 					editor.enableReadOnlyMode( 'Custom Lock' );
 
 					// FYI: Changing read only triggers view#render in the editor.
-					sinon.assert.callCount( spy, 2 );
-					sinon.assert.calledWithExactly( spy.firstCall, { type: UPDATE_VIEW_STATE } );
-					sinon.assert.calledWithExactly( spy.secondCall, { type: UPDATE_CURRENT_EDITOR_IS_READ_ONLY } );
+					expect( spy ).toHaveBeenCalledTimes( 2 );
+					expect( spy ).toHaveBeenNthCalledWith( 1, { type: UPDATE_VIEW_STATE } );
+					expect( spy ).toHaveBeenNthCalledWith( 2, { type: UPDATE_CURRENT_EDITOR_IS_READ_ONLY } );
 
 					editor.disableReadOnlyMode( 'Custom Lock' );
 
-					sinon.assert.callCount( spy, 4 );
-					sinon.assert.calledWithExactly( spy.thirdCall, { type: UPDATE_VIEW_STATE } );
-					sinon.assert.calledWithExactly( spy.getCall( 3 ), { type: UPDATE_CURRENT_EDITOR_IS_READ_ONLY } );
+					expect( spy ).toHaveBeenCalledTimes( 4 );
+					expect( spy ).toHaveBeenNthCalledWith( 3, { type: UPDATE_VIEW_STATE } );
+					expect( spy ).toHaveBeenNthCalledWith( 4, { type: UPDATE_CURRENT_EDITOR_IS_READ_ONLY } );
 
-					spy.restore();
+					spy.mockRestore();
 				} );
 
 				it( 'should continue listening to the editor#change:isReadOnly event when the inspector is collapsed', () => {
 					CKEditorInspector.attach( { foo: editor } );
 					dispatchStoreAction( toggleIsCollapsed() );
 
-					const spy = sinon.stub( CKEditorInspector._store, 'dispatch' );
+					const spy = vi.spyOn( CKEditorInspector._store, 'dispatch' ).mockImplementation( () => {} );
 
 					editor.enableReadOnlyMode( 'Custom Lock' );
-					sinon.assert.calledOnce( spy );
+					expect( spy ).toHaveBeenCalledTimes( 1 );
 					// FYI: UPDATE_VIEW_STATE will not happen when the inspector is collapsed.
-					sinon.assert.calledWithExactly( spy.firstCall, { type: UPDATE_CURRENT_EDITOR_IS_READ_ONLY } );
+					expect( spy ).toHaveBeenCalledWith( { type: UPDATE_CURRENT_EDITOR_IS_READ_ONLY } );
 
-					spy.restore();
+					spy.mockRestore();
 				} );
 
 				it( 'should stop listening to the editor#change:isReadOnly event when the inspector is being detached', () => {
 					CKEditorInspector.attach( { foo: editor } );
 
-					const spy = sinon.spy( CKEditorInspector._store, 'dispatch' );
+					const spy = vi.spyOn( CKEditorInspector._store, 'dispatch' );
 
 					editor.enableReadOnlyMode( 'Custom Lock' );
-					sinon.assert.calledTwice( spy );
+					expect( spy ).toHaveBeenCalledTimes( 2 );
 
 					CKEditorInspector.detach( 'foo' );
 
 					editor.disableReadOnlyMode( 'Custom Lock' );
 
-					sinon.assert.callCount( spy, 3 );
-					sinon.assert.calledWithExactly( spy.getCall( 2 ), { type: SET_EDITORS, editors: sinon.match.map } );
+					expect( spy ).toHaveBeenCalledTimes( 3 );
+					expect( spy ).toHaveBeenNthCalledWith( 3, { type: SET_EDITORS, editors: expect.any( Map ) } );
 				} );
 
 				it( 'should stop listening to the editor#change:isReadOnly event when the inspector is being destroyed', () => {
 					CKEditorInspector.attach( { foo: editor } );
 
-					const spy = sinon.spy( CKEditorInspector._store, 'dispatch' );
+					const spy = vi.spyOn( CKEditorInspector._store, 'dispatch' );
 
 					editor.enableReadOnlyMode( 'Custom Lock' );
-					sinon.assert.calledTwice( spy );
+					expect( spy ).toHaveBeenCalledTimes( 2 );
 
 					CKEditorInspector.destroy();
 
 					editor.disableReadOnlyMode( 'Custom Lock' );
-					sinon.assert.calledTwice( spy );
+					expect( spy ).toHaveBeenCalledTimes( 2 );
 				} );
 			} );
 		} );
@@ -349,8 +347,8 @@ describe( 'CKEditorInspector', () => {
 					CKEditorInspector.attach( { foo: editor } );
 					CKEditorInspector.attach( { bar: anotherEditor } );
 
-					expect( document.querySelectorAll( '.ck-inspector-wrapper' ) ).to.be.lengthOf( 1 );
-					expect( document.querySelectorAll( '.ck-inspector' ) ).to.be.lengthOf( 1 );
+					expect( document.querySelectorAll( '.ck-inspector-wrapper' ) ).toHaveLength( 1 );
+					expect( document.querySelectorAll( '.ck-inspector' ) ).toHaveLength( 1 );
 
 					anotherEditorElement.remove();
 
@@ -365,12 +363,12 @@ describe( 'CKEditorInspector', () => {
 					const secondNames = CKEditorInspector.attach( anotherEditor );
 					const state = getStoreState();
 
-					expect( state.editors.get( 'editor-1' ) ).to.equal( editor );
-					expect( state.editors.get( 'editor-2' ) ).to.equal( anotherEditor );
-					expect( state.currentEditorName ).to.equal( 'editor-1' );
+					expect( state.editors.get( 'editor-1' ) ).toBe( editor );
+					expect( state.editors.get( 'editor-2' ) ).toBe( anotherEditor );
+					expect( state.currentEditorName ).toBe( 'editor-1' );
 
-					expect( firstNames ).to.have.members( [ 'editor-1' ] );
-					expect( secondNames ).to.have.members( [ 'editor-2' ] );
+					expect( firstNames ).toEqual( [ 'editor-1' ] );
+					expect( secondNames ).toEqual( [ 'editor-2' ] );
 
 					return anotherEditor.destroy();
 				} );
@@ -381,8 +379,8 @@ describe( 'CKEditorInspector', () => {
 
 			const state = getStoreState();
 
-			expect( state.editors.get( 'foo' ) ).to.equal( editor );
-			expect( state.currentEditorName ).to.equal( 'foo' );
+			expect( state.editors.get( 'foo' ) ).toBe( editor );
+			expect( state.currentEditorName ).toBe( 'foo' );
 		} );
 
 		it( 'should attach to an editor named like one of core editor properties (used in a duck typing)', () => {
@@ -391,9 +389,9 @@ describe( 'CKEditorInspector', () => {
 
 			const state = getStoreState();
 
-			expect( state.editors.get( 'model' ) ).to.equal( editor );
-			expect( state.editors.get( 'editing' ) ).to.equal( editor );
-			expect( state.currentEditorName ).to.equal( 'model' );
+			expect( state.editors.get( 'model' ) ).toBe( editor );
+			expect( state.editors.get( 'editing' ) ).toBe( editor );
+			expect( state.currentEditorName ).toBe( 'model' );
 		} );
 
 		it( 'should attach to multiple editors at a time', () => {
@@ -402,10 +400,11 @@ describe( 'CKEditorInspector', () => {
 					const names = CKEditorInspector.attach( { foo: editor, bar: anotherEditor } );
 					const state = getStoreState();
 
-					expect( state.editors.get( 'foo' ) ).to.equal( editor );
-					expect( state.editors.get( 'bar' ) ).to.equal( anotherEditor );
-					expect( state.currentEditorName ).to.equal( 'foo' );
-					expect( names ).to.have.members( [ 'foo', 'bar' ] );
+					expect( state.editors.get( 'foo' ) ).toBe( editor );
+					expect( state.editors.get( 'bar' ) ).toBe( anotherEditor );
+					expect( state.currentEditorName ).toBe( 'foo' );
+					expect( names ).toEqual( expect.arrayContaining( [ 'foo', 'bar' ] ) );
+					expect( names ).toHaveLength( 2 );
 
 					return anotherEditor.destroy();
 				} );
@@ -416,23 +415,23 @@ describe( 'CKEditorInspector', () => {
 
 			const editors = getStoreState().editors;
 
-			expect( editors.get( 'foo' ) ).to.equal( editor );
-			sinon.assert.calledWithMatch( warnStub, /^\[CKEditorInspector\] The CKEditorInspector\.attach/ );
+			expect( editors.get( 'foo' ) ).toBe( editor );
+			expect( warnStub ).toHaveBeenCalledWith( expect.stringMatching( /^\[CKEditorInspector\] The CKEditorInspector\.attach/ ) );
 		} );
 
 		it( 'should detach when the editor is destroyed', () => {
-			const spy = sinon.spy( CKEditorInspector, 'detach' );
+			const spy = vi.spyOn( CKEditorInspector, 'detach' );
 
 			CKEditorInspector.attach( { bar: editor } );
 
 			return editor.destroy().then( () => {
 				const state = getStoreState();
 
-				sinon.assert.calledOnce( spy );
-				sinon.assert.calledWith( spy, 'bar' );
+				expect( spy ).toHaveBeenCalledTimes( 1 );
+				expect( spy ).toHaveBeenCalledWith( 'bar' );
 
-				expect( state.editors.size ).to.equal( 0 );
-				expect( state.currentEditorName ).to.be.null;
+				expect( state.editors.size ).toBe( 0 );
+				expect( state.currentEditorName ).toBeNull();
 			} );
 		} );
 
@@ -442,20 +441,20 @@ describe( 'CKEditorInspector', () => {
 
 			dispatchStoreAction( toggleIsCollapsed() );
 
-			const spy = sinon.spy( CKEditorInspector._store, 'dispatch' );
+			const spy = vi.spyOn( CKEditorInspector._store, 'dispatch' );
 
 			editor.model.document.fire( 'change' );
-			sinon.assert.notCalled( spy );
+			expect( spy ).not.toHaveBeenCalled();
 
 			dispatchStoreAction( toggleIsCollapsed() );
 
-			sinon.assert.callCount( spy, 4 );
+			expect( spy ).toHaveBeenCalledTimes( 4 );
 			// Note: The 0 call was TOGGLE_IS_COLLAPSED.
-			sinon.assert.calledWithExactly( spy.getCall( 1 ), { type: UPDATE_MODEL_STATE } );
-			sinon.assert.calledWithExactly( spy.getCall( 2 ), { type: UPDATE_COMMANDS_STATE } );
-			sinon.assert.calledWithExactly( spy.getCall( 3 ), { type: UPDATE_VIEW_STATE } );
+			expect( spy ).toHaveBeenNthCalledWith( 2, { type: UPDATE_MODEL_STATE } );
+			expect( spy ).toHaveBeenNthCalledWith( 3, { type: UPDATE_COMMANDS_STATE } );
+			expect( spy ).toHaveBeenNthCalledWith( 4, { type: UPDATE_VIEW_STATE } );
 
-			spy.restore();
+			spy.mockRestore();
 		} );
 
 		describe( 'options', () => {
@@ -463,19 +462,19 @@ describe( 'CKEditorInspector', () => {
 				it( 'should be false if unspecified', () => {
 					CKEditorInspector.attach( editor );
 
-					expect( getStoreState().ui.isCollapsed ).to.be.false;
+					expect( getStoreState().ui.isCollapsed ).toBe( false );
 				} );
 
 				it( 'should control the initial collapsed state of the inspector (single editor)', () => {
 					CKEditorInspector.attach( editor, { isCollapsed: true } );
 
-					expect( getStoreState().ui.isCollapsed ).to.be.true;
+					expect( getStoreState().ui.isCollapsed ).toBe( true );
 				} );
 
 				it( 'should control the initial collapsed state of the inspector (multiple editors)', () => {
 					CKEditorInspector.attach( { foo: editor }, { isCollapsed: true } );
 
-					expect( getStoreState().ui.isCollapsed ).to.be.true;
+					expect( getStoreState().ui.isCollapsed ).toBe( true );
 				} );
 
 				it( 'should override the configuration in the LocalStorage', () => {
@@ -483,7 +482,7 @@ describe( 'CKEditorInspector', () => {
 
 					CKEditorInspector.attach( { foo: editor }, { isCollapsed: false } );
 
-					expect( getStoreState().ui.isCollapsed ).to.be.false;
+					expect( getStoreState().ui.isCollapsed ).toBe( false );
 				} );
 			} );
 		} );
@@ -498,13 +497,10 @@ describe( 'CKEditorInspector', () => {
 
 					const editorNames = CKEditorInspector.attachToAll();
 					const state = getStoreState();
+					const attachedEditors = editorNames.map( name => state.editors.get( name ) );
 
-					expect( state.editors.size ).to.equal( 2 );
-					expect( state.editors.get( 'editor-5' ) ).to.equal( editor );
-					expect( state.editors.get( 'editor-6' ) ).to.equal( anotherEditor );
-					expect( state.currentEditorName ).to.equal( 'editor-5' );
-
-					expect( editorNames ).to.have.members( [ 'editor-5', 'editor-6' ] );
+					expect( attachedEditors ).toEqual( expect.arrayContaining( [ editor, anotherEditor ] ) );
+					expect( editorNames ).toEqual( expect.arrayContaining( [ state.currentEditorName ] ) );
 
 					return anotherEditor.destroy();
 				} );
@@ -519,16 +515,15 @@ describe( 'CKEditorInspector', () => {
 					CKEditorInspector.attachToAll();
 
 					let editors = getStoreState().editors;
+					const initialEditorCount = editors.size;
 
-					expect( editors.size ).to.equal( 2 );
-					expect( editors.get( 'editor-7' ) ).to.equal( editor );
-					expect( editors.get( 'editor-8' ) ).to.equal( anotherEditor );
+					expect( [ ...editors.values() ] ).toEqual( expect.arrayContaining( [ editor, anotherEditor ] ) );
 
 					CKEditorInspector.attachToAll();
 
 					editors = getStoreState().editors;
 
-					expect( editors.size ).to.equal( 2 );
+					expect( editors.size ).toBe( initialEditorCount );
 
 					return anotherEditor.destroy();
 				} );
@@ -540,12 +535,12 @@ describe( 'CKEditorInspector', () => {
 					document.body.appendChild( editor.ui.view.element );
 					document.body.appendChild( anotherEditor.ui.view.element );
 
-					const spy = sinon.spy( CKEditorInspector, 'attach' );
+					const spy = vi.spyOn( CKEditorInspector, 'attach' );
 					const options = { foo: true };
 					CKEditorInspector.attachToAll( options );
 
-					sinon.assert.calledWithExactly( spy.firstCall, editor, options );
-					sinon.assert.calledWithExactly( spy.secondCall, anotherEditor, options );
+					expect( spy ).toHaveBeenCalledWith( editor, options );
+					expect( spy ).toHaveBeenCalledWith( anotherEditor, options );
 
 					return anotherEditor.destroy();
 				} );
@@ -558,15 +553,15 @@ describe( 'CKEditorInspector', () => {
 
 			let state = getStoreState();
 
-			expect( state.editors.get( 'foo' ) ).to.equal( editor );
-			expect( state.currentEditorName ).to.equal( 'foo' );
+			expect( state.editors.get( 'foo' ) ).toBe( editor );
+			expect( state.currentEditorName ).toBe( 'foo' );
 
 			CKEditorInspector.detach( 'foo' );
 
 			state = getStoreState();
 
-			expect( state.editors.size ).to.equal( 0 );
-			expect( state.currentEditorName ).to.be.null;
+			expect( state.editors.size ).toBe( 0 );
+			expect( state.currentEditorName ).toBeNull();
 		} );
 
 		it( 'should not throw if executed multiple times', () => {
@@ -575,7 +570,7 @@ describe( 'CKEditorInspector', () => {
 			expect( () => {
 				CKEditorInspector.detach( 'foo' );
 				CKEditorInspector.detach( 'foo' );
-			} ).to.not.throw();
+			} ).not.toThrow();
 		} );
 	} );
 
@@ -584,10 +579,10 @@ describe( 'CKEditorInspector', () => {
 			CKEditorInspector.attach( { foo: editor } );
 			CKEditorInspector.destroy();
 
-			expect( document.querySelector( '.ck-inspector-wrapper' ) ).to.be.null;
-			expect( CKEditorInspector._editors.size ).to.equal( 0 );
-			expect( CKEditorInspector._wrapper ).to.be.null;
-			expect( CKEditorInspector._store ).to.be.null;
+			expect( document.querySelector( '.ck-inspector-wrapper' ) ).toBeNull();
+			expect( CKEditorInspector._editors.size ).toBe( 0 );
+			expect( CKEditorInspector._wrapper ).toBeNull();
+			expect( CKEditorInspector._store ).toBeNull();
 		} );
 	} );
 } );

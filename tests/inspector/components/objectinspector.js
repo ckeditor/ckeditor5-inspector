@@ -3,50 +3,41 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import React from 'react';
+import { render } from '@testing-library/react';
 import ObjectInspector from '../../../src/components/objectinspector';
-import PropertyList from '../../../src/components/propertylist';
+
+let propertyListProps;
+
+vi.mock( '../../../src/components/propertylist', () => ( {
+	default: props => {
+		propertyListProps = props;
+
+		return <div className="ck-inspector-property-list" />;
+	}
+} ) );
 
 describe( '<ObjectInspector />', () => {
-	let wrapper;
-
-	afterEach( () => {
-		wrapper.unmount();
+	beforeEach( () => {
+		propertyListProps = null;
 	} );
 
 	it( 'renders', () => {
-		wrapper = mount( <ObjectInspector lists={[]} /> );
+		const { container } = render( <ObjectInspector lists={[]} /> );
 
-		expect( wrapper ).to.have.className( 'ck-inspector__object-inspector' );
+		expect( container.firstChild ).toHaveClass( 'ck-inspector__object-inspector' );
 	} );
 
 	it( 'renders props#header', () => {
-		wrapper = mount( <ObjectInspector lists={[]} header="foo" /> );
+		const { container } = render( <ObjectInspector lists={[]} header="foo" /> );
 
-		expect( wrapper.find( 'h2' ) ).to.have.className( 'ck-inspector-code' );
+		expect( container.querySelector( 'h2' ) ).toHaveClass( 'ck-inspector-code' );
 	} );
 
 	describe( 'props#lists', () => {
-		it( 'does not render when there are no items', () => {
-			wrapper = mount( <ObjectInspector lists={[
-				{
-					name: 'foo',
-					url: 'http://bar',
-					buttons: [
-						{
-							type: 'log',
-							label: 'ABC'
-						}
-					],
-					itemDefinitions: {}
-				}
-			]} /> );
-
-			expect( wrapper.find( PropertyList ) ).to.have.length( 0 );
-		} );
-
-		it( 'renders a <PropertyList /> when there are items', () => {
-			wrapper = mount( <ObjectInspector lists={[
+		it( 'passes itemDefinitions to <PropertyList />', () => {
+			render( <ObjectInspector lists={[
 				{
 					name: 'foo',
 					url: 'http://bar',
@@ -63,18 +54,57 @@ describe( '<ObjectInspector />', () => {
 				}
 			]} /> );
 
-			expect( wrapper.find( 'hr' ) ).to.have.length( 1 );
-			expect( wrapper.find( 'h3' ).text() ).to.equal( 'foo' );
-			expect( wrapper.find( PropertyList ).props().itemDefinitions ).to.deep.equal( {
+			expect( propertyListProps.itemDefinitions ).toEqual( {
 				foo: { value: 'bar' },
 				qux: { value: 'baz' }
 			} );
 		} );
 
-		it( 'passes a "onPropertyTitleClick" handler to <PropertyList />', () => {
-			const onClickMock = sinon.spy();
+		it( 'does not render when there are no items', () => {
+			const { container } = render( <ObjectInspector lists={[
+				{
+					name: 'foo',
+					url: 'http://bar',
+					buttons: [
+						{
+							type: 'log',
+							label: 'ABC'
+						}
+					],
+					itemDefinitions: {}
+				}
+			]} /> );
 
-			wrapper = mount( <ObjectInspector lists={[
+			expect( container.querySelectorAll( '.ck-inspector-property-list' ) ).toHaveLength( 0 );
+		} );
+
+		it( 'renders a <PropertyList /> when there are items', () => {
+			const { container } = render( <ObjectInspector lists={[
+				{
+					name: 'foo',
+					url: 'http://bar',
+					buttons: [
+						{
+							type: 'log',
+							label: 'ABC'
+						}
+					],
+					itemDefinitions: {
+						foo: { value: 'bar' },
+						qux: { value: 'baz' }
+					}
+				}
+			]} /> );
+
+			expect( container.querySelectorAll( 'hr' ) ).toHaveLength( 1 );
+			expect( container.querySelector( 'h3' ) ).toHaveTextContent( 'foo' );
+			expect( container.querySelectorAll( '.ck-inspector-property-list' ) ).toHaveLength( 1 );
+		} );
+
+		it( 'passes a "onPropertyTitleClick" handler to <PropertyList />', () => {
+			const onClickMock = vi.fn();
+
+			render( <ObjectInspector lists={[
 				{
 					name: 'foo',
 					url: 'http://bar',
@@ -92,13 +122,13 @@ describe( '<ObjectInspector />', () => {
 				}
 			]} /> );
 
-			expect( wrapper.find( PropertyList ).props().onPropertyTitleClick ).to.equal( onClickMock );
+			expect( propertyListProps.onPropertyTitleClick ).toBe( onClickMock );
 		} );
 
 		it( 'passes a "presentation" data to <PropertyList />', () => {
 			const presentationMock = {};
 
-			wrapper = mount( <ObjectInspector lists={[
+			render( <ObjectInspector lists={[
 				{
 					name: 'foo',
 					url: 'http://bar',
@@ -116,7 +146,7 @@ describe( '<ObjectInspector />', () => {
 				}
 			]} /> );
 
-			expect( wrapper.find( PropertyList ).props().presentation ).to.equal( presentationMock );
+			expect( propertyListProps.presentation ).toBe( presentationMock );
 		} );
 	} );
 } );

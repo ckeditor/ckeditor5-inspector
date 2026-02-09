@@ -3,6 +3,7 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { Paragraph } from 'ckeditor5';
 
 import TestEditor from '../../../utils/testeditor';
@@ -77,18 +78,18 @@ describe( 'view data store reducer', () => {
 
 		viewState = viewReducer( globalState, null, {} );
 
-		expect( viewState ).to.be.null;
+		expect( viewState ).toBeNull();
 	} );
 
 	it( 'should create a default state if no model state was passed to the reducer', () => {
 		viewState = viewReducer( globalState, null, {} );
 
-		expect( viewState ).to.have.property( 'treeDefinition' );
-		expect( viewState ).to.have.property( 'ranges' );
-		expect( viewState ).to.have.property( 'currentNode' );
-		expect( viewState ).to.have.property( 'currentNodeDefinition' );
-		expect( viewState ).to.have.property( 'currentRootName' );
-		expect( viewState ).to.have.property( 'ui' );
+		expect( viewState ).toHaveProperty( 'treeDefinition' );
+		expect( viewState ).toHaveProperty( 'ranges' );
+		expect( viewState ).toHaveProperty( 'currentNode' );
+		expect( viewState ).toHaveProperty( 'currentNodeDefinition' );
+		expect( viewState ).toHaveProperty( 'currentRootName' );
+		expect( viewState ).toHaveProperty( 'ui' );
 	} );
 
 	describe( 'application state', () => {
@@ -98,7 +99,7 @@ describe( 'view data store reducer', () => {
 
 				viewState = viewReducer( globalState, viewState, setViewCurrentRootName( 'main' ) );
 
-				expect( viewState.currentRootName ).to.equal( 'main' );
+				expect( viewState.currentRootName ).toBe( 'main' );
 			} );
 
 			it( 'should be updated on setCurrentEditorName() action', () => {
@@ -106,7 +107,7 @@ describe( 'view data store reducer', () => {
 
 				viewState = viewReducer( globalState, viewState, setCurrentEditorName( 'b' ) );
 
-				expect( viewState.currentRootName ).to.equal( 'main' );
+				expect( viewState.currentRootName ).toBe( 'main' );
 			} );
 
 			it( 'should reset other properties on setViewCurrentRootName() action', () => {
@@ -119,11 +120,11 @@ describe( 'view data store reducer', () => {
 
 				viewState = viewReducer( globalState, viewState, setViewCurrentRootName( 'main' ) );
 
-				expect( viewState.currentRootName ).to.equal( 'main' );
-				expect( viewState.currentNode ).to.be.null;
-				expect( viewState.currentNodeDefinition ).to.be.null;
-				expect( viewState.treeDefinition ).to.be.an( 'array' );
-				expect( viewState.ranges ).to.be.an( 'array' );
+				expect( viewState.currentRootName ).toBe( 'main' );
+				expect( viewState.currentNode ).toBeNull();
+				expect( viewState.currentNodeDefinition ).toBeNull();
+				expect( viewState.treeDefinition ).toEqual( expect.any( Array ) );
+				expect( viewState.ranges ).toEqual( expect.any( Array ) );
 			} );
 		} );
 
@@ -133,7 +134,7 @@ describe( 'view data store reducer', () => {
 
 				viewState = viewReducer( globalState, viewState, setViewCurrentNode( node ) );
 
-				expect( viewState.currentNode ).to.equal( node );
+				expect( viewState.currentNode ).toBe( node );
 			} );
 
 			it( 'should be reset on updateViewState() action if the root has changed', () => {
@@ -145,7 +146,7 @@ describe( 'view data store reducer', () => {
 				viewState.currentRootName = 'main';
 				viewState = viewReducer( globalState, viewState, updateViewState() );
 
-				expect( viewState.currentNode ).to.be.null;
+				expect( viewState.currentNode ).toBeNull();
 			} );
 
 			it( 'should be reset on updateViewState() action if the currentNode has no parent (but isn\'t a root)', () => {
@@ -157,7 +158,7 @@ describe( 'view data store reducer', () => {
 				viewState.currentRootName = 'main';
 				viewState = viewReducer( globalState, viewState, updateViewState() );
 
-				expect( viewState.currentNode ).to.be.null;
+				expect( viewState.currentNode ).toBeNull();
 			} );
 
 			it( 'should be reset on setActiveTab() action if the root has changed', () => {
@@ -169,7 +170,7 @@ describe( 'view data store reducer', () => {
 				viewState.currentRootName = 'main';
 				viewState = viewReducer( globalState, viewState, setActiveTab( 'View' ) );
 
-				expect( viewState.currentNode ).to.be.null;
+				expect( viewState.currentNode ).toBeNull();
 			} );
 		} );
 
@@ -180,14 +181,14 @@ describe( 'view data store reducer', () => {
 				viewState.currentNodeDefinition = null;
 				viewState = viewReducer( globalState, viewState, setViewCurrentNode( node ) );
 
-				expect( viewState.currentNodeDefinition ).to.be.an( 'object' );
+				expect( viewState.currentNodeDefinition ).toEqual( expect.any( Object ) );
 			} );
 
 			it( 'should be reset when #currentRootname has changed', () => {
 				viewState.currentNodeDefinition = 'foo';
 				viewState = viewReducer( globalState, viewState, setViewCurrentRootName( 'main' ) );
 
-				expect( viewState.currentNodeDefinition ).to.be.null;
+				expect( viewState.currentNodeDefinition ).toBeNull();
 			} );
 
 			it( 'should be updated on updateViewState() action if the root has changed', () => {
@@ -198,7 +199,7 @@ describe( 'view data store reducer', () => {
 				viewState.currentNodeDefinition = 'foo';
 				viewState = viewReducer( globalState, viewState, updateViewState() );
 
-				expect( viewState.currentNodeDefinition ).to.be.null;
+				expect( viewState.currentNodeDefinition ).toBeNull();
 			} );
 
 			it( 'should be reset on updateViewState() action if the currentNode has no parent (but isn\'t a root)', () => {
@@ -211,7 +212,7 @@ describe( 'view data store reducer', () => {
 				viewState.currentNodeDefinition = 'foo';
 				viewState = viewReducer( globalState, viewState, updateViewState() );
 
-				expect( viewState.currentNodeDefinition ).to.be.null;
+				expect( viewState.currentNodeDefinition ).toBeNull();
 			} );
 
 			it( 'should be updated on setActiveTab() action if the root has changed', () => {
@@ -222,7 +223,7 @@ describe( 'view data store reducer', () => {
 				viewState.currentNodeDefinition = 'foo';
 				viewState = viewReducer( globalState, viewState, setActiveTab( 'View' ) );
 
-				expect( viewState.currentNodeDefinition ).to.be.null;
+				expect( viewState.currentNodeDefinition ).toBeNull();
 			} );
 
 			it( 'should be reset on updateViewState() action if there is no #currentNode', () => {
@@ -231,7 +232,7 @@ describe( 'view data store reducer', () => {
 				viewState.currentNodeDefinition = 'foo';
 				viewState = viewReducer( globalState, viewState, updateViewState() );
 
-				expect( viewState.currentNodeDefinition ).to.be.null;
+				expect( viewState.currentNodeDefinition ).toBeNull();
 			} );
 
 			it( 'should be reset on setActiveTab() action if there is no #currentNode', () => {
@@ -240,7 +241,7 @@ describe( 'view data store reducer', () => {
 				viewState.currentNodeDefinition = 'foo';
 				viewState = viewReducer( globalState, viewState, setActiveTab( 'Model' ) );
 
-				expect( viewState.currentNodeDefinition ).to.be.null;
+				expect( viewState.currentNodeDefinition ).toBeNull();
 			} );
 		} );
 
@@ -251,35 +252,35 @@ describe( 'view data store reducer', () => {
 				viewState.treeDefinition = null;
 				viewState = viewReducer( globalState, viewState, updateViewState() );
 
-				expect( viewState.treeDefinition[ 0 ].node ).to.equal( viewRoot );
+				expect( viewState.treeDefinition[ 0 ].node ).toBe( viewRoot );
 			} );
 
 			it( 'should be updated on updateViewState() action', () => {
 				viewState.treeDefinition = null;
 				viewState = viewReducer( globalState, viewState, updateViewState() );
 
-				expect( viewState.treeDefinition ).to.be.an( 'array' );
+				expect( viewState.treeDefinition ).toEqual( expect.any( Array ) );
 			} );
 
 			it( 'should be updated on setActiveTab() action', () => {
 				viewState.treeDefinition = null;
 				viewState = viewReducer( globalState, viewState, setActiveTab( 'Model' ) );
 
-				expect( viewState.treeDefinition ).to.be.an( 'array' );
+				expect( viewState.treeDefinition ).toEqual( expect.any( Array ) );
 			} );
 
 			it( 'should be updated on setEditors() action', () => {
 				viewState.treeDefinition = null;
 				viewState = viewReducer( globalState, viewState, setEditors( new Map( [ [ 'a', editorA ] ] ) ) );
 
-				expect( viewState.treeDefinition ).to.be.an( 'array' );
+				expect( viewState.treeDefinition ).toEqual( expect.any( Array ) );
 			} );
 
 			it( 'should be updated on setCurrentEditorName() action', () => {
 				viewState.treeDefinition = null;
 				viewState = viewReducer( globalState, viewState, setCurrentEditorName( 'b' ) );
 
-				expect( viewState.treeDefinition ).to.be.an( 'array' );
+				expect( viewState.treeDefinition ).toEqual( expect.any( Array ) );
 			} );
 		} );
 
@@ -294,36 +295,36 @@ describe( 'view data store reducer', () => {
 
 				const selectionRange = viewState.ranges[ 0 ];
 
-				expect( selectionRange.start.path ).to.deep.equal( [ 0, 0, 0 ] );
-				expect( selectionRange.end.path ).to.deep.equal( [ 0, 0, 3 ] );
+				expect( selectionRange.start.path ).toEqual( [ 0, 0, 0 ] );
+				expect( selectionRange.end.path ).toEqual( [ 0, 0, 3 ] );
 			} );
 
 			it( 'should be updated on updateViewState() action', () => {
 				viewState.ranges = null;
 				viewState = viewReducer( globalState, viewState, updateViewState() );
 
-				expect( viewState.ranges ).to.be.an( 'array' );
+				expect( viewState.ranges ).toEqual( expect.any( Array ) );
 			} );
 
 			it( 'should be updated on setActiveTab() action', () => {
 				viewState.ranges = null;
 				viewState = viewReducer( globalState, viewState, setActiveTab( 'Model' ) );
 
-				expect( viewState.ranges ).to.be.an( 'array' );
+				expect( viewState.ranges ).toEqual( expect.any( Array ) );
 			} );
 
 			it( 'should be updated on setEditors() action', () => {
 				viewState.ranges = null;
 				viewState = viewReducer( globalState, viewState, setEditors( new Map( [ [ 'a', editorA ] ] ) ) );
 
-				expect( viewState.ranges ).to.be.an( 'array' );
+				expect( viewState.ranges ).toEqual( expect.any( Array ) );
 			} );
 
 			it( 'should be updated on setCurrentEditorName() action', () => {
 				viewState.ranges = null;
 				viewState = viewReducer( globalState, viewState, setCurrentEditorName( 'b' ) );
 
-				expect( viewState.ranges ).to.be.an( 'array' );
+				expect( viewState.ranges ).toEqual( expect.any( Array ) );
 			} );
 		} );
 	} );
@@ -332,7 +333,7 @@ describe( 'view data store reducer', () => {
 		it( 'should be created with defaults if the LocalStorage is empty', () => {
 			viewState = viewReducer( globalState, {}, {} );
 
-			expect( viewState.ui ).to.deep.equal( {
+			expect( viewState.ui ).toEqual( {
 				activeTab: 'Inspect',
 				showElementTypes: false
 			} );
@@ -344,7 +345,7 @@ describe( 'view data store reducer', () => {
 
 			viewState = viewReducer( globalState, {}, {} );
 
-			expect( viewState.ui ).to.deep.equal( {
+			expect( viewState.ui ).toEqual( {
 				activeTab: 'Selection',
 				showElementTypes: true
 			} );
@@ -354,31 +355,31 @@ describe( 'view data store reducer', () => {
 			it( 'should be updated on setViewActiveTab() action', () => {
 				viewState = viewReducer( globalState, viewState, setViewActiveTab( 'Selection' ) );
 
-				expect( viewState.ui.activeTab ).to.equal( 'Selection' );
+				expect( viewState.ui.activeTab ).toBe( 'Selection' );
 			} );
 
 			it( 'should be saved in local storage when nupdated', () => {
 				viewState = viewReducer( globalState, viewState, setViewActiveTab( 'Selection' ) );
 
-				expect( LocalStorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) ).to.equal( 'Selection' );
+				expect( LocalStorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) ).toBe( 'Selection' );
 			} );
 		} );
 
 		describe( '#showElementTypes', () => {
 			it( 'should be updated on toggleViewShowElementTypes() action', () => {
-				expect( viewState.ui.showElementTypes ).to.be.false;
+				expect( viewState.ui.showElementTypes ).toBe( false );
 
 				viewState = viewReducer( globalState, viewState, toggleViewShowElementTypes() );
 
-				expect( viewState.ui.showElementTypes ).to.be.true;
+				expect( viewState.ui.showElementTypes ).toBe( true );
 			} );
 
 			it( 'should be saved in local storage when updated', () => {
-				expect( viewState.ui.showElementTypes ).to.be.false;
+				expect( viewState.ui.showElementTypes ).toBe( false );
 
 				viewState = viewReducer( globalState, viewState, toggleViewShowElementTypes() );
 
-				expect( LocalStorageManager.get( LOCAL_STORAGE_ELEMENT_TYPES ) ).to.equal( 'true' );
+				expect( LocalStorageManager.get( LOCAL_STORAGE_ELEMENT_TYPES ) ).toBe( 'true' );
 			} );
 		} );
 	} );

@@ -3,6 +3,8 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect } from 'vitest';
+
 import {
 	setSchemaCurrentDefinitionName,
 	SET_SCHEMA_CURRENT_DEFINITION_NAME
@@ -10,7 +12,7 @@ import {
 
 describe( 'schema data store actions', () => {
 	it( 'should export setSchemaCurrentDefinitionName()', () => {
-		expect( setSchemaCurrentDefinitionName( 'foo' ) ).to.deep.equal( {
+		expect( setSchemaCurrentDefinitionName( 'foo' ) ).toEqual( {
 			type: SET_SCHEMA_CURRENT_DEFINITION_NAME,
 			currentSchemaDefinitionName: 'foo'
 		} );

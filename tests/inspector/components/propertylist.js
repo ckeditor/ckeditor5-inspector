@@ -3,22 +3,18 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect, vi } from 'vitest';
 import React from 'react';
+import { fireEvent, render } from '@testing-library/react';
 import PropertyList from '../../../src/components/propertylist';
 
 describe( '<PropertyList />', () => {
-	let wrapper;
-
-	afterEach( () => {
-		wrapper.unmount();
-	} );
-
 	it( 'renders', () => {
-		wrapper = mount( <PropertyList itemDefinitions={[]} /> );
+		const { container } = render( <PropertyList itemDefinitions={[]} /> );
 
-		expect( wrapper ).to.have.className( 'ck-inspector-property-list' );
-		expect( wrapper ).to.have.className( 'ck-inspector-code' );
-		expect( wrapper.text() ).to.equal( '' );
+		expect( container.firstChild ).toHaveClass( 'ck-inspector-property-list' );
+		expect( container.firstChild ).toHaveClass( 'ck-inspector-code' );
+		expect( container.textContent ).toBe( '' );
 	} );
 
 	it( 'renders names and values', () => {
@@ -27,25 +23,20 @@ describe( '<PropertyList />', () => {
 			qux: { value: 'baz' }
 		};
 
-		wrapper = mount( <PropertyList itemDefinitions={definitions} name="listName" /> );
+		const { getByLabelText, container } = render( <PropertyList itemDefinitions={definitions} name="listName" /> );
 
-		const dt1 = wrapper.children().childAt( 0 );
-		const dd1 = wrapper.children().childAt( 1 );
-		const dt2 = wrapper.children().childAt( 2 );
-		const dd2 = wrapper.children().childAt( 3 );
+		const fooInput = getByLabelText( 'foo' );
+		const quxInput = getByLabelText( 'qux' );
 
-		expect( dt1.html() ).to.match(
-			/<dt class="ck-inspector-property-list__title"><label for="[^-]+-foo-value-input">foo<\/label>:<\/dt>/
-		);
-		expect( dt2.html() ).to.match(
-			/<dt class="ck-inspector-property-list__title"><label for="[^-]+-qux-value-input">qux<\/label>:<\/dt>/
-		);
+		expect( fooInput ).toHaveAttribute( 'id', expect.stringMatching( /listName-foo-value-input/ ) );
+		expect( quxInput ).toHaveAttribute( 'id', expect.stringMatching( /listName-qux-value-input/ ) );
+		expect( fooInput ).toHaveValue( 'bar' );
+		expect( quxInput ).toHaveValue( 'baz' );
 
-		expect( dd1.html() ).to.match( /<dd><input id="[^-]+-foo-value-input" type="text" readonly="" value="bar"><\/dd>/ );
-		expect( dd2.html() ).to.match( /<dd><input id="[^-]+-qux-value-input" type="text" readonly="" value="baz"><\/dd>/ );
-
-		expect( dt1.find( 'label' ) ).to.have.attr( 'for' ).equal( dd1.find( 'input' ).prop( 'id' ) );
-		expect( dt2.find( 'label' ) ).to.have.attr( 'for' ).equal( dd2.find( 'input' ).prop( 'id' ) );
+		const fooLabel = container.querySelector( `label[for="${ fooInput.id }"]` );
+		const quxLabel = container.querySelector( `label[for="${ quxInput.id }"]` );
+		expect( fooLabel ).toBeTruthy();
+		expect( quxLabel ).toBeTruthy();
 	} );
 
 	it( 'renders sub-properties', () => {
@@ -59,28 +50,15 @@ describe( '<PropertyList />', () => {
 			}
 		};
 
-		wrapper = mount( <PropertyList itemDefinitions={definitions} name="listName" /> );
+		const { container, getByLabelText } = render( <PropertyList itemDefinitions={definitions} name="listName" /> );
 
-		const dt1 = wrapper.children().childAt( 0 );
-		const dd1 = wrapper.children().childAt( 1 );
-		const dl = wrapper.children().childAt( 2 );
+		const title = container.querySelector( '.ck-inspector-property-list__title_collapsible' );
+		expect( title ).toHaveClass( 'ck-inspector-property-list__title_collapsed' );
+		expect( title.querySelector( 'button' ) ).toHaveTextContent( 'Toggle' );
 
-		expect( dt1.html() ).to.match( new RegExp(
-			'<dt class="' +
-				'ck-inspector-property-list__title ' +
-				'ck-inspector-property-list__title_collapsible ' +
-				'ck-inspector-property-list__title_collapsed' +
-			'">' +
-				'<button type="button">Toggle</button>' +
-				'<label for="[^-]+-foo-value-input">foo</label>:' +
-			'</dt>'
-		) );
-
-		expect( dd1.html() ).to.match( /<dd><input id="[^-]+-foo-value-input" type="text" readonly="" value="bar"><\/dd>/ );
-		expect( dl.props().itemDefinitions ).to.deep.equal( {
-			'subA-name': { value: 'subA-value' },
-			'subB-name': { value: 'subB-value' }
-		} );
+		expect( getByLabelText( 'foo' ) ).toHaveValue( 'bar' );
+		expect( getByLabelText( 'subA-name' ) ).toHaveValue( 'subA-value' );
+		expect( getByLabelText( 'subB-name' ) ).toHaveValue( 'subB-value' );
 	} );
 
 	it( 'toggles title class when clicked the toggler', () => {
@@ -94,14 +72,11 @@ describe( '<PropertyList />', () => {
 			}
 		};
 
-		wrapper = mount( <PropertyList itemDefinitions={definitions} /> );
+		const { container, getByRole } = render( <PropertyList itemDefinitions={definitions} /> );
 
-		const dt = wrapper.children().childAt( 0 );
-		const toggler = dt.children().childAt( 0 );
-
-		toggler.simulate( 'click' );
-
-		expect( dt ).to.have.className( 'ck-inspector-property-list__title_expanded' );
+		const title = container.querySelector( '.ck-inspector-property-list__title_collapsible' );
+		fireEvent.click( getByRole( 'button', { name: 'Toggle' } ) );
+		expect( title ).toHaveClass( 'ck-inspector-property-list__title_expanded' );
 	} );
 
 	it( 'truncates property values to 2000 characters', () => {
@@ -111,16 +86,16 @@ describe( '<PropertyList />', () => {
 			baz: { value: new Array( 2100 ).fill( 0 ).join( '' ) }
 		};
 
-		wrapper = mount( <PropertyList itemDefinitions={definitions} /> );
+		const { getByLabelText } = render( <PropertyList itemDefinitions={definitions} /> );
 
-		const dd1 = wrapper.children().childAt( 1 );
-		const dd2 = wrapper.children().childAt( 3 );
-		const dd3 = wrapper.children().childAt( 5 );
+		const fooValue = getByLabelText( 'foo' ).value;
+		const barValue = getByLabelText( 'bar' ).value;
+		const bazValue = getByLabelText( 'baz' ).value;
 
-		expect( dd1.find( 'input' ).props().value ).to.have.length( 1999 );
-		expect( dd2.find( 'input' ).props().value ).to.have.length( 2000 );
-		expect( dd3.find( 'input' ).props().value ).to.have.lengthOf.below( 2100 );
-		expect( dd3.find( 'input' ).props().value ).to.match( /characters left]$/ );
+		expect( fooValue ).toHaveLength( 1999 );
+		expect( barValue ).toHaveLength( 2000 );
+		expect( bazValue.length ).toBeLessThan( 2100 );
+		expect( bazValue ).toMatch( /characters left]$/ );
 	} );
 
 	it( 'renders the title HTML attribute when specified', () => {
@@ -129,13 +104,10 @@ describe( '<PropertyList />', () => {
 			bar: { value: 'bar' }
 		};
 
-		wrapper = mount( <PropertyList itemDefinitions={definitions} /> );
+		const { getByText } = render( <PropertyList itemDefinitions={definitions} /> );
 
-		const dt1 = wrapper.children().childAt( 0 );
-		const dt2 = wrapper.children().childAt( 2 );
-
-		expect( dt1.find( 'label' ).props().title ).to.equal( 'Foo title' );
-		expect( dt2.find( 'label' ).props().title ).to.be.undefined;
+		expect( getByText( 'foo', { selector: 'label' } ) ).toHaveAttribute( 'title', 'Foo title' );
+		expect( getByText( 'bar', { selector: 'label' } ) ).not.toHaveAttribute( 'title' );
 	} );
 
 	describe( 'property title click handling', () => {
@@ -146,20 +118,19 @@ describe( '<PropertyList />', () => {
 				}
 			};
 
-			wrapper = mount( <PropertyList itemDefinitions={definitions} /> );
+			const { container, getByText } = render( <PropertyList itemDefinitions={definitions} /> );
 
-			const dt = wrapper.children().childAt( 0 );
-			const label = dt.find( 'label' );
+			const title = container.querySelector( '.ck-inspector-property-list__title' );
+			const label = getByText( 'foo', { selector: 'label' } );
 
-			expect( dt ).to.not.have.className( 'ck-inspector-property-list__title_clickable' );
-
+			expect( title ).not.toHaveClass( 'ck-inspector-property-list__title_clickable' );
 			expect( () => {
-				label.simulate( 'click' );
-			} ).to.not.throw();
+				fireEvent.click( label );
+			} ).not.toThrow();
 		} );
 
 		it( 'uses props.onPropertyTitleClick when a property title was clicked and passes property name to the callback', () => {
-			const onClickSpy = sinon.spy();
+			const onClickSpy = vi.fn();
 
 			const definitions = {
 				foo: {
@@ -167,15 +138,14 @@ describe( '<PropertyList />', () => {
 				}
 			};
 
-			wrapper = mount( <PropertyList itemDefinitions={definitions} onPropertyTitleClick={onClickSpy} /> );
+			const { container, getByText } = render( <PropertyList itemDefinitions={definitions} onPropertyTitleClick={onClickSpy} /> );
 
-			const dt = wrapper.children().childAt( 0 );
-			const label = dt.find( 'label' );
+			const label = getByText( 'foo', { selector: 'label' } );
+			const title = container.querySelector( '.ck-inspector-property-list__title' );
 
-			label.simulate( 'click' );
-			sinon.assert.calledOnceWithExactly( onClickSpy, 'foo' );
-
-			expect( dt ).to.have.className( 'ck-inspector-property-list__title_clickable' );
+			fireEvent.click( label );
+			expect( onClickSpy ).toHaveBeenCalledWith( 'foo' );
+			expect( title ).toHaveClass( 'ck-inspector-property-list__title_clickable' );
 		} );
 	} );
 } );

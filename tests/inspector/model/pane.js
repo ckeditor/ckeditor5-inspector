@@ -3,62 +3,57 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import React from 'react';
 import TestEditor from '../../utils/testeditor';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-
+import { render, screen } from '@testing-library/react';
 import ModelPane from '../../../src/model/pane';
-import ModelTree from '../../../src/model/tree';
-import ModelNodeInspector from '../../../src/model/nodeinspector';
-import ModelSelectionInspector from '../../../src/model/selectioninspector';
-import ModelMarkersInspector from '../../../src/model/markerinspector';
 
 describe( '<ModelPane />', () => {
-	let editor, store, wrapper, element;
+	let editor, store, renderResult, element;
 
-	beforeEach( () => {
+	beforeEach( async () => {
 		window.localStorage.clear();
 
 		element = document.createElement( 'div' );
 		document.body.appendChild( element );
 
-		return TestEditor.create( element ).then( newEditor => {
-			editor = newEditor;
+		editor = await TestEditor.create( element );
 
-			store = createStore( state => state, {
-				editors: new Map( [ [ 'test-editor', editor ] ] ),
-				currentEditorName: 'test-editor',
+		store = createStore( state => state, {
+			editors: new Map( [ [ 'test-editor', editor ] ] ),
+			currentEditorName: 'test-editor',
+			ui: {
+				activeTab: 'Model'
+			},
+			model: {
+				roots: [],
+				ranges: [],
+				markers: [],
+				treeDefinition: null,
+				currentRootName: 'main',
 				ui: {
-					activeTab: 'Model'
-				},
-				model: {
-					roots: [],
-					ranges: [],
-					markers: [],
-					treeDefinition: null,
-					currentRootName: 'main',
-					ui: {
-						activeTab: 'Selection',
-						showMarkers: false,
-						showCompactText: false
-					}
+					activeTab: 'Selection',
+					showMarkers: false,
+					showCompactText: false
 				}
-			} );
-
-			wrapper = mount( <Provider store={store}><ModelPane /></Provider> );
+			}
 		} );
+
+		renderResult = render( <Provider store={store}><ModelPane /></Provider> );
 	} );
 
-	afterEach( () => {
-		wrapper.unmount();
+	afterEach( async () => {
+		renderResult.unmount();
 		element.remove();
-
-		return editor.destroy();
+		await editor.destroy();
 	} );
 
 	describe( 'render()', () => {
 		it( 'should render a placeholder when no props#currentEditorName', () => {
+			renderResult.unmount();
 			store = createStore( state => state, {
 				currentEditorName: null,
 				model: {
@@ -66,26 +61,22 @@ describe( '<ModelPane />', () => {
 				}
 			} );
 
-			const wrapper = mount( <Provider store={store}><ModelPane /></Provider> );
-
-			expect( wrapper.text() ).to.match( /^Nothing to show/ );
-
-			wrapper.unmount();
+			renderResult = render( <Provider store={store}><ModelPane /></Provider> );
+			expect( screen.getByText( 'Nothing to show. Attach another editor instance to start inspecting.' ) )
+				.toBeInTheDocument();
 		} );
 
 		it( 'should render <Tabs> with a proper change handler', () => {
-			const tabs = wrapper.find( 'Tabs' );
-
-			expect( tabs ).to.have.length( 1 );
-			expect( tabs.props().activeTab ).to.equal( 'Selection' );
-			expect( tabs.props().onTabChange ).to.equal( wrapper.find( 'ModelPane' ).props().setModelActiveTab );
+			const activeTab = document.querySelector( '.ck-inspector-horizontal-nav__item_active' );
+			expect( activeTab ).toHaveTextContent( 'Selection' );
 		} );
 
 		it( 'should render a <ModelTree/>', () => {
-			expect( wrapper.find( ModelTree ) ).to.have.length( 1 );
+			expect( document.querySelector( '.ck-inspector-tree' ) ).toBeTruthy();
 		} );
 
 		it( 'should render a <ModelNodeInspector/> if the active tab is "Inspect"', () => {
+			renderResult.unmount();
 			store = createStore( state => state, {
 				editors: new Map( [ [ 'test-editor', editor ] ] ),
 				currentEditorName: 'test-editor',
@@ -106,14 +97,12 @@ describe( '<ModelPane />', () => {
 				}
 			} );
 
-			const wrapper = mount( <Provider store={store}><ModelPane /></Provider> );
-
-			expect( wrapper.find( ModelNodeInspector ) ).to.have.length( 1 );
-
-			wrapper.unmount();
+			renderResult = render( <Provider store={store}><ModelPane /></Provider> );
+			expect( screen.getByText( 'Select a node in the tree to inspect' ) ).toBeInTheDocument();
 		} );
 
 		it( 'should render a <ModelSelectionInspector/> if the active tab is "Selection"', () => {
+			renderResult.unmount();
 			store = createStore( state => state, {
 				editors: new Map( [ [ 'test-editor', editor ] ] ),
 				currentEditorName: 'test-editor',
@@ -134,14 +123,12 @@ describe( '<ModelPane />', () => {
 				}
 			} );
 
-			const wrapper = mount( <Provider store={store}><ModelPane /></Provider> );
-
-			expect( wrapper.find( ModelSelectionInspector ) ).to.have.length( 1 );
-
-			wrapper.unmount();
+			renderResult = render( <Provider store={store}><ModelPane /></Provider> );
+			expect( screen.getByRole( 'button', { name: 'Scroll to selection' } ) ).toBeInTheDocument();
 		} );
 
 		it( 'should render a <ModelMarkersInspector/> if the active tab is "Markers"', () => {
+			renderResult.unmount();
 			store = createStore( state => state, {
 				editors: new Map( [ [ 'test-editor', editor ] ] ),
 				currentEditorName: 'test-editor',
@@ -162,11 +149,8 @@ describe( '<ModelPane />', () => {
 				}
 			} );
 
-			const wrapper = mount( <Provider store={store}><ModelPane /></Provider> );
-
-			expect( wrapper.find( ModelMarkersInspector ) ).to.have.length( 1 );
-
-			wrapper.unmount();
+			renderResult = render( <Provider store={store}><ModelPane /></Provider> );
+			expect( screen.getByText( 'Markers' ) ).toBeInTheDocument();
 		} );
 	} );
 } );

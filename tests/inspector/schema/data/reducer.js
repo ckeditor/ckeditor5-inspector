@@ -3,6 +3,7 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { Paragraph } from 'ckeditor5';
 
 import TestEditor from '../../../utils/testeditor';
@@ -62,15 +63,15 @@ describe( 'schema data store reducer', () => {
 
 		schemaState = schemaReducer( globalState, null, {} );
 
-		expect( schemaState ).to.be.null;
+		expect( schemaState ).toBeNull();
 	} );
 
 	it( 'should create a default state if no schema state was passed to the reducer', () => {
 		schemaState = schemaReducer( globalState, null, {} );
 
-		expect( schemaState ).to.have.property( 'treeDefinition' );
-		expect( schemaState ).to.have.property( 'currentSchemaDefinitionName' );
-		expect( schemaState ).to.have.property( 'currentSchemaDefinition' );
+		expect( schemaState ).toHaveProperty( 'treeDefinition' );
+		expect( schemaState ).toHaveProperty( 'currentSchemaDefinitionName' );
+		expect( schemaState ).toHaveProperty( 'currentSchemaDefinition' );
 	} );
 
 	it( 'should pass through when no action was passed to the reducer', () => {
@@ -80,9 +81,9 @@ describe( 'schema data store reducer', () => {
 			currentSchemaDefinition: 'baz'
 		}, {} );
 
-		expect( schemaState.treeDefinition ).to.deep.equal( [ 'foo' ] );
-		expect( schemaState.currentSchemaDefinitionName ).to.equal( 'bar' );
-		expect( schemaState.currentSchemaDefinition ).to.equal( 'baz' );
+		expect( schemaState.treeDefinition ).toEqual( [ 'foo' ] );
+		expect( schemaState.currentSchemaDefinitionName ).toBe( 'bar' );
+		expect( schemaState.currentSchemaDefinition ).toBe( 'baz' );
 	} );
 
 	describe( 'application state', () => {
@@ -91,21 +92,21 @@ describe( 'schema data store reducer', () => {
 				schemaState.currentSchemaDefinitionName = 'paragraph';
 				schemaState = schemaReducer( globalState, schemaState, setEditors( new Map( [ [ 'b', editorB ] ] ) ) );
 
-				expect( schemaState.currentSchemaDefinitionName ).to.be.null;
+				expect( schemaState.currentSchemaDefinitionName ).toBeNull();
 			} );
 
 			it( 'should be reset on setCurrentEditorName() action', () => {
 				schemaState.currentSchemaDefinitionName = null;
 				schemaState = schemaReducer( globalState, schemaState, setCurrentEditorName( 'b' ) );
 
-				expect( schemaState.currentSchemaDefinitionName ).to.be.null;
+				expect( schemaState.currentSchemaDefinitionName ).toBeNull();
 			} );
 
 			it( 'should be set on setSchemaCurrentDefinitionName() action', () => {
 				schemaState.currentSchemaDefinitionName = null;
 				schemaState = schemaReducer( globalState, schemaState, setSchemaCurrentDefinitionName( 'paragraph' ) );
 
-				expect( schemaState.currentSchemaDefinitionName ).to.equal( 'paragraph' );
+				expect( schemaState.currentSchemaDefinitionName ).toBe( 'paragraph' );
 			} );
 		} );
 
@@ -114,21 +115,21 @@ describe( 'schema data store reducer', () => {
 				schemaState.currentSchemaDefinition = null;
 				schemaState = schemaReducer( globalState, schemaState, setEditors( new Map( [ [ 'b', editorB ] ] ) ) );
 
-				expect( schemaState.currentSchemaDefinition ).to.be.null;
+				expect( schemaState.currentSchemaDefinition ).toBeNull();
 			} );
 
 			it( 'should be reset on setCurrentEditorName() action', () => {
 				schemaState.currentSchemaDefinition = null;
 				schemaState = schemaReducer( globalState, schemaState, setCurrentEditorName( 'b' ) );
 
-				expect( schemaState.currentSchemaDefinition ).to.be.null;
+				expect( schemaState.currentSchemaDefinition ).toBeNull();
 			} );
 
 			it( 'should be set on setSchemaCurrentDefinitionName() action', () => {
 				schemaState.currentSchemaDefinition = null;
 				schemaState = schemaReducer( globalState, schemaState, setSchemaCurrentDefinitionName( 'paragraph' ) );
 
-				expect( schemaState.currentSchemaDefinition ).to.be.an( 'object' );
+				expect( schemaState.currentSchemaDefinition ).toEqual( expect.any( Object ) );
 			} );
 
 			it( 'should be set on setActiveTab() action', () => {
@@ -136,7 +137,7 @@ describe( 'schema data store reducer', () => {
 				schemaState.currentSchemaDefinition = null;
 				schemaState = schemaReducer( globalState, schemaState, setActiveTab( 'Schema' ) );
 
-				expect( schemaState.currentSchemaDefinition ).to.be.an( 'object' );
+				expect( schemaState.currentSchemaDefinition ).toEqual( expect.any( Object ) );
 			} );
 		} );
 
@@ -149,29 +150,29 @@ describe( 'schema data store reducer', () => {
 
 				schemaState = schemaReducer( globalState, schemaState, setEditors( new Map() ) );
 
-				expect( schemaState.treeDefinition ).to.be.an( 'array' );
-				expect( schemaState.treeDefinition ).to.have.length( 0 );
+				expect( schemaState.treeDefinition ).toEqual( expect.any( Array ) );
+				expect( schemaState.treeDefinition ).toHaveLength( 0 );
 			} );
 
 			it( 'should be set on setEditors() action', () => {
 				schemaState.treeDefinition = null;
 				schemaState = schemaReducer( globalState, schemaState, setEditors( new Map( [ [ 'b', editorB ] ] ) ) );
 
-				expect( schemaState.treeDefinition ).to.be.an( 'array' );
+				expect( schemaState.treeDefinition ).toEqual( expect.any( Array ) );
 			} );
 
 			it( 'should be set on setCurrentEditorName() action', () => {
 				schemaState.treeDefinition = null;
 				schemaState = schemaReducer( globalState, schemaState, setCurrentEditorName( 'b' ) );
 
-				expect( schemaState.treeDefinition ).to.be.an( 'array' );
+				expect( schemaState.treeDefinition ).toEqual( expect.any( Array ) );
 			} );
 
 			it( 'should be set on setActiveTab() action', () => {
 				schemaState.treeDefinition = null;
 				schemaState = schemaReducer( globalState, schemaState, setActiveTab( 'Commands' ) );
 
-				expect( schemaState.treeDefinition ).to.be.an( 'array' );
+				expect( schemaState.treeDefinition ).toEqual( expect.any( Array ) );
 			} );
 		} );
 	} );

@@ -3,11 +3,13 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { expect } from 'vitest';
+
 import CKEditorInspector from '../../src/ckeditorinspector';
 
 export function assertTreeItems( items, expected ) {
-	if ( expected.length != items.length ) {
-		expect.fail( items, expected, 'number of items should match' );
+	if ( expected.length !== items.length ) {
+		throw new Error( 'number of items should match' );
 	}
 
 	for ( let expectedItemIndex = 0; expectedItemIndex < expected.length; expectedItemIndex++ ) {
@@ -15,24 +17,26 @@ export function assertTreeItems( items, expected ) {
 		const assertedItem = items[ expectedItemIndex ];
 
 		if ( assertedItem === undefined ) {
-			expect.fail( JSON.stringify( assertedItem ), JSON.stringify( expectedItem ), 'should be' );
+			throw new Error( 'should be' );
 		}
 
 		if ( typeof expectedItem === 'string' ) {
 			// Child is ia text.
-			return expect( assertedItem ).to.equal( expectedItem );
+			return expect( assertedItem ).toBe( expectedItem );
 		}
 
 		for ( const property in expectedItem ) {
 			if ( property === 'text' && expectedItem[ property ] instanceof RegExp ) {
-				expect( assertedItem[ property ] ).to.match( expectedItem[ property ], property + ' must match' );
+				expect( assertedItem[ property ] ).toMatch( expectedItem[ property ] );
 			} else if ( property !== 'attributes' && property !== 'children' ) {
-				expect( assertedItem[ property ] ).to.deep.equal( expectedItem[ property ], property + ' must match' );
+				expect( assertedItem[ property ] ).toEqual( expectedItem[ property ] );
 			}
 		}
 
 		if ( expectedItem.attributes ) {
-			expect( Array.from( assertedItem.attributes ) ).to.have.deep.members( expectedItem.attributes, 'attributes must match' );
+			const attributes = Array.from( assertedItem.attributes );
+			expect( attributes ).toHaveLength( expectedItem.attributes.length );
+			expect( attributes ).toEqual( expect.arrayContaining( expectedItem.attributes ) );
 		}
 
 		if ( expectedItem.children ) {

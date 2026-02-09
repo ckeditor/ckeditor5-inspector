@@ -3,97 +3,87 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import React from 'react';
 import { Paragraph, BoldEditing } from 'ckeditor5';
 import TestEditor from '../../utils/testeditor';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-
-import { SET_VIEW_CURRENT_ROOT_NAME } from '../../../src/view/data/actions';
-
-import Tree from '../../../src/components/tree/tree.js';
-import Select from '../../../src/components/select';
-import Checkbox from '../../../src/components/checkbox';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { SET_VIEW_CURRENT_ROOT_NAME, TOGGLE_VIEW_SHOW_ELEMENT_TYPES } from '../../../src/view/data/actions';
 import ViewTree from '../../../src/view/tree';
 
 describe( '<ViewTree />', () => {
-	let editor, wrapper, element, store, dispatchSpy;
+	let editor, renderResult, element, store, dispatchSpy;
 
-	beforeEach( () => {
+	beforeEach( async () => {
 		window.localStorage.clear();
 
 		element = document.createElement( 'div' );
 		document.body.appendChild( element );
 
-		return TestEditor.create( element, {
+		editor = await TestEditor.create( element, {
 			plugins: [ Paragraph, BoldEditing ]
-		} ).then( newEditor => {
-			editor = newEditor;
-
-			store = createStore( ( state, action ) => ( { ...state, ...action.state } ), {
-				editors: new Map( [ [ 'test-editor', editor ] ] ),
-				currentEditorName: 'test-editor',
-				ui: {
-					activeTab: 'View'
-				},
-				view: {
-					roots: [ ...editor.editing.view.document.roots ],
-					ranges: [],
-					treeDefinition: null,
-					currentRootName: 'main',
-					currentNode: editor.editing.view.document.getRoot(),
-					ui: {
-						activeTab: 'Selection',
-						showElementTypes: false
-					}
-				}
-			} );
-
-			dispatchSpy = sinon.spy( store, 'dispatch' );
-
-			wrapper = mount( <Provider store={store}><ViewTree /></Provider> );
 		} );
+
+		store = createStore( ( state, action ) => ( { ...state, ...action.state } ), {
+			editors: new Map( [ [ 'test-editor', editor ] ] ),
+			currentEditorName: 'test-editor',
+			ui: {
+				activeTab: 'View'
+			},
+			view: {
+				roots: [ ...editor.editing.view.document.roots ],
+				ranges: [],
+				treeDefinition: null,
+				currentRootName: 'main',
+				currentNode: editor.editing.view.document.getRoot(),
+				ui: {
+					activeTab: 'Selection',
+					showElementTypes: false
+				}
+			}
+		} );
+
+		dispatchSpy = vi.spyOn( store, 'dispatch' );
+
+		renderResult = render( <Provider store={store}><ViewTree /></Provider> );
 	} );
 
-	afterEach( () => {
-		wrapper.unmount();
+	afterEach( async () => {
+		renderResult.unmount();
 		element.remove();
-
-		return editor.destroy();
+		await editor.destroy();
 	} );
 
 	describe( 'render()', () => {
 		it( 'should render a view root <Select> that changes the current root name', () => {
-			const select = wrapper.find( Select );
+			const select = screen.getByLabelText( 'Root:' );
 
-			expect( select.props().label ).to.equal( 'Root' );
-			expect( select.props().value ).to.equal( 'main' );
-			expect( select.props().options ).to.have.members( [ 'main' ] );
+			expect( select ).toHaveValue( 'main' );
+			expect( select.querySelectorAll( 'option' ) ).toHaveLength( 1 );
 
-			select.props().onChange( { target: { value: 'foo' } } );
-			sinon.assert.calledWithExactly( dispatchSpy, {
-				currentRootName: 'foo',
+			fireEvent.change( select, { target: { value: 'main' } } );
+			expect( dispatchSpy ).toHaveBeenCalledWith( {
+				currentRootName: 'main',
 				type: SET_VIEW_CURRENT_ROOT_NAME
 			} );
 		} );
 
 		it( 'should render a show element types <Checkbox>', () => {
-			const checkbox = wrapper.find( Checkbox );
+			const checkbox = screen.getByLabelText( 'Show element types' );
+			expect( checkbox ).not.toBeChecked();
 
-			expect( checkbox.props().label ).to.equal( 'Show element types' );
-			expect( checkbox.props().isChecked ).to.be.false;
-			expect( checkbox.props().onChange ).to.equal( wrapper.find( 'ViewTree' ).props().toggleViewShowElementTypes );
+			fireEvent.click( checkbox );
+			expect( dispatchSpy ).toHaveBeenCalledWith( {
+				type: TOGGLE_VIEW_SHOW_ELEMENT_TYPES
+			} );
 		} );
 
 		it( 'should use a <Tree> component', () => {
-			const tree = wrapper.find( Tree );
-			const viewTree = wrapper.find( 'ViewTree' );
-
-			expect( tree.props().definition ).to.equal( viewTree.props().treeDefinition );
-			expect( tree.props().onClick ).to.equal( viewTree.instance().handleTreeClick );
-			expect( tree.props().showCompactText ).to.equal( 'true' );
-			expect( tree.props().activeNode ).to.equal( editor.editing.view.document.getRoot() );
-			expect( tree.props().textDirection ).to.equal( 'ltr' );
+			const tree = document.querySelector( '.ck-inspector-tree' );
+			expect( tree ).toHaveClass( 'ck-inspector-tree_compact-text' );
+			expect( tree ).toHaveClass( 'ck-inspector-tree_text-direction_ltr' );
 		} );
 	} );
 } );

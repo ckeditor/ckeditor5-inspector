@@ -3,45 +3,52 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import React from 'react';
+import { fireEvent, render } from '@testing-library/react';
 import TreeElement from '../../../../src/components/tree/treeelement';
-import TreeNodeAttribute from '../../../../src/components/tree/treenodeattribute';
+
+vi.mock( '../../../../src/components/tree/utils', () => ( {
+	renderTreeNodeFromDefinition: definition => {
+		if ( definition.type === 'text' ) {
+			return `"${ definition.text }"`;
+		}
+
+		return null;
+	}
+} ) );
 
 describe( '<TreeElement />', () => {
-	let wrapper, clickSpy;
+	let clickSpy;
 
 	beforeEach( () => {
-		clickSpy = sinon.spy();
-	} );
-
-	afterEach( () => {
-		wrapper.unmount();
+		clickSpy = vi.fn();
 	} );
 
 	it( 'is rendered', () => {
-		wrapper = mount( <TreeElement definition={{
+		const { container } = render( <TreeElement definition={{
 			name: 'foo',
 			attributes: [],
 			children: []
 		}} /> );
 
-		expect( wrapper ).to.have.className( 'ck-inspector-code' );
-		expect( wrapper ).to.have.className( 'ck-inspector-tree-node' );
+		expect( container.firstChild ).toHaveClass( 'ck-inspector-code' );
+		expect( container.firstChild ).toHaveClass( 'ck-inspector-tree-node' );
 	} );
 
 	it( 'reacts to props#isActive', () => {
-		wrapper = mount( <TreeElement definition={{
+		const { container } = render( <TreeElement definition={{
 			name: 'foo',
 			isActive: true,
 			attributes: [],
 			children: []
 		}} /> );
 
-		expect( wrapper ).to.have.className( 'ck-inspector-tree-node_active' );
+		expect( container.firstChild ).toHaveClass( 'ck-inspector-tree-node_active' );
 	} );
 
 	it( 'reacts to props.presentation#isEmpty', () => {
-		wrapper = mount( <TreeElement definition={{
+		const { container } = render( <TreeElement definition={{
 			name: 'foo',
 			attributes: [],
 			presentation: {
@@ -50,11 +57,11 @@ describe( '<TreeElement />', () => {
 			children: []
 		}} /> );
 
-		expect( wrapper ).to.have.className( 'ck-inspector-tree-node_empty' );
+		expect( container.firstChild ).toHaveClass( 'ck-inspector-tree-node_empty' );
 	} );
 
 	it( 'reacts to props.presentation#cssClass', () => {
-		wrapper = mount( <TreeElement definition={{
+		const { container } = render( <TreeElement definition={{
 			name: 'foo',
 			attributes: [],
 			presentation: {
@@ -63,11 +70,11 @@ describe( '<TreeElement />', () => {
 			children: []
 		}} /> );
 
-		expect( wrapper ).to.have.className( 'bar' );
+		expect( container.firstChild ).toHaveClass( 'bar' );
 	} );
 
 	it( 'executes props#onClick when clicked', () => {
-		wrapper = mount( <TreeElement definition={{
+		const { container } = render( <TreeElement definition={{
 			name: 'foo',
 			isActive: true,
 			attributes: [],
@@ -76,25 +83,24 @@ describe( '<TreeElement />', () => {
 			onClick: clickSpy
 		}} /> );
 
-		wrapper.simulate( 'click' );
-		sinon.assert.calledOnce( clickSpy );
+		fireEvent.click( container.firstChild );
+		expect( clickSpy ).toHaveBeenCalledTimes( 1 );
 	} );
 
 	describe( 'name', () => {
 		it( 'is rendered', () => {
-			wrapper = mount( <TreeElement definition={{
+			const { container } = render( <TreeElement definition={{
 				name: 'foo',
 				attributes: [],
 				children: []
 			}} /> );
 
-			const name = wrapper.children().childAt( 0 );
-
-			expect( name ).to.have.className( 'ck-inspector-tree-node__name' );
+			const name = container.querySelector( '.ck-inspector-tree-node__name' );
+			expect( name ).toHaveClass( 'ck-inspector-tree-node__name' );
 		} );
 
 		it( 'comes with attributes', () => {
-			wrapper = mount( <TreeElement definition={{
+			const { container } = render( <TreeElement definition={{
 				name: 'foo',
 				attributes: [
 					[ 'a', 'b' ],
@@ -103,19 +109,14 @@ describe( '<TreeElement />', () => {
 				children: []
 			}} /> );
 
-			const name = wrapper.children().childAt( 0 );
-			const firstAt = wrapper.find( TreeNodeAttribute ).first();
-			const secondAt = wrapper.find( TreeNodeAttribute ).last();
-
-			expect( name.find( TreeNodeAttribute ) ).to.have.length( 2 );
-			expect( firstAt.props().name ).to.equal( 'a' );
-			expect( firstAt.props().value ).to.equal( 'b' );
-			expect( secondAt.props().name ).to.equal( 'c' );
-			expect( secondAt.props().value ).to.equal( 'd' );
+			const attributes = container.querySelectorAll( '.ck-inspector-tree-node__attribute' );
+			expect( attributes ).toHaveLength( 2 );
+			expect( attributes[ 0 ] ).toHaveTextContent( 'ab' );
+			expect( attributes[ 1 ] ).toHaveTextContent( 'cd' );
 		} );
 
 		it( 'should support #showElementTypes', () => {
-			wrapper = mount( <TreeElement definition={{
+			const { container } = render( <TreeElement definition={{
 				name: 'foo',
 				elementType: 'some',
 				attributes: [],
@@ -124,27 +125,25 @@ describe( '<TreeElement />', () => {
 				showElementTypes: true
 			}} /> );
 
-			const name = wrapper.children().childAt( 0 );
-
-			expect( name.text() ).to.equal( 'some:foo' );
+			const name = container.querySelector( '.ck-inspector-tree-node__name' );
+			expect( name ).toHaveTextContent( 'some:foo' );
 		} );
 	} );
 
 	describe( 'content', () => {
 		it( 'is rendered', () => {
-			wrapper = mount( <TreeElement definition={{
+			const { container } = render( <TreeElement definition={{
 				name: 'foo',
 				attributes: [],
 				children: []
 			}} /> );
 
-			const content = wrapper.children().childAt( 1 );
-
-			expect( content ).to.have.className( 'ck-inspector-tree-node__content' );
+			const content = container.querySelector( '.ck-inspector-tree-node__content' );
+			expect( content ).toHaveClass( 'ck-inspector-tree-node__content' );
 		} );
 
 		it( 'comes with children', () => {
-			wrapper = mount( <TreeElement definition={{
+			const { container } = render( <TreeElement definition={{
 				name: 'foo',
 				attributes: [],
 				children: [
@@ -158,30 +157,29 @@ describe( '<TreeElement />', () => {
 				]
 			}} /> );
 
-			const content = wrapper.children().childAt( 1 );
-
-			expect( content.childAt( 0 ).text() ).to.equal( '"abc"' );
+			const content = container.querySelector( '.ck-inspector-tree-node__content' );
+			expect( content ).toHaveTextContent( '"abc"' );
 		} );
 	} );
 
 	describe( 'closing tag', () => {
 		it( 'is rendered by default', () => {
-			wrapper = mount( <TreeElement definition={{
+			const { container } = render( <TreeElement definition={{
 				name: 'foo',
 				attributes: [],
 				children: []
 			}} /> );
 
-			expect( wrapper.find( '.ck-inspector-tree-node__name' ) ).to.have.length( 2 );
+			const names = container.querySelectorAll( '.ck-inspector-tree-node__name' );
+			expect( names ).toHaveLength( 2 );
 
-			const closing = wrapper.children().childAt( 2 );
-
-			expect( closing ).to.have.className( 'ck-inspector-tree-node__name' );
-			expect( closing.text() ).to.equal( '/foo' );
+			const closing = names[ 1 ];
+			expect( closing ).toHaveClass( 'ck-inspector-tree-node__name' );
+			expect( closing ).toHaveTextContent( '/foo' );
 		} );
 
 		it( 'is not rendered when props.presentation#isEmpty', () => {
-			wrapper = mount( <TreeElement definition={{
+			const { container } = render( <TreeElement definition={{
 				name: 'foo',
 				attributes: [],
 				children: [],
@@ -190,11 +188,11 @@ describe( '<TreeElement />', () => {
 				}
 			}} /> );
 
-			expect( wrapper.find( '.ck-inspector-tree-node__name' ) ).to.have.length( 1 );
+			expect( container.querySelectorAll( '.ck-inspector-tree-node__name' ) ).toHaveLength( 1 );
 		} );
 
 		it( 'should support #showElementTypes', () => {
-			wrapper = mount( <TreeElement definition={{
+			const { container } = render( <TreeElement definition={{
 				name: 'foo',
 				elementType: 'some',
 				attributes: [],
@@ -203,9 +201,8 @@ describe( '<TreeElement />', () => {
 				showElementTypes: true
 			}} /> );
 
-			const closing = wrapper.children().childAt( 2 );
-
-			expect( closing.text() ).to.equal( '/some:foo' );
+			const closing = container.querySelectorAll( '.ck-inspector-tree-node__name' )[ 1 ];
+			expect( closing ).toHaveTextContent( '/some:foo' );
 		} );
 	} );
 } );

@@ -4,7 +4,7 @@
  */
 
 import React, { Component } from 'react';
-import isEqual from 'lodash.isequal';
+import { isEqual } from 'es-toolkit/compat';
 
 /**
  * A class which instances represent positions (selection, markers) in the tree.

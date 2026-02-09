@@ -3,29 +3,31 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect, vi } from 'vitest';
+
 import LocalStorageManager from '../../src/localstoragemanager';
 
 describe( 'LocalStorageManager', () => {
 	describe( '#set()', () => {
 		it( 'sets items in the local storage', () => {
-			const spy = sinon.spy( window.Storage.prototype, 'setItem' );
+			const spy = vi.spyOn( window.Storage.prototype, 'setItem' );
 
 			LocalStorageManager.set( 'foo', 'bar' );
 			LocalStorageManager.set( 'baz', 'qux' );
 
-			sinon.assert.calledWithExactly( spy.firstCall, 'ck5-inspector-foo', 'bar' );
-			sinon.assert.calledWithExactly( spy.secondCall, 'ck5-inspector-baz', 'qux' );
+			expect( spy ).toHaveBeenNthCalledWith( 1, 'ck5-inspector-foo', 'bar' );
+			expect( spy ).toHaveBeenNthCalledWith( 2, 'ck5-inspector-baz', 'qux' );
 		} );
 	} );
 
 	describe( '#get()', () => {
 		it( 'retrieves items from the local storage', () => {
-			const spy = sinon.spy( window.Storage.prototype, 'getItem' );
+			const spy = vi.spyOn( window.Storage.prototype, 'getItem' );
 
 			LocalStorageManager.set( 'foo', 'bar' );
-			expect( LocalStorageManager.get( 'foo' ) ).to.equal( 'bar' );
+			expect( LocalStorageManager.get( 'foo' ) ).toBe( 'bar' );
 
-			sinon.assert.calledWithExactly( spy, 'ck5-inspector-foo' );
+			expect( spy ).toHaveBeenCalledWith( 'ck5-inspector-foo' );
 		} );
 	} );
 } );

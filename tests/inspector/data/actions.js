@@ -3,6 +3,8 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect } from 'vitest';
+
 import {
 	toggleIsCollapsed,
 	setHeight,
@@ -23,48 +25,48 @@ import {
 
 describe( 'global data store actions', () => {
 	it( 'should export toggleIsCollapsed()', () => {
-		expect( toggleIsCollapsed() ).to.deep.equal( {
+		expect( toggleIsCollapsed() ).toEqual( {
 			type: TOGGLE_IS_COLLAPSED
 		} );
 	} );
 
 	it( 'should export setHeight()', () => {
-		expect( setHeight( '100px' ) ).to.deep.equal( {
+		expect( setHeight( '100px' ) ).toEqual( {
 			type: SET_HEIGHT,
 			newHeight: '100px'
 		} );
 	} );
 
 	it( 'should export setSidePaneWidth()', () => {
-		expect( setSidePaneWidth( '123px' ) ).to.deep.equal( {
+		expect( setSidePaneWidth( '123px' ) ).toEqual( {
 			type: SET_SIDE_PANE_WIDTH,
 			newWidth: '123px'
 		} );
 	} );
 
 	it( 'should export setEditors()', () => {
-		expect( setEditors( { foo: 'bar' } ) ).to.deep.equal( {
+		expect( setEditors( { foo: 'bar' } ) ).toEqual( {
 			type: SET_EDITORS,
 			editors: { foo: 'bar' }
 		} );
 	} );
 
 	it( 'should export setCurrentEditorName()', () => {
-		expect( setCurrentEditorName( 'foo' ) ).to.deep.equal( {
+		expect( setCurrentEditorName( 'foo' ) ).toEqual( {
 			type: SET_CURRENT_EDITOR_NAME,
 			editorName: 'foo'
 		} );
 	} );
 
 	it( 'should export setActiveTab()', () => {
-		expect( setActiveTab( 'foo' ) ).to.deep.equal( {
+		expect( setActiveTab( 'foo' ) ).toEqual( {
 			type: SET_ACTIVE_INSPECTOR_TAB,
 			tabName: 'foo'
 		} );
 	} );
 
 	it( 'should export updateCurrentEditorIsReadOnly()', () => {
-		expect( updateCurrentEditorIsReadOnly() ).to.deep.equal( {
+		expect( updateCurrentEditorIsReadOnly() ).toEqual( {
 			type: UPDATE_CURRENT_EDITOR_IS_READ_ONLY
 		} );
 	} );

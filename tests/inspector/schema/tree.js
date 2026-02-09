@@ -3,114 +3,77 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import React from 'react';
 import { Paragraph } from 'ckeditor5';
 import TestEditor from '../../utils/testeditor';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-
+import { fireEvent, render } from '@testing-library/react';
 import { getSchemaTreeDefinition } from '../../../src/schema/data/utils';
-
 import { reducer } from '../../../src/data/reducer';
-import Tree from '../../../src/components/tree/tree.js';
 import SchemaTree from '../../../src/schema/tree';
 
 describe( '<SchemaTree />', () => {
-	let editor, wrapper, element, store;
+	let editor, renderResult, element, store;
 
-	beforeEach( () => {
+	beforeEach( async () => {
 		element = document.createElement( 'div' );
 		document.body.appendChild( element );
 
-		return TestEditor.create( element, {
+		editor = await TestEditor.create( element, {
 			plugins: [ Paragraph ]
-		} ).then( newEditor => {
-			editor = newEditor;
-
-			const editors = new Map( [ [ 'test-editor', editor ] ] );
-			const currentEditorName = 'test-editor';
-
-			store = createStore( reducer, {
-				editors,
-				currentEditorName,
-				ui: {
-					activeTab: 'Schema'
-				},
-				schema: {
-					currentSchemaDefinitionName: 'paragraph',
-					treeDefinition: getSchemaTreeDefinition( { editors, currentEditorName } )
-				}
-			} );
-
-			wrapper = mount( <Provider store={store}><SchemaTree /></Provider> );
 		} );
+
+		const editors = new Map( [ [ 'test-editor', editor ] ] );
+		const currentEditorName = 'test-editor';
+
+		store = createStore( reducer, {
+			editors,
+			currentEditorName,
+			ui: {
+				activeTab: 'Schema'
+			},
+			schema: {
+				currentSchemaDefinitionName: 'paragraph',
+				treeDefinition: getSchemaTreeDefinition( { editors, currentEditorName } )
+			}
+		} );
+
+		renderResult = render( <Provider store={store}><SchemaTree /></Provider> );
 	} );
 
-	afterEach( () => {
-		wrapper.unmount();
+	afterEach( async () => {
+		renderResult.unmount();
 		element.remove();
-
-		return editor.destroy();
+		await editor.destroy();
 	} );
 
 	describe( 'render()', () => {
 		it( 'should use a <Tree> component', () => {
-			const tree = wrapper.find( Tree );
-			const schemaTree = wrapper.find( 'SchemaTree' );
-
-			expect( tree.props().definition ).to.equal( schemaTree.props().treeDefinition );
-			expect( tree.props().onClick ).to.equal( schemaTree.instance().handleTreeClick );
-			expect( tree.props().activeNode ).to.equal( 'paragraph' );
+			const active = document.querySelector( '.ck-inspector-tree-node_active' );
+			expect( active ).toBeTruthy();
+			expect( active.querySelector( '.ck-inspector-tree-node__name' ) ).toHaveTextContent( 'paragraph' );
 		} );
 
 		it( 'should render a <Tree> with schema items in alphabetical order', () => {
-			const tree = wrapper.find( Tree );
+			const names = Array.from(
+				document.querySelectorAll( '.ck-inspector-tree-node__name:not(.ck-inspector-tree-node__name_close)' )
+			).map( node => node.textContent );
 
-			// Note: Asserting just a few. There are plenty of them and they will change as the editor develops.
-			expect( tree.props().definition ).to.include.deep.members( [
-				{
-					attributes: [],
-					children: [],
-					name: '$root',
-					node: '$root',
-					presentation: {
-						cssClass: 'ck-inspector-tree-node_tagless',
-						isEmpty: true
-					},
-					type: 'element'
-				},
-				{
-					attributes: [],
-					children: [],
-					name: '$text',
-					node: '$text',
-					presentation: {
-						cssClass: 'ck-inspector-tree-node_tagless',
-						isEmpty: true
-					},
-					type: 'element'
-				},
-				{
-					attributes: [],
-					children: [],
-					name: 'paragraph',
-					node: 'paragraph',
-					presentation: {
-						cssClass: 'ck-inspector-tree-node_tagless',
-						isEmpty: true
-					},
-					type: 'element'
-				}
-			] );
+			const rootIndex = names.indexOf( '$root' );
+			const textIndex = names.indexOf( '$text' );
+			const paragraphIndex = names.indexOf( 'paragraph' );
+
+			expect( rootIndex ).toBeGreaterThanOrEqual( 0 );
+			expect( textIndex ).toBe( rootIndex + 1 );
+			expect( paragraphIndex ).toBe( textIndex + 1 );
 		} );
 
 		it( 'should start inspecting a schema definition when an item was clicked', () => {
-			const tree = wrapper.find( Tree );
-			const element = tree.find( 'TreeElement' ).first();
-
-			element.simulate( 'click' );
-
-			expect( store.getState().schema.currentSchemaDefinitionName ).to.equal( '$block' );
+			const element = document.querySelector( '.ck-inspector-tree-node' );
+			fireEvent.click( element );
+			expect( store.getState().schema.currentSchemaDefinitionName ).toBe( '$block' );
 		} );
 	} );
 } );

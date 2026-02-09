@@ -3,129 +3,130 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import React from 'react';
 import { Paragraph, BoldEditing } from 'ckeditor5';
 import TestEditor from '../../utils/testeditor';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
+import { fireEvent, render, screen } from '@testing-library/react';
 
-import { SET_MODEL_CURRENT_ROOT_NAME } from '../../../src/model/data/actions';
+import {
+	SET_MODEL_CURRENT_ROOT_NAME,
+	TOGGLE_MODEL_SHOW_COMPACT_TEXT,
+	TOGGLE_MODEL_SHOW_MARKERS
+} from '../../../src/model/data/actions';
 import {
 	getEditorModelRanges,
 	getEditorModelMarkers,
 	getEditorModelTreeDefinition
 } from '../../../src/model/data/utils';
 
-import Tree from '../../../src/components/tree/tree.js';
-import Select from '../../../src/components/select';
-import Checkbox from '../../../src/components/checkbox';
 import ModelTree from '../../../src/model/tree';
 
 describe( '<ModelTree />', () => {
-	let editor, wrapper, element, store, dispatchSpy;
+	let editor, renderResult, element, store, dispatchSpy;
 
 	const container = document.createElement( 'div' );
 	document.body.appendChild( container );
 
-	beforeEach( () => {
+	beforeEach( async () => {
 		window.localStorage.clear();
 
 		element = document.createElement( 'div' );
 		document.body.appendChild( element );
 
-		return TestEditor.create( element, {
+		editor = await TestEditor.create( element, {
 			plugins: [ Paragraph, BoldEditing ],
 			initialData: '<p>foobar</p>'
-		} ).then( newEditor => {
-			editor = newEditor;
-
-			editor.model.change( writer => {
-				const paragraph = editor.model.document.getRoot().getChild( 0 );
-
-				writer.setSelection(
-					writer.createRange( writer.createPositionAt( paragraph, 1 ), writer.createPositionAt( paragraph, 3 ) )
-				);
-			} );
-
-			const ranges = getEditorModelRanges( editor, 'main' );
-			const markers = getEditorModelMarkers( editor, 'main' );
-			const definition = getEditorModelTreeDefinition( {
-				currentEditor: editor,
-				currentRootName: 'main',
-				ranges,
-				markers
-			} );
-
-			store = createStore( state => state, {
-				editors: new Map( [ [ 'test-editor', editor ] ] ),
-				currentEditorName: 'test-editor',
-				model: {
-					roots: [ ...editor.model.document.roots ],
-					ranges,
-					markers,
-					treeDefinition: definition,
-					currentRootName: 'main',
-					currentNode: editor.model.document.getRoot(),
-					ui: {
-						showMarkers: false,
-						showCompactText: false
-					}
-				}
-			} );
-
-			dispatchSpy = sinon.spy( store, 'dispatch' );
-
-			wrapper = mount( <Provider store={store}><ModelTree /></Provider> );
 		} );
+
+		editor.model.change( writer => {
+			const paragraph = editor.model.document.getRoot().getChild( 0 );
+
+			writer.setSelection(
+				writer.createRange( writer.createPositionAt( paragraph, 1 ), writer.createPositionAt( paragraph, 3 ) )
+			);
+		} );
+
+		const ranges = getEditorModelRanges( editor, 'main' );
+		const markers = getEditorModelMarkers( editor, 'main' );
+		const definition = getEditorModelTreeDefinition( {
+			currentEditor: editor,
+			currentRootName: 'main',
+			ranges,
+			markers
+		} );
+
+		store = createStore( state => state, {
+			editors: new Map( [ [ 'test-editor', editor ] ] ),
+			currentEditorName: 'test-editor',
+			model: {
+				roots: [ ...editor.model.document.roots ],
+				ranges,
+				markers,
+				treeDefinition: definition,
+				currentRootName: 'main',
+				currentNode: editor.model.document.getRoot(),
+				ui: {
+					showMarkers: false,
+					showCompactText: false
+				}
+			}
+		} );
+
+		dispatchSpy = vi.spyOn( store, 'dispatch' );
+
+		renderResult = render( <Provider store={store}><ModelTree /></Provider> );
 	} );
 
-	afterEach( () => {
-		wrapper.unmount();
+	afterEach( async () => {
+		renderResult.unmount();
 		element.remove();
-
-		return editor.destroy();
+		await editor.destroy();
 	} );
 
 	describe( 'render()', () => {
 		it( 'should render a model root <Select> that changes current root name', () => {
-			const select = wrapper.find( Select );
+			const select = screen.getByLabelText( 'Root:' );
+			const options = Array.from( select.options ).map( option => option.value );
 
-			expect( select.props().label ).to.equal( 'Root' );
-			expect( select.props().value ).to.equal( 'main' );
-			expect( select.props().options ).to.have.members( [ 'main', '$graveyard' ] );
+			expect( select ).toHaveValue( 'main' );
+			expect( options ).toEqual( expect.arrayContaining( [ 'main', '$graveyard' ] ) );
 
-			select.props().onChange( { target: { value: '$graveyard' } } );
-			sinon.assert.calledWithExactly( dispatchSpy, {
+			fireEvent.change( select, { target: { value: '$graveyard' } } );
+			expect( dispatchSpy ).toHaveBeenCalledWith( {
 				currentRootName: '$graveyard',
 				type: SET_MODEL_CURRENT_ROOT_NAME
 			} );
 		} );
 
 		it( 'should render a compact text <Checkbox>', () => {
-			const checkbox = wrapper.find( Checkbox ).first();
+			const checkbox = screen.getByLabelText( 'Compact text' );
+			expect( checkbox ).not.toBeChecked();
 
-			expect( checkbox.props().label ).to.equal( 'Compact text' );
-			expect( checkbox.props().isChecked ).to.be.false;
-			expect( checkbox.props().onChange ).to.equal( wrapper.find( 'ModelTree' ).props().toggleModelShowCompactText );
+			fireEvent.click( checkbox );
+			expect( dispatchSpy ).toHaveBeenCalledWith( {
+				type: TOGGLE_MODEL_SHOW_COMPACT_TEXT
+			} );
 		} );
 
 		it( 'should render a show markers <Checkbox>', () => {
-			const checkbox = wrapper.find( Checkbox ).last();
+			const checkbox = screen.getByLabelText( 'Show markers' );
+			expect( checkbox ).not.toBeChecked();
 
-			expect( checkbox.props().label ).to.equal( 'Show markers' );
-			expect( checkbox.props().isChecked ).to.be.false;
-			expect( checkbox.props().onChange ).to.equal( wrapper.find( 'ModelTree' ).props().toggleModelShowMarkers );
+			fireEvent.click( checkbox );
+			expect( dispatchSpy ).toHaveBeenCalledWith( {
+				type: TOGGLE_MODEL_SHOW_MARKERS
+			} );
 		} );
 
 		it( 'should use a <Tree> component', () => {
-			const tree = wrapper.find( Tree );
-			const modelTree = wrapper.find( 'ModelTree' );
-
-			expect( tree.props().definition ).to.equal( modelTree.props().treeDefinition );
-			expect( tree.props().onClick ).to.equal( modelTree.instance().handleTreeClick );
-			expect( tree.props().showCompactText ).to.be.false;
-			expect( tree.props().activeNode ).to.equal( editor.model.document.getRoot() );
-			expect( tree.props().textDirection ).to.equal( 'ltr' );
+			const tree = document.querySelector( '.ck-inspector-tree' );
+			expect( tree ).toHaveClass( 'ck-inspector-model-tree__hide-markers' );
+			expect( tree ).toHaveClass( 'ck-inspector-tree_text-direction_ltr' );
+			expect( tree ).not.toHaveClass( 'ck-inspector-tree_compact-text' );
+			expect( document.querySelector( '.ck-inspector-tree-node_active' ) ).toBeTruthy();
 		} );
 	} );
 } );

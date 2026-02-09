@@ -3,6 +3,7 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { Paragraph, BoldEditing } from 'ckeditor5';
 
 import {
@@ -456,7 +457,7 @@ describe( 'model data utils', () => {
 
 			const definition = getEditorModelNodeDefinition( editor, paragraph );
 
-			expect( Object.keys( definition.attributes ) ).to.have.ordered.members( [ 'a', 'b', 'c', 'd' ] );
+			expect( Object.keys( definition.attributes ) ).toEqual( [ 'a', 'b', 'c', 'd' ] );
 		} );
 	} );
 } );

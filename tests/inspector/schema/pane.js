@@ -3,46 +3,42 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import React from 'react';
 import TestEditor from '../../utils/testeditor';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-
+import { render, screen } from '@testing-library/react';
 import SchemaPane from '../../../src/schema/pane';
-import SchemaTree from '../../../src/schema/tree';
-import SchemaDefinitionInspector from '../../../src/schema/schemadefinitioninspector';
 
 describe( '<SchemaPane />', () => {
-	let editor, wrapper, element, store;
+	let editor, renderResult, element, store;
 
-	beforeEach( () => {
+	beforeEach( async () => {
 		window.localStorage.clear();
 
 		element = document.createElement( 'div' );
 		document.body.appendChild( element );
 
-		return TestEditor.create( element ).then( newEditor => {
-			editor = newEditor;
+		editor = await TestEditor.create( element );
 
-			store = createStore( state => state, {
-				editors: new Map( [ [ 'test-editor', editor ] ] ),
-				currentEditorName: 'test-editor',
-				ui: {
-					activeTab: 'Schema'
-				},
-				schema: {
-				}
-			} );
-
-			wrapper = mount( <Provider store={store}><SchemaPane /></Provider> );
+		store = createStore( state => state, {
+			editors: new Map( [ [ 'test-editor', editor ] ] ),
+			currentEditorName: 'test-editor',
+			ui: {
+				activeTab: 'Schema'
+			},
+			schema: {
+			}
 		} );
+
+		renderResult = render( <Provider store={store}><SchemaPane /></Provider> );
 	} );
 
-	afterEach( () => {
-		wrapper.unmount();
+	afterEach( async () => {
+		renderResult.unmount();
 		element.remove();
-
-		return editor.destroy();
+		await editor.destroy();
 	} );
 
 	describe( 'render()', () => {
@@ -54,26 +50,23 @@ describe( '<SchemaPane />', () => {
 				}
 			} );
 
-			const wrapper = mount( <Provider store={store}><SchemaPane /></Provider> );
-
-			expect( wrapper.text() ).to.match( /^Nothing to show/ );
-
-			wrapper.unmount();
+			const { unmount } = render( <Provider store={store}><SchemaPane /></Provider> );
+			expect( screen.getByText( 'Nothing to show. Attach another editor instance to start inspecting.' ) )
+				.toBeInTheDocument();
+			unmount();
 		} );
 
 		it( 'should render <Tabs>', () => {
-			const tabs = wrapper.find( 'Tabs' );
-
-			expect( tabs ).to.have.length( 1 );
-			expect( tabs.props().activeTab ).to.equal( 'Inspect' );
+			const activeTab = document.querySelector( '.ck-inspector-horizontal-nav__item_active' );
+			expect( activeTab ).toHaveTextContent( 'Inspect' );
 		} );
 
 		it( 'should render a <SchemaTree/>', () => {
-			expect( wrapper.find( SchemaTree ) ).to.have.length( 1 );
+			expect( document.querySelector( '.ck-inspector-tree' ) ).toBeTruthy();
 		} );
 
 		it( 'should render a <SchemaDefinitionInspector/>', () => {
-			expect( wrapper.find( SchemaDefinitionInspector ) ).to.have.length( 1 );
+			expect( screen.getByText( 'Select a schema definition to inspect' ) ).toBeInTheDocument();
 		} );
 	} );
 } );

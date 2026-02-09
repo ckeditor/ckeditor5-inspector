@@ -3,6 +3,8 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+
 import TestEditor from '../../utils/testeditor';
 import LocalStorageManager from '../../../src/localstoragemanager';
 
@@ -63,12 +65,12 @@ describe( 'global data store reducer', () => {
 	} );
 
 	it( 'should create a data state', () => {
-		expect( state ).to.have.property( 'model' );
-		expect( state ).to.have.property( 'view' );
-		expect( state ).to.have.property( 'commands' );
-		expect( state ).to.have.property( 'schema' );
-		expect( state ).to.have.property( 'currentEditorGlobals' );
-		expect( state ).to.have.property( 'ui' );
+		expect( state ).toHaveProperty( 'model' );
+		expect( state ).toHaveProperty( 'view' );
+		expect( state ).toHaveProperty( 'commands' );
+		expect( state ).toHaveProperty( 'schema' );
+		expect( state ).toHaveProperty( 'currentEditorGlobals' );
+		expect( state ).toHaveProperty( 'ui' );
 	} );
 
 	describe( 'application state', () => {
@@ -76,7 +78,7 @@ describe( 'global data store reducer', () => {
 			it( 'should be updated on setEditors() action', () => {
 				state = reducer( state, setEditors( new Map( [ [ 'b', editorB ] ] ) ) );
 
-				expect( [ ...state.editors ] ).to.deep.equal( [
+				expect( [ ...state.editors ] ).toEqual( [
 					[ 'b', editorB ]
 				] );
 			} );
@@ -86,8 +88,8 @@ describe( 'global data store reducer', () => {
 
 				state = reducer( state, setEditors( new Map() ) );
 
-				expect( [ ...state.editors ] ).to.deep.equal( [] );
-				expect( state.currentEditorName ).to.be.null;
+				expect( [ ...state.editors ] ).toEqual( [] );
+				expect( state.currentEditorName ).toBeNull();
 			} );
 
 			it( 'should set #currentEditorName to the first editor if current one is not in editors', () => {
@@ -95,7 +97,7 @@ describe( 'global data store reducer', () => {
 
 				state = reducer( state, setEditors( new Map( [ [ 'a', editorA ] ] ) ) );
 
-				expect( state.currentEditorName ).to.equal( 'a' );
+				expect( state.currentEditorName ).toBe( 'a' );
 			} );
 		} );
 
@@ -103,14 +105,14 @@ describe( 'global data store reducer', () => {
 			it( 'should be updated on setCurrentEditorName() action', () => {
 				state = reducer( state, setCurrentEditorName( 'b' ) );
 
-				expect( state.currentEditorName ).to.equal( 'b' );
+				expect( state.currentEditorName ).toBe( 'b' );
 			} );
 		} );
 	} );
 
 	describe( 'current editor global properties state', () => {
 		it( 'should be created with defaults', () => {
-			expect( state.currentEditorGlobals ).to.deep.equal( {
+			expect( state.currentEditorGlobals ).toEqual( {
 				isReadOnly: false
 			} );
 		} );
@@ -125,7 +127,7 @@ describe( 'global data store reducer', () => {
 
 			state = reducer( state, setEditors( new Map( [ [ 'a', editorA ] ] ) ) );
 
-			expect( state.currentEditorGlobals ).to.deep.equal( {
+			expect( state.currentEditorGlobals ).toEqual( {
 				isReadOnly: true
 			} );
 		} );
@@ -138,7 +140,7 @@ describe( 'global data store reducer', () => {
 
 			state = reducer( state, setCurrentEditorName( 'b' ) );
 
-			expect( state.currentEditorGlobals ).to.deep.equal( {
+			expect( state.currentEditorGlobals ).toEqual( {
 				isReadOnly: false
 			} );
 		} );
@@ -150,7 +152,7 @@ describe( 'global data store reducer', () => {
 
 				state = reducer( state, updateCurrentEditorIsReadOnly() );
 
-				expect( state.currentEditorGlobals.isReadOnly ).to.be.false;
+				expect( state.currentEditorGlobals.isReadOnly ).toBe( false );
 			} );
 
 			it( 'should be false when there are no editors in the inspector (e.g. all were destroyed)', () => {
@@ -161,7 +163,7 @@ describe( 'global data store reducer', () => {
 
 				state = reducer( state, setEditors( new Map() ) );
 
-				expect( state.currentEditorGlobals ).to.deep.equal( {
+				expect( state.currentEditorGlobals ).toEqual( {
 					isReadOnly: false
 				} );
 			} );
@@ -170,7 +172,7 @@ describe( 'global data store reducer', () => {
 
 	describe( 'UI state', () => {
 		it( 'should be created with defaults if the LocalStorage is empty', () => {
-			expect( state.ui ).to.deep.equal( {
+			expect( state.ui ).toEqual( {
 				activeTab: 'Model',
 				isCollapsed: false,
 				height: '400px',
@@ -193,7 +195,7 @@ describe( 'global data store reducer', () => {
 				ui: {}
 			}, {} );
 
-			expect( state.ui ).to.deep.equal( {
+			expect( state.ui ).toEqual( {
 				activeTab: 'View',
 				isCollapsed: true,
 				height: '123px',
@@ -205,29 +207,29 @@ describe( 'global data store reducer', () => {
 			it( 'should be updated on setHeight action', () => {
 				state = reducer( state, setHeight( '60px' ) );
 
-				expect( state.ui.height ).to.equal( '60px' );
+				expect( state.ui.height ).toBe( '60px' );
 			} );
 
 			it( 'should be saved in local storage when nupdated', () => {
 				state = reducer( state, setHeight( '60px' ) );
 
-				expect( LocalStorageManager.get( LOCAL_STORAGE_INSPECTOR_HEIGHT ) ).to.equal( '60px' );
+				expect( LocalStorageManager.get( LOCAL_STORAGE_INSPECTOR_HEIGHT ) ).toBe( '60px' );
 			} );
 		} );
 
 		describe( '#isCollapsed', () => {
 			it( 'should be updated on toggleIsCollapsed() action', () => {
-				expect( state.ui.isCollapsed ).to.be.false;
+				expect( state.ui.isCollapsed ).toBe( false );
 
 				state = reducer( state, toggleIsCollapsed() );
 
-				expect( state.ui.isCollapsed ).to.be.true;
+				expect( state.ui.isCollapsed ).toBe( true );
 			} );
 
 			it( 'should be saved in local storage when nupdated', () => {
 				state = reducer( state, toggleIsCollapsed() );
 
-				expect( LocalStorageManager.get( LOCAL_STORAGE_IS_COLLAPSED ) ).to.equal( 'true' );
+				expect( LocalStorageManager.get( LOCAL_STORAGE_IS_COLLAPSED ) ).toBe( 'true' );
 			} );
 		} );
 
@@ -235,13 +237,13 @@ describe( 'global data store reducer', () => {
 			it( 'should be updated on setSidePaneWidth() action', () => {
 				state = reducer( state, setSidePaneWidth( '160px' ) );
 
-				expect( state.ui.sidePaneWidth ).to.equal( '160px' );
+				expect( state.ui.sidePaneWidth ).toBe( '160px' );
 			} );
 
 			it( 'should be saved in local storage when nupdated', () => {
 				state = reducer( state, setSidePaneWidth( '160px' ) );
 
-				expect( LocalStorageManager.get( LOCAL_STORAGE_SIDE_PANE_WIDTH ) ).to.equal( '160px' );
+				expect( LocalStorageManager.get( LOCAL_STORAGE_SIDE_PANE_WIDTH ) ).toBe( '160px' );
 			} );
 		} );
 
@@ -249,13 +251,13 @@ describe( 'global data store reducer', () => {
 			it( 'should be updated on setActiveTab() action', () => {
 				state = reducer( state, setActiveTab( 'Model' ) );
 
-				expect( state.ui.activeTab ).to.equal( 'Model' );
+				expect( state.ui.activeTab ).toBe( 'Model' );
 			} );
 
 			it( 'should be saved in local storage when nupdated', () => {
 				state = reducer( state, setActiveTab( 'View' ) );
 
-				expect( LocalStorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) ).to.equal( 'View' );
+				expect( LocalStorageManager.get( LOCAL_STORAGE_ACTIVE_TAB ) ).toBe( 'View' );
 			} );
 		} );
 	} );

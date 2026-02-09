@@ -3,6 +3,8 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect } from 'vitest';
+
 import {
 	stringify,
 	uid,
@@ -13,25 +15,25 @@ import {
 describe( 'Utils', () => {
 	describe( 'stringify()', () => {
 		it( 'stringifies values', () => {
-			expect( stringify( undefined ) ).to.equal( 'undefined' );
-			expect( stringify( true ) ).to.equal( 'true' );
-			expect( stringify( 'foo' ) ).to.equal( '"foo"' );
-			expect( stringify( [ 'a' ] ) ).to.equal( '["a"]' );
-			expect( stringify( { a: false } ) ).to.equal( '{a:false}' );
-			expect( stringify( () => 'foo' ) ).to.equal( 'function() {…}' );
+			expect( stringify( undefined ) ).toBe( 'undefined' );
+			expect( stringify( true ) ).toBe( 'true' );
+			expect( stringify( 'foo' ) ).toBe( '"foo"' );
+			expect( stringify( [ 'a' ] ) ).toBe( '["a"]' );
+			expect( stringify( { a: false } ) ).toBe( '{a:false}' );
+			expect( stringify( () => 'foo' ) ).toBe( 'function() {…}' );
 		} );
 
 		it( 'serializes quotes properly', () => {
-			expect( stringify( '\'foo\'' ) ).to.equal( '"\\"foo\\""' );
+			expect( stringify( '\'foo\'' ) ).toBe( '"\\"foo\\""' );
 		} );
 
 		it( 'stringifies values (no quotes around text)', () => {
-			expect( stringify( undefined ) ).to.equal( 'undefined' );
-			expect( stringify( true ) ).to.equal( 'true' );
-			expect( stringify( 'foo', false ) ).to.equal( 'foo' );
-			expect( stringify( [ 'a' ], false ) ).to.equal( '["a"]' );
-			expect( stringify( { a: false }, false ) ).to.equal( '{a:false}' );
-			expect( stringify( () => 'foo' ), false ).to.equal( 'function() {…}' );
+			expect( stringify( undefined ) ).toBe( 'undefined' );
+			expect( stringify( true ) ).toBe( 'true' );
+			expect( stringify( 'foo', false ) ).toBe( 'foo' );
+			expect( stringify( [ 'a' ], false ) ).toBe( '["a"]' );
+			expect( stringify( { a: false }, false ) ).toBe( '{a:false}' );
+			expect( stringify( () => 'foo' ), false ).toBe( 'function() {…}' );
 		} );
 
 		it( 'should not throw while processing circular references', () => {
@@ -39,8 +41,8 @@ describe( 'Utils', () => {
 			obj.baz = obj;
 
 			expect( () => {
-				expect( stringify( obj ) ).to.equal( '{foo:"bar"}' );
-			} ).to.not.throw();
+				expect( stringify( obj ) ).toBe( '{foo:"bar"}' );
+			} ).not.toThrow();
 		} );
 
 		it( 'should process only two first level of objects', () => {
@@ -54,39 +56,40 @@ describe( 'Utils', () => {
 				}
 			};
 
-			expect( stringify( obj ) ).to.equal( '{level:"1",nested:{level:"2",subNested:{}}}' );
+			expect( stringify( obj ) ).toBe( '{level:"1",nested:{level:"2",subNested:{}}}' );
 		} );
 	} );
 
 	describe( 'uid()', () => {
 		it( 'generates UID', () => {
-			expect( uid() ).to.be.a( 'string' );
+			expect( uid() ).toEqual( expect.any( String ) );
 		} );
 	} );
 
 	describe( 'stringifyPropertyList()', () => {
 		it( 'stringifies props', () => {
-			expect( stringifyPropertyList( {
+			const symbolKey = Symbol( '42' );
+			const result = stringifyPropertyList( {
 				foo: { value: 'bar' },
 				baz: { value: 'qux' },
-				[ Symbol( '42' ) ]: { value: 'abc' }
-			} ) ).to.deep.include( {
-				foo: { value: '"bar"' },
-				baz: { value: '"qux"' },
-				[ Symbol( '42' ) ]: { value: '"abc"' }
+				[ symbolKey ]: { value: 'abc' }
 			} );
+
+			expect( result.foo ).toEqual( { value: '"bar"' } );
+			expect( result.baz ).toEqual( { value: '"qux"' } );
+			expect( result[ symbolKey ] ).toBeUndefined();
 		} );
 	} );
 
 	describe( 'truncateString()', () => {
 		it( 'truncates when too long', () => {
-			expect( truncateString( '1234', 3 ) ).to.equal( '123… [1 characters left]' );
-			expect( truncateString( '1234', 2 ) ).to.equal( '12… [2 characters left]' );
+			expect( truncateString( '1234', 3 ) ).toBe( '123… [1 characters left]' );
+			expect( truncateString( '1234', 2 ) ).toBe( '12… [2 characters left]' );
 		} );
 
 		it( 'does nothing when in limit', () => {
-			expect( truncateString( '1234', 4 ) ).to.equal( '1234' );
-			expect( truncateString( '1234', 5 ) ).to.equal( '1234' );
+			expect( truncateString( '1234', 4 ) ).toBe( '1234' );
+			expect( truncateString( '1234', 5 ) ).toBe( '1234' );
 		} );
 	} );
 } );

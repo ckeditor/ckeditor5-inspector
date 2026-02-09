@@ -71,9 +71,7 @@ export default defineConfig( [
 
 		languageOptions: {
 			globals: {
-				...globals.node,
-				mount: true,
-				shallow: true
+				...globals.node
 			}
 		}
 	},

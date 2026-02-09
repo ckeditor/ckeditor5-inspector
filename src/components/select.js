@@ -4,7 +4,7 @@
  */
 
 import React, { Component } from 'react';
-import isEqual from 'lodash.isequal';
+import { isEqual } from 'es-toolkit/compat';
 
 export default class Select extends Component {
 	render() {

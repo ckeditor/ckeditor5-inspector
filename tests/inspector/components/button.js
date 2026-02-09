@@ -3,80 +3,87 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
+import { describe, it, expect, vi } from 'vitest';
 import React from 'react';
+import { fireEvent, render } from '@testing-library/react';
 import Button from '../../../src/components/button';
 import ConsoleIcon from '../../../src/assets/img/console.svg';
 
 describe( '<Button />', () => {
 	it( 'renders a button', () => {
-		const wrapper = shallow( <Button /> );
+		const { container } = render( <Button /> );
+		const button = container.querySelector( 'button' );
 
-		expect( wrapper.first() ).to.have.className( 'ck-inspector-button' );
-		expect( wrapper.first() ).to.have.attr( 'type', 'button' );
+		expect( button ).toHaveClass( 'ck-inspector-button' );
+		expect( button ).toHaveAttribute( 'type', 'button' );
 	} );
 
 	it( 'reacts to props#text', () => {
-		const wrapper = shallow( <Button /> );
+		const { container, rerender } = render( <Button /> );
 
-		wrapper.setProps( { text: 'foo' } );
+		rerender( <Button text="foo" /> );
 
-		expect( wrapper.first() ).to.have.attr( 'title', 'foo' );
-		expect( wrapper.first().contains( 'foo' ) ).to.be.true;
+		const button = container.querySelector( 'button' );
+		expect( button ).toHaveAttribute( 'title', 'foo' );
+		expect( button ).toHaveTextContent( 'foo' );
 	} );
 
 	it( 'reacts to props#className', () => {
-		const wrapper = mount( <Button /> );
+		const { container, rerender } = render( <Button /> );
 
-		wrapper.setProps( { className: 'foo-bar-baz' } );
-
-		expect( wrapper.getDOMNode().classList.contains( 'foo-bar-baz' ) ).to.be.true;
+		rerender( <Button className="foo-bar-baz" /> );
+		const button = container.querySelector( 'button' );
+		expect( button ).toHaveClass( 'foo-bar-baz' );
 	} );
 
 	it( 'reacts to props#isOn', () => {
-		const wrapper = shallow( <Button /> );
+		const { container, rerender } = render( <Button /> );
+		const button = container.querySelector( 'button' );
 
-		expect( wrapper.first() ).to.not.have.className( 'ck-inspector-button_on' );
+		expect( button ).not.toHaveClass( 'ck-inspector-button_on' );
 
-		wrapper.setProps( { isOn: true } );
-		expect( wrapper.first() ).to.have.className( 'ck-inspector-button_on' );
+		rerender( <Button isOn={true} /> );
+		expect( container.querySelector( 'button' ) ).toHaveClass( 'ck-inspector-button_on' );
 
-		wrapper.setProps( { isOn: false } );
-		expect( wrapper.first() ).to.not.have.className( 'ck-inspector-button_on' );
+		rerender( <Button isOn={false} /> );
+		expect( container.querySelector( 'button' ) ).not.toHaveClass( 'ck-inspector-button_on' );
 	} );
 
 	it( 'reacts to props#isEnabled', () => {
-		const wrapper = shallow( <Button /> );
+		const { container, rerender } = render( <Button /> );
+		const button = container.querySelector( 'button' );
 
-		expect( wrapper.first() ).to.not.have.className( 'ck-inspector-button_disabled' );
+		expect( button ).not.toHaveClass( 'ck-inspector-button_disabled' );
 
-		wrapper.setProps( { isEnabled: false } );
-		expect( wrapper.first() ).to.have.className( 'ck-inspector-button_disabled' );
+		rerender( <Button isEnabled={false} /> );
+		expect( container.querySelector( 'button' ) ).toHaveClass( 'ck-inspector-button_disabled' );
 
-		wrapper.setProps( { isEnabled: true } );
-		expect( wrapper.first() ).to.not.have.className( 'ck-inspector-button_disabled' );
+		rerender( <Button isEnabled={true} /> );
+		expect( container.querySelector( 'button' ) ).not.toHaveClass( 'ck-inspector-button_disabled' );
 	} );
 
 	it( 'reacts to props#icon', () => {
-		const wrapper = shallow( <Button /> );
+		const { container, rerender } = render( <Button /> );
 
-		wrapper.setProps( { icon: <ConsoleIcon/> } );
+		rerender( <Button icon={<ConsoleIcon />} /> );
+		expect( container.querySelector( 'svg' ) ).toBeTruthy();
 	} );
 
 	describe( 'onClick handling', () => {
 		it( 'executes props#onClick when clicked', () => {
-			const spy = sinon.spy();
-			const wrapper = shallow( <Button onClick={spy} /> );
+			const spy = vi.fn();
+			const { container } = render( <Button onClick={spy} /> );
 
-			wrapper.first().simulate( 'click' );
-			sinon.assert.callCount( spy, 1 );
+			fireEvent.click( container.querySelector( 'button' ) );
+			expect( spy ).toHaveBeenCalledTimes( 1 );
 		} );
 
 		it( 'does not execute props#onClick when #isEnabled is false', () => {
-			const spy = sinon.spy();
-			const wrapper = shallow( <Button onClick={spy} isEnabled={false} /> );
+			const spy = vi.fn();
+			const { container } = render( <Button onClick={spy} isEnabled={false} /> );
 
-			wrapper.first().simulate( 'click' );
-			sinon.assert.notCalled( spy );
+			fireEvent.click( container.querySelector( 'button' ) );
+			expect( spy ).not.toHaveBeenCalled();
 		} );
 	} );
 } );
