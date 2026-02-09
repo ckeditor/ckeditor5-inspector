@@ -5,7 +5,7 @@
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import TestEditor from '../../utils/testeditor';
 import SetEditorDataButton from '../../../src/components/seteditordatabutton';
 
@@ -44,6 +44,15 @@ describe( '<SetEditorDataButton />', () => {
 			expect( screen.queryByRole( 'heading', { name: 'Set editor data' } ) ).toBeNull();
 		} );
 
+		it( 'is disabled when editor is missing', () => {
+			renderResult.unmount();
+			renderResult = render( <SetEditorDataButton editor={null} /> );
+
+			const button = screen.getByRole( 'button', { name: 'Set editor data' } );
+
+			expect( button ).toHaveClass( 'ck-inspector-button_disabled' );
+		} );
+
 		it( 'should render a <Button>', () => {
 			const button = screen.getByRole( 'button', { name: 'Set editor data' } );
 
@@ -60,12 +69,28 @@ describe( '<SetEditorDataButton />', () => {
 	} );
 
 	describe( '<Modal>', () => {
+		it( 'is rendered in a portal outside inspector wrapper', async () => {
+			await openModal();
+
+			const portal = document.querySelector( '.ck-inspector-portal' );
+
+			expect( portal ).toBeTruthy();
+			expect( inspectorWrapperDomElement.contains( portal ) ).toBe( false );
+		} );
+
 		it( 'shows action buttons', async () => {
 			await openModal();
 
 			expect( screen.getByRole( 'button', { name: 'Load data' } ) ).toBeInTheDocument();
 			expect( screen.getByRole( 'button', { name: 'Cancel' } ) ).toBeInTheDocument();
 			expect( screen.getByRole( 'button', { name: 'Set data' } ) ).toBeInTheDocument();
+		} );
+
+		it( 'renders keyboard shortcut titles', async () => {
+			await openModal();
+
+			expect( screen.getByRole( 'button', { name: 'Cancel' } ) ).toHaveAttribute( 'title', 'Cancel (Esc)' );
+			expect( screen.getByRole( 'button', { name: 'Set data' } ) ).toHaveAttribute( 'title', 'Set editor data (⇧+Enter)' );
 		} );
 
 		it( 'should render modal classes when opened', async () => {
@@ -86,6 +111,17 @@ describe( '<SetEditorDataButton />', () => {
 			await openModal();
 
 			expect( screen.getByPlaceholderText( 'Paste HTML here...' ) ).toHaveValue( '<p>foo</p>' );
+		} );
+
+		it( 'closes when overlay is clicked', async () => {
+			await openModal();
+
+			const overlay = document.querySelector( '.ck-inspector-modal' );
+			fireEvent.click( overlay );
+
+			await waitFor( () => {
+				expect( screen.queryByRole( 'heading', { name: 'Set editor data' } ) ).toBeNull();
+			} );
 		} );
 	} );
 
@@ -168,6 +204,16 @@ describe( '<SetEditorDataButton />', () => {
 
 			expect( setDataSpy ).toHaveBeenCalledTimes( 1 );
 			expect( screen.queryByRole( 'heading', { name: 'Set editor data' } ) ).toBeNull();
+		} );
+
+		it( 'loads fresh editor data when opened again', async () => {
+			await openModal();
+			fireEvent.click( screen.getByRole( 'button', { name: 'Cancel' } ) );
+
+			getDataSpy.mockReturnValue( '<p>bar</p>' );
+			await openModal();
+
+			expect( screen.getByPlaceholderText( 'Paste HTML here...' ) ).toHaveValue( '<p>bar</p>' );
 		} );
 	} );
 } );
