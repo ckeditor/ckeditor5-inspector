@@ -51,15 +51,16 @@ describe( '<ViewPane />', () => {
 
 	describe( 'render()', () => {
 		it( 'should render a placeholder when no props#currentEditorName', () => {
-			renderResult.unmount();
-			store = createStore( state => state, {
-				currentEditorName: null,
-				view: {
-					ui: {}
+			store.dispatch( {
+				type: 'setState',
+				state: {
+					currentEditorName: null,
+					view: {
+						ui: {}
+					}
 				}
 			} );
 
-			renderResult = render( <Provider store={store}><ViewPane /></Provider> );
 			expect( screen.getByText( 'Nothing to show. Attach another editor instance to start inspecting.' ) )
 				.toBeInTheDocument();
 		} );
@@ -74,50 +75,36 @@ describe( '<ViewPane />', () => {
 		} );
 
 		it( 'should render a <ViewNodeInspector/> if the active tab is "Inspect"', () => {
-			renderResult.unmount();
-			store = createStore( state => state, {
-				editors: new Map( [ [ 'test-editor', editor ] ] ),
-				currentEditorName: 'test-editor',
-				ui: {
-					activeTab: 'View'
-				},
-				view: {
-					roots: [],
-					ranges: [],
-					treeDefinition: null,
-					currentRootName: 'main',
-					ui: {
-						activeTab: 'Inspect',
-						showElementTypes: false
+			store.dispatch( {
+				type: 'setState',
+				state: {
+					view: {
+						...store.getState().view,
+						ui: {
+							activeTab: 'Inspect',
+							showElementTypes: false
+						}
 					}
 				}
 			} );
 
-			renderResult = render( <Provider store={store}><ViewPane /></Provider> );
 			expect( screen.getByText( 'Select a node in the tree to inspect' ) ).toBeInTheDocument();
 		} );
 
 		it( 'should render a <ViewSelectionInspector/> if the active tab is "Selection"', () => {
-			renderResult.unmount();
-			store = createStore( state => state, {
-				editors: new Map( [ [ 'test-editor', editor ] ] ),
-				currentEditorName: 'test-editor',
-				ui: {
-					activeTab: 'View'
-				},
-				view: {
-					roots: [],
-					ranges: [],
-					treeDefinition: null,
-					currentRootName: 'main',
-					ui: {
-						activeTab: 'Selection',
-						showElementTypes: false
+			store.dispatch( {
+				type: 'setState',
+				state: {
+					view: {
+						...store.getState().view,
+						ui: {
+							activeTab: 'Selection',
+							showElementTypes: false
+						}
 					}
 				}
 			} );
 
-			renderResult = render( <Provider store={store}><ViewPane /></Provider> );
 			expect( screen.getByRole( 'button', { name: 'Scroll to selection' } ) ).toBeInTheDocument();
 		} );
 	} );

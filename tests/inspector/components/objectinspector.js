@@ -3,12 +3,26 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import React from 'react';
-import { fireEvent, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import ObjectInspector from '../../../src/components/objectinspector';
 
+let propertyListProps;
+
+vi.mock( '../../../src/components/propertylist', () => ( {
+	default: props => {
+		propertyListProps = props;
+
+		return <div className="ck-inspector-property-list" />;
+	}
+} ) );
+
 describe( '<ObjectInspector />', () => {
+	beforeEach( () => {
+		propertyListProps = null;
+	} );
+
 	it( 'renders', () => {
 		const { container } = render( <ObjectInspector lists={[]} /> );
 
@@ -22,6 +36,30 @@ describe( '<ObjectInspector />', () => {
 	} );
 
 	describe( 'props#lists', () => {
+		it( 'passes itemDefinitions to <PropertyList />', () => {
+			render( <ObjectInspector lists={[
+				{
+					name: 'foo',
+					url: 'http://bar',
+					buttons: [
+						{
+							type: 'log',
+							label: 'ABC'
+						}
+					],
+					itemDefinitions: {
+						foo: { value: 'bar' },
+						qux: { value: 'baz' }
+					}
+				}
+			]} /> );
+
+			expect( propertyListProps.itemDefinitions ).toEqual( {
+				foo: { value: 'bar' },
+				qux: { value: 'baz' }
+			} );
+		} );
+
 		it( 'does not render when there are no items', () => {
 			const { container } = render( <ObjectInspector lists={[
 				{
@@ -65,7 +103,8 @@ describe( '<ObjectInspector />', () => {
 
 		it( 'passes a "onPropertyTitleClick" handler to <PropertyList />', () => {
 			const onClickMock = vi.fn();
-			const { container } = render( <ObjectInspector lists={[
+
+			render( <ObjectInspector lists={[
 				{
 					name: 'foo',
 					url: 'http://bar',
@@ -83,13 +122,13 @@ describe( '<ObjectInspector />', () => {
 				}
 			]} /> );
 
-			const label = container.querySelector( 'label' );
-			fireEvent.click( label );
-			expect( onClickMock ).toHaveBeenCalledWith( 'foo' );
+			expect( propertyListProps.onPropertyTitleClick ).toBe( onClickMock );
 		} );
 
 		it( 'passes a "presentation" data to <PropertyList />', () => {
-			const { container } = render( <ObjectInspector lists={[
+			const presentationMock = {};
+
+			render( <ObjectInspector lists={[
 				{
 					name: 'foo',
 					url: 'http://bar',
@@ -100,21 +139,14 @@ describe( '<ObjectInspector />', () => {
 						}
 					],
 					itemDefinitions: {
-						foo: {
-							value: 'bar',
-							subProperties: {
-								qux: { value: 'baz' }
-							}
-						}
+						foo: { value: 'bar' },
+						qux: { value: 'baz' }
 					},
-					presentation: {
-						expandCollapsibles: true
-					}
+					presentation: presentationMock
 				}
 			]} /> );
 
-			const title = container.querySelector( '.ck-inspector-property-list__title_collapsible' );
-			expect( title ).toHaveClass( 'ck-inspector-property-list__title_expanded' );
+			expect( propertyListProps.presentation ).toBe( presentationMock );
 		} );
 	} );
 } );

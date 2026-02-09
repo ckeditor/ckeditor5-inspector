@@ -151,8 +151,14 @@ describe( '<Tree />', () => {
 		} );
 
 		it( 'should be rendered', () => {
-			expect( document.querySelectorAll( '.ck-inspector-tree-node' ) ).toHaveLength( 1 );
-			expect( document.querySelectorAll( '.ck-inspector-tree-text' ) ).toHaveLength( 2 );
+			const elementNodes = document.querySelectorAll( '.ck-inspector-tree-node' );
+			const textNodes = document.querySelectorAll( '.ck-inspector-tree-text' );
+
+			expect( elementNodes ).toHaveLength( 1 );
+			expect( textNodes ).toHaveLength( 2 );
+			expect( elementNodes[ 0 ].querySelector( '.ck-inspector-tree-node__name' ) ).toHaveTextContent( 'a' );
+			expect( textNodes[ 0 ] ).toHaveTextContent( '"abc"' );
+			expect( textNodes[ 1 ] ).toHaveTextContent( '"xyz"' );
 		} );
 
 		it( 'should share tree\'s props#onClick', () => {
@@ -253,6 +259,8 @@ describe( '<Tree />', () => {
 		it( 'is rendered', () => {
 			const comments = document.querySelectorAll( '.ck-inspector-tree-comment' );
 			expect( comments ).toHaveLength( 2 );
+			expect( comments[ 0 ] ).toHaveTextContent( 'foo' );
+			expect( comments[ 1 ] ).toHaveTextContent( 'bar' );
 		} );
 
 		it( 'is rendered with unsafe html', () => {

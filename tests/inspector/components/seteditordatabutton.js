@@ -40,6 +40,10 @@ describe( '<SetEditorDataButton />', () => {
 	} );
 
 	describe( '<Button>', () => {
+		it( 'is closed by default', () => {
+			expect( screen.queryByRole( 'heading', { name: 'Set editor data' } ) ).toBeNull();
+		} );
+
 		it( 'should render a <Button>', () => {
 			const button = screen.getByRole( 'button', { name: 'Set editor data' } );
 
@@ -56,6 +60,14 @@ describe( '<SetEditorDataButton />', () => {
 	} );
 
 	describe( '<Modal>', () => {
+		it( 'shows action buttons', async () => {
+			await openModal();
+
+			expect( screen.getByRole( 'button', { name: 'Load data' } ) ).toBeInTheDocument();
+			expect( screen.getByRole( 'button', { name: 'Cancel' } ) ).toBeInTheDocument();
+			expect( screen.getByRole( 'button', { name: 'Set data' } ) ).toBeInTheDocument();
+		} );
+
 		it( 'should render modal classes when opened', async () => {
 			await openModal();
 

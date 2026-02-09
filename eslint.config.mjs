@@ -71,14 +71,7 @@ export default defineConfig( [
 
 		languageOptions: {
 			globals: {
-				...globals.node,
-				afterEach: true,
-				beforeEach: true,
-				describe: true,
-				expect: true,
-				it: true,
-				test: true,
-				vi: true
+				...globals.node
 			}
 		}
 	},

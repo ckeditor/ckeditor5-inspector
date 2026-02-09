@@ -7,7 +7,6 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import TreeElement from '../../../../src/components/tree/treeelement';
-import { renderTreeNodeFromDefinition } from '../../../../src/components/tree/utils';
 
 vi.mock( '../../../../src/components/tree/utils', () => ( {
 	renderTreeNodeFromDefinition: definition => {
@@ -156,7 +155,7 @@ describe( '<TreeElement />', () => {
 						children: []
 					}
 				]
-			}} globalTreeProps={{ renderTreeNodeFromDefinition }} /> );
+			}} /> );
 
 			const content = container.querySelector( '.ck-inspector-tree-node__content' );
 			expect( content ).toHaveTextContent( '"abc"' );

@@ -19,14 +19,6 @@ describe( '<TreeTextNode />', () => {
 		clickSpy = vi.fn();
 	} );
 
-	const getMeaningfulNodes = element => Array.from( element.childNodes ).filter( node => {
-		if ( node.nodeType === 1 ) {
-			return true;
-		}
-
-		return node.nodeType === 3 && node.textContent.trim() !== '';
-	} );
-
 	it( 'is rendered', () => {
 		const { container } = render( <TreeTextNode definition={{
 			attributes: [],
@@ -86,8 +78,10 @@ describe( '<TreeTextNode />', () => {
 				}} /> );
 
 				const content = container.querySelector( '.ck-inspector-tree-node__content' );
-				const nodes = getMeaningfulNodes( content );
-				expect( nodes[ 0 ] ).toHaveClass( 'ck-inspector-tree__position_selection' );
+				const position = content.querySelector( '.ck-inspector-tree__position_selection' );
+
+				expect( position ).toBeTruthy();
+				expect( content.firstElementChild ).toBe( position );
 			} );
 
 			it( 'should be rendered after the content', () => {
@@ -102,8 +96,10 @@ describe( '<TreeTextNode />', () => {
 				}} /> );
 
 				const content = container.querySelector( '.ck-inspector-tree-node__content' );
-				const nodes = getMeaningfulNodes( content );
-				expect( nodes[ nodes.length - 1 ] ).toHaveClass( 'ck-inspector-tree__position_selection' );
+				const position = content.querySelector( '.ck-inspector-tree__position_selection' );
+
+				expect( position ).toBeTruthy();
+				expect( content.lastElementChild ).toBe( position );
 			} );
 
 			it( 'should be rendered in the middle of the content', () => {
@@ -119,17 +115,12 @@ describe( '<TreeTextNode />', () => {
 				}} /> );
 
 				const content = container.querySelector( '.ck-inspector-tree-node__content' );
-				const nodes = getMeaningfulNodes( content );
-				const positionIndex = nodes.findIndex( node => {
-					return node.nodeType === 1 && node.classList.contains( 'ck-inspector-tree__position_selection' );
-				} );
-				const textBefore = nodes.slice( 0, positionIndex ).map( node => node.textContent ).join( '' );
-				const textAfter = nodes.slice( positionIndex + 1 ).map( node => node.textContent ).join( '' );
+				const position = content.querySelector( '.ck-inspector-tree__position_selection' );
 
-				expect( positionIndex ).toBeGreaterThan( 0 );
-				expect( positionIndex ).toBeLessThan( nodes.length - 1 );
-				expect( textBefore ).toBe( 'ab' );
-				expect( textAfter ).toBe( 'c' );
+				expect( position ).toBeTruthy();
+				expect( position.previousSibling.textContent ).toBe( 'b' );
+				expect( position.previousSibling.previousSibling.textContent ).toBe( 'a' );
+				expect( position.nextSibling.textContent ).toBe( 'c' );
 			} );
 		} );
 

@@ -65,11 +65,9 @@ describe( '<SchemaTree />', () => {
 			const textIndex = names.indexOf( '$text' );
 			const paragraphIndex = names.indexOf( 'paragraph' );
 
-			expect( rootIndex ).toBeGreaterThan( -1 );
-			expect( textIndex ).toBeGreaterThan( -1 );
-			expect( paragraphIndex ).toBeGreaterThan( -1 );
-			expect( rootIndex ).toBeLessThan( textIndex );
-			expect( textIndex ).toBeLessThan( paragraphIndex );
+			expect( rootIndex ).toBeGreaterThanOrEqual( 0 );
+			expect( textIndex ).toBe( rootIndex + 1 );
+			expect( paragraphIndex ).toBe( textIndex + 1 );
 		} );
 
 		it( 'should start inspecting a schema definition when an item was clicked', () => {
