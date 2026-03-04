@@ -131,7 +131,7 @@ Start the webpack file watcher:
 pnpm run dev
 ```
 
-and open `http://path/to/ckeditor5-inspector/sample/inspector.html` in your web browser.
+and visit samples hosted at `http://localhost:3000/sample/` in your web browser.
 
 ### Building
 
