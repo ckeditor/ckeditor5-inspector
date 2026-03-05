@@ -55,6 +55,9 @@ export default defineConfig( {
 		'process.env.NODE_ENV': JSON.stringify( process.env.NODE_ENV ),
 		CKEDITOR_INSPECTOR_VERSION: JSON.stringify( getLastFromChangelog() )
 	},
+	css: {
+		transformer: 'lightningcss'
+	},
 	build: {
 		outDir: OUT_DIR,
 		emptyOutDir: false,
