@@ -20,6 +20,8 @@ export default defineConfig( [
 	{
 		files: [
 			'./*.{js,mjs}',
+			'scripts/**/*.{js,mjs}',
+			'scripts-tests/**/*.{js,mjs}',
 			'src/**/*.{js,mjs}',
 			'tests/**/*.{js,mjs}'
 		],

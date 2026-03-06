@@ -18,7 +18,7 @@
   "scripts": {
     "nice": "ckeditor5-dev-changelog-create-entry",
     "postinstall": "node ./scripts/postinstall.mjs",
-    "serve": "echo 'Visit samples at http://localhost:3000/sample' && serve . --no-port-switching",
+    "serve": "node ./scripts/serve.mjs",
     "build": "rimraf './build/*' && concurrently --group 'pnpm:build:inspector' 'pnpm:build:mini'",
     "build:inspector": "vite build --mode production -- --variant=inspector",
     "build:mini": "vite build --mode production -- --variant=mini",

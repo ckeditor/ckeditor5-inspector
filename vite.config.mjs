@@ -42,7 +42,28 @@ export default defineConfig( {
 			include: '**/*.svg',
 			exportAsDefault: true
 		} ),
-		vitePluginCssInjectedByJs()
+		vitePluginCssInjectedByJs( {
+			injectCodeFunction: ( cssCode, options = {} ) => {
+				if ( typeof document === 'undefined' ) {
+					return;
+				}
+
+				const elementStyle = document.createElement( 'style' );
+
+				if ( options.styleId ) {
+					elementStyle.id = options.styleId;
+				}
+
+				for ( const attribute of Object.keys( options.attributes || {} ) ) {
+					elementStyle.setAttribute( attribute, options.attributes[ attribute ] );
+				}
+
+				elementStyle.setAttribute( 'data-cke-inspector', 'true' );
+
+				elementStyle.appendChild( document.createTextNode( cssCode ) );
+				document.head.appendChild( elementStyle );
+			}
+		} )
 	],
 	optimizeDeps: {
 		esbuildOptions: {
