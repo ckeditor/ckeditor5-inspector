@@ -26,7 +26,6 @@ import {
 } from './utils';
 import './ckeditorinspector.css';
 
-// From changelog -> webpack.
 window.CKEDITOR_INSPECTOR_VERSION = CKEDITOR_INSPECTOR_VERSION;
 
 export default class CKEditorInspector {

@@ -129,9 +129,6 @@ importers:
       rimraf:
         specifier: ^6.1.3
         version: 6.1.3
-      rollup-plugin-license:
-        specifier: ^3.7.0
-        version: 3.7.0(picomatch@4.0.3)(rollup@4.59.0)
       serve:
         specifier: ^14.2.6
         version: 14.2.6
@@ -1658,10 +1655,6 @@ packages:
     resolution: {integrity: sha512-LHE+8BuR7RYGDKvnrmcuSq3tDcKv9OFEXQt/HpbZhY7V6h0zlUXutnAD82GiFx9rdieCMjkvtcsPqBwgUl1Iiw==}
     engines: {node: '>= 0.4'}
 
-  array-find-index@1.0.2:
-    resolution: {integrity: sha512-M1HQyIXcBGtVywBt8WVdim+lrNaK7VHp99Qt5pSNziXznKHViIBbXWtfRTpEFpF/c4FdfxNAsCCwPp5phBYJtw==}
-    engines: {node: '>=0.10.0'}
-
   array-includes@3.1.9:
     resolution: {integrity: sha512-FmeCCAenzH0KH381SPT5FZmiA/TmpndpcaShhfgEN9eCVjnFBqq3l1xrI42y8+PPLI6hypzou4GXw00WHmPBLQ==}
     engines: {node: '>= 0.4'}
@@ -1957,9 +1950,6 @@ packages:
   comment-parser@1.4.1:
     resolution: {integrity: sha512-buhp5kePrmda3vhc5B9t7pUQXAb2Tnd0qgpkIhPhkHXxJpiPJ11H0ZEU0oBpJ2QztSbzG/ZxMj/CHsYJqRHmyg==}
     engines: {node: '>= 12.0.0'}
-
-  commenting@1.1.0:
-    resolution: {integrity: sha512-YeNK4tavZwtH7jEgK1ZINXzLKm6DZdEMfsaaieOsCAN0S8vsY7UeuO3Q7d/M018EFgE+IeUAuBOKkFccBZsUZA==}
 
   compressible@2.0.18:
     resolution: {integrity: sha512-AF3r7P5dWxL8MxyITRMlORQNaOA2IkAFaTr4k7BUumjPtRpGDTZpl0Pb1XCO6JeDCBdp126Cgs9sMxqSjgYyRg==}
@@ -3195,9 +3185,6 @@ packages:
   lodash.uniq@4.5.0:
     resolution: {integrity: sha512-xfBaXQd9ryd9dlSDvnvI0lvxfLJlYAZzXomUYzLKtUeOQvOP5piqAWuGtrhWeqaXK9hhoM/iyJc5AV+XfsX3HQ==}
 
-  lodash@4.17.23:
-    resolution: {integrity: sha512-LgVTMpQtIopCi79SJeDiP0TfWi5CNEc/L/aRdTh3yIvmZXTnheWpKjSZhnvMl8iXbC1tFg9gdHHDMLoV7CnG+w==}
-
   log-symbols@4.1.0:
     resolution: {integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==}
     engines: {node: '>=10'}
@@ -3494,9 +3481,6 @@ packages:
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     hasBin: true
 
-  moment@2.30.1:
-    resolution: {integrity: sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==}
-
   mrmime@2.0.1:
     resolution: {integrity: sha512-Y3wQdFg2Va6etvQ5I82yUhGdsKrcYox6p7FfL1LbK2J4V01F9TGlepTIhnK24t7koZibmg82KGglhA1XK5IsLQ==}
     engines: {node: '>=10'}
@@ -3661,10 +3645,6 @@ packages:
 
   package-json-from-dist@1.0.1:
     resolution: {integrity: sha512-UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==}
-
-  package-name-regex@2.0.6:
-    resolution: {integrity: sha512-gFL35q7kbE/zBaPA3UKhp2vSzcPYx2ecbYuwv1ucE9Il6IIgBDweBlH8D68UFGZic2MkllKa2KHCfC1IQBQUYA==}
-    engines: {node: '>=12'}
 
   pacote@21.0.3:
     resolution: {integrity: sha512-itdFlanxO0nmQv4ORsvA9K1wv40IPfB9OmWqfaJWvoJ30VKyHsqNgDVeG+TVhI7Gk7XW8slUy7cA9r6dF5qohw==}
@@ -4220,12 +4200,6 @@ packages:
     engines: {node: 20 || >=22}
     hasBin: true
 
-  rollup-plugin-license@3.7.0:
-    resolution: {integrity: sha512-RvvOIF+GH3fBR3wffgc/vmjQn6qOn72WjppWVDp/v+CLpT0BbcRBdSkPeeIOL6U5XccdYgSIMjUyXgxlKEEFcw==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      rollup: ^1.0.0 || ^2.0.0 || ^3.0.0 || ^4.0.0
-
   rollup@4.59.0:
     resolution: {integrity: sha512-2oMpl67a3zCH9H79LeMcbDhXW/UmWG/y2zuqnF2jQq5uq9TbM9TVyXvA4+t+ne2IIkBdrLpAaRQAvo7YI/Yyeg==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
@@ -4416,9 +4390,6 @@ packages:
   space-separated-tokens@2.0.2:
     resolution: {integrity: sha512-PEGlAwrG8yXGXRjW32fGbg66JAlOAwbObuqVoJpv/mRgoWDQfgH1wDPvtzWyUSNAXBGSk8h755YDbbcEy3SH2Q==}
 
-  spdx-compare@1.0.0:
-    resolution: {integrity: sha512-C1mDZOX0hnu0ep9dfmuoi03+eOdDoz2yvK79RxbcrVEG1NO1Ph35yW102DHWKN4pk80nwCgeMmSY5L25VE4D9A==}
-
   spdx-correct@3.2.0:
     resolution: {integrity: sha512-kN9dJbvnySHULIluDHy32WHRUu3Og7B9sbY7tsFLctQkIqnMh3hErYgdMjTYuqmcXX+lK5T1lnUt3G7zNswmZA==}
 
@@ -4428,17 +4399,8 @@ packages:
   spdx-expression-parse@3.0.1:
     resolution: {integrity: sha512-cbqHunsQWnJNE6KhVSMsMeH5H/L9EpymbzqTQ3uLwNCLZ1Q481oWaofqH7nO6V07xlXwY6PhQdQ2IedWx/ZK4Q==}
 
-  spdx-expression-validate@2.0.0:
-    resolution: {integrity: sha512-b3wydZLM+Tc6CFvaRDBOF9d76oGIHNCLYFeHbftFXUWjnfZWganmDmvtM5sm1cRwJc/VDBMLyGGrsLFd1vOxbg==}
-
   spdx-license-ids@3.0.22:
     resolution: {integrity: sha512-4PRT4nh1EImPbt2jASOKHX7PB7I+e4IWNLvkKFDxNhJlfjbYlleYQh285Z/3mPTHSAK/AvdMmw5BNNuYH8ShgQ==}
-
-  spdx-ranges@2.1.1:
-    resolution: {integrity: sha512-mcdpQFV7UDAgLpXEE/jOMqvK4LBoO0uTQg0uvXUewmEFhpiZx5yJSZITHB8w1ZahKdhfZqP5GPEOKLyEq5p8XA==}
-
-  spdx-satisfies@5.0.1:
-    resolution: {integrity: sha512-Nwor6W6gzFp8XX4neaKQ7ChV4wmpSh2sSDemMFSzHxpTw460jxFYeOn+jq4ybnSSw/5sc3pjka9MQPouksQNpw==}
 
   sprintf-js@1.0.3:
     resolution: {integrity: sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==}
@@ -5573,6 +5535,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.6.0
       '@ckeditor/ckeditor5-utils': 47.6.0
       ckeditor5: 47.6.0
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-heading@47.6.0':
     dependencies:
@@ -5594,6 +5558,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.6.0
       '@ckeditor/ckeditor5-utils': 47.6.0
       ckeditor5: 47.6.0
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-horizontal-line@47.6.0':
     dependencies:
@@ -7119,8 +7085,6 @@ snapshots:
       call-bound: 1.0.4
       is-array-buffer: 3.0.5
 
-  array-find-index@1.0.2: {}
-
   array-includes@3.1.9:
     dependencies:
       call-bind: 1.0.8
@@ -7497,8 +7461,6 @@ snapshots:
   commander@6.2.1: {}
 
   comment-parser@1.4.1: {}
-
-  commenting@1.1.0: {}
 
   compressible@2.0.18:
     dependencies:
@@ -8946,8 +8908,6 @@ snapshots:
 
   lodash.uniq@4.5.0: {}
 
-  lodash@4.17.23: {}
-
   log-symbols@4.1.0:
     dependencies:
       chalk: 4.1.2
@@ -9476,8 +9436,6 @@ snapshots:
       yargs-parser: 21.1.1
       yargs-unparser: 2.0.0
 
-  moment@2.30.1: {}
-
   mrmime@2.0.1: {}
 
   ms@2.0.0: {}
@@ -9660,8 +9618,6 @@ snapshots:
   p-map@7.0.3: {}
 
   package-json-from-dist@1.0.1: {}
-
-  package-name-regex@2.0.6: {}
 
   pacote@21.0.3:
     dependencies:
@@ -10255,20 +10211,6 @@ snapshots:
       glob: 13.0.6
       package-json-from-dist: 1.0.1
 
-  rollup-plugin-license@3.7.0(picomatch@4.0.3)(rollup@4.59.0):
-    dependencies:
-      commenting: 1.1.0
-      fdir: 6.5.0(picomatch@4.0.3)
-      lodash: 4.17.23
-      magic-string: 0.30.21
-      moment: 2.30.1
-      package-name-regex: 2.0.6
-      rollup: 4.59.0
-      spdx-expression-validate: 2.0.0
-      spdx-satisfies: 5.0.1
-    transitivePeerDependencies:
-      - picomatch
-
   rollup@4.59.0:
     dependencies:
       '@types/estree': 1.0.8
@@ -10542,12 +10484,6 @@ snapshots:
 
   space-separated-tokens@2.0.2: {}
 
-  spdx-compare@1.0.0:
-    dependencies:
-      array-find-index: 1.0.2
-      spdx-expression-parse: 3.0.1
-      spdx-ranges: 2.1.1
-
   spdx-correct@3.2.0:
     dependencies:
       spdx-expression-parse: 3.0.1
@@ -10560,19 +10496,7 @@ snapshots:
       spdx-exceptions: 2.5.0
       spdx-license-ids: 3.0.22
 
-  spdx-expression-validate@2.0.0:
-    dependencies:
-      spdx-expression-parse: 3.0.1
-
   spdx-license-ids@3.0.22: {}
-
-  spdx-ranges@2.1.1: {}
-
-  spdx-satisfies@5.0.1:
-    dependencies:
-      spdx-compare: 1.0.0
-      spdx-expression-parse: 3.0.1
-      spdx-ranges: 2.1.1
 
   sprintf-js@1.0.3: {}
 

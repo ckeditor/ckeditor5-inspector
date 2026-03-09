@@ -125,13 +125,13 @@ pnpm install
 
 ### Working with the code
 
-Start the webpack file watcher:
+Start the file watcher:
 
 ```console
 pnpm run dev
 ```
 
-and visit samples hosted at `http://localhost:3000/sample/` in your web browser.
+and visit samples in your web browser. The URL is available in the console `http://localhost:XXXX/sample`
 
 ### Building
 
