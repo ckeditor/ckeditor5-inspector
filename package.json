@@ -19,7 +19,7 @@
     "nice": "ckeditor5-dev-changelog-create-entry",
     "postinstall": "node ./scripts/postinstall.mjs",
     "serve": "node ./scripts/serve.mjs",
-    "build": "rimraf ./build/* && concurrently --group 'pnpm:build:inspector' 'pnpm:build:mini'",
+    "build": "rimraf -g './build/*' && concurrently --group 'pnpm:build:inspector' 'pnpm:build:mini'",
     "build:inspector": "vite build --mode production -- --variant=inspector",
     "build:mini": "vite build --mode production -- --variant=mini",
     "dev": "concurrently -c 'blue,' --kill-others 'pnpm:serve' 'pnpm:watch:inspector' 'pnpm:watch:mini'",
