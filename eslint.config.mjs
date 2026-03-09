@@ -20,8 +20,8 @@ export default defineConfig( [
 	{
 		files: [
 			'./*.{js,mjs}',
-			'src/**/*.{js,mjs}',
-			'tests/**/*.{js,mjs}'
+			'src/**/*.{js,jsx,mjs}',
+			'tests/**/*.{js,jsx,mjs}'
 		],
 
 		extends: [
@@ -68,7 +68,7 @@ export default defineConfig( [
 		}
 	},
 	{
-		files: [ 'tests/**/*.{js,mjs}' ],
+		files: [ 'tests/**/*.{js,jsx,mjs}' ],
 
 		languageOptions: {
 			globals: {

@@ -19,23 +19,19 @@ const DEFAULT_VARIANT = 'inspector';
 // We need a separate build for each inspector variant.
 // See: https://github.com/vitejs/vite/issues/14703
 const VARIANTS = {
-	inspector: { name: 'CKEditorInspector', output: 'inspector.js', entry: 'ckeditorinspector.js' },
-	mini: { name: 'MiniCKEditorInspector', output: 'miniinspector.js', entry: 'minickeditorinspector.js' }
+	inspector: { name: 'CKEditorInspector', output: 'inspector.js', entry: 'ckeditorinspector.jsx' },
+	mini: { name: 'MiniCKEditorInspector', output: 'miniinspector.js', entry: 'minickeditorinspector.jsx' }
 };
 
 const variant = getVariant();
 
 export default defineConfig( {
-	esbuild: {
-		loader: 'jsx',
-		include: /\.jsx?(\?.*)?$/
-	},
 	plugins: [
 		vitejsPluginReact( {
 			babel: {
 				presets: [ '@babel/preset-react' ]
 			},
-			include: /\.[jt]sx?(\?.*)?$/,
+			include: /\.[jt]sx(\?.*)?$/,
 			jsxRuntime: 'classic'
 		} ),
 		vitePluginSvgr( {
@@ -44,13 +40,6 @@ export default defineConfig( {
 		} ),
 		vitePluginCssInjectedByJs()
 	],
-	optimizeDeps: {
-		esbuildOptions: {
-			loader: {
-				'.js': 'jsx'
-			}
-		}
-	},
 	define: {
 		'process.env.NODE_ENV': JSON.stringify( process.env.NODE_ENV ),
 		CKEDITOR_INSPECTOR_VERSION: JSON.stringify( getLastFromChangelog() )
@@ -93,7 +82,7 @@ export default defineConfig( {
 			]
 		},
 		include: [
-			'tests/**/*.js'
+			'tests/**/*.{js,jsx}'
 		],
 		exclude: [
 			'tests/setup.js',
@@ -110,7 +99,7 @@ export default defineConfig( {
 			reporter: [ 'text-summary', 'html', 'lcov', 'json' ],
 			reportsDirectory: 'coverage',
 			include: [
-				'src/**/*.js'
+				'src/**/*.{js,jsx}'
 			]
 		}
 	}
