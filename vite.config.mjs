@@ -7,7 +7,6 @@ import { defineConfig } from 'vite';
 import { getLastFromChangelog } from '@ckeditor/ckeditor5-dev-release-tools';
 import { parseArgs } from 'node:util';
 import { playwright } from '@vitest/browser-playwright';
-import rollupPluginLicense from 'rollup-plugin-license';
 import upath from 'upath';
 import vitejsPluginReact from '@vitejs/plugin-react';
 import vitePluginCssInjectedByJs from 'vite-plugin-css-injected-by-js';
@@ -91,15 +90,7 @@ export default defineConfig( {
 		rollupOptions: {
 			output: {
 				entryFileNames: variant.output
-			},
-			plugins: [
-				rollupPluginLicense( {
-					thirdParty: {
-						includePrivate: false,
-						output: upath.join( OUT_DIR, `${ variant.output }.LICENSE.txt` )
-					}
-				} )
-			]
+			}
 		}
 	},
 	test: {
