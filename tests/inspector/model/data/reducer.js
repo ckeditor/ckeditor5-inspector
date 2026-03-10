@@ -130,6 +130,17 @@ describe( 'model data store reducer', () => {
 		} );
 
 		describe( '#currentNode', () => {
+			it( 'should update #currentNodeDefinition for a non-root element that has a parent', () => {
+				const node = editorA.model.document.getRoot().getChild( 0 );
+
+				modelState.currentNode = node;
+				modelState.currentNodeDefinition = 'old';
+				modelState = modelReducer( globalState, modelState, updateModelState() );
+
+				expect( modelState.currentNode ).toBe( node );
+				expect( modelState.currentNodeDefinition ).toEqual( expect.any( Object ) );
+			} );
+
 			it( 'should be updated on setModelCurrentNode() action', () => {
 				const node = editorA.model.document.getRoot();
 

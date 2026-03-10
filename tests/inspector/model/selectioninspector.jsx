@@ -100,6 +100,27 @@ describe( '<ModelSelectionInspector />', () => {
 				expect( screen.queryByRole( 'heading', { level: 3, name: /Attributes/ } ) ).toBeNull();
 			} );
 
+			it( '"Attributes" should display selection attributes when set', () => {
+				editor.model.change( writer => {
+					writer.setSelectionAttribute( 'bold', true );
+				} );
+
+				const attributeStore = createStore( state => state, {
+					editors: new Map( [ [ 'test-editor', editor ] ] ),
+					currentEditorName: 'test-editor',
+					model: {
+						ranges: getEditorModelRanges( editor, 'main' )
+					}
+				} );
+
+				const { unmount } = render( <Provider store={attributeStore}><ModelSelectionInspector /></Provider> );
+
+				const header = screen.getByRole( 'heading', { level: 3, name: /Attributes/ } );
+
+				expect( header ).toBeInTheDocument();
+				unmount();
+			} );
+
 			it( '"Properties" should be rendered', () => {
 				const header = screen.getByRole( 'heading', { level: 3, name: 'Properties' } );
 				const list = header.nextElementSibling;

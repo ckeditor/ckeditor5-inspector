@@ -3,17 +3,17 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import React from 'react';
 import TestEditor from '../../utils/testeditor';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { getCommandsTreeDefinition } from '../../../src/commands/data/utils';
 import CommandTree from '../../../src/commands/tree';
 
 describe( '<CommandTree />', () => {
-	let editor, renderResult, element, store;
+	let editor, renderResult, element, store, dispatchSpy;
 
 	beforeEach( async () => {
 		element = document.createElement( 'div' );
@@ -36,6 +36,8 @@ describe( '<CommandTree />', () => {
 			}
 		} );
 
+		dispatchSpy = vi.spyOn( store, 'dispatch' );
+
 		renderResult = render( <Provider store={store}><CommandTree /></Provider> );
 	} );
 
@@ -46,6 +48,15 @@ describe( '<CommandTree />', () => {
 	} );
 
 	describe( 'render()', () => {
+		it( 'should dispatch setCommandsCurrentCommandName when a tree node is clicked', () => {
+			const node = document.querySelector( '.ck-inspector-tree-node' );
+			fireEvent.click( node );
+
+			expect( dispatchSpy ).toHaveBeenCalledWith( expect.objectContaining( {
+				type: 'SET_COMMANDS_CURRENT_COMMAND_NAME'
+			} ) );
+		} );
+
 		it( 'should use a <Tree> component', () => {
 			const active = document.querySelector( '.ck-inspector-tree-node_active' );
 			expect( active ).toBeTruthy();

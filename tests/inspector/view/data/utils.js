@@ -3,10 +3,11 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
-import { describe, it, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { Paragraph, BoldEditing } from 'ckeditor5';
 
 import {
+	getEditorViewRoots,
 	getEditorViewTreeDefinition,
 	getEditorViewRanges
 } from '../../../../src/view/data/utils';
@@ -25,6 +26,22 @@ const ROOT_ATTRIBUTES = [
 ];
 
 describe( 'view data utils', () => {
+	describe( 'null editor', () => {
+		it( 'getEditorViewRoots() returns an empty array when editor is null', () => {
+			expect( getEditorViewRoots( null ) ).toEqual( [] );
+		} );
+
+		it( 'getEditorViewRanges() returns an empty array when editor is null', () => {
+			expect( getEditorViewRanges( null, 'main' ) ).toEqual( [] );
+		} );
+
+		it( 'getEditorViewTreeDefinition() returns null when currentEditor is null', () => {
+			expect( getEditorViewTreeDefinition( {
+				currentEditor: null, currentRootName: 'main', ranges: []
+			} ) ).toBeNull();
+		} );
+	} );
+
 	describe( 'getEditorViewTreeDefinition()', () => {
 		let editor, element, root;
 
@@ -751,5 +768,132 @@ describe( 'view data utils', () => {
 				}
 			] );
 		} );
+	} );
+} );
+
+describe( 'view data utils edge cases', () => {
+	function createViewElement( { path, index, children, name = 'div', isRoot = false } ) {
+		return {
+			name,
+			index,
+			getPath() {
+				return path;
+			},
+			getChildren() {
+				return children;
+			},
+			getAttributes() {
+				return [];
+			},
+			is( type ) {
+				return isRoot && type === 'rootElement';
+			}
+		};
+	}
+
+	function createViewText( { path, index, data, createSparseSlot = false } ) {
+		return {
+			__createSparseSlot: createSparseSlot,
+			index,
+			data,
+			getPath() {
+				return path;
+			}
+		};
+	}
+
+	it( 'walks backward for non-end positions when searching for matching child index', () => {
+		const root = createViewElement( {
+			path: [],
+			index: 0,
+			isRoot: true,
+			children: [
+				createViewText( { path: [ 0 ], index: 0, data: 'a' } ),
+				createViewText( { path: [ 1 ], index: 1, data: 'b' } ),
+				createViewText( { path: [ 2 ], index: 2, data: 'c' } )
+			]
+		} );
+
+		const definition = getEditorViewTreeDefinition( {
+			currentEditor: {
+				editing: {
+					view: {
+						document: {
+							getRoot: () => root
+						}
+					}
+				}
+			},
+			currentRootName: 'main',
+			ranges: [
+				{
+					type: 'selection',
+					start: { path: [ 1 ] },
+					end: { path: [ 1 ] }
+				}
+			]
+		} );
+
+		expect( definition[ 0 ].children[ 1 ].positionsBefore ).toEqual( [
+			expect.objectContaining( { offset: 1, isEnd: false } )
+		] );
+	} );
+
+	it( 'uses the parent positions collection when the child array has an empty trailing slot', () => {
+		const originalPush = Array.prototype.push;
+
+		// eslint-disable-next-line no-extend-native
+		Array.prototype.push = function( ...args ) {
+			const [ value ] = args;
+
+			if ( value && value.node && value.node.__createSparseSlot ) {
+				this.length += 1;
+
+				return this.length;
+			}
+
+			return originalPush.apply( this, args );
+		};
+
+		const root = createViewElement( {
+			path: [],
+			index: 0,
+			isRoot: true,
+			children: [
+				createViewText( { path: [ 0 ], index: 0, data: 'a', createSparseSlot: true } )
+			]
+		} );
+
+		let definition;
+
+		try {
+			definition = getEditorViewTreeDefinition( {
+				currentEditor: {
+					editing: {
+						view: {
+							document: {
+								getRoot: () => root
+							}
+						}
+					}
+				},
+				currentRootName: 'main',
+				ranges: [
+					{
+						type: 'selection',
+						start: { path: [ 1 ] },
+						end: { path: [ 1 ] }
+					}
+				]
+			} );
+		} finally {
+			// eslint-disable-next-line no-extend-native
+			Array.prototype.push = originalPush;
+		}
+
+		expect( definition[ 0 ].positions ).toEqual( [
+			expect.objectContaining( { offset: 1, isEnd: false } ),
+			expect.objectContaining( { offset: 1, isEnd: true } )
+		] );
 	} );
 } );

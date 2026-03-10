@@ -78,6 +78,14 @@ describe( 'commands data store reducer', () => {
 		expect( commandsState ).toHaveProperty( 'currentCommandDefinition' );
 	} );
 
+	it( 'should return the state unchanged for an unknown action', () => {
+		const previousState = commandsState;
+
+		commandsState = commandsReducer( globalState, commandsState, { type: 'UNKNOWN_ACTION' } );
+
+		expect( commandsState ).toBe( previousState );
+	} );
+
 	describe( 'application state', () => {
 		describe( '#currentCommandName', () => {
 			it( 'should be reset on setEditors() action', () => {
