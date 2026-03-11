@@ -3,14 +3,9 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { Paragraph, BoldEditing } from 'ckeditor5';
-
-import {
-	getEditorViewRoots,
-	getEditorViewTreeDefinition,
-	getEditorViewRanges
-} from '../../../../src/view/data/utils';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { BoldEditing, Paragraph } from 'ckeditor5';
+import { getEditorViewRanges, getEditorViewRoots, getEditorViewTreeDefinition } from '../../../../src/view/data/utils';
 
 import TestEditor from '../../../utils/testeditor';
 
@@ -802,6 +797,34 @@ describe( 'view data utils edge cases', () => {
 		};
 	}
 
+	function mockSparsePushForRootChildren( root ) {
+		const originalObjectAssign = Object.assign;
+
+		vi.spyOn( Object, 'assign' ).mockImplementation( ( target, ...sources ) => {
+			const source = sources[ 0 ];
+
+			if ( target.node === root && source && source.children && source.children.push === Array.prototype.push ) {
+				source.children.push = function( ...args ) {
+					const [ value ] = args;
+
+					if ( value && value.node && value.node.__createSparseSlot ) {
+						this.length += 1;
+
+						return this.length;
+					}
+
+					return Array.prototype.push.apply( this, args );
+				};
+			}
+
+			return originalObjectAssign( target, ...sources );
+		} );
+	}
+
+	afterEach( () => {
+		vi.restoreAllMocks();
+	} );
+
 	it( 'walks backward for non-end positions when searching for matching child index', () => {
 		const root = createViewElement( {
 			path: [],
@@ -840,21 +863,6 @@ describe( 'view data utils edge cases', () => {
 	} );
 
 	it( 'uses the parent positions collection when the child array has an empty trailing slot', () => {
-		const originalPush = Array.prototype.push;
-
-		// eslint-disable-next-line no-extend-native
-		Array.prototype.push = function( ...args ) {
-			const [ value ] = args;
-
-			if ( value && value.node && value.node.__createSparseSlot ) {
-				this.length += 1;
-
-				return this.length;
-			}
-
-			return originalPush.apply( this, args );
-		};
-
 		const root = createViewElement( {
 			path: [],
 			index: 0,
@@ -864,32 +872,27 @@ describe( 'view data utils edge cases', () => {
 			]
 		} );
 
-		let definition;
+		mockSparsePushForRootChildren( root );
 
-		try {
-			definition = getEditorViewTreeDefinition( {
-				currentEditor: {
-					editing: {
-						view: {
-							document: {
-								getRoot: () => root
-							}
+		const definition = getEditorViewTreeDefinition( {
+			currentEditor: {
+				editing: {
+					view: {
+						document: {
+							getRoot: () => root
 						}
 					}
-				},
-				currentRootName: 'main',
-				ranges: [
-					{
-						type: 'selection',
-						start: { path: [ 1 ] },
-						end: { path: [ 1 ] }
-					}
-				]
-			} );
-		} finally {
-			// eslint-disable-next-line no-extend-native
-			Array.prototype.push = originalPush;
-		}
+				}
+			},
+			currentRootName: 'main',
+			ranges: [
+				{
+					type: 'selection',
+					start: { path: [ 1 ] },
+					end: { path: [ 1 ] }
+				}
+			]
+		} );
 
 		expect( definition[ 0 ].positions ).toEqual( [
 			expect.objectContaining( { offset: 1, isEnd: false } ),
