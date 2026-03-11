@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
-import { defineConfig } from 'vite';
+import { defineConfig, mergeConfig } from 'vite';
 import { getLastFromChangelog } from '@ckeditor/ckeditor5-dev-release-tools';
 import { playwright } from '@vitest/browser-playwright';
 import upath from 'upath';
@@ -12,18 +12,20 @@ import vitePluginCssInjectedByJs from 'vite-plugin-css-injected-by-js';
 import vitePluginSvgr from 'vite-plugin-svgr';
 
 const OUT_DIR = 'build';
+const DEV_MODE = 'dev';
+const DEFAULT_MODE = 'fullInspector';
 
-// We need a separate build for each inspector variant.
+// `umd` is not supported for multiple entry points in Vite. Thus, we need to split the build into two separate runs.
 // See: https://github.com/vitejs/vite/issues/14703
-const VARIANTS = {
-	inspector: { name: 'CKEditorInspector', output: 'inspector.js', entry: 'ckeditorinspector.js' },
-	mini: { name: 'MiniCKEditorInspector', output: 'miniinspector.js', entry: 'minickeditorinspector.js' }
+const MODES = {
+	fullInspector: { name: 'CKEditorInspector', output: 'inspector.js', entry: 'ckeditorinspector.js' },
+	miniInspector: { name: 'MiniCKEditorInspector', output: 'miniinspector.js', entry: 'minickeditorinspector.js' }
 };
 
-export default defineConfig( ( { mode } ) => {
-	const variant = getVariant( mode );
+const VITE_DEFAULT_MODES = new Set( [ 'development', 'production', 'test' ] );
 
-	return {
+export default defineConfig( ( { mode: modeName } ) => {
+	const commonConfig = {
 		esbuild: {
 			loader: 'jsx',
 			include: /\.jsx?(\?.*)?$/
@@ -39,28 +41,6 @@ export default defineConfig( ( { mode } ) => {
 			vitePluginSvgr( {
 				include: '**/*.svg',
 				exportAsDefault: true
-			} ),
-			vitePluginCssInjectedByJs( {
-				injectCodeFunction: ( cssCode, options = {} ) => {
-					if ( typeof document === 'undefined' ) {
-						return;
-					}
-
-					const elementStyle = document.createElement( 'style' );
-
-					if ( options.styleId ) {
-						elementStyle.id = options.styleId;
-					}
-
-					for ( const attribute of Object.keys( options.attributes || {} ) ) {
-						elementStyle.setAttribute( attribute, options.attributes[ attribute ] );
-					}
-
-					elementStyle.setAttribute( 'data-cke-inspector', 'true' );
-
-					elementStyle.appendChild( document.createTextNode( cssCode ) );
-					document.head.appendChild( elementStyle );
-				}
 			} )
 		],
 		optimizeDeps: {
@@ -76,20 +56,6 @@ export default defineConfig( ( { mode } ) => {
 		},
 		css: {
 			transformer: 'lightningcss'
-		},
-		build: {
-			outDir: OUT_DIR,
-			emptyOutDir: false,
-			lib: {
-				formats: [ 'umd' ],
-				name: variant.name,
-				entry: upath.resolve( import.meta.dirname, 'src', variant.entry )
-			},
-			rollupOptions: {
-				output: {
-					entryFileNames: variant.output
-				}
-			}
 		},
 		test: {
 			browser: {
@@ -125,14 +91,65 @@ export default defineConfig( ( { mode } ) => {
 			}
 		}
 	};
-} );
 
-function getVariant( mode ) {
-	const variantName = mode in VARIANTS ? mode : 'inspector';
-
-	if ( !( variantName in VARIANTS ) ) {
-		throw new Error( `Unknown variant "${ variantName }". Available variants: ${ Object.keys( VARIANTS ).join( ', ' ) }.` );
+	if ( modeName === DEV_MODE || modeName === 'development' ) {
+		return commonConfig;
 	}
 
-	return VARIANTS[ variantName ];
+	const mode = getMode( modeName );
+
+	const productionConfig = {
+		plugins: [
+			vitePluginCssInjectedByJs( {
+				injectCodeFunction: ( cssCode, options = {} ) => {
+					if ( typeof document === 'undefined' ) {
+						return;
+					}
+
+					const elementStyle = document.createElement( 'style' );
+
+					if ( options.styleId ) {
+						elementStyle.id = options.styleId;
+					}
+
+					for ( const attribute of Object.keys( options.attributes || {} ) ) {
+						elementStyle.setAttribute( attribute, options.attributes[ attribute ] );
+					}
+
+					elementStyle.setAttribute( 'data-cke-inspector', 'true' );
+
+					elementStyle.appendChild( document.createTextNode( cssCode ) );
+					document.head.appendChild( elementStyle );
+				}
+			} )
+		],
+		build: {
+			emptyOutDir: false,
+			outDir: OUT_DIR,
+			lib: {
+				formats: [ 'umd' ],
+				name: mode.name,
+				entry: upath.resolve( import.meta.dirname, 'src', mode.entry )
+			},
+			rollupOptions: {
+				output: {
+					entryFileNames: mode.output
+				}
+			}
+		}
+	};
+
+	return mergeConfig( commonConfig, productionConfig );
+} );
+
+function getMode( mode = DEFAULT_MODE ) {
+	if ( VITE_DEFAULT_MODES.has( mode ) ) {
+		return MODES[ DEFAULT_MODE ];
+	}
+
+	if ( !( mode in MODES ) ) {
+		throw new Error( `Unknown mode "${ mode }". Available modes: ${ Object.keys( MODES ).join( ', ' ) }.` );
+	}
+
+	return MODES[ mode ];
 }
