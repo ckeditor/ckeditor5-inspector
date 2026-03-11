@@ -125,13 +125,13 @@ pnpm install
 
 ### Working with the code
 
-Start the file watcher:
+Start the Vite development server:
 
 ```console
 pnpm run dev
 ```
 
-and visit samples in your web browser. The URL is available in the console `http://localhost:XXXX/sample`
+Then open `http://localhost:5173` in your web browser and choose the demo page.
 
 ### Building
 
