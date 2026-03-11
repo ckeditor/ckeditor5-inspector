@@ -84,7 +84,6 @@ export default defineConfig( {
 		lib: {
 			formats: [ 'umd' ],
 			name: variant.name,
-			fileName: variant.fileName,
 			entry: upath.resolve( import.meta.dirname, 'src', variant.entry )
 		},
 		rollupOptions: {
