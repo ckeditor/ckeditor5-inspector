@@ -10,5 +10,11 @@ export async function preparePackageJson() {
 		delete packageJson.engines;
 	}
 
+	packageJson.bundleDependencies = Object.keys( packageJson.dependencies );
+
+	if ( packageJson.dependencies ) {
+		delete packageJson.dependencies;
+	}
+
 	return packageJson;
 }

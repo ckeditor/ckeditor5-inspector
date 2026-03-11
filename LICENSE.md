@@ -11,10 +11,22 @@ Licensed under a dual-license model, this software is available under:
 
 For more information, see: [https://ckeditor.com/legal/ckeditor-licensing-options](https://ckeditor.com/legal/ckeditor-licensing-options).
 
-Sources of Intellectual Property Included in CKEditor
------------------------------------------------------
+Sources of Intellectual Property Included in CKEditor&nbsp;5 Inspector
+----------------------------------------------------------------------
 
-Where not otherwise indicated, all CKEditor content is authored by CKSource engineers and consists of CKSource-owned intellectual property. In some specific instances, CKEditor will incorporate work done by developers outside of CKSource with their express permission.
+Where not otherwise indicated, all CKEditor&nbsp;5 Inspector content is authored by CKSource engineers and consists of CKSource-owned intellectual property. In some specific instances, CKEditor&nbsp;5 Inspector will incorporate work done by developers outside of CKSource with their express permission.
+
+The following libraries are included in CKEditor&nbsp;5 Inspector under the [MIT license](https://opensource.org/licenses/MIT):
+
+* copy-to-clipboard - Copyright (c) 2017 sudodoki <smd.deluzion@gmail.com>.
+* es-toolkit - Copyright (c) 2024 Viva Republica, Inc and Copyright OpenJS Foundation and other contributors.
+* javascript-stringify - Copyright (c) 2013 Blake Embrey (hello@blakeembrey.com).
+* react - Copyright (c) Facebook, Inc. and its affiliates.
+* react-dom - Copyright (c) Facebook, Inc. and its affiliates.
+* react-modal - Copyright (c) 2017 Ryan Florence.
+* react-redux - Copyright (c) 2015-present Dan Abramov.
+* react-rnd - Copyright (c) 2017 @bokuweb.
+* redux - Copyright (c) 2015-present Dan Abramov.
 
 Trademarks
 ----------
