@@ -22,8 +22,8 @@ export default defineConfig( [
 			'./*.{js,mjs}',
 			'scripts/**/*.{js,mjs}',
 			'scripts-tests/**/*.{js,mjs}',
-			'src/**/*.{js,mjs}',
-			'tests/**/*.{js,mjs}',
+			'src/**/*.{js,jsx,mjs}',
+			'tests/**/*.{js,jsx,mjs}',
 			'sample/**/*.{js,mjs}'
 		],
 
@@ -71,7 +71,7 @@ export default defineConfig( [
 		}
 	},
 	{
-		files: [ 'tests/**/*.{js,mjs}' ],
+		files: [ 'tests/**/*.{js,jsx,mjs}' ],
 
 		languageOptions: {
 			globals: {

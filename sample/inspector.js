@@ -21,7 +21,7 @@ import '../node_modules/@ckeditor/ckeditor5-media-embed/build/media-embed.js';
 import '../node_modules/@ckeditor/ckeditor5-paste-from-office/build/paste-from-office.js';
 import '../node_modules/@ckeditor/ckeditor5-table/build/table.js';
 
-import CKEditorInspector from '../src/ckeditorinspector.js';
+import CKEditorInspector from '../src/ckeditorinspector.jsx';
 
 window.CKEditorInspector = CKEditorInspector;
 

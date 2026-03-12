@@ -16,8 +16,8 @@ const OUT_DIR = 'build';
 // `umd` is not supported for multiple entry points in Vite. Thus, we need to split the build into two separate runs.
 // See: https://github.com/vitejs/vite/issues/14703
 const MODES = {
-	fullInspector: { name: 'CKEditorInspector', output: 'inspector.js', entry: 'ckeditorinspector.js' },
-	miniInspector: { name: 'MiniCKEditorInspector', output: 'miniinspector.js', entry: 'minickeditorinspector.js' }
+	fullInspector: { name: 'CKEditorInspector', output: 'inspector.js', entry: 'ckeditorinspector.jsx' },
+	miniInspector: { name: 'MiniCKEditorInspector', output: 'miniinspector.js', entry: 'minickeditorinspector.jsx' }
 };
 
 export default defineConfig( ( { mode: modeName } ) => {
@@ -65,7 +65,7 @@ export default defineConfig( ( { mode: modeName } ) => {
 				]
 			},
 			include: [
-				'tests/**/*.js'
+				'tests/**/*.{js,jsx}'
 			],
 			exclude: [
 				'tests/setup.js',
@@ -82,7 +82,7 @@ export default defineConfig( ( { mode: modeName } ) => {
 				reporter: [ 'text-summary', 'html', 'lcov', 'json' ],
 				reportsDirectory: 'coverage',
 				include: [
-					'src/**/*.js'
+					'src/**/*.{js,jsx}'
 				]
 			}
 		}
