@@ -3,23 +3,30 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 
-/* global CKEditor5 */
-
-import '../node_modules/ckeditor5/build/ckeditor5-dll.js';
-import '../node_modules/@ckeditor/ckeditor5-editor-decoupled/build/editor-decoupled.js';
-import '../node_modules/@ckeditor/ckeditor5-autoformat/build/autoformat.js';
-import '../node_modules/@ckeditor/ckeditor5-basic-styles/build/basic-styles.js';
-import '../node_modules/@ckeditor/ckeditor5-block-quote/build/block-quote.js';
-import '../node_modules/@ckeditor/ckeditor5-essentials/build/essentials.js';
-import '../node_modules/@ckeditor/ckeditor5-heading/build/heading.js';
-import '../node_modules/@ckeditor/ckeditor5-html-support/build/html-support.js';
-import '../node_modules/@ckeditor/ckeditor5-image/build/image.js';
-import '../node_modules/@ckeditor/ckeditor5-indent/build/indent.js';
-import '../node_modules/@ckeditor/ckeditor5-link/build/link.js';
-import '../node_modules/@ckeditor/ckeditor5-list/build/list.js';
-import '../node_modules/@ckeditor/ckeditor5-media-embed/build/media-embed.js';
-import '../node_modules/@ckeditor/ckeditor5-paste-from-office/build/paste-from-office.js';
-import '../node_modules/@ckeditor/ckeditor5-table/build/table.js';
+import {
+	Autoformat,
+	BlockQuote,
+	Bold,
+	DecoupledEditor,
+	Essentials,
+	GeneralHtmlSupport,
+	Heading,
+	Image,
+	ImageCaption,
+	ImageStyle,
+	ImageToolbar,
+	ImageUpload,
+	Indent,
+	Italic,
+	Link,
+	List,
+	MediaEmbed,
+	Paragraph,
+	PasteFromOffice,
+	Table,
+	TableToolbar
+} from 'ckeditor5';
+import 'ckeditor5/ckeditor5.css';
 
 import CKEditorInspector from '../src/ckeditorinspector.jsx';
 
@@ -123,26 +130,26 @@ document.querySelector( '#detach-inspector-from-editors' ).addEventListener( 'cl
 const config = {
 	licenseKey: 'GPL',
 	plugins: [
-		CKEditor5.autoformat.Autoformat,
-		CKEditor5.basicStyles.Bold,
-		CKEditor5.basicStyles.Italic,
-		CKEditor5.blockQuote.BlockQuote,
-		CKEditor5.essentials.Essentials,
-		CKEditor5.heading.Heading,
-		CKEditor5.htmlSupport.GeneralHtmlSupport,
-		CKEditor5.image.Image,
-		CKEditor5.image.ImageCaption,
-		CKEditor5.image.ImageStyle,
-		CKEditor5.image.ImageToolbar,
-		CKEditor5.image.ImageUpload,
-		CKEditor5.indent.Indent,
-		CKEditor5.link.Link,
-		CKEditor5.list.List,
-		CKEditor5.mediaEmbed.MediaEmbed,
-		CKEditor5.paragraph.Paragraph,
-		CKEditor5.pasteFromOffice.PasteFromOffice,
-		CKEditor5.table.Table,
-		CKEditor5.table.TableToolbar
+		Autoformat,
+		Bold,
+		Italic,
+		BlockQuote,
+		Essentials,
+		Heading,
+		GeneralHtmlSupport,
+		Image,
+		ImageCaption,
+		ImageStyle,
+		ImageToolbar,
+		ImageUpload,
+		Indent,
+		Link,
+		List,
+		MediaEmbed,
+		Paragraph,
+		PasteFromOffice,
+		Table,
+		TableToolbar
 	],
 	htmlSupport: {
 		allow: [
@@ -196,7 +203,7 @@ const config = {
 	}
 };
 
-CKEditor5.editorDecoupled.DecoupledEditor
+DecoupledEditor
 	.create( document.querySelector( '#first-editor-content' ), {
 		...config,
 		extraPlugins: [ UploadAdapter, MarkerDemoPlugin ]
@@ -211,7 +218,7 @@ CKEditor5.editorDecoupled.DecoupledEditor
 		console.error( error );
 	} );
 
-CKEditor5.editorDecoupled.DecoupledEditor
+DecoupledEditor
 	.create( document.querySelector( '#second-editor-content' ), {
 		...config,
 		extraPlugins: [ UploadAdapter ]
@@ -226,7 +233,7 @@ CKEditor5.editorDecoupled.DecoupledEditor
 		console.error( error );
 	} );
 
-CKEditor5.editorDecoupled.DecoupledEditor
+DecoupledEditor
 	.create( document.querySelector( '#rtl-editor-content' ), {
 		...config,
 		extraPlugins: [ UploadAdapter ],
