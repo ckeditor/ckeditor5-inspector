@@ -23,7 +23,8 @@ export default defineConfig( [
 			'scripts/**/*.{js,mjs}',
 			'scripts-tests/**/*.{js,mjs}',
 			'src/**/*.{js,jsx,mjs}',
-			'tests/**/*.{js,jsx,mjs}'
+			'tests/**/*.{js,jsx,mjs}',
+			'sample/**/*.{js,mjs}'
 		],
 
 		extends: [

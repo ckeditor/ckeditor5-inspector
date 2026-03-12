@@ -13,6 +13,8 @@ import { fireEvent, render, screen } from '@testing-library/react';
 
 import {
 	SET_MODEL_CURRENT_ROOT_NAME,
+	SET_MODEL_CURRENT_NODE,
+	SET_MODEL_ACTIVE_TAB,
 	TOGGLE_MODEL_SHOW_COMPACT_TEXT,
 	TOGGLE_MODEL_SHOW_MARKERS
 } from '../../../src/model/data/actions';
@@ -87,6 +89,25 @@ describe( '<ModelTree />', () => {
 	} );
 
 	describe( 'render()', () => {
+		it( 'should dispatch setModelCurrentNode when a tree node is clicked', () => {
+			const node = document.querySelector( '.ck-inspector-tree-node' );
+			fireEvent.click( node );
+
+			expect( dispatchSpy ).toHaveBeenCalledWith( expect.objectContaining( {
+				type: SET_MODEL_CURRENT_NODE
+			} ) );
+		} );
+
+		it( 'should dispatch setModelActiveTab when a tree node is double-clicked', () => {
+			const node = document.querySelector( '.ck-inspector-tree-node' );
+			fireEvent.click( node, { detail: 2 } );
+
+			expect( dispatchSpy ).toHaveBeenCalledWith( expect.objectContaining( {
+				type: SET_MODEL_ACTIVE_TAB,
+				tabName: 'Inspect'
+			} ) );
+		} );
+
 		it( 'should render a model root <Select> that changes current root name', () => {
 			const select = screen.getByLabelText( 'Root:' );
 			const options = Array.from( select.options ).map( option => option.value );
@@ -127,6 +148,31 @@ describe( '<ModelTree />', () => {
 			expect( tree ).toHaveClass( 'ck-inspector-tree_text-direction_ltr' );
 			expect( tree ).not.toHaveClass( 'ck-inspector-tree_compact-text' );
 			expect( document.querySelector( '.ck-inspector-tree-node_active' ) ).toBeTruthy();
+		} );
+
+		it( 'should not add hide-markers class when showMarkers is true', () => {
+			const showMarkersStore = createStore( state => state, {
+				editors: new Map( [ [ 'test-editor', editor ] ] ),
+				currentEditorName: 'test-editor',
+				model: {
+					roots: [ ...editor.model.document.roots ],
+					ranges: [],
+					markers: [],
+					treeDefinition: [],
+					currentRootName: 'main',
+					currentNode: null,
+					ui: {
+						showMarkers: true,
+						showCompactText: false
+					}
+				}
+			} );
+
+			const { container, unmount } = render( <Provider store={showMarkersStore}><ModelTree /></Provider> );
+			const tree = container.querySelector( '.ck-inspector-tree' );
+
+			expect( tree ).not.toHaveClass( 'ck-inspector-model-tree__hide-markers' );
+			unmount();
 		} );
 	} );
 } );

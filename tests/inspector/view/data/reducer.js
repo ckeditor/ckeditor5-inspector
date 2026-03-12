@@ -92,6 +92,17 @@ describe( 'view data store reducer', () => {
 		expect( viewState ).toHaveProperty( 'ui' );
 	} );
 
+	it( 'should set currentRootName to null when the current editor has no view roots', () => {
+		const noEditorState = {
+			...globalState,
+			currentEditorName: 'non-existent'
+		};
+
+		viewState = viewReducer( noEditorState, null, {} );
+
+		expect( viewState.currentRootName ).toBeNull();
+	} );
+
 	describe( 'application state', () => {
 		describe( '#currentRootName', () => {
 			it( 'should be updated on setViewCurrentRootName() action', () => {
@@ -129,6 +140,18 @@ describe( 'view data store reducer', () => {
 		} );
 
 		describe( '#currentNode', () => {
+			it( 'should update #currentNodeDefinition for a non-root element that has a parent', () => {
+				const node = editorA.editing.view.document.getRoot().getChild( 0 );
+
+				viewState.currentNode = node;
+				viewState.currentRootName = 'main';
+				viewState.currentNodeDefinition = 'old';
+				viewState = viewReducer( globalState, viewState, updateViewState() );
+
+				expect( viewState.currentNode ).toBe( node );
+				expect( viewState.currentNodeDefinition ).toEqual( expect.any( Object ) );
+			} );
+
 			it( 'should be updated on setViewCurrentNode() action', () => {
 				const node = editorA.editing.view.document.getRoot();
 

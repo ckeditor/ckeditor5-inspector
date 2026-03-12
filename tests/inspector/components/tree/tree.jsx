@@ -269,6 +269,27 @@ describe( '<Tree />', () => {
 		} );
 	} );
 
+	describe( 'unknown node type', () => {
+		it( 'should not render anything for unknown node type', () => {
+			const { container } = render( <Tree
+				definition={[
+					{
+						type: 'element',
+						name: 'a',
+						node: 'a-node',
+						attributes: [],
+						children: [
+							{ type: 'unknown', node: 'x' }
+						]
+					}
+				]}
+			/> );
+
+			expect( container.querySelector( '.ck-inspector-tree' ) ).toBeTruthy();
+			expect( container.querySelector( '.ck-inspector-tree-node' ) ).toBeTruthy();
+		} );
+	} );
+
 	describe( 'attribute', () => {
 		it( 'truncates values above 500 characters', () => {
 			const { container } = render( <Tree

@@ -10,7 +10,16 @@ import TestEditor from '../../utils/testeditor';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { SET_VIEW_CURRENT_ROOT_NAME, TOGGLE_VIEW_SHOW_ELEMENT_TYPES } from '../../../src/view/data/actions';
+import {
+	SET_VIEW_CURRENT_ROOT_NAME,
+	SET_VIEW_CURRENT_NODE,
+	SET_VIEW_ACTIVE_TAB,
+	TOGGLE_VIEW_SHOW_ELEMENT_TYPES
+} from '../../../src/view/data/actions';
+import {
+	getEditorViewRanges,
+	getEditorViewTreeDefinition
+} from '../../../src/view/data/utils';
 import ViewTree from '../../../src/view/tree';
 
 describe( '<ViewTree />', () => {
@@ -26,6 +35,13 @@ describe( '<ViewTree />', () => {
 			plugins: [ Paragraph, BoldEditing ]
 		} );
 
+		const viewRanges = getEditorViewRanges( editor, 'main' );
+		const viewTreeDefinition = getEditorViewTreeDefinition( {
+			currentEditor: editor,
+			currentRootName: 'main',
+			ranges: viewRanges
+		} );
+
 		store = createStore( ( state, action ) => ( { ...state, ...action.state } ), {
 			editors: new Map( [ [ 'test-editor', editor ] ] ),
 			currentEditorName: 'test-editor',
@@ -34,8 +50,8 @@ describe( '<ViewTree />', () => {
 			},
 			view: {
 				roots: [ ...editor.editing.view.document.roots ],
-				ranges: [],
-				treeDefinition: null,
+				ranges: viewRanges,
+				treeDefinition: viewTreeDefinition,
 				currentRootName: 'main',
 				currentNode: editor.editing.view.document.getRoot(),
 				ui: {
@@ -57,6 +73,25 @@ describe( '<ViewTree />', () => {
 	} );
 
 	describe( 'render()', () => {
+		it( 'should dispatch setViewCurrentNode when a tree node is clicked', () => {
+			const node = document.querySelector( '.ck-inspector-tree-node' );
+			fireEvent.click( node );
+
+			expect( dispatchSpy ).toHaveBeenCalledWith( expect.objectContaining( {
+				type: SET_VIEW_CURRENT_NODE
+			} ) );
+		} );
+
+		it( 'should dispatch setViewActiveTab when a tree node is double-clicked', () => {
+			const node = document.querySelector( '.ck-inspector-tree-node' );
+			fireEvent.click( node, { detail: 2 } );
+
+			expect( dispatchSpy ).toHaveBeenCalledWith( expect.objectContaining( {
+				type: SET_VIEW_ACTIVE_TAB,
+				tabName: 'Inspect'
+			} ) );
+		} );
+
 		it( 'should render a view root <Select> that changes the current root name', () => {
 			const select = screen.getByLabelText( 'Root:' );
 

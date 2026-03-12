@@ -124,6 +124,46 @@ describe( '<TreeTextNode />', () => {
 			} );
 		} );
 
+		describe( 'positions sorting', () => {
+			it( 'should sort multiple positions by ascending offset', () => {
+				const { container } = render( <TreeTextNode definition={{
+					name: 'foo',
+					text: 'abc',
+					startOffset: 0,
+					positions: [
+						{ offset: 2, isEnd: true, presentation: null, type: 'selection', name: null },
+						{ offset: 1, isEnd: false, presentation: null, type: 'selection', name: null }
+					]
+				}} globalTreeProps={{
+					showCompactText: true
+				}} /> );
+
+				const positions = container.querySelectorAll( '.ck-inspector-tree__position' );
+
+				expect( positions ).toHaveLength( 2 );
+				expect( positions[ 0 ].previousSibling.textContent ).toBe( 'a' );
+				expect( positions[ 1 ].previousSibling.textContent ).toBe( 'b' );
+			} );
+
+			it( 'should keep stable order for positions with the same offset', () => {
+				const { container } = render( <TreeTextNode definition={{
+					name: 'foo',
+					text: 'abc',
+					startOffset: 0,
+					positions: [
+						{ offset: 1, isEnd: false, presentation: null, type: 'selection', name: null },
+						{ offset: 1, isEnd: true, presentation: null, type: 'selection', name: null }
+					]
+				}} globalTreeProps={{
+					showCompactText: true
+				}} /> );
+
+				const positions = container.querySelectorAll( '.ck-inspector-tree__position' );
+
+				expect( positions ).toHaveLength( 2 );
+			} );
+		} );
+
 		describe( 'props#showCompactText true', () => {
 			it( 'renders text only', () => {
 				const { container } = render( <TreeTextNode definition={{

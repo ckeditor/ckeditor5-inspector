@@ -176,6 +176,18 @@ describe( '<SetEditorDataButton />', () => {
 			expect( screen.getByRole( 'heading', { name: 'Set editor data' } ) ).toBeInTheDocument();
 		} );
 
+		it( 'should not set editor data when pressing Enter without Shift key', async () => {
+			const setDataSpy = vi.spyOn( editor, 'setData' );
+
+			await openModal();
+			const textarea = screen.getByPlaceholderText( 'Paste HTML here...' );
+
+			fireEvent.keyPress( textarea, { key: 'Enter', keyCode: 13, charCode: 13, shiftKey: false } );
+
+			expect( setDataSpy ).not.toHaveBeenCalled();
+			expect( screen.getByRole( 'heading', { name: 'Set editor data' } ) ).toBeInTheDocument();
+		} );
+
 		it( 'should update editor data and focus textarea when loading data', async () => {
 			const textarea = await openModal().then( () => screen.getByPlaceholderText( 'Paste HTML here...' ) );
 			getDataSpy.mockReturnValue( 'abcd' );
