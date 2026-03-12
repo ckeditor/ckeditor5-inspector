@@ -20,7 +20,7 @@ import '../node_modules/@ckeditor/ckeditor5-media-embed/build/media-embed.js';
 import '../node_modules/@ckeditor/ckeditor5-paste-from-office/build/paste-from-office.js';
 import '../node_modules/@ckeditor/ckeditor5-table/build/table.js';
 
-import MiniCKEditorInspector from '../src/minickeditorinspector.js';
+import MiniCKEditorInspector from '../src/minickeditorinspector.jsx';
 
 window.MiniCKEditorInspector = MiniCKEditorInspector;
 
