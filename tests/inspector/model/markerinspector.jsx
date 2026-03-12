@@ -55,6 +55,23 @@ describe( '<ModelMarkerInspector />', () => {
 		await editor.destroy();
 	} );
 
+	describe( 'no markers', () => {
+		it( 'should render an empty pane when there are no markers', () => {
+			const emptyStore = createStore( state => state, {
+				editors: new Map( [ [ 'foo', editor ] ] ),
+				currentEditorName: 'foo',
+				model: {
+					markers: []
+				}
+			} );
+
+			const { unmount } = render( <Provider store={emptyStore}><ModelMarkerInspector /></Provider> );
+
+			expect( screen.getByText( 'No markers in the document.' ) ).toBeInTheDocument();
+			unmount();
+		} );
+	} );
+
 	describe( 'render()', () => {
 		it( 'should render the inspector', () => {
 			const logSpy = vi.spyOn( Logger, 'log' ).mockImplementation( () => {} );
@@ -62,6 +79,31 @@ describe( '<ModelMarkerInspector />', () => {
 			expect( screen.getByRole( 'heading', { level: 2 } ) ).toHaveTextContent( 'Markers' );
 			fireEvent.click( screen.getByRole( 'button', { name: 'Log in console' } ) );
 			expect( logSpy ).toHaveBeenCalledTimes( 1 );
+		} );
+
+		it( 'should render multiple markers sharing a name segment as a group with plural label', () => {
+			editor.model.change( writer => {
+				const root = editor.model.document.getRoot();
+				const range = editor.model.createRange(
+					editor.model.createPositionFromPath( root, [ 0, 1 ] ),
+					editor.model.createPositionFromPath( root, [ 0, 2 ] )
+				);
+
+				writer.addMarker( 'foo:another', { range, usingOperation: false, affectsData: false } );
+			} );
+
+			const newStore = createStore( state => state, {
+				editors: new Map( [ [ 'foo', editor ] ] ),
+				currentEditorName: 'foo',
+				model: {
+					markers: getEditorModelMarkers( editor, 'main' )
+				}
+			} );
+
+			const { unmount } = render( <Provider store={newStore}><ModelMarkerInspector /></Provider> );
+
+			expect( screen.getByDisplayValue( '2 markers' ) ).toBeInTheDocument();
+			unmount();
 		} );
 
 		it( 'should render markers tree', () => {

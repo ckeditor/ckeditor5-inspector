@@ -162,6 +162,34 @@ describe( '<TreeElement />', () => {
 		} );
 	} );
 
+	describe( 'positions', () => {
+		it( 'should render positionsBefore', () => {
+			const { container } = render( <TreeElement definition={{
+				name: 'foo',
+				attributes: [],
+				children: [],
+				positionsBefore: [
+					{ type: 'selection', offset: 0, isEnd: false, presentation: null, name: null }
+				]
+			}} /> );
+
+			expect( container.querySelector( '.ck-inspector-tree__position_selection' ) ).toBeTruthy();
+		} );
+
+		it( 'should render positionsAfter', () => {
+			const { container } = render( <TreeElement definition={{
+				name: 'foo',
+				attributes: [],
+				children: [],
+				positionsAfter: [
+					{ type: 'selection', offset: 0, isEnd: false, presentation: null, name: null }
+				]
+			}} /> );
+
+			expect( container.querySelector( '.ck-inspector-tree__position_selection' ) ).toBeTruthy();
+		} );
+	} );
+
 	describe( 'closing tag', () => {
 		it( 'is rendered by default', () => {
 			const { container } = render( <TreeElement definition={{
