@@ -125,13 +125,13 @@ pnpm install
 
 ### Working with the code
 
-Start the file watcher:
+Start the watch build:
 
 ```console
 pnpm run dev
 ```
 
-and visit samples in your web browser. The URL is available in the console `http://localhost:XXXX/sample`
+Then open one of the demo pages from the `sample` directory and refresh the browser manually after each rebuild.
 
 ### Building
 
