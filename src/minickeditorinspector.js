@@ -8,7 +8,6 @@ import ReactDOM from 'react-dom';
 
 import MiniInspectorUI from './minickeditorinspectorui';
 
-// From changelog -> webpack.
 window.CKEDITOR_MINI_INSPECTOR_VERSION = CKEDITOR_INSPECTOR_VERSION;
 
 export default class MiniCKEditorInspector {

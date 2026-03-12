@@ -125,13 +125,13 @@ pnpm install
 
 ### Working with the code
 
-Start the webpack file watcher:
+Start the watch build:
 
 ```console
 pnpm run dev
 ```
 
-and open `http://path/to/ckeditor5-inspector/sample/inspector.html` in your web browser.
+Then open one of the demo pages from the `sample` directory and refresh the browser manually after each rebuild.
 
 ### Building
 

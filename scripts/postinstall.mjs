@@ -4,8 +4,8 @@
  */
 
 import path from 'upath';
-import fs from 'fs';
-import { execSync } from 'child_process';
+import fs from 'node:fs';
+import { execSync } from 'node:child_process';
 import { ROOT_DIRECTORY } from './utils/constants.mjs';
 
 // When installing a repository as a dependency, the `.git` directory does not exist.
