@@ -109,6 +109,10 @@ jobs:
           name: Execute ESLint
           command: pnpm run lint
       - run:
+          when: always
+          name: Validate license files
+          command: pnpm run validate-license-files --verbose
+      - run:
           name: Execute tests for internal scripts
           command: pnpm run test:scripts
       - run:
