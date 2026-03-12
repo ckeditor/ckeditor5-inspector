@@ -25,7 +25,7 @@
     "release:prepare-changelog": "node ./scripts/preparechangelog.mjs",
     "release:prepare-packages": "node ./scripts/preparepackages.mjs",
     "release:publish-packages": "node ./scripts/publishpackages.mjs",
-    "test": "vitest --config ./vite.config.mjs --run",
+    "test": "vitest --run",
     "test:scripts": "vitest --config ./scripts-tests/vitest.config.mjs --run",
     "lint": "eslint"
   },

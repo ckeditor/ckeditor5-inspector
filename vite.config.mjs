@@ -12,8 +12,6 @@ import vitePluginCssInjectedByJs from 'vite-plugin-css-injected-by-js';
 import vitePluginSvgr from 'vite-plugin-svgr';
 
 const OUT_DIR = 'build';
-const DEV_MODE = 'dev';
-const DEFAULT_MODE = 'fullInspector';
 
 // `umd` is not supported for multiple entry points in Vite. Thus, we need to split the build into two separate runs.
 // See: https://github.com/vitejs/vite/issues/14703
@@ -21,8 +19,6 @@ const MODES = {
 	fullInspector: { name: 'CKEditorInspector', output: 'inspector.js', entry: 'ckeditorinspector.js' },
 	miniInspector: { name: 'MiniCKEditorInspector', output: 'miniinspector.js', entry: 'minickeditorinspector.js' }
 };
-
-const VITE_DEFAULT_MODES = new Set( [ 'development', 'production', 'test' ] );
 
 export default defineConfig( ( { mode: modeName } ) => {
 	const commonConfig = {
@@ -92,11 +88,11 @@ export default defineConfig( ( { mode: modeName } ) => {
 		}
 	};
 
-	if ( modeName === DEV_MODE || modeName === 'development' ) {
+	const mode = MODES[ modeName ];
+
+	if ( !mode ) {
 		return commonConfig;
 	}
-
-	const mode = getMode( modeName );
 
 	const productionConfig = {
 		plugins: [
@@ -141,15 +137,3 @@ export default defineConfig( ( { mode: modeName } ) => {
 
 	return mergeConfig( commonConfig, productionConfig );
 } );
-
-function getMode( mode = DEFAULT_MODE ) {
-	if ( VITE_DEFAULT_MODES.has( mode ) ) {
-		return MODES[ DEFAULT_MODE ];
-	}
-
-	if ( !( mode in MODES ) ) {
-		throw new Error( `Unknown mode "${ mode }". Available modes: ${ Object.keys( MODES ).join( ', ' ) }.` );
-	}
-
-	return MODES[ mode ];
-}
