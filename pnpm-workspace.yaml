@@ -6,6 +6,7 @@ overrides:
   'diff@<4.0.4': '^4.0.4'
   'nth-check@<2.0.1': '^2.1.1'
   'qs@^6': '^6.14.2'
+  'serialize-javascript@^6': '^7.0.3'
   'tar@^6': '^7.5.8'
 
 minimumReleaseAge: 4320 # 3 days
@@ -13,6 +14,8 @@ minimumReleaseAgeExclude:
   - '@ckeditor/*'
   - '@cksource/*'
   - '*ckeditor5*'
+
+  - pacote # Required for version 21.5.0 released on 2026/03/09
 
 shellEmulator: true
 shamefullyHoist: true
