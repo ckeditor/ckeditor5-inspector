@@ -3,10 +3,7 @@ onlyBuiltDependencies:
 
 overrides:
   'diff@^7': '^8.0.3'
-  'diff@<4.0.4': '^4.0.4'
-  'nth-check@<2.0.1': '^2.1.1'
-  'qs@^6': '^6.14.2'
-  'tar@^6': '^7.5.8'
+  'serialize-javascript@^6': '^7.0.3'
 
 minimumReleaseAge: 4320 # 3 days
 minimumReleaseAgeExclude:
