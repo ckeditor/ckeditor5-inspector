@@ -78,6 +78,14 @@ describe( 'commands data store reducer', () => {
 		expect( commandsState ).toHaveProperty( 'currentCommandDefinition' );
 	} );
 
+	it( 'should create a default state if no commands state was passed to the reducer', () => {
+		commandsState = commandsReducer( globalState, undefined, {} );
+
+		expect( commandsState ).toHaveProperty( 'treeDefinition' );
+		expect( commandsState ).toHaveProperty( 'currentCommandName' );
+		expect( commandsState ).toHaveProperty( 'currentCommandDefinition' );
+	} );
+
 	it( 'should return the state unchanged for an unknown action', () => {
 		const previousState = commandsState;
 

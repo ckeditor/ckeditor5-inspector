@@ -22,16 +22,8 @@ const MODES = {
 
 export default defineConfig( ( { mode: modeName } ) => {
 	const commonConfig = {
-		esbuild: {
-			loader: 'jsx',
-			include: /\.jsx?(\?.*)?$/
-		},
 		plugins: [
 			vitejsPluginReact( {
-				babel: {
-					presets: [ '@babel/preset-react' ]
-				},
-				include: /\.[jt]sx?(\?.*)?$/,
 				jsxRuntime: 'classic'
 			} ),
 			vitePluginSvgr( {
@@ -39,19 +31,9 @@ export default defineConfig( ( { mode: modeName } ) => {
 				exportAsDefault: true
 			} )
 		],
-		optimizeDeps: {
-			esbuildOptions: {
-				loader: {
-					'.js': 'jsx'
-				}
-			}
-		},
 		define: {
 			'process.env.NODE_ENV': JSON.stringify( process.env.NODE_ENV ),
 			CKEDITOR_INSPECTOR_VERSION: JSON.stringify( getLastFromChangelog() )
-		},
-		css: {
-			transformer: 'lightningcss'
 		},
 		test: {
 			browser: {
@@ -127,7 +109,7 @@ export default defineConfig( ( { mode: modeName } ) => {
 				name: mode.name,
 				entry: upath.resolve( import.meta.dirname, 'src', mode.entry )
 			},
-			rollupOptions: {
+			rolldownOptions: {
 				output: {
 					entryFileNames: mode.output
 				}
