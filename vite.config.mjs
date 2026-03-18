@@ -24,9 +24,6 @@ export default defineConfig( ( { mode: modeName } ) => {
 	const commonConfig = {
 		plugins: [
 			vitejsPluginReact( {
-				babel: {
-					presets: [ '@babel/preset-react' ]
-				},
 				include: /\.[jt]sx?(\?.*)?$/,
 				jsxRuntime: 'classic'
 			} ),
