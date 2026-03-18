@@ -32,13 +32,6 @@ export default defineConfig( ( { mode: modeName } ) => {
 				exportAsDefault: true
 			} )
 		],
-		optimizeDeps: {
-			rolldownOptions: {
-				moduleTypes: {
-					'.js': 'jsx'
-				}
-			}
-		},
 		define: {
 			'process.env.NODE_ENV': JSON.stringify( process.env.NODE_ENV ),
 			CKEDITOR_INSPECTOR_VERSION: JSON.stringify( getLastFromChangelog() )
