@@ -120,7 +120,7 @@ export default defineConfig( ( { mode: modeName } ) => {
 				name: mode.name,
 				entry: upath.resolve( import.meta.dirname, 'src', mode.entry )
 			},
-			rollupOptions: {
+			rolldownOptions: {
 				output: {
 					entryFileNames: mode.output
 				}
