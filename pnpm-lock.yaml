@@ -103,9 +103,6 @@ importers:
       husky:
         specifier: ^9.1.7
         version: 9.1.7
-      lightningcss:
-        specifier: ^1.31.1
-        version: 1.31.1
       lint-staged:
         specifier: ^10.5.4
         version: 10.5.4

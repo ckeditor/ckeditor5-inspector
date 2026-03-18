@@ -72,7 +72,6 @@
     "fs-extra": "^11.3.0",
     "globals": "^16.1.0",
     "husky": "^9.1.7",
-    "lightningcss": "^1.31.1",
     "lint-staged": "^10.5.4",
     "listr2": "^9.0.2",
     "minimist": "^1.2.8",
