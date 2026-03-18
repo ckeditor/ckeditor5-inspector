@@ -35,9 +35,6 @@ export default defineConfig( ( { mode: modeName } ) => {
 			'process.env.NODE_ENV': JSON.stringify( process.env.NODE_ENV ),
 			CKEDITOR_INSPECTOR_VERSION: JSON.stringify( getLastFromChangelog() )
 		},
-		css: {
-			transformer: 'lightningcss'
-		},
 		test: {
 			browser: {
 				provider: playwright(),
