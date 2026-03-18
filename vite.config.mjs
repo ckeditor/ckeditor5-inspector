@@ -22,10 +22,6 @@ const MODES = {
 
 export default defineConfig( ( { mode: modeName } ) => {
 	const commonConfig = {
-		esbuild: {
-			loader: 'jsx',
-			include: /\.jsx?(\?.*)?$/
-		},
 		plugins: [
 			vitejsPluginReact( {
 				babel: {
@@ -40,8 +36,8 @@ export default defineConfig( ( { mode: modeName } ) => {
 			} )
 		],
 		optimizeDeps: {
-			esbuildOptions: {
-				loader: {
+			rolldownOptions: {
+				moduleTypes: {
 					'.js': 'jsx'
 				}
 			}
