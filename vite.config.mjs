@@ -74,7 +74,7 @@ export default defineConfig( ( { mode: modeName } ) => {
 			],
 			testTimeout: 15000,
 			coverage: {
-				provider: 'v8',
+				provider: 'istanbul',
 				reporter: [ 'text-summary', 'html', 'lcov', 'json' ],
 				reportsDirectory: 'coverage',
 				include: [
