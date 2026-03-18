@@ -24,7 +24,6 @@ export default defineConfig( ( { mode: modeName } ) => {
 	const commonConfig = {
 		plugins: [
 			vitejsPluginReact( {
-				include: /\.[jt]sx?(\?.*)?$/,
 				jsxRuntime: 'classic'
 			} ),
 			vitePluginSvgr( {
