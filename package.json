@@ -51,7 +51,6 @@
     "redux": "^4.1.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.0",
     "@ckeditor/ckeditor5-dev-bump-year": "^55.0.0",
     "@ckeditor/ckeditor5-dev-changelog": "^55.0.0",
     "@ckeditor/ckeditor5-dev-ci": "^55.0.0",
