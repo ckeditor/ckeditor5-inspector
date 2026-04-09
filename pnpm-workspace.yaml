@@ -3,13 +3,15 @@ onlyBuiltDependencies:
 
 overrides:
   'diff@^7': '^8.0.3'
-  'serialize-javascript@^6': '^7.0.3'
+  'serialize-javascript@^6': '^7.0.5'
+  'vite': '8.0.5' # Remove after 2026-04-12.
 
 minimumReleaseAge: 4320 # 3 days
 minimumReleaseAgeExclude:
   - '@ckeditor/*'
   - '@cksource/*'
   - '*ckeditor5*'
+  - 'vite' # Remove after 2026-04-12.
 
 shellEmulator: true
 shamefullyHoist: true
