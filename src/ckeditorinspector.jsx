@@ -197,12 +197,14 @@ export default class CKEditorInspector {
 			return;
 		}
 
-		const container = CKEditorInspector._wrapper = document.createElement( 'div' );
+		const mountTarget = options.container || document.body;
+		const ownerDocument = mountTarget.ownerDocument || document;
+		const container = CKEditorInspector._wrapper = ownerDocument.createElement( 'div' )
 		let previousEditor;
 		let wasUICollapsed;
 
 		container.className = 'ck-inspector-wrapper';
-		document.body.appendChild( container );
+		mountTarget.appendChild( container );
 
 		// Create a listener that will trigger the store action when the model
 		// is changing or the view is being rendered.
