@@ -65,6 +65,17 @@ export default class CKEditorInspector {
 	 *			'footer-editor': editor2
 	 *		}, { option: 'value', ... } );
 	 *
+	 * **Note:** In multi-window / multi-document environments (Electron, WebView2, iframes),
+	 * the inspector can be mounted into a specific container instead of the default `document.body`:
+	 *
+	 *              CKEditorInspector.attach( editor, { container: someElement } );
+	 *
+	 * This is useful when the global `document` of the realm where the inspector module was
+	 * evaluated is not the document where the editor lives — for example, when the editor runs
+	 * inside an iframe but the inspector bundle is loaded in the outer window. The inspector
+	 * wrapper element is created in `container.ownerDocument` so ReactDOM event delegation
+	 * works correctly in the target document.
+	 *
 	 * @param {Editor|Object} editorOrEditors If an editor instance is passed, the inspect will attach to the editor
 	 * with an auto–generated name. It is possible to pass an object with `name: instance` pairs to attach to
 	 * multiple editors at a time with unique names.
