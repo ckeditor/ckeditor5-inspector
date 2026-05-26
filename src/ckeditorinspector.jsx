@@ -209,8 +209,7 @@ export default class CKEditorInspector {
 		}
 
 		const mountTarget = options.container || document.body;
-		const ownerDocument = mountTarget.ownerDocument || document;
-		const container = CKEditorInspector._wrapper = ownerDocument.createElement( 'div' );
+		const container = CKEditorInspector._wrapper = mountTarget.ownerDocument.createElement( 'div' );
 
 		let previousEditor;
 		let wasUICollapsed;
