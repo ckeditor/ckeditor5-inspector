@@ -14,3 +14,5 @@ minimumReleaseAgeExclude:
 shellEmulator: true
 shamefullyHoist: true
 preferFrozenLockfile: true
+allowBuilds:
+  esbuild: true

@@ -485,6 +485,97 @@ describe( 'CKEditorInspector', () => {
 					expect( getStoreState().ui.isCollapsed ).toBe( false );
 				} );
 			} );
+
+			describe( '#container', () => {
+				let customContainer;
+
+				beforeEach( () => {
+					customContainer = document.createElement( 'div' );
+					document.body.appendChild( customContainer );
+				} );
+
+				afterEach( () => {
+					customContainer.remove();
+				} );
+
+				it( 'should mount the inspector wrapper inside the provided container instead of document.body', () => {
+					CKEditorInspector.attach( editor, { container: customContainer } );
+
+					const wrapper = CKEditorInspector._wrapper;
+
+					expect( wrapper ).toBeInstanceOf( HTMLElement );
+					expect( wrapper.parentNode ).toBe( customContainer );
+					expect( wrapper.parentNode ).not.toBe( document.body );
+				} );
+
+				it( 'should render the inspector UI inside the provided container', () => {
+					CKEditorInspector.attach( editor, { container: customContainer } );
+
+					expect( customContainer.querySelector( '.ck-inspector' ) ).not.toBeNull();
+					expect( CKEditorInspector._wrapper.parentNode ).not.toBe( document.body );
+				} );
+
+				it( 'should create the wrapper element using ownerDocument of the provided container', () => {
+					CKEditorInspector.attach( editor, { container: customContainer } );
+
+					const wrapper = CKEditorInspector._wrapper;
+
+					expect( wrapper.ownerDocument ).toBe( customContainer.ownerDocument );
+				} );
+
+				it( 'should work the same as default when container is document.body', () => {
+					CKEditorInspector.attach( editor, { container: document.body } );
+
+					const wrapper = CKEditorInspector._wrapper;
+
+					expect( wrapper.parentNode ).toBe( document.body );
+					expect( wrapper.firstChild.classList.contains( 'ck-inspector' ) ).toBe( true );
+				} );
+
+				it( 'should not mount a second wrapper when attaching a second editor with a different container', async () => {
+					const anotherContainer = document.createElement( 'div' );
+					document.body.appendChild( anotherContainer );
+
+					CKEditorInspector.attach( editor, { container: customContainer } );
+
+					const firstWrapper = CKEditorInspector._wrapper;
+					const anotherEditor = await TestEditor.create( element );
+
+					CKEditorInspector.attach( anotherEditor, { container: anotherContainer } );
+
+					expect( CKEditorInspector._wrapper ).toBe( firstWrapper );
+					expect( document.querySelectorAll( '.ck-inspector-wrapper' ) ).toHaveLength( 1 );
+
+					anotherContainer.remove();
+
+					await anotherEditor.destroy();
+				} );
+
+				it( 'should still function correctly (attach/detach/destroy) when using a custom container', () => {
+					CKEditorInspector.attach( { foo: editor }, { container: customContainer } );
+
+					let state = getStoreState();
+
+					expect( state.editors.get( 'foo' ) ).toBe( editor );
+
+					CKEditorInspector.detach( 'foo' );
+
+					state = getStoreState();
+
+					expect( state.editors.size ).toBe( 0 );
+
+					CKEditorInspector.destroy();
+
+					expect( CKEditorInspector._wrapper ).toBeNull();
+					expect( customContainer.querySelector( '.ck-inspector-wrapper' ) ).toBeNull();
+				} );
+
+				it( 'should accept the container option passed with named editors', () => {
+					CKEditorInspector.attach( { foo: editor }, { container: customContainer } );
+
+					expect( CKEditorInspector._wrapper.parentNode ).toBe( customContainer );
+				} );
+			} );
 		} );
 	} );
 
