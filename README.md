@@ -110,17 +110,26 @@ CKEditorInspector.attach( { 'editor-name': editor }, {
 } );
 ```
 
-#### container
+#### `container`
 
-To mount the inspector into a specific DOM element instead of the default document.body, use the options.container option.
+To mount the inspector into a specific DOM element instead of the default `document.body`, use the `options.container` option.
 
-This is useful in multi-window / multi-document environments (Electron, WebView2, iframes) where the global document of the realm that loaded the inspector script is not the document where the editor lives. Without this option, the inspector would be appended to the wrong document's <body> and remain invisible.
+This is useful in multi-window / multi-document environments (Electron, WebView2, iframes) where the global document of the realm that loaded the inspector script is not the document where the editor lives. Without this option, the inspector would be appended to the wrong document's `<body>` and remain invisible.
 
-The inspector wrapper element is created in container.ownerDocument, so ReactDOM event delegation works correctly in the target document.
+The inspector wrapper element is created in `container.ownerDocument`, so ReactDOM event delegation works correctly in the target document.
 
-Note: This option works when CKEditorInspector.attach() is called for the first time only.
+**Note**: This option works when `CKEditorInspector.attach()` is called for the first time only.
 
-js +const editorIframe = document.getElementById( 'editor-frame' ); +const editorDocument = editorIframe.contentDocument; + +CKEditorInspector.attach( editor, { +     // Mount the inspector into the iframe document where the editor lives, +       // instead of the default `document.body` of the outer window. +        container: editorDocument.body +} ); +
+```js
+const editorIframe = document.getElementById( 'editor-frame' );
+const editorDocument = editorIframe.contentDocument;
+
+CKEditorInspector.attach( editor, {
+	// Mount the inspector into the iframe document where the editor lives,
+	// instead of the default `document.body` of the outer window.
+	container: editorDocument.body
+} );
+```
 
 ## Development
 
