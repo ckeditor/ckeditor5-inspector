@@ -51,12 +51,12 @@
     "redux": "^4.1.2"
   },
   "devDependencies": {
-    "@ckeditor/ckeditor5-dev-bump-year": "^55.0.0",
-    "@ckeditor/ckeditor5-dev-changelog": "^55.0.0",
-    "@ckeditor/ckeditor5-dev-ci": "^55.0.0",
-    "@ckeditor/ckeditor5-dev-license-checker": "^55.0.0",
-    "@ckeditor/ckeditor5-dev-release-tools": "^55.0.0",
-    "@ckeditor/ckeditor5-dev-utils": "^55.0.0",
+    "@ckeditor/ckeditor5-dev-bump-year": "^55.6.0",
+    "@ckeditor/ckeditor5-dev-changelog": "^55.6.0",
+    "@ckeditor/ckeditor5-dev-ci": "^55.6.0",
+    "@ckeditor/ckeditor5-dev-license-checker": "^55.6.0",
+    "@ckeditor/ckeditor5-dev-release-tools": "^55.6.0",
+    "@ckeditor/ckeditor5-dev-utils": "^55.6.0",
     "@inquirer/prompts": "^7.8.3",
     "@listr2/prompt-adapter-inquirer": "^3.0.2",
     "@testing-library/jest-dom": "^6.8.0",
