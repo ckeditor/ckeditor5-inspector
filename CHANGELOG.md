@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## [5.0.2](https://github.com/ckeditor/ckeditor5-inspector/compare/v5.0.1...v5.0.2) (June 10, 2026)
+
+### Other changes
+
+* Readme simplification.
+
+
 ## [5.0.1](https://github.com/ckeditor/ckeditor5-inspector/compare/v5.0.0...v5.0.1) (May 27, 2026)
 
 ### Bug fixes
@@ -41,13 +48,6 @@ Changelog
 ### Other changes
 
 * Aligned the CKEditor 5 Inspector API to use the new lock mechanism when enabling/disabling the read-only mode. ([commit](https://github.com/ckeditor/ckeditor5-inspector/commit/55d72a3a8f708554d22341ce26a31f4448c39fc5))
-
-
-## [3.1.1](https://github.com/ckeditor/ckeditor5-inspector/compare/v3.1.0...v3.1.1) (2022-03-29)
-
-### Bug fixes
-
-* Improved rendering of GHS attributes in the inspector. Closes [#129](https://github.com/ckeditor/ckeditor5-inspector/issues/129). ([commit](https://github.com/ckeditor/ckeditor5-inspector/commit/5874d2a971628b69000120519a82ba3dccb7651f))
 
 ---
 
