@@ -51,19 +51,19 @@
     "redux": "^4.1.2"
   },
   "devDependencies": {
-    "@ckeditor/ckeditor5-dev-bump-year": "^55.6.0",
-    "@ckeditor/ckeditor5-dev-changelog": "^55.6.0",
-    "@ckeditor/ckeditor5-dev-ci": "^55.6.0",
-    "@ckeditor/ckeditor5-dev-license-checker": "^55.6.0",
-    "@ckeditor/ckeditor5-dev-release-tools": "^55.6.0",
-    "@ckeditor/ckeditor5-dev-utils": "^55.6.0",
+    "@ckeditor/ckeditor5-dev-bump-year": "^55.6.3",
+    "@ckeditor/ckeditor5-dev-changelog": "^55.6.3",
+    "@ckeditor/ckeditor5-dev-ci": "^55.6.3",
+    "@ckeditor/ckeditor5-dev-license-checker": "^55.6.3",
+    "@ckeditor/ckeditor5-dev-release-tools": "^55.6.3",
+    "@ckeditor/ckeditor5-dev-utils": "^55.6.3",
     "@inquirer/prompts": "^7.8.3",
     "@listr2/prompt-adapter-inquirer": "^3.0.2",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^12.1.5",
     "@vitejs/plugin-react": "^6.0.1",
-    "@vitest/browser-playwright": "4.1.0",
-    "@vitest/coverage-v8": "^4.1.0",
+    "@vitest/browser-playwright": "4.1.9",
+    "@vitest/coverage-v8": "^4.1.9",
     "ckeditor5": "^47.6.0",
     "eslint": "^9.34.0",
     "eslint-config-ckeditor5": "^13.0.0",
@@ -82,7 +82,7 @@
     "vite": "^8.0.0",
     "vite-plugin-css-injected-by-js": "^4.0.1",
     "vite-plugin-svgr": "^4.4.0",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.9"
   },
   "lint-staged": {
     "**/*": [
