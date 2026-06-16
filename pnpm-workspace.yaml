@@ -6,23 +6,14 @@ allowBuilds:
 overrides:
   'diff@^7': '^8.0.3'
   'serialize-javascript@^6': '^7.0.5'
+  'esbuild@^0.27': '^0.28.1'
+  'js-yaml@^3': '^4.2.0'
 
 minimumReleaseAge: 4320 # 3 days
 minimumReleaseAgeExclude:
   - '@ckeditor/*'
   - '@cksource/*'
   - '*ckeditor5*'
-  - '@vitest/browser-playwright' # Needed for version 4.1.9. Remove after 2026-06-18T07:21:50Z
-  - '@vitest/coverage-v8' # Needed for version 4.1.9. Remove after 2026-06-18T07:21:14Z
-  - 'vitest' # Needed for version 4.1.9. Remove after 2026-06-18T07:23:00Z
-  - '@vitest/mocker' # Needed for version 4.1.9. Remove after 2026-06-18T07:22:31Z
-  - '@vitest/pretty-format' # Needed for version 4.1.9. Remove after 2026-06-18T07:22:52Z
-  - '@vitest/spy' # Needed for version 4.1.9. Remove after 2026-06-18T07:22:46Z
-  - '@vitest/snapshot' # Needed for version 4.1.9. Remove after 2026-06-18T07:22:18Z
-  - '@vitest/utils' # Needed for version 4.1.9. Remove after 2026-06-18T07:22:37Z
-  - '@vitest/runner' # Needed for version 4.1.9. Remove after 2026-06-18T07:22:24Z
-  - '@vitest/expect' # Needed for version 4.1.9. Remove after 2026-06-18T07:22:11Z
-  - '@vitest/browser' # Needed for version 4.1.9. Remove after 2026-06-18T07:21:58Z
 
 shellEmulator: true
 shamefullyHoist: true
