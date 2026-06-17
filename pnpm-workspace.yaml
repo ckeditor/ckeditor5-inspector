@@ -1,9 +1,10 @@
-onlyBuiltDependencies:
-  - esbuild
+allowBuilds:
+  esbuild: true
 
 overrides:
   'diff@^7': '^8.0.3'
   'serialize-javascript@^6': '^7.0.5'
+  'esbuild@^0.27': '^0.28.1'
 
 minimumReleaseAge: 4320 # 3 days
 minimumReleaseAgeExclude:
@@ -14,5 +15,3 @@ minimumReleaseAgeExclude:
 shellEmulator: true
 shamefullyHoist: true
 preferFrozenLockfile: true
-allowBuilds:
-  esbuild: true
