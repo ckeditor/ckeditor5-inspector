@@ -1,5 +1,6 @@
 allowBuilds:
   esbuild: true
+  snyk: true
 
 overrides:
   'diff@^7': '^8.0.3'
@@ -15,3 +16,4 @@ minimumReleaseAgeExclude:
 shellEmulator: true
 shamefullyHoist: true
 preferFrozenLockfile: true
+verifyDepsBeforeRun: false
