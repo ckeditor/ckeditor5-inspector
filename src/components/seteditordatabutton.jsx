@@ -8,10 +8,13 @@ import Modal from 'react-modal';
 
 import Button from './button';
 import LoadDataIcon from '../assets/img/load-data.svg';
+import { HostContext } from '../hostcontext';
 
 import './seteditordatabutton.css';
 
 export default class SetEditorDataButton extends Component {
+	static contextType = HostContext;
+
 	constructor( props ) {
 		super( props );
 
@@ -36,7 +39,7 @@ export default class SetEditorDataButton extends Component {
 			/>,
 			<Modal
 				isOpen={this.state.isModalOpen}
-				appElement={document.querySelector( '.ck-inspector-wrapper' )}
+				appElement={this.context.document.querySelector( '.ck-inspector-wrapper' )}
 				onAfterOpen={
 					this._handleModalAfterOpen.bind( this )
 				}

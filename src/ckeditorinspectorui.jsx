@@ -25,6 +25,7 @@ import SchemaPane from './schema/pane';
 
 import EditorQuickActions from './editorquickactions';
 import ArrowDownIcon from './assets/img/arrow-down.svg';
+import { HostContext } from './hostcontext';
 
 import './ckeditorinspectorui.css';
 
@@ -39,29 +40,37 @@ const INSPECTOR_STYLES = {
 };
 
 class CKEditorInspectorUI extends Component {
+	static contextType = HostContext;
+
 	constructor( props ) {
 		super( props );
 
-		updateBodyHeight( this.props.height );
-		document.body.style.setProperty( '--ck-inspector-collapsed-height', `${ INSPECTOR_COLLAPSED_HEIGHT }px` );
-
 		this.handleInspectorResize = this.handleInspectorResize.bind( this );
+	}
+
+	componentDidMount() {
+		updateBodyHeight( this.context.document, this.props.height );
+		this.context.document.body.style.setProperty(
+			'--ck-inspector-collapsed-height', `${ INSPECTOR_COLLAPSED_HEIGHT }px`
+		);
 	}
 
 	handleInspectorResize( evt, direction, ref ) {
 		const height = ref.style.height;
 
 		this.props.setHeight( height );
-		updateBodyHeight( height );
+		updateBodyHeight( this.context.document, height );
 	}
 
 	render() {
+		const hostBody = this.context.document.body;
+
 		if ( this.props.isCollapsed ) {
-			document.body.classList.remove( 'ck-inspector-body-expanded' );
-			document.body.classList.add( 'ck-inspector-body-collapsed' );
+			hostBody.classList.remove( 'ck-inspector-body-expanded' );
+			hostBody.classList.add( 'ck-inspector-body-collapsed' );
 		} else {
-			document.body.classList.remove( 'ck-inspector-body-collapsed' );
-			document.body.classList.add( 'ck-inspector-body-expanded' );
+			hostBody.classList.remove( 'ck-inspector-body-collapsed' );
+			hostBody.classList.add( 'ck-inspector-body-expanded' );
 		}
 
 		return <Rnd
@@ -102,8 +111,10 @@ class CKEditorInspectorUI extends Component {
 	}
 
 	componentWillUnmount() {
-		document.body.classList.remove( 'ck-inspector-body-expanded' );
-		document.body.classList.remove( 'ck-inspector-body-collapsed' );
+		const hostBody = this.context.document.body;
+
+		hostBody.classList.remove( 'ck-inspector-body-expanded' );
+		hostBody.classList.remove( 'ck-inspector-body-collapsed' );
 	}
 }
 
@@ -126,6 +137,8 @@ export class DocsButton extends Component {
 }
 
 class ToggleButtonVisual extends Component {
+	static contextType = HostContext;
+
 	constructor( props ) {
 		super( props );
 
@@ -146,11 +159,11 @@ class ToggleButtonVisual extends Component {
 	}
 
 	componentDidMount() {
-		window.addEventListener( 'keydown', this.handleShortcut );
+		this.context.window.addEventListener( 'keydown', this.handleShortcut );
 	}
 
 	componentWillUnmount() {
-		window.removeEventListener( 'keydown', this.handleShortcut );
+		this.context.window.removeEventListener( 'keydown', this.handleShortcut );
 	}
 
 	handleShortcut( event ) {
@@ -183,8 +196,8 @@ export const EditorInstanceSelector = connect(
 	{ setCurrentEditorName }
 )( EditorInstanceSelectorVisual );
 
-function updateBodyHeight( height ) {
-	document.body.style.setProperty( '--ck-inspector-height', height );
+function updateBodyHeight( hostDocument, height ) {
+	hostDocument.body.style.setProperty( '--ck-inspector-height', height );
 }
 
 function isToggleShortcut( event ) {

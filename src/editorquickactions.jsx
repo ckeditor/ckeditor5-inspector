@@ -16,12 +16,15 @@ import ReadOnlyIcon from './assets/img/read-only.svg';
 import TrashIcon from './assets/img/trash.svg';
 import CopyToClipboardIcon from './assets/img/copy-to-clipboard.svg';
 import CheckmarkIcon from './assets/img/checkmark.svg';
+import { HostContext } from './hostcontext';
 
 import './editorquickactions.css';
 
 const INSPECTOR_READ_ONLY_LOCK_ID = 'Lock from Inspector (@ckeditor/ckeditor5-inspector)';
 
 class EditorQuickActions extends Component {
+	static contextType = HostContext;
+
 	constructor( props ) {
 		super( props );
 
@@ -63,14 +66,14 @@ class EditorQuickActions extends Component {
 	}
 
 	componentDidMount() {
-		document.addEventListener( 'keydown', this._keyDownHandler );
-		document.addEventListener( 'keyup', this._keyUpHandler );
+		this.context.document.addEventListener( 'keydown', this._keyDownHandler );
+		this.context.document.addEventListener( 'keyup', this._keyUpHandler );
 	}
 
 	componentWillUnmount() {
 		// Stop reacting to Shift key press/release after the inspector was destroyed.
-		document.removeEventListener( 'keydown', this._keyDownHandler );
-		document.removeEventListener( 'keyup', this._keyUpHandler );
+		this.context.document.removeEventListener( 'keydown', this._keyDownHandler );
+		this.context.document.removeEventListener( 'keyup', this._keyUpHandler );
 
 		// Don't update the button look after the inspector was destroyed.
 		clearTimeout( this._editorDataJustCopiedTimeout );

@@ -19,6 +19,7 @@ import { updateCommandsState } from './commands/data/actions';
 import EditorListener from './data/utils';
 
 import CKEditorInspectorUI from './ckeditorinspectorui';
+import { HostContext } from './hostcontext';
 import Logger from './logger';
 import {
 	normalizeArguments,
@@ -197,6 +198,11 @@ export default class CKEditorInspector {
 		CKEditorInspector._editorListener = null;
 		CKEditorInspector._wrapper = null;
 		CKEditorInspector._store = null;
+
+		if ( CKEditorInspector._teardown ) {
+			CKEditorInspector._teardown();
+			CKEditorInspector._teardown = null;
+		}
 	}
 
 	static _updateEditorsState() {
@@ -209,13 +215,39 @@ export default class CKEditorInspector {
 		}
 
 		const mountTarget = options.container || document.body;
-		const container = CKEditorInspector._wrapper = mountTarget.ownerDocument.createElement( 'div' );
+		const hostDocument = mountTarget.ownerDocument;
+		const hostWindow = hostDocument.defaultView || window;
+		const container = CKEditorInspector._wrapper = hostDocument.createElement( 'div' );
 
 		let previousEditor;
 		let wasUICollapsed;
 
 		container.className = 'ck-inspector-wrapper';
 		mountTarget.appendChild( container );
+
+		// When the host document differs from the module document (multi-window
+		// scenarios), the inspector CSS injected at import time only lives in
+		// the module document's head. Clone the inspector-related <style> tags
+		// into the host document so the UI renders correctly there too.
+		const clonedStyleElements = [];
+
+		if ( hostDocument !== document ) {
+			for ( const styleEl of document.querySelectorAll( 'style' ) ) {
+				if ( styleEl.textContent && styleEl.textContent.includes( 'ck-inspector' ) ) {
+					const clone = styleEl.cloneNode( true );
+
+					clone.dataset.ckInspectorClone = 'true';
+					hostDocument.head.appendChild( clone );
+					clonedStyleElements.push( clone );
+				}
+			}
+		}
+
+		CKEditorInspector._teardown = () => {
+			for ( const clone of clonedStyleElements ) {
+				clone.remove();
+			}
+		};
 
 		// Create a listener that will trigger the store action when the model
 		// is changing or the view is being rendered.
@@ -306,9 +338,11 @@ export default class CKEditorInspector {
 		} );
 
 		ReactDOM.render(
-			<Provider store={CKEditorInspector._store}>
-				<CKEditorInspectorUI />
-			</Provider>,
+			<HostContext.Provider value={{ document: hostDocument, window: hostWindow }}>
+				<Provider store={CKEditorInspector._store}>
+					<CKEditorInspectorUI />
+				</Provider>
+			</HostContext.Provider>,
 			container
 		);
 	}
