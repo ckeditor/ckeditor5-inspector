@@ -1,17 +1,6 @@
 Changelog
 =========
 
-## Unreleased
-
-### Bug fixes
-
-* Fixed the `container` option of `CKEditorInspector.attach()` to actually work in multi-window / multi-document environments (Electron, WebView2, iframes). Previously, even when a container in a different document was passed, the inspector's UI still read and wrote the module-realm `document` and `window` (event listeners, `body` class toggles, viewport sizing, `Modal` app element, `scrollIntoView` targets), so it appeared broken in the host document. See [ckeditor/ckeditor5-inspector#39](https://github.com/ckeditor/ckeditor5-inspector/issues/39), [ckeditor/ckeditor5-inspector#100](https://github.com/ckeditor/ckeditor5-inspector/issues/100).
-
-  The inspector now derives the host `document` / `window` from `container.ownerDocument` and exposes them via a React `HostContext` consumed by every component that touches the DOM. Inspector-related `<style>` tags are also cloned into the host document's `<head>` so its CSS is available there.
-
-  Thanks to [Marco Cimmino (@marco-ms)](https://github.com/marco-ms).
-
-
 ## [5.0.2](https://github.com/ckeditor/ckeditor5-inspector/compare/v5.0.1...v5.0.2) (June 10, 2026)
 
 ### Other changes
