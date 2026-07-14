@@ -576,6 +576,123 @@ describe( 'CKEditorInspector', () => {
 					expect( CKEditorInspector._wrapper.parentNode ).toBe( customContainer );
 				} );
 			} );
+
+			describe( '#container in a cross-document environment', () => {
+				let iframe, hostDocument, hostWindow, hostContainer, outerMarkerStyle;
+
+				beforeEach( () => {
+					// A same-origin iframe gives us a real, distinct document/window pair
+					// that mirrors a multi-window setup (Electron BrowserWindow, WebView2
+					// popup, iframe) — the case the fix is meant to cover.
+					iframe = document.createElement( 'iframe' );
+					document.body.appendChild( iframe );
+
+					hostDocument = iframe.contentDocument;
+					hostWindow = iframe.contentWindow;
+
+					hostContainer = hostDocument.createElement( 'div' );
+					hostDocument.body.appendChild( hostContainer );
+
+					// Simulate an inspector-related <style> tag living in the module
+					// realm (as happens when the bundler injects CSS at import time).
+					// The mount logic is expected to clone it into the host document.
+					outerMarkerStyle = document.createElement( 'style' );
+					outerMarkerStyle.textContent = '.ck-inspector-cross-doc-marker { color: red; }';
+					document.head.appendChild( outerMarkerStyle );
+				} );
+
+				afterEach( () => {
+					outerMarkerStyle.remove();
+					iframe.remove();
+				} );
+
+				it( 'should create the wrapper element in the host document', () => {
+					CKEditorInspector.attach( editor, { container: hostContainer } );
+
+					expect( CKEditorInspector._wrapper.ownerDocument ).toBe( hostDocument );
+					expect( CKEditorInspector._wrapper.ownerDocument ).not.toBe( document );
+				} );
+
+				it( 'should render the inspector UI into the host document only', () => {
+					CKEditorInspector.attach( editor, { container: hostContainer } );
+
+					expect( hostDocument.querySelector( '.ck-inspector' ) ).not.toBeNull();
+					expect( document.body.querySelector( '.ck-inspector' ) ).toBeNull();
+				} );
+
+				it( 'should clone inspector-related <style> tags into the host document <head>', () => {
+					CKEditorInspector.attach( editor, { container: hostContainer } );
+
+					const clones = hostDocument.head.querySelectorAll( 'style[data-ck-inspector-clone="true"]' );
+
+					expect( clones.length ).toBeGreaterThan( 0 );
+
+					const markerClone = [ ...clones ].find( c => c.textContent.includes( '.ck-inspector-cross-doc-marker' ) );
+
+					expect( markerClone ).toBeDefined();
+					expect( markerClone.textContent ).toContain( 'color: red' );
+				} );
+
+				it( 'should not clone <style> tags when the container is in the module document', () => {
+					CKEditorInspector.attach( editor, { container: document.body } );
+
+					const clones = document.head.querySelectorAll( 'style[data-ck-inspector-clone="true"]' );
+
+					expect( clones.length ).toBe( 0 );
+				} );
+
+				it( 'should toggle body classes on the host document, not the module document', () => {
+					CKEditorInspector.attach( editor, { container: hostContainer } );
+
+					const hasHostClass =
+						hostDocument.body.classList.contains( 'ck-inspector-body-expanded' ) ||
+						hostDocument.body.classList.contains( 'ck-inspector-body-collapsed' );
+
+					expect( hasHostClass ).toBe( true );
+					expect( document.body.classList.contains( 'ck-inspector-body-expanded' ) ).toBe( false );
+					expect( document.body.classList.contains( 'ck-inspector-body-collapsed' ) ).toBe( false );
+				} );
+
+				it( 'should bind the Alt+F12 shortcut to the host window', () => {
+					CKEditorInspector.attach( editor, { container: hostContainer } );
+
+					const before = getStoreState().ui.isCollapsed;
+
+					// Dispatch the shortcut on the host window; the outer window
+					// listener (if any lingered) must not receive it.
+					const event = new hostWindow.KeyboardEvent( 'keydown', {
+						key: 'F12',
+						altKey: true,
+						bubbles: true
+					} );
+					hostWindow.dispatchEvent( event );
+
+					expect( getStoreState().ui.isCollapsed ).toBe( !before );
+				} );
+
+				it( 'should remove cloned <style> tags on destroy()', () => {
+					CKEditorInspector.attach( editor, { container: hostContainer } );
+
+					expect(
+						hostDocument.head.querySelectorAll( 'style[data-ck-inspector-clone="true"]' ).length
+					).toBeGreaterThan( 0 );
+
+					CKEditorInspector.destroy();
+
+					expect(
+						hostDocument.head.querySelectorAll( 'style[data-ck-inspector-clone="true"]' ).length
+					).toBe( 0 );
+				} );
+
+				it( 'should clean up host document body classes on destroy()', () => {
+					CKEditorInspector.attach( editor, { container: hostContainer } );
+
+					CKEditorInspector.destroy();
+
+					expect( hostDocument.body.classList.contains( 'ck-inspector-body-expanded' ) ).toBe( false );
+					expect( hostDocument.body.classList.contains( 'ck-inspector-body-collapsed' ) ).toBe( false );
+				} );
+			} );
 		} );
 	} );
 

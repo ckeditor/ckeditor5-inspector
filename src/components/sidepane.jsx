@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import {
 	setSidePaneWidth
 } from '../data/actions';
+import { HostContext } from '../hostcontext';
 
 import './sidepane.css';
 
@@ -18,8 +19,11 @@ const SIDE_PANE_STYLES = {
 };
 
 class SidePane extends Component {
+	static contextType = HostContext;
+
 	get maxSidePaneWidth() {
-		return Math.min( window.innerWidth - 400, window.innerWidth * .8 );
+		const hostWindow = this.context.window;
+		return Math.min( hostWindow.innerWidth - 400, hostWindow.innerWidth * .8 );
 	}
 
 	render() {

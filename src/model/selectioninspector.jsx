@@ -15,10 +15,13 @@ import { getModelPositionDefinition } from './utils';
 
 import ConsoleIcon from '../assets/img/console.svg';
 import EyeIcon from '../assets/img/eye.svg';
+import { HostContext } from '../hostcontext';
 
 const API_DOCS_PREFIX = 'https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_selection-Selection.html';
 
 class ModelSelectionInspector extends Component {
+	static contextType = HostContext;
+
 	constructor( props ) {
 		super( props );
 
@@ -33,7 +36,7 @@ class ModelSelectionInspector extends Component {
 	}
 
 	handleScrollToSelectionButtonClick() {
-		const domSelectionElement = document.querySelector( '.ck-inspector-tree__position.ck-inspector-tree__position_selection' );
+		const domSelectionElement = this.context.document.querySelector( '.ck-inspector-tree__position.ck-inspector-tree__position_selection' );
 
 		// E.g. wrong root is selected.
 		if ( !domSelectionElement ) {
