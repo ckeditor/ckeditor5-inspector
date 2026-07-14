@@ -17,7 +17,11 @@ import React from 'react';
  * The default value falls back to the module globals so consumers that don't
  * pass a `container` (single-realm case) continue to work unchanged.
  */
+/* v8 ignore start -- @preserve: SSR / non-DOM fallback, unreachable in jsdom-based test runs */
+
 export const HostContext = React.createContext( {
 	document: typeof document === 'undefined' ? null : document,
 	window: typeof window === 'undefined' ? null : window
 } );
+
+/* v8 ignore stop */

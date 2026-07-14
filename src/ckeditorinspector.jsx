@@ -199,10 +199,8 @@ export default class CKEditorInspector {
 		CKEditorInspector._wrapper = null;
 		CKEditorInspector._store = null;
 
-		if ( CKEditorInspector._teardown ) {
-			CKEditorInspector._teardown();
-			CKEditorInspector._teardown = null;
-		}
+		CKEditorInspector._teardown?.();
+		CKEditorInspector._teardown = null;
 	}
 
 	static _updateEditorsState() {
