@@ -693,6 +693,41 @@ describe( 'CKEditorInspector', () => {
 					expect( hostDocument.body.classList.contains( 'ck-inspector-body-collapsed' ) ).toBe( false );
 				} );
 			} );
+
+			describe( '#container in a detached document (no defaultView)', () => {
+				let detachedDocument, detachedContainer;
+
+				beforeEach( () => {
+					detachedDocument = document.implementation.createHTMLDocument( 'detached' );
+					detachedContainer = detachedDocument.createElement( 'div' );
+					detachedDocument.body.appendChild( detachedContainer );
+				} );
+
+				it( 'should have no defaultView on the detached document', () => {
+					expect( detachedDocument.defaultView ).toBeNull();
+				} );
+
+				it( 'should still create the wrapper element in the detached document', () => {
+					CKEditorInspector.attach( editor, { container: detachedContainer } );
+
+					expect( CKEditorInspector._wrapper.ownerDocument ).toBe( detachedDocument );
+				} );
+
+				it( 'should fall back to the global window when hostDocument.defaultView is null', () => {
+					CKEditorInspector.attach( editor, { container: detachedContainer } );
+
+					const before = getStoreState().ui.isCollapsed;
+					const event = new window.KeyboardEvent( 'keydown', {
+						key: 'F12',
+						altKey: true,
+						bubbles: true
+					} );
+
+					window.dispatchEvent( event );
+
+					expect( getStoreState().ui.isCollapsed ).toBe( !before );
+				} );
+			} );
 		} );
 	} );
 
