@@ -188,7 +188,7 @@ function getEssentialState( globalState, modelState, modelStateOverrides ) {
 	} );
 
 	let currentNode = overriddenModelState.currentNode;
-	let currentNodeDefinition = overriddenModelState.currentNodeDefinition;
+	let currentNodeDefinition;
 
 	if ( currentNode ) {
 		// * If the currentNode no longer belongs to the current root, reset the state.

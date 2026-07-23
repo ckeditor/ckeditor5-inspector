@@ -8,4 +8,3 @@ export const SET_SCHEMA_CURRENT_DEFINITION_NAME = 'SET_SCHEMA_CURRENT_DEFINITION
 export function setSchemaCurrentDefinitionName( currentSchemaDefinitionName ) {
 	return { type: SET_SCHEMA_CURRENT_DEFINITION_NAME, currentSchemaDefinitionName };
 }
-

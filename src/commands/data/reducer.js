@@ -69,4 +69,3 @@ function getBlankCommandsState( globalState, commandsState = {} ) {
 		treeDefinition: getCommandsTreeDefinition( globalState, commandsState )
 	};
 }
-

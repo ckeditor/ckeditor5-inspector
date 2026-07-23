@@ -67,4 +67,3 @@ function getBlankSchemaState( globalState, schemaState = {} ) {
 		treeDefinition: getSchemaTreeDefinition( globalState, schemaState )
 	};
 }
-
