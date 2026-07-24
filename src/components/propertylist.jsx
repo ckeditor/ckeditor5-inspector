@@ -78,9 +78,9 @@ class PropertyTitle extends PureComponent {
 	}
 
 	handleCollapsedChange() {
-		this.setState( {
-			isCollapsed: !this.state.isCollapsed
-		} );
+		this.setState( prevState => ( {
+			isCollapsed: !prevState.isCollapsed
+		} ) );
 	}
 
 	render() {

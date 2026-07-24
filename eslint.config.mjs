@@ -7,7 +7,7 @@ import globals from 'globals';
 import { defineConfig } from 'eslint/config';
 import ckeditor5Rules from 'eslint-plugin-ckeditor5-rules';
 import ckeditor5Config from 'eslint-config-ckeditor5';
-import eslintPluginReact from 'eslint-plugin-react';
+import eslintReact from '@eslint-react/eslint-plugin';
 
 export default defineConfig( [
 	{
@@ -28,13 +28,18 @@ export default defineConfig( [
 		],
 
 		extends: [
-			eslintPluginReact.configs.flat.recommended,
+			eslintReact.configs.recommended,
 			ckeditor5Config
 		],
 
 		languageOptions: {
 			ecmaVersion: 'latest',
 			sourceType: 'module',
+			parserOptions: {
+				ecmaFeatures: {
+					jsx: true
+				}
+			},
 			globals: {
 				...globals.browser,
 				CKEDITOR_INSPECTOR_VERSION: true
@@ -47,18 +52,10 @@ export default defineConfig( [
 		},
 
 		plugins: {
-			'ckeditor5-rules': ckeditor5Rules,
-			'react': eslintPluginReact
-		},
-
-		settings: {
-			react: {
-				version: 'detect'
-			}
+			'ckeditor5-rules': ckeditor5Rules
 		},
 
 		rules: {
-			'react/prop-types': 'off',
 			'no-console': 'off',
 			'ckeditor5-rules/license-header': [ 'error', {
 				'headerLines': [

@@ -161,7 +161,7 @@ function getEssentialState( globalState, viewState, viewStateOverrides ) {
 	} );
 
 	let currentNode = overriddenViewState.currentNode;
-	let currentNodeDefinition = overriddenViewState.currentNodeDefinition;
+	let currentNodeDefinition;
 
 	if ( currentNode ) {
 		// If the currentNode no longer belongs to the root, reset the state.

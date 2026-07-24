@@ -23,4 +23,3 @@ releaseTools.isVersionPublishableForTag( packageName, changelogVersion, npmTag )
 			console.log( 'The project is ready to release.' );
 		}
 	} );
-
