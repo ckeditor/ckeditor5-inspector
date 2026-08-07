@@ -62,8 +62,8 @@
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^12.1.5",
     "@vitejs/plugin-react": "^6.0.1",
-    "@vitest/browser-playwright": "^4.1.8",
-    "@vitest/coverage-v8": "^4.1.8",
+    "@vitest/browser-playwright": "^4.1.10",
+    "@vitest/coverage-v8": "^4.1.10",
     "ckeditor5": "^47.6.0",
     "eslint": "^10.0.0",
     "eslint-config-ckeditor5": "^19.0.0",
@@ -82,7 +82,7 @@
     "vite": "^8.0.16",
     "vite-plugin-css-injected-by-js": "^4.0.1",
     "vite-plugin-svgr": "^4.4.0",
-    "vitest": "^4.1.8"
+    "vitest": "^4.1.10"
   },
   "lint-staged": {
     "**/*": [
