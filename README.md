@@ -134,7 +134,7 @@ CKEditorInspector.attach( editor, {
 ## Development
 
 > [!NOTE]
-> This project requires **pnpm v10** or higher. You can check your version with `pnpm --version` and update if needed with `npm install -g pnpm@latest`.
+> This project requires **pnpm v12** or higher. You can check your version with `pnpm --version` and update if needed with `npm install -g pnpm@latest`.
 
 To configure the environment:
 
