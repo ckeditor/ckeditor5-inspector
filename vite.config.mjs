@@ -36,11 +36,11 @@ export default defineConfig( ( { mode: modeName } ) => {
 			CKEDITOR_INSPECTOR_VERSION: JSON.stringify( getLastFromChangelog() )
 		},
 		test: {
+			fileParallelism: false,
 			browser: {
 				provider: playwright(),
 				enabled: true,
 				headless: true,
-				fileParallelism: false,
 				screenshotFailures: false,
 				instances: [
 					{ browser: 'chromium' }
