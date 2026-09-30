@@ -59,10 +59,10 @@ importers:
         version: 5.17.3(eslint@10.7.0(jiti@2.5.1)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.2)
       '@inquirer/prompts':
         specifier: ^7.8.3
-        version: 7.8.6(@types/node@25.5.0)
+        version: 7.10.1(@types/node@25.5.0)
       '@listr2/prompt-adapter-inquirer':
         specifier: ^3.0.2
-        version: 3.0.4(@inquirer/prompts@7.8.6(@types/node@25.5.0))(@types/node@25.5.0)(listr2@9.0.4)
+        version: 3.0.4(@inquirer/prompts@7.10.1(@types/node@25.5.0))(@types/node@25.5.0)(listr2@9.0.4)
       '@testing-library/jest-dom':
         specifier: ^6.8.0
         version: 6.9.1
@@ -80,7 +80,7 @@ importers:
         version: 4.1.10(@vitest/browser@4.1.10)(vitest@4.1.10)
       ckeditor5:
         specifier: ^47.6.0
-        version: 47.6.0(supports-color@7.2.0)
+        version: 47.6.0
       eslint:
         specifier: ^10.0.0
         version: 10.7.0(jiti@2.5.1)(supports-color@7.2.0)
@@ -142,10 +142,6 @@ packages:
   '@adobe/css-tools@4.4.4':
     resolution: {integrity: sha512-Elp+iwUx5rN5+Y8xLt5/GRoG20WGoDCQ/1Fb+1LiGtvwbDavuSk0jhD/eZdckHAuzcDzccnkv+rEjyWfRx18gg==}
 
-  '@babel/code-frame@7.29.0':
-    resolution: {integrity: sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw==}
-    engines: {node: '>=6.9.0'}
-
   '@babel/code-frame@7.29.7':
     resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
     engines: {node: '>=6.9.0'}
@@ -184,10 +180,6 @@ packages:
     resolution: {integrity: sha512-Pb5ijPrZ89GDH8223L4UP8i6QApWxs04RbPQJTeWDV0/keR2E36MeKnyr6LYmUUvqRRI+Iv87SuF1W6ErINzYw==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/helper-validator-identifier@7.28.5':
-    resolution: {integrity: sha512-qSs4ifwzKJSV39ucNjsvc6WVHs6b7S03sOh2OcHF9UHfVPqWWALUsNUVzhSBiItjRZoLHx7nIarVjqKVusUZ1Q==}
-    engines: {node: '>=6.9.0'}
-
   '@babel/helper-validator-identifier@7.29.7':
     resolution: {integrity: sha512-qehxGkRj55h/ff8EMaJ+cYhyaKlHIxqYDn682wQD7RNp9UujOQsHog2uS0r2vzr4pW+sXf90NeeayjcNaX3fFg==}
     engines: {node: '>=6.9.0'}
@@ -215,10 +207,6 @@ packages:
 
   '@babel/traverse@7.29.7':
     resolution: {integrity: sha512-EhlfNQtZ+NK22w5BM61ciuiq1m58ed33Wr1Xan//ZRTy6hgjnwyCffRYwzsGXdASJSUJ1guZILsErh1eQcl+zw==}
-    engines: {node: '>=6.9.0'}
-
-  '@babel/types@7.29.0':
-    resolution: {integrity: sha512-LwdZHpScM4Qz8Xw2iKSzS+cfglZzJGvofQICy7W7v4caru4EaAmyUuO6BGrbyQ2mYV11W0U8j5mBhd14dd3B0A==}
     engines: {node: '>=6.9.0'}
 
   '@babel/types@7.29.7':
@@ -610,12 +598,6 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@eslint-community/eslint-utils@4.9.0':
-    resolution: {integrity: sha512-ayVFHdtZ+hsq1t2Dy24wCmGXGe4q9Gu3smhLYALJrr473ZH27MsnSL+LKUlimp4BWJqMDMLmPpx/Q9R3OAlL4g==}
-    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-    peerDependencies:
-      eslint: ^6.0.0 || ^7.0.0 || >=8.0.0
-
   '@eslint-community/eslint-utils@4.9.1':
     resolution: {integrity: sha512-phrYmNiYppR7znFEdqgfWHXR6NCkZEK7hwWDHZUjit/2/U0r6XvkDl0SYnoM51Hq7FhCGdLDT6zxCCOY1hexsQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -748,34 +730,12 @@ packages:
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
 
-  '@inquirer/ansi@1.0.0':
-    resolution: {integrity: sha512-JWaTfCxI1eTmJ1BIv86vUfjVatOdxwD0DAVKYevY8SazeUUZtW+tNbsdejVO1GYE0GXJW1N1ahmiC3TFd+7wZA==}
-    engines: {node: '>=18'}
-
   '@inquirer/ansi@1.0.2':
     resolution: {integrity: sha512-S8qNSZiYzFd0wAcyG5AXCvUHC5Sr7xpZ9wZ2py9XR88jUz8wooStVx5M6dRzczbBWjic9NP7+rY0Xi7qqK/aMQ==}
     engines: {node: '>=18'}
 
-  '@inquirer/checkbox@4.2.4':
-    resolution: {integrity: sha512-2n9Vgf4HSciFq8ttKXk+qy+GsyTXPV1An6QAwe/8bkbbqvG4VW1I/ZY1pNu2rf+h9bdzMLPbRSfcNxkHBy/Ydw==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@types/node': '>=18'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-
   '@inquirer/checkbox@4.3.2':
     resolution: {integrity: sha512-VXukHf0RR1doGe6Sm4F0Em7SWYLTHSsbGfJdS9Ja2bX5/D5uwVOEjr07cncLROdBvmnvCATYEWlHqYmXv2IlQA==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@types/node': '>=18'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-
-  '@inquirer/confirm@5.1.18':
-    resolution: {integrity: sha512-MilmWOzHa3Ks11tzvuAmFoAd/wRuaP3SwlT1IZhyMke31FKLxPiuDWcGXhU+PKveNOpAc4axzAgrgxuIJJRmLw==}
     engines: {node: '>=18'}
     peerDependencies:
       '@types/node': '>=18'
@@ -792,26 +752,8 @@ packages:
       '@types/node':
         optional: true
 
-  '@inquirer/core@10.2.2':
-    resolution: {integrity: sha512-yXq/4QUnk4sHMtmbd7irwiepjB8jXU0kkFRL4nr/aDBA2mDz13cMakEWdDwX3eSCTkk03kwcndD1zfRAIlELxA==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@types/node': '>=18'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-
   '@inquirer/core@10.3.2':
     resolution: {integrity: sha512-43RTuEbfP8MbKzedNqBrlhhNKVwoK//vUFNW3Q3vZ88BLcrs4kYpGg+B2mm5p2K/HfygoCxuKwJJiv8PbGmE0A==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@types/node': '>=18'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-
-  '@inquirer/editor@4.2.20':
-    resolution: {integrity: sha512-7omh5y5bK672Q+Brk4HBbnHNowOZwrb/78IFXdrEB9PfdxL3GudQyDk8O9vQ188wj3xrEebS2M9n18BjJoI83g==}
     engines: {node: '>=18'}
     peerDependencies:
       '@types/node': '>=18'
@@ -828,26 +770,8 @@ packages:
       '@types/node':
         optional: true
 
-  '@inquirer/expand@4.0.20':
-    resolution: {integrity: sha512-Dt9S+6qUg94fEvgn54F2Syf0Z3U8xmnBI9ATq2f5h9xt09fs2IJXSCIXyyVHwvggKWFXEY/7jATRo2K6Dkn6Ow==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@types/node': '>=18'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-
   '@inquirer/expand@4.0.23':
     resolution: {integrity: sha512-nRzdOyFYnpeYTTR2qFwEVmIWypzdAx/sIkCMeTNTcflFOovfqUk+HcFhQQVBftAh9gmGrpFj6QcGEqrDMDOiew==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@types/node': '>=18'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-
-  '@inquirer/external-editor@1.0.2':
-    resolution: {integrity: sha512-yy9cOoBnx58TlsPrIxauKIFQTiyH+0MK4e97y4sV9ERbI+zDxw7i2hxHLCIEGIE/8PPvDxGhgzIOTSOWcs6/MQ==}
     engines: {node: '>=18'}
     peerDependencies:
       '@types/node': '>=18'
@@ -864,22 +788,9 @@ packages:
       '@types/node':
         optional: true
 
-  '@inquirer/figures@1.0.13':
-    resolution: {integrity: sha512-lGPVU3yO9ZNqA7vTYz26jny41lE7yoQansmqdMLBEfqaGsmdg7V3W9mK9Pvb5IL4EVZ9GnSDGMO/cJXud5dMaw==}
-    engines: {node: '>=18'}
-
   '@inquirer/figures@1.0.15':
     resolution: {integrity: sha512-t2IEY+unGHOzAaVM5Xx6DEWKeXlDDcNPeDyUpsRc6CUhBfU3VQOEl+Vssh7VNp1dR8MdUJBWhuObjXCsVpjN5g==}
     engines: {node: '>=18'}
-
-  '@inquirer/input@4.2.4':
-    resolution: {integrity: sha512-cwSGpLBMwpwcZZsc6s1gThm0J+it/KIJ+1qFL2euLmSKUMGumJ5TcbMgxEjMjNHRGadouIYbiIgruKoDZk7klw==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@types/node': '>=18'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
 
   '@inquirer/input@4.3.1':
     resolution: {integrity: sha512-kN0pAM4yPrLjJ1XJBjDxyfDduXOuQHrBB8aLDMueuwUGn+vNpF7Gq7TvyVxx8u4SHlFFj4trmj+a2cbpG4Jn1g==}
@@ -890,26 +801,8 @@ packages:
       '@types/node':
         optional: true
 
-  '@inquirer/number@3.0.20':
-    resolution: {integrity: sha512-bbooay64VD1Z6uMfNehED2A2YOPHSJnQLs9/4WNiV/EK+vXczf/R988itL2XLDGTgmhMF2KkiWZo+iEZmc4jqg==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@types/node': '>=18'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-
   '@inquirer/number@3.0.23':
     resolution: {integrity: sha512-5Smv0OK7K0KUzUfYUXDXQc9jrf8OHo4ktlEayFlelCjwMXz0299Y8OrI+lj7i4gCBY15UObk76q0QtxjzFcFcg==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@types/node': '>=18'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-
-  '@inquirer/password@4.0.20':
-    resolution: {integrity: sha512-nxSaPV2cPvvoOmRygQR+h0B+Av73B01cqYLcr7NXcGXhbmsYfUb8fDdw2Us1bI2YsX+VvY7I7upgFYsyf8+Nug==}
     engines: {node: '>=18'}
     peerDependencies:
       '@types/node': '>=18'
@@ -935,15 +828,6 @@ packages:
       '@types/node':
         optional: true
 
-  '@inquirer/prompts@7.8.6':
-    resolution: {integrity: sha512-68JhkiojicX9SBUD8FE/pSKbOKtwoyaVj1kwqLfvjlVXZvOy3iaSWX4dCLsZyYx/5Ur07Fq+yuDNOen+5ce6ig==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@types/node': '>=18'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-
   '@inquirer/rawlist@4.1.11':
     resolution: {integrity: sha512-+LLQB8XGr3I5LZN/GuAHo+GpDJegQwuPARLChlMICNdwW7OwV2izlCSCxN6cqpL0sMXmbKbFcItJgdQq5EBXTw==}
     engines: {node: '>=18'}
@@ -953,35 +837,8 @@ packages:
       '@types/node':
         optional: true
 
-  '@inquirer/rawlist@4.1.8':
-    resolution: {integrity: sha512-CQ2VkIASbgI2PxdzlkeeieLRmniaUU1Aoi5ggEdm6BIyqopE9GuDXdDOj9XiwOqK5qm72oI2i6J+Gnjaa26ejg==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@types/node': '>=18'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-
-  '@inquirer/search@3.1.3':
-    resolution: {integrity: sha512-D5T6ioybJJH0IiSUK/JXcoRrrm8sXwzrVMjibuPs+AgxmogKslaafy1oxFiorNI4s3ElSkeQZbhYQgLqiL8h6Q==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@types/node': '>=18'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-
   '@inquirer/search@3.2.2':
     resolution: {integrity: sha512-p2bvRfENXCZdWF/U2BXvnSI9h+tuA8iNqtUKb9UWbmLYCRQxd8WkvwWvYn+3NgYaNwdUkHytJMGG4MMLucI1kA==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@types/node': '>=18'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-
-  '@inquirer/select@4.3.4':
-    resolution: {integrity: sha512-Qp20nySRmfbuJBBsgPU7E/cL62Hf250vMZRzYDcBHty2zdD1kKCnoDFWRr0WO2ZzaXp3R7a4esaVGJUx0E6zvA==}
     engines: {node: '>=18'}
     peerDependencies:
       '@types/node': '>=18'
@@ -1000,15 +857,6 @@ packages:
 
   '@inquirer/type@3.0.10':
     resolution: {integrity: sha512-BvziSRxfz5Ov8ch0z/n3oijRSEcEsHnhggm4xFZe93DHcUCTlutlq9Ox4SVENAfcRD22UQq7T/atg9Wr3k09eA==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@types/node': '>=18'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-
-  '@inquirer/type@3.0.8':
-    resolution: {integrity: sha512-lg9Whz8onIHRthWaN1Q9EGLa/0LFJjyM8mEUbL1eTi6yMGvBf8gvyDLtxSXztQsxMvhxxNpJYrwa1YHdq+w4Jw==}
     engines: {node: '>=18'}
     peerDependencies:
       '@types/node': '>=18'
@@ -2092,9 +1940,6 @@ packages:
   css.escape@1.5.1:
     resolution: {integrity: sha512-YUifsXXuknHlUsmlgyY0PKzgPOr7/FjCePfHNt0jxm83wHZi44VDMQ7/fGNkjY3/jV1MC+1CmZbaHzugyeRtpg==}
 
-  csstype@3.1.3:
-    resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
-
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
 
@@ -2667,10 +2512,6 @@ packages:
 
   iconv-lite@0.6.3:
     resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
-    engines: {node: '>=0.10.0'}
-
-  iconv-lite@0.7.0:
-    resolution: {integrity: sha512-cf6L2Ds3h57VVmkZe+Pn+5APsT7FpqJtEhhieDCvrE2MK5Qk9MyffgQyuxQTm6BChfeZNtcOLHp9IcWRVcIcBQ==}
     engines: {node: '>=0.10.0'}
 
   iconv-lite@0.7.2:
@@ -4327,12 +4168,6 @@ snapshots:
 
   '@adobe/css-tools@4.4.4': {}
 
-  '@babel/code-frame@7.29.0':
-    dependencies:
-      '@babel/helper-validator-identifier': 7.28.5
-      js-tokens: 4.0.0
-      picocolors: 1.1.1
-
   '@babel/code-frame@7.29.7':
     dependencies:
       '@babel/helper-validator-identifier': 7.29.7
@@ -4397,8 +4232,6 @@ snapshots:
 
   '@babel/helper-string-parser@7.29.7': {}
 
-  '@babel/helper-validator-identifier@7.28.5': {}
-
   '@babel/helper-validator-identifier@7.29.7': {}
 
   '@babel/helper-validator-option@7.29.7': {}
@@ -4432,11 +4265,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/types@7.29.0':
-    dependencies:
-      '@babel/helper-string-parser': 7.29.7
-      '@babel/helper-validator-identifier': 7.29.7
-
   '@babel/types@7.29.7':
     dependencies:
       '@babel/helper-string-parser': 7.29.7
@@ -4452,171 +4280,116 @@ snapshots:
       '@ckeditor/ckeditor5-upload': 47.6.0
       ckeditor5: 47.6.0
 
-  '@ckeditor/ckeditor5-adapter-ckfinder@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-upload': 47.6.0
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
-
-  '@ckeditor/ckeditor5-alignment@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-alignment@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
 
-  '@ckeditor/ckeditor5-autoformat@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-autoformat@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-heading': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
+      '@ckeditor/ckeditor5-heading': 47.6.0
       '@ckeditor/ckeditor5-typing': 47.6.0
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
 
-  '@ckeditor/ckeditor5-autosave@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-autosave@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
-  '@ckeditor/ckeditor5-basic-styles@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-basic-styles@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
       '@ckeditor/ckeditor5-typing': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
 
-  '@ckeditor/ckeditor5-block-quote@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-block-quote@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
       '@ckeditor/ckeditor5-enter': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
       '@ckeditor/ckeditor5-typing': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
 
-  '@ckeditor/ckeditor5-bookmark@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-bookmark@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-link': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-link': 47.6.0
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       '@ckeditor/ckeditor5-widget': 47.6.0
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      ckeditor5: 47.6.0
 
-  '@ckeditor/ckeditor5-ckbox@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-ckbox@47.6.0':
     dependencies:
-      '@ckeditor/ckeditor5-cloud-services': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-cloud-services': 47.6.0
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-image': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-image': 47.6.0
+      '@ckeditor/ckeditor5-ui': 47.6.0
       '@ckeditor/ckeditor5-upload': 47.6.0
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-utils': 47.6.0
       blurhash: 2.0.5
-      ckeditor5: 47.6.0(supports-color@7.2.0)
+      ckeditor5: 47.6.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
-  '@ckeditor/ckeditor5-ckfinder@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-ckfinder@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-image': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      '@ckeditor/ckeditor5-image': 47.6.0
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
 
   '@ckeditor/ckeditor5-clipboard@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       '@ckeditor/ckeditor5-widget': 47.6.0
       es-toolkit: 1.39.5
-
-  '@ckeditor/ckeditor5-clipboard@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-widget': 47.6.0(supports-color@7.2.0)
-      es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-cloud-services@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-utils': 47.6.0
       ckeditor5: 47.6.0
 
-  '@ckeditor/ckeditor5-cloud-services@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
-
-  '@ckeditor/ckeditor5-code-block@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-code-block@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-clipboard': 47.6.0
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
       '@ckeditor/ckeditor5-enter': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
 
   '@ckeditor/ckeditor5-core@47.6.0':
     dependencies:
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       '@ckeditor/ckeditor5-watchdog': 47.6.0
       es-toolkit: 1.39.5
-
-  '@ckeditor/ckeditor5-core@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-watchdog': 47.6.0(supports-color@7.2.0)
-      es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-dev-bump-year@58.0.0':
     dependencies:
@@ -4678,348 +4451,242 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@ckeditor/ckeditor5-easy-image@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-easy-image@47.6.0':
     dependencies:
-      '@ckeditor/ckeditor5-cloud-services': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-cloud-services': 47.6.0
       '@ckeditor/ckeditor5-core': 47.6.0
       '@ckeditor/ckeditor5-upload': 47.6.0
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
 
   '@ckeditor/ckeditor5-editor-balloon@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       ckeditor5: 47.6.0
       es-toolkit: 1.39.5
-
-  '@ckeditor/ckeditor5-editor-balloon@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-      es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-editor-classic@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       ckeditor5: 47.6.0
       es-toolkit: 1.39.5
-
-  '@ckeditor/ckeditor5-editor-classic@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-      es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-editor-decoupled@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       ckeditor5: 47.6.0
       es-toolkit: 1.39.5
-
-  '@ckeditor/ckeditor5-editor-decoupled@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-      es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-editor-inline@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       ckeditor5: 47.6.0
       es-toolkit: 1.39.5
 
-  '@ckeditor/ckeditor5-editor-inline@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-editor-multi-root@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
-  '@ckeditor/ckeditor5-editor-multi-root@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-      es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
-
-  '@ckeditor/ckeditor5-emoji@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-emoji@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-mention': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-mention': 47.6.0
       '@ckeditor/ckeditor5-typing': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
       es-toolkit: 1.39.5
       fuzzysort: 3.1.0
-    transitivePeerDependencies:
-      - supports-color
 
-  '@ckeditor/ckeditor5-engine@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-engine@47.6.0':
     dependencies:
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-utils': 47.6.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-enter@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
 
-  '@ckeditor/ckeditor5-enter@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
-
-  '@ckeditor/ckeditor5-essentials@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-essentials@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-clipboard': 47.6.0
       '@ckeditor/ckeditor5-core': 47.6.0
       '@ckeditor/ckeditor5-enter': 47.6.0
       '@ckeditor/ckeditor5-select-all': 47.6.0
       '@ckeditor/ckeditor5-typing': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
       '@ckeditor/ckeditor5-undo': 47.6.0
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      ckeditor5: 47.6.0
 
   '@ckeditor/ckeditor5-find-and-replace@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       ckeditor5: 47.6.0
       es-toolkit: 1.39.5
 
-  '@ckeditor/ckeditor5-find-and-replace@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-font@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
+      '@ckeditor/ckeditor5-engine': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-      es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
 
-  '@ckeditor/ckeditor5-font@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-fullscreen@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-editor-classic': 47.6.0
+      '@ckeditor/ckeditor5-editor-decoupled': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
 
-  '@ckeditor/ckeditor5-fullscreen@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-heading@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-editor-classic': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-editor-decoupled': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
-
-  '@ckeditor/ckeditor5-heading@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
       '@ckeditor/ckeditor5-paragraph': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
 
-  '@ckeditor/ckeditor5-highlight@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-highlight@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
 
   '@ckeditor/ckeditor5-horizontal-line@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       '@ckeditor/ckeditor5-widget': 47.6.0
       ckeditor5: 47.6.0
 
-  '@ckeditor/ckeditor5-horizontal-line@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-html-embed@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       '@ckeditor/ckeditor5-widget': 47.6.0
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      ckeditor5: 47.6.0
 
-  '@ckeditor/ckeditor5-html-embed@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-html-support@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-widget': 47.6.0
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
-
-  '@ckeditor/ckeditor5-html-support@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
       '@ckeditor/ckeditor5-enter': 47.6.0
-      '@ckeditor/ckeditor5-heading': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-image': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-list': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-remove-format': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-table': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-heading': 47.6.0
+      '@ckeditor/ckeditor5-image': 47.6.0
+      '@ckeditor/ckeditor5-list': 47.6.0
+      '@ckeditor/ckeditor5-remove-format': 47.6.0
+      '@ckeditor/ckeditor5-table': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       '@ckeditor/ckeditor5-widget': 47.6.0
-      ckeditor5: 47.6.0(supports-color@7.2.0)
+      ckeditor5: 47.6.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-icons@47.6.0': {}
 
-  '@ckeditor/ckeditor5-image@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-image@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-clipboard': 47.6.0
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
       '@ckeditor/ckeditor5-typing': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
       '@ckeditor/ckeditor5-undo': 47.6.0
       '@ckeditor/ckeditor5-upload': 47.6.0
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-utils': 47.6.0
       '@ckeditor/ckeditor5-widget': 47.6.0
-      ckeditor5: 47.6.0(supports-color@7.2.0)
+      ckeditor5: 47.6.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
-  '@ckeditor/ckeditor5-indent@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-indent@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-heading': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
+      '@ckeditor/ckeditor5-heading': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-list': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      '@ckeditor/ckeditor5-list': 47.6.0
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
 
-  '@ckeditor/ckeditor5-language@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-language@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      '@ckeditor/ckeditor5-engine': 47.6.0
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
 
-  '@ckeditor/ckeditor5-link@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-link@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-clipboard': 47.6.0
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-image': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-image': 47.6.0
       '@ckeditor/ckeditor5-typing': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       '@ckeditor/ckeditor5-widget': 47.6.0
-      ckeditor5: 47.6.0(supports-color@7.2.0)
+      ckeditor5: 47.6.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
-  '@ckeditor/ckeditor5-list@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-list@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-clipboard': 47.6.0
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
       '@ckeditor/ckeditor5-enter': 47.6.0
-      '@ckeditor/ckeditor5-font': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-font': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
       '@ckeditor/ckeditor5-typing': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-markdown-gfm@47.6.0(supports-color@7.2.0)':
     dependencies:
       '@ckeditor/ckeditor5-clipboard': 47.6.0
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
       '@types/hast': 3.0.4
       ckeditor5: 47.6.0
       hast-util-from-dom: 5.0.1
@@ -5039,346 +4706,203 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@ckeditor/ckeditor5-media-embed@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-media-embed@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-clipboard': 47.6.0
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
       '@ckeditor/ckeditor5-typing': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
       '@ckeditor/ckeditor5-undo': 47.6.0
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-utils': 47.6.0
       '@ckeditor/ckeditor5-widget': 47.6.0
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      ckeditor5: 47.6.0
 
-  '@ckeditor/ckeditor5-mention@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-mention@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
       '@ckeditor/ckeditor5-typing': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
-  '@ckeditor/ckeditor5-minimap@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-minimap@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      '@ckeditor/ckeditor5-engine': 47.6.0
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
 
-  '@ckeditor/ckeditor5-page-break@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-page-break@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       '@ckeditor/ckeditor5-widget': 47.6.0
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      ckeditor5: 47.6.0
 
   '@ckeditor/ckeditor5-paragraph@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-
-  '@ckeditor/ckeditor5-paragraph@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
 
   '@ckeditor/ckeditor5-paste-from-office@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-clipboard': 47.6.0
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
       ckeditor5: 47.6.0
-
-  '@ckeditor/ckeditor5-paste-from-office@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-clipboard': 47.6.0
-      '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-remove-format@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       ckeditor5: 47.6.0
-
-  '@ckeditor/ckeditor5-remove-format@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-restricted-editing@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       ckeditor5: 47.6.0
-
-  '@ckeditor/ckeditor5-restricted-editing@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-select-all@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
 
-  '@ckeditor/ckeditor5-select-all@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
-
-  '@ckeditor/ckeditor5-show-blocks@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-show-blocks@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
 
   '@ckeditor/ckeditor5-source-editing@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-theme-lark': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-theme-lark': 47.6.0
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       ckeditor5: 47.6.0
-
-  '@ckeditor/ckeditor5-source-editing@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-theme-lark': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-special-characters@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
       '@ckeditor/ckeditor5-typing': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       ckeditor5: 47.6.0
 
-  '@ckeditor/ckeditor5-special-characters@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-style@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-icons': 47.6.0
+      '@ckeditor/ckeditor5-html-support': 47.6.0
+      '@ckeditor/ckeditor5-list': 47.6.0
+      '@ckeditor/ckeditor5-table': 47.6.0
       '@ckeditor/ckeditor5-typing': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
-
-  '@ckeditor/ckeditor5-style@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-html-support': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-list': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-table': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-typing': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
-  '@ckeditor/ckeditor5-table@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-table@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-clipboard': 47.6.0
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       '@ckeditor/ckeditor5-widget': 47.6.0
-      ckeditor5: 47.6.0(supports-color@7.2.0)
+      ckeditor5: 47.6.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
-  '@ckeditor/ckeditor5-theme-lark@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-theme-lark@47.6.0':
     dependencies:
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      '@ckeditor/ckeditor5-ui': 47.6.0
 
   '@ckeditor/ckeditor5-typing@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       es-toolkit: 1.39.5
 
-  '@ckeditor/ckeditor5-typing@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-ui@47.6.0':
     dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
-
-  '@ckeditor/ckeditor5-ui@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-editor-multi-root': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-core': 47.6.0
+      '@ckeditor/ckeditor5-editor-multi-root': 47.6.0
+      '@ckeditor/ckeditor5-engine': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-utils': 47.6.0
       '@types/color-convert': 2.0.4
       color-convert: 3.1.0
       color-parse: 2.0.2
       es-toolkit: 1.39.5
       vanilla-colorful: 0.7.2
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-undo@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-
-  '@ckeditor/ckeditor5-undo@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
 
   '@ckeditor/ckeditor5-upload@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-utils': 47.6.0
 
-  '@ckeditor/ckeditor5-upload@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-utils@47.6.0':
     dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
-
-  '@ckeditor/ckeditor5-utils@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-watchdog@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-editor-multi-root': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-editor-multi-root': 47.6.0
+      '@ckeditor/ckeditor5-engine': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       es-toolkit: 1.39.5
-
-  '@ckeditor/ckeditor5-watchdog@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-editor-multi-root': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-widget@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-engine': 47.6.0
       '@ckeditor/ckeditor5-enter': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
       '@ckeditor/ckeditor5-typing': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
       es-toolkit: 1.39.5
 
-  '@ckeditor/ckeditor5-widget@47.6.0(supports-color@7.2.0)':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-enter': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-typing': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
-
-  '@ckeditor/ckeditor5-word-count@47.6.0(supports-color@7.2.0)':
+  '@ckeditor/ckeditor5-word-count@47.6.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      ckeditor5: 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
+      '@ckeditor/ckeditor5-utils': 47.6.0
+      ckeditor5: 47.6.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@emnapi/core@1.10.0':
     dependencies:
@@ -5481,11 +5005,6 @@ snapshots:
 
   '@esbuild/win32-x64@0.28.1':
     optional: true
-
-  '@eslint-community/eslint-utils@4.9.0(eslint@10.7.0(jiti@2.5.1)(supports-color@7.2.0))':
-    dependencies:
-      eslint: 10.7.0(jiti@2.5.1)(supports-color@7.2.0)
-      eslint-visitor-keys: 3.4.3
 
   '@eslint-community/eslint-utils@4.9.1(eslint@10.7.0(jiti@2.5.1)(supports-color@7.2.0))':
     dependencies:
@@ -5659,19 +5178,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@inquirer/ansi@1.0.0': {}
-
   '@inquirer/ansi@1.0.2': {}
-
-  '@inquirer/checkbox@4.2.4(@types/node@25.5.0)':
-    dependencies:
-      '@inquirer/ansi': 1.0.0
-      '@inquirer/core': 10.2.2(@types/node@25.5.0)
-      '@inquirer/figures': 1.0.13
-      '@inquirer/type': 3.0.8(@types/node@25.5.0)
-      yoctocolors-cjs: 2.1.3
-    optionalDependencies:
-      '@types/node': 25.5.0
 
   '@inquirer/checkbox@4.3.2(@types/node@25.5.0)':
     dependencies:
@@ -5683,30 +5190,10 @@ snapshots:
     optionalDependencies:
       '@types/node': 25.5.0
 
-  '@inquirer/confirm@5.1.18(@types/node@25.5.0)':
-    dependencies:
-      '@inquirer/core': 10.2.2(@types/node@25.5.0)
-      '@inquirer/type': 3.0.8(@types/node@25.5.0)
-    optionalDependencies:
-      '@types/node': 25.5.0
-
   '@inquirer/confirm@5.1.21(@types/node@25.5.0)':
     dependencies:
       '@inquirer/core': 10.3.2(@types/node@25.5.0)
       '@inquirer/type': 3.0.10(@types/node@25.5.0)
-    optionalDependencies:
-      '@types/node': 25.5.0
-
-  '@inquirer/core@10.2.2(@types/node@25.5.0)':
-    dependencies:
-      '@inquirer/ansi': 1.0.2
-      '@inquirer/figures': 1.0.15
-      '@inquirer/type': 3.0.10(@types/node@25.5.0)
-      cli-width: 4.1.0
-      mute-stream: 2.0.0
-      signal-exit: 4.1.0
-      wrap-ansi: 6.2.0
-      yoctocolors-cjs: 2.1.3
     optionalDependencies:
       '@types/node': 25.5.0
 
@@ -5723,27 +5210,11 @@ snapshots:
     optionalDependencies:
       '@types/node': 25.5.0
 
-  '@inquirer/editor@4.2.20(@types/node@25.5.0)':
-    dependencies:
-      '@inquirer/core': 10.2.2(@types/node@25.5.0)
-      '@inquirer/external-editor': 1.0.2(@types/node@25.5.0)
-      '@inquirer/type': 3.0.8(@types/node@25.5.0)
-    optionalDependencies:
-      '@types/node': 25.5.0
-
   '@inquirer/editor@4.2.23(@types/node@25.5.0)':
     dependencies:
       '@inquirer/core': 10.3.2(@types/node@25.5.0)
       '@inquirer/external-editor': 1.0.3(@types/node@25.5.0)
       '@inquirer/type': 3.0.10(@types/node@25.5.0)
-    optionalDependencies:
-      '@types/node': 25.5.0
-
-  '@inquirer/expand@4.0.20(@types/node@25.5.0)':
-    dependencies:
-      '@inquirer/core': 10.2.2(@types/node@25.5.0)
-      '@inquirer/type': 3.0.8(@types/node@25.5.0)
-      yoctocolors-cjs: 2.1.3
     optionalDependencies:
       '@types/node': 25.5.0
 
@@ -5755,13 +5226,6 @@ snapshots:
     optionalDependencies:
       '@types/node': 25.5.0
 
-  '@inquirer/external-editor@1.0.2(@types/node@25.5.0)':
-    dependencies:
-      chardet: 2.1.1
-      iconv-lite: 0.7.0
-    optionalDependencies:
-      '@types/node': 25.5.0
-
   '@inquirer/external-editor@1.0.3(@types/node@25.5.0)':
     dependencies:
       chardet: 2.1.1
@@ -5769,16 +5233,7 @@ snapshots:
     optionalDependencies:
       '@types/node': 25.5.0
 
-  '@inquirer/figures@1.0.13': {}
-
   '@inquirer/figures@1.0.15': {}
-
-  '@inquirer/input@4.2.4(@types/node@25.5.0)':
-    dependencies:
-      '@inquirer/core': 10.2.2(@types/node@25.5.0)
-      '@inquirer/type': 3.0.8(@types/node@25.5.0)
-    optionalDependencies:
-      '@types/node': 25.5.0
 
   '@inquirer/input@4.3.1(@types/node@25.5.0)':
     dependencies:
@@ -5787,25 +5242,10 @@ snapshots:
     optionalDependencies:
       '@types/node': 25.5.0
 
-  '@inquirer/number@3.0.20(@types/node@25.5.0)':
-    dependencies:
-      '@inquirer/core': 10.2.2(@types/node@25.5.0)
-      '@inquirer/type': 3.0.8(@types/node@25.5.0)
-    optionalDependencies:
-      '@types/node': 25.5.0
-
   '@inquirer/number@3.0.23(@types/node@25.5.0)':
     dependencies:
       '@inquirer/core': 10.3.2(@types/node@25.5.0)
       '@inquirer/type': 3.0.10(@types/node@25.5.0)
-    optionalDependencies:
-      '@types/node': 25.5.0
-
-  '@inquirer/password@4.0.20(@types/node@25.5.0)':
-    dependencies:
-      '@inquirer/ansi': 1.0.0
-      '@inquirer/core': 10.2.2(@types/node@25.5.0)
-      '@inquirer/type': 3.0.8(@types/node@25.5.0)
     optionalDependencies:
       '@types/node': 25.5.0
 
@@ -5832,42 +5272,10 @@ snapshots:
     optionalDependencies:
       '@types/node': 25.5.0
 
-  '@inquirer/prompts@7.8.6(@types/node@25.5.0)':
-    dependencies:
-      '@inquirer/checkbox': 4.2.4(@types/node@25.5.0)
-      '@inquirer/confirm': 5.1.18(@types/node@25.5.0)
-      '@inquirer/editor': 4.2.20(@types/node@25.5.0)
-      '@inquirer/expand': 4.0.20(@types/node@25.5.0)
-      '@inquirer/input': 4.2.4(@types/node@25.5.0)
-      '@inquirer/number': 3.0.20(@types/node@25.5.0)
-      '@inquirer/password': 4.0.20(@types/node@25.5.0)
-      '@inquirer/rawlist': 4.1.8(@types/node@25.5.0)
-      '@inquirer/search': 3.1.3(@types/node@25.5.0)
-      '@inquirer/select': 4.3.4(@types/node@25.5.0)
-    optionalDependencies:
-      '@types/node': 25.5.0
-
   '@inquirer/rawlist@4.1.11(@types/node@25.5.0)':
     dependencies:
       '@inquirer/core': 10.3.2(@types/node@25.5.0)
       '@inquirer/type': 3.0.10(@types/node@25.5.0)
-      yoctocolors-cjs: 2.1.3
-    optionalDependencies:
-      '@types/node': 25.5.0
-
-  '@inquirer/rawlist@4.1.8(@types/node@25.5.0)':
-    dependencies:
-      '@inquirer/core': 10.2.2(@types/node@25.5.0)
-      '@inquirer/type': 3.0.8(@types/node@25.5.0)
-      yoctocolors-cjs: 2.1.3
-    optionalDependencies:
-      '@types/node': 25.5.0
-
-  '@inquirer/search@3.1.3(@types/node@25.5.0)':
-    dependencies:
-      '@inquirer/core': 10.2.2(@types/node@25.5.0)
-      '@inquirer/figures': 1.0.13
-      '@inquirer/type': 3.0.8(@types/node@25.5.0)
       yoctocolors-cjs: 2.1.3
     optionalDependencies:
       '@types/node': 25.5.0
@@ -5877,16 +5285,6 @@ snapshots:
       '@inquirer/core': 10.3.2(@types/node@25.5.0)
       '@inquirer/figures': 1.0.15
       '@inquirer/type': 3.0.10(@types/node@25.5.0)
-      yoctocolors-cjs: 2.1.3
-    optionalDependencies:
-      '@types/node': 25.5.0
-
-  '@inquirer/select@4.3.4(@types/node@25.5.0)':
-    dependencies:
-      '@inquirer/ansi': 1.0.0
-      '@inquirer/core': 10.2.2(@types/node@25.5.0)
-      '@inquirer/figures': 1.0.13
-      '@inquirer/type': 3.0.8(@types/node@25.5.0)
       yoctocolors-cjs: 2.1.3
     optionalDependencies:
       '@types/node': 25.5.0
@@ -5902,10 +5300,6 @@ snapshots:
       '@types/node': 25.5.0
 
   '@inquirer/type@3.0.10(@types/node@25.5.0)':
-    optionalDependencies:
-      '@types/node': 25.5.0
-
-  '@inquirer/type@3.0.8(@types/node@25.5.0)':
     optionalDependencies:
       '@types/node': 25.5.0
 
@@ -5955,10 +5349,10 @@ snapshots:
 
   '@kwsites/promise-deferred@1.1.1': {}
 
-  '@listr2/prompt-adapter-inquirer@3.0.4(@inquirer/prompts@7.8.6(@types/node@25.5.0))(@types/node@25.5.0)(listr2@9.0.4)':
+  '@listr2/prompt-adapter-inquirer@3.0.4(@inquirer/prompts@7.10.1(@types/node@25.5.0))(@types/node@25.5.0)(listr2@9.0.4)':
     dependencies:
-      '@inquirer/prompts': 7.8.6(@types/node@25.5.0)
-      '@inquirer/type': 3.0.8(@types/node@25.5.0)
+      '@inquirer/prompts': 7.10.1(@types/node@25.5.0)
+      '@inquirer/type': 3.0.10(@types/node@25.5.0)
       listr2: 9.0.4
     transitivePeerDependencies:
       - '@types/node'
@@ -6405,7 +5799,7 @@ snapshots:
 
   '@svgr/hast-util-to-babel-ast@8.0.0':
     dependencies:
-      '@babel/types': 7.29.0
+      '@babel/types': 7.29.7
       entities: 4.5.0
 
   '@svgr/plugin-jsx@8.1.0(@svgr/core@8.1.0(supports-color@7.2.0)(typescript@5.9.2))(supports-color@7.2.0)':
@@ -6420,7 +5814,7 @@ snapshots:
 
   '@testing-library/dom@8.20.1':
     dependencies:
-      '@babel/code-frame': 7.29.0
+      '@babel/code-frame': 7.29.7
       '@babel/runtime': 7.28.4
       '@types/aria-query': 5.0.4
       aria-query: 5.1.3
@@ -6527,7 +5921,7 @@ snapshots:
 
   '@types/react@19.1.13':
     dependencies:
-      csstype: 3.1.3
+      csstype: 3.2.3
 
   '@types/scheduler@0.16.8': {}
 
@@ -6913,132 +6307,66 @@ snapshots:
   ckeditor5@47.6.0:
     dependencies:
       '@ckeditor/ckeditor5-adapter-ckfinder': 47.6.0
-      '@ckeditor/ckeditor5-alignment': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-autoformat': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-autosave': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-basic-styles': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-block-quote': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-bookmark': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ckbox': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ckfinder': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-alignment': 47.6.0
+      '@ckeditor/ckeditor5-autoformat': 47.6.0
+      '@ckeditor/ckeditor5-autosave': 47.6.0
+      '@ckeditor/ckeditor5-basic-styles': 47.6.0
+      '@ckeditor/ckeditor5-block-quote': 47.6.0
+      '@ckeditor/ckeditor5-bookmark': 47.6.0
+      '@ckeditor/ckeditor5-ckbox': 47.6.0
+      '@ckeditor/ckeditor5-ckfinder': 47.6.0
       '@ckeditor/ckeditor5-clipboard': 47.6.0
       '@ckeditor/ckeditor5-cloud-services': 47.6.0
-      '@ckeditor/ckeditor5-code-block': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-core': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-easy-image': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-code-block': 47.6.0
+      '@ckeditor/ckeditor5-core': 47.6.0
+      '@ckeditor/ckeditor5-easy-image': 47.6.0
       '@ckeditor/ckeditor5-editor-balloon': 47.6.0
       '@ckeditor/ckeditor5-editor-classic': 47.6.0
       '@ckeditor/ckeditor5-editor-decoupled': 47.6.0
       '@ckeditor/ckeditor5-editor-inline': 47.6.0
-      '@ckeditor/ckeditor5-editor-multi-root': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-emoji': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-editor-multi-root': 47.6.0
+      '@ckeditor/ckeditor5-emoji': 47.6.0
+      '@ckeditor/ckeditor5-engine': 47.6.0
       '@ckeditor/ckeditor5-enter': 47.6.0
-      '@ckeditor/ckeditor5-essentials': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-essentials': 47.6.0
       '@ckeditor/ckeditor5-find-and-replace': 47.6.0
-      '@ckeditor/ckeditor5-font': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-fullscreen': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-heading': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-highlight': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-font': 47.6.0
+      '@ckeditor/ckeditor5-fullscreen': 47.6.0
+      '@ckeditor/ckeditor5-heading': 47.6.0
+      '@ckeditor/ckeditor5-highlight': 47.6.0
       '@ckeditor/ckeditor5-horizontal-line': 47.6.0
-      '@ckeditor/ckeditor5-html-embed': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-html-support': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-html-embed': 47.6.0
+      '@ckeditor/ckeditor5-html-support': 47.6.0
       '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-image': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-indent': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-language': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-link': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-list': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-image': 47.6.0
+      '@ckeditor/ckeditor5-indent': 47.6.0
+      '@ckeditor/ckeditor5-language': 47.6.0
+      '@ckeditor/ckeditor5-link': 47.6.0
+      '@ckeditor/ckeditor5-list': 47.6.0
       '@ckeditor/ckeditor5-markdown-gfm': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-media-embed': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-mention': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-minimap': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-page-break': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-media-embed': 47.6.0
+      '@ckeditor/ckeditor5-mention': 47.6.0
+      '@ckeditor/ckeditor5-minimap': 47.6.0
+      '@ckeditor/ckeditor5-page-break': 47.6.0
       '@ckeditor/ckeditor5-paragraph': 47.6.0
       '@ckeditor/ckeditor5-paste-from-office': 47.6.0
       '@ckeditor/ckeditor5-remove-format': 47.6.0
       '@ckeditor/ckeditor5-restricted-editing': 47.6.0
       '@ckeditor/ckeditor5-select-all': 47.6.0
-      '@ckeditor/ckeditor5-show-blocks': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-show-blocks': 47.6.0
       '@ckeditor/ckeditor5-source-editing': 47.6.0
       '@ckeditor/ckeditor5-special-characters': 47.6.0
-      '@ckeditor/ckeditor5-style': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-table': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-theme-lark': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-style': 47.6.0
+      '@ckeditor/ckeditor5-table': 47.6.0
+      '@ckeditor/ckeditor5-theme-lark': 47.6.0
       '@ckeditor/ckeditor5-typing': 47.6.0
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-ui': 47.6.0
       '@ckeditor/ckeditor5-undo': 47.6.0
       '@ckeditor/ckeditor5-upload': 47.6.0
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
+      '@ckeditor/ckeditor5-utils': 47.6.0
       '@ckeditor/ckeditor5-watchdog': 47.6.0
       '@ckeditor/ckeditor5-widget': 47.6.0
-      '@ckeditor/ckeditor5-word-count': 47.6.0(supports-color@7.2.0)
-
-  ckeditor5@47.6.0(supports-color@7.2.0):
-    dependencies:
-      '@ckeditor/ckeditor5-adapter-ckfinder': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-alignment': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-autoformat': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-autosave': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-basic-styles': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-block-quote': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-bookmark': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ckbox': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ckfinder': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-clipboard': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-cloud-services': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-code-block': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-core': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-easy-image': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-editor-balloon': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-editor-classic': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-editor-decoupled': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-editor-inline': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-editor-multi-root': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-emoji': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-engine': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-enter': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-essentials': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-find-and-replace': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-font': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-fullscreen': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-heading': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-highlight': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-horizontal-line': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-html-embed': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-html-support': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-icons': 47.6.0
-      '@ckeditor/ckeditor5-image': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-indent': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-language': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-link': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-list': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-markdown-gfm': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-media-embed': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-mention': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-minimap': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-page-break': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-paragraph': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-paste-from-office': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-remove-format': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-restricted-editing': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-select-all': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-show-blocks': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-source-editing': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-special-characters': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-style': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-table': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-theme-lark': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-typing': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-ui': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-undo': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-upload': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-utils': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-watchdog': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-widget': 47.6.0(supports-color@7.2.0)
-      '@ckeditor/ckeditor5-word-count': 47.6.0(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
+      '@ckeditor/ckeditor5-word-count': 47.6.0
 
   classnames@2.5.1: {}
 
@@ -7132,8 +6460,6 @@ snapshots:
       which: 2.0.2
 
   css.escape@1.5.1: {}
-
-  csstype@3.1.3: {}
 
   csstype@3.2.3: {}
 
@@ -7458,7 +6784,7 @@ snapshots:
 
   eslint@10.7.0(jiti@2.5.1)(supports-color@7.2.0):
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.0(eslint@10.7.0(jiti@2.5.1)(supports-color@7.2.0))
+      '@eslint-community/eslint-utils': 4.9.1(eslint@10.7.0(jiti@2.5.1)(supports-color@7.2.0))
       '@eslint-community/regexpp': 4.12.2
       '@eslint/config-array': 0.23.5(supports-color@7.2.0)
       '@eslint/config-helpers': 0.6.0
@@ -7885,10 +7211,6 @@ snapshots:
     dependencies:
       safer-buffer: 2.1.2
     optional: true
-
-  iconv-lite@0.7.0:
-    dependencies:
-      safer-buffer: 2.1.2
 
   iconv-lite@0.7.2:
     dependencies:
@@ -8890,7 +8212,7 @@ snapshots:
 
   parse-json@5.2.0:
     dependencies:
-      '@babel/code-frame': 7.29.0
+      '@babel/code-frame': 7.29.7
       error-ex: 1.3.4
       json-parse-even-better-errors: 2.3.1
       lines-and-columns: 1.2.4
