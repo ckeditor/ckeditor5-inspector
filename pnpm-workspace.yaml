@@ -2,6 +2,9 @@ allowBuilds:
   esbuild: true
   snyk: true
 
+overrides:
+  'simple-git@^3': '^4.0.2'
+
 minimumReleaseAge: 4320 # 3 days
 minimumReleaseAgeExclude:
   # Company-owned scopes - every release comes from our own pipelines.
