@@ -76,7 +76,7 @@ describe( '<ModelMarkerInspector />', () => {
 		it( 'should render the inspector', () => {
 			const logSpy = vi.spyOn( Logger, 'log' ).mockImplementation( () => {} );
 
-			expect( screen.getByRole( 'heading', { level: 2 } ) ).toHaveTextContent( 'Markers' );
+			expect( screen.getByRole( 'heading', { level: 2 } ) ).toMatchTextContent( 'Markers' );
 			fireEvent.click( screen.getByRole( 'button', { name: 'Log in console' } ) );
 			expect( logSpy ).toHaveBeenCalledTimes( 1 );
 		} );

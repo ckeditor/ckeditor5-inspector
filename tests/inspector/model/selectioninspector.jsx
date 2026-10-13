@@ -91,7 +91,7 @@ describe( '<ModelSelectionInspector />', () => {
 			} );
 
 			it( 'should contain the object inspector', () => {
-				expect( screen.getByRole( 'heading', { level: 2 } ) ).toHaveTextContent( 'Selection' );
+				expect( screen.getByRole( 'heading', { level: 2 } ) ).toMatchTextContent( 'Selection' );
 			} );
 		} );
 
