@@ -81,7 +81,7 @@ describe( '<Tree />', () => {
 			expect( nodes ).toHaveLength( 3 );
 
 			const names = document.querySelectorAll( '.ck-inspector-tree-node__name:not(.ck-inspector-tree-node__name_close)' );
-			expect( names[ 0 ] ).toHaveTextContent( 'a' );
+			expect( names[ 0 ] ).toMatchTextContent( 'a' );
 			expect( names[ 1 ] ).toHaveTextContent( 'aa' );
 			expect( names[ 2 ] ).toHaveTextContent( 'b' );
 		} );
@@ -156,7 +156,7 @@ describe( '<Tree />', () => {
 
 			expect( elementNodes ).toHaveLength( 1 );
 			expect( textNodes ).toHaveLength( 2 );
-			expect( elementNodes[ 0 ].querySelector( '.ck-inspector-tree-node__name' ) ).toHaveTextContent( 'a' );
+			expect( elementNodes[ 0 ].querySelector( '.ck-inspector-tree-node__name' ) ).toMatchTextContent( 'a' );
 			expect( textNodes[ 0 ] ).toHaveTextContent( '"abc"' );
 			expect( textNodes[ 1 ] ).toHaveTextContent( '"xyz"' );
 		} );
@@ -175,7 +175,7 @@ describe( '<Tree />', () => {
 
 		it( 'share tree\'s props#showCompactText', () => {
 			const textNode = document.querySelector( '.ck-inspector-tree-text' );
-			expect( textNode ).toHaveTextContent( /^"abc"$/ );
+			expect( textNode ).toHaveTextContent( '"abc"' );
 
 			renderResult.rerender( <Tree
 				definition={[ itemA, itemB ]}
@@ -185,7 +185,7 @@ describe( '<Tree />', () => {
 				activeNode={activeNode}
 			/> );
 
-			expect( document.querySelector( '.ck-inspector-tree-text' ) ).toHaveTextContent( /^abc$/ );
+			expect( document.querySelector( '.ck-inspector-tree-text' ) ).toHaveTextContent( 'abc' );
 		} );
 
 		it( 'respond to tree\'s props#activeNode', () => {

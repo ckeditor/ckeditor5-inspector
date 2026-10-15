@@ -59,7 +59,6 @@
     "@ckeditor/ckeditor5-dev-utils": "^62.5.0",
     "@inquirer/prompts": "^7.8.3",
     "@listr2/prompt-adapter-inquirer": "^3.0.2",
-    "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^12.1.5",
     "@vitejs/plugin-react": "^6.0.1",
     "@vitest/browser-playwright": "^5.0.0",

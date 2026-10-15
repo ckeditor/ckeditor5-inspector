@@ -21,7 +21,7 @@ describe( '<ViewNodeInspector />', () => {
 
 	const expectHeader = text => {
 		const header = screen.getByRole( 'heading', { level: 2 } );
-		expect( header ).toHaveTextContent( text );
+		expect( header ).toMatchTextContent( text );
 		const link = header.querySelector( 'a' );
 		expect( link ).toHaveAttribute( 'href', expect.stringMatching( /^https:\/\/ckeditor.com\/docs/ ) );
 	};
