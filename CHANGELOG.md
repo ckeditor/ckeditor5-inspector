@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## [5.0.4](https://github.com/ckeditor/ckeditor5-inspector/compare/v5.0.3...v5.0.4) (October 16, 2026)
+
+### Other changes
+
+* Upgraded Node.js to version 26.10.0.
+
+
 ## [5.0.3](https://github.com/ckeditor/ckeditor5-inspector/compare/v5.0.2...v5.0.3) (July 14, 2026)
 
 ### Bug fixes
@@ -41,13 +48,6 @@ Changelog
 ### BREAKING CHANGES
 
 * Due to changes in type definitions and package structure in CKEditor 5 v46.0.0, the inspector now requires this version or newer. Earlier versions are no longer compatible. See [ckeditor/ckeditor5#18583](https://github.com/ckeditor/ckeditor5/issues/18583).
-
-
-## [4.1.0](https://github.com/ckeditor/ckeditor5-inspector/compare/v4.0.0...v4.1.0) (2022-05-26)
-
-### Features
-
-* Introduced the schema tab. Closes [#41](https://github.com/ckeditor/ckeditor5-inspector/issues/41). ([commit](https://github.com/ckeditor/ckeditor5-inspector/commit/4d82ee7eeacb8af9a9a3bfb732806a11de92c557))
 
 ---
 
