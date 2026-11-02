@@ -23,7 +23,7 @@ describe( '<ViewSelectionInspector />', () => {
 
 		editor = await TestEditor.create( element, {
 			plugins: [ Paragraph, BoldEditing ],
-			initialData: '<p>foo</p>'
+			root: { initialData: '<p>foo</p>' }
 		} );
 
 		store = createStore( state => state, {

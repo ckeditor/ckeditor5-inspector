@@ -20,7 +20,7 @@ describe( '<MiniCKEditorInspectorUI />', () => {
 
 		editor = await TestEditor.create( element, {
 			plugins: [ Paragraph ],
-			initialData: '<p>foo</p>'
+			root: { initialData: '<p>foo</p>' }
 		} );
 
 		renderResult = render( <MiniCKEditorInspectorUI editor={editor} /> );

@@ -25,7 +25,7 @@ describe( '<ModelMarkerInspector />', () => {
 
 		editor = await TestEditor.create( element, {
 			plugins: [ Paragraph, BoldEditing ],
-			initialData: '<p>foo</p>'
+			root: { initialData: '<p>foo</p>' }
 		} );
 
 		editor.model.change( writer => {

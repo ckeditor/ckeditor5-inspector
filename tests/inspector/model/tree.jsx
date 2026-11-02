@@ -40,7 +40,7 @@ describe( '<ModelTree />', () => {
 
 		editor = await TestEditor.create( element, {
 			plugins: [ Paragraph, BoldEditing ],
-			initialData: '<p>foobar</p>'
+			root: { initialData: '<p>foobar</p>' }
 		} );
 
 		editor.model.change( writer => {

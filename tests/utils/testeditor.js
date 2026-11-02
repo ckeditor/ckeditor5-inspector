@@ -45,7 +45,7 @@ export default class TestEditor extends Editor {
 				editor.initPlugins()
 					.then( () => editor.ui.init( element ) )
 					.then( () => editor.editing.view.attachDomRoot( editor.ui.getEditableElement() ) )
-					.then( () => editor.data.init( config.initialData || getDataFromElement( element ) ) )
+					.then( () => editor.data.init( config.root?.initialData || getDataFromElement( element ) ) )
 					.then( () => {
 						editor.state = 'ready';
 						editor.fire( 'ready' );

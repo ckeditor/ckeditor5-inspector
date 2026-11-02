@@ -175,7 +175,12 @@ const config = {
 };
 
 DecoupledEditor
-	.create( document.querySelector( '#editor-content' ), config )
+	.create( {
+		...config,
+		root: {
+			element: document.querySelector( '#editor-content' )
+		}
+	} )
 	.then( editor => {
 		window.firstEditor = editor;
 		document.body.insertBefore( editor.ui.view.toolbar.element, editor.ui.getEditableElement() );
