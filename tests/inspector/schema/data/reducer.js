@@ -34,7 +34,7 @@ describe( 'schema data store reducer', () => {
 
 		editorA = await TestEditor.create( elementA, {
 			plugins: [ Paragraph ],
-			initialData: '<p>foo</p>'
+			root: { initialData: '<p>foo</p>' }
 		} );
 
 		editorB = await TestEditor.create( elementB );

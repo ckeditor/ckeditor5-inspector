@@ -204,8 +204,11 @@ const config = {
 };
 
 DecoupledEditor
-	.create( document.querySelector( '#first-editor-content' ), {
+	.create( {
 		...config,
+		root: {
+			element: document.querySelector( '#first-editor-content' )
+		},
 		extraPlugins: [ UploadAdapter, MarkerDemoPlugin ]
 	} )
 	.then( editor => {
@@ -219,8 +222,11 @@ DecoupledEditor
 	} );
 
 DecoupledEditor
-	.create( document.querySelector( '#second-editor-content' ), {
+	.create( {
 		...config,
+		root: {
+			element: document.querySelector( '#second-editor-content' )
+		},
 		extraPlugins: [ UploadAdapter ]
 	} )
 	.then( editor => {
@@ -234,8 +240,11 @@ DecoupledEditor
 	} );
 
 DecoupledEditor
-	.create( document.querySelector( '#rtl-editor-content' ), {
+	.create( {
 		...config,
+		root: {
+			element: document.querySelector( '#rtl-editor-content' )
+		},
 		extraPlugins: [ UploadAdapter ],
 		language: 'ar'
 	} )

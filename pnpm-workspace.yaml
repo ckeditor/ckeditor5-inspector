@@ -2,6 +2,10 @@ allowBuilds:
   esbuild: true
   snyk: true
 
+overrides:
+  'glob@^13': '^14.0.3'
+  'minimatch@^10': '^11.0.3'
+
 minimumReleaseAge: 4320 # 3 days
 minimumReleaseAgeExclude:
   # Company-owned scopes - every release comes from our own pipelines.

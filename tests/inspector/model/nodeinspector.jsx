@@ -40,7 +40,7 @@ describe( '<ModelNodeInspector />', () => {
 
 		editor = await TestEditor.create( element, {
 			plugins: [ Paragraph, BoldEditing ],
-			initialData: '<p>foo</p>'
+			root: { initialData: '<p>foo</p>' }
 		} );
 
 		root = editor.model.document.getRoot();

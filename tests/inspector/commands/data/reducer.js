@@ -35,7 +35,7 @@ describe( 'commands data store reducer', () => {
 
 		return TestEditor.create( elementA, {
 			plugins: [ Paragraph ],
-			initialData: '<p>foo</p>'
+			root: { initialData: '<p>foo</p>' }
 		} ).then( newEditor => {
 			editorA = newEditor;
 
